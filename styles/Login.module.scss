@@ -1,0 +1,16 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  form {
+    display: block;
+    div {
+      margin: 5px auto;
+    }
+  } 
+}
+
+.btnSubmit {
+  width: 100%;
+}
