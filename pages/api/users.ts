@@ -10,8 +10,8 @@ export type OdooUser = {
 };
 
 const users = async (req: NextApiRequest, res: NextApiResponse) => {
-  const username = "";
-  const password = "";
+  const username = "alberto@neokingdom.org";
+  const password = "maf6mwf4MVW0yzk-vwx";
 
   const session = await getSession(
     process.env.ODOO_ENDPOINT!,
