@@ -1,9 +1,4 @@
-const STAGES = {
-  29: "backlog",
-  30: "progress",
-  31: "done",
-  32: "approved",
-} as const;
+import { parseDate, STAGES } from "./utils";
 
 type OdooTask = {
   id: string;
@@ -19,26 +14,6 @@ type OdooTask = {
   tier: [number, string];
   write_date: string;
 };
-
-type OdooDuration = {
-  id: string;
-  task_id: [number, string];
-  start: string;
-  end: string;
-  unit_amount: number;
-  name: string;
-};
-
-type OdooProject = {
-  id: string;
-  name: string;
-  sequence: string;
-  task_ids: number[];
-};
-
-function parseDate(s: string) {
-  return s ? new Date(s.replace(" ", "T") + "Z") : false;
-}
 
 export function parseTask(task: OdooTask) {
   console.log("task: ", task);
@@ -69,31 +44,5 @@ export function parseTask(task: OdooTask) {
     lastActivity: 0,
     stage,
     stages,
-  };
-}
-
-export function parseDuration(duration: OdooDuration) {
-  return {
-    id: duration.id,
-    taskId: duration.task_id[0],
-    start: parseDate(duration.start),
-    end: parseDate(duration.end),
-    hours: duration.unit_amount,
-    description: duration.name,
-  };
-}
-
-export function parseProject(project: OdooProject) {
-  return {
-    id: project.id,
-    name: project.name,
-    sequence: project.sequence,
-    taskIds: project.task_ids,
-    isTracking: false,
-    stages: new Set(),
-    stagesCount: {
-      todo: 0,
-      done: 0,
-    },
   };
 }

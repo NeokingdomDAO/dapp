@@ -54,7 +54,7 @@ function tuplify(query: { [key: string]: string } | string[] = {}) {
   return params;
 }
 
-export async function getSession(
+export async function getClient(
   url: string,
   db: string,
   username: string,
@@ -69,7 +69,7 @@ export async function getSession(
     password
   );
   const model = (...args: any[]) =>
-    call(url, "object", "execute_kw", db, uid, password, args);
+    call(url, "object", "execute_kw", db, uid, password, ...args);
   return {
     create: async (name: string, object: any) =>
       model(name, "create", [object]),

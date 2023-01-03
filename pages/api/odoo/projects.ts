@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextApiRequest, NextApiResponse } from "next";
-import { getClient } from "../../lib/odoo/client";
+import { getClient } from "../../../lib/odoo/client";
 
 function groupBy(arr: { [key: string]: any }[], key: string = "id") {
   return arr.reduce((acc, item) => {
@@ -11,7 +11,10 @@ function groupBy(arr: { [key: string]: any }[], key: string = "id") {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { username, password } = req.body;
+  //const { username, password } = req.body;
+  const username = process.env.ODOO_USERNAME!;
+  const password = process.env.ODOO_PASSWORD!;
+
   const session = await getClient(
     process.env.ODOO_ENDPOINT!,
     process.env.ODOO_DB_NAME!,
@@ -38,4 +41,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const projects = groupBy(
     await session.read("project.project", Array.from(projectIds))
   );
+  return res.status(200).json({ projects, tasks });
 };

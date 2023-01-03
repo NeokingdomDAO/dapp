@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../lib/odoo";
+import { getClient } from "../../lib/odoo/client";
 
 export type OdooUser = {
   email: string;
@@ -13,7 +13,7 @@ const users = async (req: NextApiRequest, res: NextApiResponse) => {
   const username = "alberto@neokingdom.org";
   const password = "maf6mwf4MVW0yzk-vwx";
 
-  const session = await getSession(
+  const session = await getClient(
     process.env.ODOO_ENDPOINT!,
     process.env.ODOO_DB_NAME!,
     username,
