@@ -6,6 +6,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "homepage": "https://github.com/NeokingdomDAO/dapp",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
