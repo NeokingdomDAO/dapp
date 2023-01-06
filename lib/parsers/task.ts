@@ -41,11 +41,8 @@ function parseDate(s: string) {
 }
 
 export function parseTask(task: OdooTask) {
-  console.log("task: ", task);
   const upstreamStage = STAGES[task.stage_id[0]];
-  const stage = ["backlog", "progress"].includes(upstreamStage)
-    ? "todo"
-    : upstreamStage;
+  const stage = ["backlog", "progress"].includes(upstreamStage) ? "todo" : upstreamStage;
   const stages = new Set([stage]);
   return {
     id: task.id,

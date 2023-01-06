@@ -27,10 +27,6 @@ async function jsonRpc(url: string, method: string, params: any) {
   }
 }
 
-<<<<<<< HEAD
-async function call(url: string, service: string, method: string, ...args: any) {
-  return await jsonRpc(url, "call", { service, method, args });
-=======
 async function call(
   url: string,
   service: string,
@@ -45,7 +41,6 @@ async function call(
     method,
     args: [db, uid, password, ...args],
   });
->>>>>>> 47fdaa6 (odoo authentication)
 }
 
 function tuplify(query: { [key: string]: string } | string[] = {}) {
@@ -59,40 +54,14 @@ function tuplify(query: { [key: string]: string } | string[] = {}) {
   return params;
 }
 
-<<<<<<< HEAD
 export async function getSession(url: string, db: string, username: string, password: string) {
-  const uid = await call(url, "common", "login", db, username, password);
-  const model = call.bind(null, url, "object", "execute_kw", db, uid, password);
-=======
-export async function getSession(
-  url: string,
-  db: string,
-  username: string,
-  password: string
-) {
-  const uid: number = await call(
-    url,
-    "common",
-    "login",
-    db,
-    username,
-    password
-  );
-  const model = (...args: any[]) =>
-    call(url, "object", "execute_kw", db, uid, password, args);
->>>>>>> 47fdaa6 (odoo authentication)
+  const uid: number = await call(url, "common", "login", db, username, password);
+  const model = (...args: any[]) => call(url, "object", "execute_kw", db, uid, password, args);
   return {
     create: async (name: string, object: any) => model(name, "create", [object]),
     read: async (name: string, ids: number[]) => model(name, "read", [ids]),
-<<<<<<< HEAD
-    search: async (name: string, query: any, fields: any) => model(name, "search_read", [tuplify(query)], fields),
+    search: async (name: string, query: any, fields?: any) => model(name, "search_read", [tuplify(query)], fields),
     update: async (name: string, id: number, object: any) => model(name, "write", [[id], object]),
-=======
-    search: async (name: string, query: any, fields?: any) =>
-      model(name, "search_read", [tuplify(query)], fields),
-    update: async (name: string, id: number, object: any) =>
-      model(name, "write", [[id], object]),
->>>>>>> 47fdaa6 (odoo authentication)
     remove: async (name: string, ids: number[]) => model(name, "unlink", [ids]),
     uid,
   };

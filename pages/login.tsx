@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styles from '../styles/Login.module.scss'
+import styles from '../styles/Login.module.css'
 
 export default function Login() {
   const [username, setUsername] = useState<string>('')

@@ -3,12 +3,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  form {
-    display: block;
-    div {
-      margin: 5px auto;
-    }
-  } 
+}
+
+.login > form > div {
+  margin: 5px auto;
 }
 
 .btnSubmit {

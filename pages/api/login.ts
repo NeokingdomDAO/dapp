@@ -7,12 +7,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const { username, password } = req.body;
 
   try {
-    const session = await getSession(
-      process.env.ODOO_ENDPOINT!,
-      process.env.ODOO_DB_NAME!,
-      username,
-      password
-    );
+    const session = await getSession(process.env.ODOO_ENDPOINT!, process.env.ODOO_DB_NAME!, username, password);
 
     if (session.uid) {
       return res.status(200).json({ uid: session.uid });
