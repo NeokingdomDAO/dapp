@@ -73,8 +73,9 @@ export async function getClient(
   return {
     create: async (name: string, object: any) =>
       model(name, "create", [object]),
-    read: async (name: string, ids: number[]) => model(name, "read", [ids]),
-    search: async (name: string, query: any, fields?: any) =>
+    read: async (name: string, ids: number[] = []) =>
+      model(name, "read", [ids]),
+    search: async (name: string, query: any = {}, fields?: any) =>
       model(name, "search_read", [tuplify(query)], fields),
     update: async (name: string, id: number, object: any) =>
       model(name, "write", [[id], object]),
