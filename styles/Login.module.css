@@ -9,6 +9,10 @@
   margin: 5px auto;
 }
 
+.loginAlert {
+  margin-top: 10px;
+}
+
 .btnSubmit {
   width: 100%;
 }

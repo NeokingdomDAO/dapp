@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,9 +15,14 @@ import TaskIcon from "@mui/icons-material/Task";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Theme } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import useUser from "../lib/useUser";
 
 const drawerWidth = 240;
 
@@ -25,6 +30,8 @@ const initActiveStyle = (currentPath: string) => (href: string) =>
   currentPath === href ? { backgroundColor: (theme: Theme) => theme.palette.grey[300] } : {};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { user, mutateUser } = useUser();
+
   const router = useRouter();
   const getActiveStyle = useMemo(() => initActiveStyle(router.asPath), [router.asPath]);
 
@@ -32,6 +39,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+  const logout = async () => {
+    const res = await fetch("/api/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const user = await res.json();
+    mutateUser(user);
   };
 
   const drawer = (
@@ -98,9 +117,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Neokingdom DAO
           </Typography>
+          {!user || !user.isLoggedIn ? (
+            <Button color="inherit">Login</Button>
+          ) : (
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={() => logout()}>Logout</MenuItem>
+              </Menu>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
       <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
