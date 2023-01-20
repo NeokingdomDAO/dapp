@@ -3,10 +3,14 @@ import { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../styles/theme";
 import Layout from "../components/Layout";
+import useUser from "../lib/useUser";
 
 export default function App({ Component, pageProps }: AppProps) {
   // @ts-ignore
   const pageTitle = Component.title ? `NeokingdomDAO | ${Component.title}` : "NeokingdomDAO";
+  // @ts-ignore
+  const { isLoading, user } = useUser({ redirectTo: "/login", shouldSkip: !Component.requireLogin });
+
   return (
     <>
       <Head>
@@ -28,7 +32,11 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <ThemeProvider theme={theme}>
         <Layout>
-          <Component {...pageProps} />
+          {isLoading && <div>loading...</div>}
+          {
+            // @ts-ignore
+            ((!isLoading && !Component.requireLogin) || user?.isLoggedIn) && <Component {...pageProps} />
+          }
         </Layout>
       </ThemeProvider>
     </>

@@ -18,15 +18,15 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Theme } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useUser from "../lib/useUser";
-import useAlertStore from '../store/alertStore';
-import { shallow } from 'zustand/shallow'
+import useAlertStore from "../store/alertStore";
+import { shallow } from "zustand/shallow";
 
 const drawerWidth = 240;
 
@@ -35,13 +35,16 @@ const initActiveStyle = (currentPath: string) => (href: string) =>
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, mutateUser } = useUser();
-  const { isAlertOpen, alertMessage, alertSeverity, openAlert, closeAlert } = useAlertStore((state) => ({ 
-    isAlertOpen: state.open,
-    alertMessage: state.message,
-    alertSeverity: state.severity, 
-    openAlert: state.openAlert,
-    closeAlert: state.closeAlert 
-  }), shallow)
+  const { isAlertOpen, alertMessage, alertSeverity, openAlert, closeAlert } = useAlertStore(
+    (state) => ({
+      isAlertOpen: state.open,
+      alertMessage: state.message,
+      alertSeverity: state.severity,
+      openAlert: state.openAlert,
+      closeAlert: state.closeAlert,
+    }),
+    shallow,
+  );
 
   const router = useRouter();
   const getActiveStyle = useMemo(() => initActiveStyle(router.asPath), [router.asPath]);
@@ -65,10 +68,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         const user = await res.json();
         mutateUser(user);
       } else {
-        openAlert({ message: 'Logout failed'});
+        openAlert({ message: "Logout failed" });
       }
     } catch (error) {
-      openAlert({ message: 'Network Error'});
+      openAlert({ message: "Network Error" });
     }
   };
 
@@ -140,7 +143,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             Neokingdom DAO
           </Typography>
           {!user || !user.isLoggedIn ? (
-            <Button color="inherit">Login</Button>
+            <Button component={Link} href="/login" color="inherit">
+              Login
+            </Button>
           ) : (
             <div>
               <IconButton
@@ -206,12 +211,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
         <Toolbar />
         <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           open={isAlertOpen}
           onClose={closeAlert}
           key="alert-snackbar"
         >
-          <Alert onClose={closeAlert} severity={alertSeverity} sx={{ width: '100%' }}>
+          <Alert onClose={closeAlert} severity={alertSeverity} sx={{ width: "100%" }}>
             {alertMessage}
           </Alert>
         </Snackbar>

@@ -1,12 +1,10 @@
 import { Button } from "@mui/material";
 import Link from "next/link";
-import useUser from '../../lib/useUser';
 
 Tasks.title = "Tasks List";
+Tasks.requireLogin = true;
 
 export default function Tasks() {
-  useUser({ redirectTo: '/login' });
-  
   return (
     <>
       <div>Tasks list</div>

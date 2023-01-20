@@ -5,8 +5,8 @@ import { User } from "../lib/userFactory";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function useUser({ redirectTo = "", redirectIfFound = false } = {}) {
-  const { data: user, mutate: mutateUser } = useSWR<User>("/api/user", fetcher);
+export default function useUser({ redirectTo = "", redirectIfFound = false, shouldSkip = false } = {}) {
+  const { data: user, mutate: mutateUser, isLoading } = useSWR<User>(!shouldSkip ? "/api/user" : null, fetcher);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,5 +24,5 @@ export default function useUser({ redirectTo = "", redirectIfFound = false } = {
     }
   }, [user, redirectIfFound, redirectTo, router]);
 
-  return { user, mutateUser };
+  return { user, mutateUser, isLoading };
 }

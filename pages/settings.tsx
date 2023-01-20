@@ -1,8 +1,6 @@
-import useUser from '../lib/useUser';
-
 Settings.title = "Settings";
+Settings.requireLogin = true;
 
 export default function Settings() {
-  useUser({ redirectTo: '/login' });
   return <div>Settings</div>;
 }

@@ -1,8 +1,6 @@
-import useUser from '../../lib/useUser';
-
 NewTask.title = "New task";
+NewTask.requireLogin = true;
 
 export default function NewTask() {
-  useUser({ redirectTo: '/login' });
   return <div>New Task</div>;
 }
