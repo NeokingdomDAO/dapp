@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styles from '../styles/Login.module.css'
+import Box from '@mui/material/Box';
 import useUser from '../lib/useUser';
 import useAlertStore from '../store/alertStore';
 
@@ -30,10 +30,15 @@ export default function Login() {
   }
 
   return (
-    <div className={styles.login}>
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
       <h1>Login</h1>
       <form onSubmit={onSubmit}>
-        <div>
+        <Box sx={{ margin: '5px auto' }}>
           <TextField
               required
               autoFocus
@@ -42,8 +47,8 @@ export default function Login() {
               onChange={(e) => setUser({ ...user, username: e.target.value})}
               value={user.username}
             />
-        </div>
-        <div>
+        </Box>
+        <Box sx={{ margin: '5px auto' }}>
           <TextField
             required
             id="password"
@@ -52,9 +57,9 @@ export default function Login() {
             onChange={(e) => setUser({ ...user, password: e.target.value})}
             value={user.password}
           />
-        </div>
-        <Button type="submit" variant="contained" size="large" className={styles.btnSubmit}>Login</Button>
+        </Box>
+        <Button type="submit" variant="contained" size="large" sx={{ width: '100%' }}>Login</Button>
       </form>
-    </div>
+    </Box>
   )
 }
