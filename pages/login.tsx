@@ -36,6 +36,7 @@ export default function Login() {
         <div>
           <TextField
               required
+              autoFocus
               id="username"
               label="Username"
               onChange={(e) => setUser({ ...user, username: e.target.value})}
