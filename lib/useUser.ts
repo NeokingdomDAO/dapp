@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { User } from "../pages/api/user";
+import { User } from "../lib/userFactory";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

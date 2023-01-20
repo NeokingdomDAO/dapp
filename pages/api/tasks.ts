@@ -5,7 +5,7 @@ import { sessionOptions } from "../../lib/session";
 
 function groupBy(arr: { [key: string]: any }[], key: string = "id") {
   return arr.reduce((acc, item) => {
-    if (!item[key]) throw new Error("Key not defined in object", item);
+    if (!item[key]) throw new Error(`Key not defined in object ${item}`);
     acc[item[key]] = item;
     return acc;
   }, {});

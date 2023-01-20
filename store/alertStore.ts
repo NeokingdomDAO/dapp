@@ -1,9 +1,9 @@
 import { create } from "zustand";
-
+import { AlertColor } from "@mui/material/Alert";
 interface Alert {
   open: boolean;
   message: string;
-  severity: string;
+  severity: AlertColor;
   openAlert: (alert: any) => void;
   closeAlert: () => void;
 }

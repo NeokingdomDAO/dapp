@@ -1,5 +1,5 @@
 import type { IronSessionOptions } from "iron-session";
-import type { User } from "../pages/api/user";
+import { User } from "../lib/userFactory";
 
 // Typings of req.session.*
 declare module "iron-session" {
