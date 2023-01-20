@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 import { User } from "../pages/api/user";
 
@@ -7,6 +7,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function useUser({ redirectTo = "", redirectIfFound = false } = {}) {
   const { data: user, mutate: mutateUser } = useSWR<User>("/api/user", fetcher);
+  const router = useRouter();
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
@@ -19,9 +20,9 @@ export default function useUser({ redirectTo = "", redirectIfFound = false } = {
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && user?.isLoggedIn)
     ) {
-      Router.push(redirectTo);
+      router.push(redirectTo);
     }
-  }, [user, redirectIfFound, redirectTo]);
+  }, [user, redirectIfFound, redirectTo, router]);
 
   return { user, mutateUser };
 }

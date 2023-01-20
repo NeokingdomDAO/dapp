@@ -11,21 +11,19 @@ export default function Login() {
     redirectIfFound: true,
   });
 
-  const [username, setUsername] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
+  const [user, setUser] = useState<{ username: string, password: string }>({ username: '', password: '' });
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
-    const body = { username, password }
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...user }),
     })
     if (res.status === 200) {
-      const user = await res.json();
-      mutateUser(user, false);
+      const resUser = await res.json();
+      mutateUser(resUser, false);
     } else {
       setErrorMsg('Login Failed: Your email or password is incorrect');
     }
@@ -40,8 +38,8 @@ export default function Login() {
               required
               id="username"
               label="Username"
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
+              onChange={(e) => setUser({ ...user, username: e.target.value})}
+              value={user.username}
             />
         </div>
         <div>
@@ -50,8 +48,8 @@ export default function Login() {
             id="password"
             type="password"
             label="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
+            onChange={(e) => setUser({ ...user, password: e.target.value})}
+            value={user.password}
           />
         </div>
         <Button type="submit" variant="contained" size="large" className={styles.btnSubmit}>Login</Button>
