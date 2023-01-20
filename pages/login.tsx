@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
 import styles from '../styles/Login.module.css'
 import useUser from '../lib/useUser';
+import useAlertStore from '../store/alertStore';
 
 export default function Login() {
   const { mutateUser } = useUser({
@@ -12,7 +12,7 @@ export default function Login() {
   });
 
   const [user, setUser] = useState<{ username: string, password: string }>({ username: '', password: '' });
-  const [errorMsg, setErrorMsg] = useState<string>('');
+  const openAlert = useAlertStore(state => state.openAlert);
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -25,7 +25,7 @@ export default function Login() {
       const resUser = await res.json();
       mutateUser(resUser, false);
     } else {
-      setErrorMsg('Login Failed: Your email or password is incorrect');
+      openAlert({ message: 'Login Failed: Your email or password is incorrect' });
     }
   }
 
@@ -54,7 +54,6 @@ export default function Login() {
         </div>
         <Button type="submit" variant="contained" size="large" className={styles.btnSubmit}>Login</Button>
       </form>
-      {errorMsg && <Alert severity="error" className={styles.loginAlert}>{errorMsg}</Alert> }
     </div>
   )
 }
