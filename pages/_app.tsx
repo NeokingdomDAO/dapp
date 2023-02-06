@@ -66,18 +66,16 @@ export default function App({ Component, pageProps }: DappProps) {
 
   const appElement = (
     <CssVarsProvider theme={newTheme} defaultMode="system">
-      <Layout>
-        {(isLoading || !mounted) && (
-          <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-            <CircularProgress />
-          </Box>
-        )}
-        {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
-          <WagmiConfig client={wagmiClient}>
-            <Component {...pageProps} />
-          </WagmiConfig>
-        )}
-      </Layout>
+      <WagmiConfig client={wagmiClient}>
+        <Layout>
+          {(isLoading || !mounted) && (
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+              <CircularProgress />
+            </Box>
+          )}
+          {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && <Component {...pageProps} />}
+        </Layout>
+      </WagmiConfig>
     </CssVarsProvider>
   );
 

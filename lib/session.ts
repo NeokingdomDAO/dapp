@@ -6,6 +6,7 @@ import { User } from "../lib/userFactory";
 declare module "iron-session" {
   interface IronSessionData {
     user?: User;
+    cookie?: string;
   }
 }
 

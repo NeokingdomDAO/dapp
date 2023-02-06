@@ -1,6 +1,7 @@
 import { useWeb3Modal } from "@web3modal/react";
+import { decodeJwt } from "jose";
 import Link from "next/link";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount, useDisconnect, useSignMessage } from "wagmi";
 import { shallow } from "zustand/shallow";
 
 import * as React from "react";
@@ -13,6 +14,7 @@ import Settings from "@mui/icons-material/Settings";
 import { Badge, Modal, Typography, useColorScheme, useTheme } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -45,6 +47,8 @@ export default function AccountMenu() {
   const { mode, setMode } = useColorScheme();
   const { user, mutateUser } = useUser();
   const { address, isConnected: walletConnected } = useAccount();
+  const { data, isError, isLoading, isSuccess, signMessageAsync } = useSignMessage();
+
   const [mounted, setMounted] = React.useState(false);
 
   const isConnected = mounted && walletConnected;
@@ -108,6 +112,54 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
 
+  const handleWalletLogin = async () => {
+    const challenge = await fetch("/api/walletLogin", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const json = await challenge.json();
+    console.log(json);
+    const sig = await signMessageAsync({ message: json.message });
+    console.log(sig);
+
+    const response = await fetch("/api/walletLogin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        address,
+        sig,
+        signingToken: json.signingToken,
+      }),
+    });
+    /*
+    const q = await fetch("/api/graphql", {
+      method: "POST",
+      body: `
+      query {
+        AccountAnalyticLine(domain: [["user_id", "=", 12]]) {
+            id,
+            user_id {
+                name
+            },
+            project_id {
+                id,
+                name
+            },
+            task_id {
+                id,
+                name
+                },
+            name,
+            unit_amount,
+        }
+      }
+      `,
+    });
+    console.log(await q.json());
+    */
+  };
+
   return (
     <React.Fragment>
       <Modal
@@ -129,9 +181,13 @@ export default function AccountMenu() {
             Log in
           </Typography>
           <Typography id="modal-description" sx={{ mt: 2 }}>
-            Use your odoo credentials to be able to log in
+            Use your odoo credentials to log in
           </Typography>
           <LoginForm onLoggedIn={handleModalClose} />
+          <hr />
+          <Button color="primary" onClick={handleWalletLogin}>
+            Log in with your wallet
+          </Button>
         </Box>
       </Modal>
 
@@ -200,7 +256,7 @@ export default function AccountMenu() {
       >
         {!user?.isLoggedIn && (
           <MenuItem href="/login" onClick={handleModalOpen} component={Link}>
-            Login via odoo
+            Login
           </MenuItem>
         )}
         {isConnected ? (
