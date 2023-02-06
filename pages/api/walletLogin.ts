@@ -6,9 +6,20 @@ import { sessionOptions } from "@lib/session";
 
 // Login with Wallet+Odoo
 const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
+    const r = await fetch("https://odoo.neokingdom.org/auth_jwt_w3", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    const json = await r.json();
+    const claims = decodeJwt(json.signing_token);
+    res.json({
+      signingToken: json.signing_token,
+      message: claims.message,
+    });
+  } else {
     const { signingToken, address, sig } = req.body as { signingToken: string; address: string; sig: string };
-    const username = address;
+    const login = address;
     const password = btoa(JSON.stringify({ signing_token: signingToken, signature: sig }));
 
     let csrfToken: string;
@@ -49,7 +60,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       credentials: "include",
       mode: "cors",
       body: new URLSearchParams({
-        login: username,
+        login,
         password,
         csrf_token: csrfToken,
         redirect: "",
@@ -67,17 +78,6 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     await req.session.save();
 
     return res.status(200).json({ loggedIn: true });
-  } else {
-    const r = await fetch("https://odoo.neokingdom.org/auth_jwt_w3", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const json = await r.json();
-    const claims = decodeJwt(json.signing_token);
-    res.json({
-      signingToken: json.signing_token,
-      message: claims.message,
-    });
   }
 };
 
