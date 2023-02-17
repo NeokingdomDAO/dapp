@@ -49,6 +49,7 @@ export default function AccountMenu() {
 
   const { address, isConnected: isWalletConnected } = useAccount({
     onConnect({ address, isReconnected }) {
+      console.log('Connecting', address, isReconnected)
       if (!isReconnected && address) handleWalletLogin(address);
     },
   });
