@@ -1,6 +1,9 @@
 namespace NodeJS {
   interface ProcessEnv {
-    ODOO_ENDPOINT: string;
+    ODOO_WEB_LOGIN_ENDPOINT: string;
+    ODOO_JWT_TOKEN_ENPOINT: string;
+    ODOO_GRAPHQL_ENPOINT: string;
+    ODOO_JSONRPC_ENDPOINT: string;
     ODOO_DB_NAME: string;
     NEXT_PUBLIC_PROJECT_KEY: "neokingdom" | "teledisko";
     NEXT_PUBLIC_GRAPHQL_ENDPOINT: string;

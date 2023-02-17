@@ -1,16 +1,12 @@
 import { OdooUser } from "types";
 
 export type User = {
-  uid: number;
-  username: string;
-  password: string;
+  id: number;
   isLoggedIn: boolean;
 } & OdooUser;
 
 const userFactory = (user: Partial<User> = {}): User => ({
-  uid: -1,
-  username: "",
-  password: "",
+  id: -1,
   isLoggedIn: false,
   email: "",
   ethereum_address: "",

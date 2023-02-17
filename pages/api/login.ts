@@ -2,11 +2,11 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { OdooUser } from "types";
 
-import { USER_FIELDS } from "@lib/constants";
-
-import { getSession } from "../../lib/odoo";
-import { sessionOptions } from "../../lib/session";
-import userFactory from "../../lib/userFactory";
+import { getOdooCookie } from "@lib/getOdooCookie";
+import odooClient from "@lib/graphql/odoo";
+import { getUserQuery } from "@lib/graphql/queries/get-user.query";
+import { sessionOptions } from "@lib/session";
+import userFactory from "@lib/userFactory";
 
 // Login with Odoo
 const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,23 +16,16 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const session = await getSession(process.env.ODOO_ENDPOINT!, process.env.ODOO_DB_NAME!, username, password);
-
-    if (session.uid) {
-      const odooUserData: OdooUser[] = await session.search("res.users", [["email", "in", [username]]], {
-        fields: USER_FIELDS[process.env.NEXT_PUBLIC_PROJECT_KEY],
-      });
-      const [{ image, avatar_256, ...withoutImage }] = odooUserData; // removing image/avatar as it will make the cookie too big
-      const user = userFactory({ uid: session.uid, username, password, isLoggedIn: true, ...withoutImage });
-      req.session.user = user;
-      await req.session.save();
-
-      return res.status(200).json(user);
-    }
-    res.status(403).json({});
+    const cookie = await getOdooCookie(username, password);
+    const data = await odooClient(cookie, getUserQuery, { email: username });
+    const userData = data.ResUsers[0] as OdooUser;
+    const user = userFactory({ ...userData, isLoggedIn: true });
+    req.session.cookie = cookie;
+    req.session.user = user;
+    await req.session.save();
+    return res.status(200).json(user);
   } catch (error) {
-    console.log("error: ", error);
-    res.status(500).json(error);
+    return res.status(401).json({ loggedIn: false, error });
   }
 };
 

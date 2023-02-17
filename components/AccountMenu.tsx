@@ -1,7 +1,6 @@
 import { useWeb3Modal } from "@web3modal/react";
-import { decodeJwt } from "jose";
 import Link from "next/link";
-import { useAccount, useDisconnect, useSignMessage } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 import { shallow } from "zustand/shallow";
 
 import * as React from "react";
@@ -44,16 +43,19 @@ const style = {
 };
 
 export default function AccountMenu() {
+  const theme = useTheme();
   const { mode, setMode } = useColorScheme();
   const { user, mutateUser } = useUser();
-  const { address, isConnected: walletConnected } = useAccount();
-  const { data, isError, isLoading, isSuccess, signMessageAsync } = useSignMessage();
+  const { signMessageAsync } = useSignMessage();
+
+  const { address, isConnected: isWalletConnected } = useAccount({
+    onConnect({ address, isReconnected }) {
+      if (!isReconnected && address) handleWalletLogin(address);
+    },
+  });
 
   const [mounted, setMounted] = React.useState(false);
-
-  const isConnected = mounted && walletConnected;
-
-  const theme = useTheme();
+  const isConnected = mounted && isWalletConnected;
 
   const {
     users: [currentOdooUser],
@@ -69,6 +71,28 @@ export default function AccountMenu() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  async function handleWalletLogin(address: `0x${string}`) {
+    const challenge = await fetch("/api/walletLogin", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const json = await challenge.json();
+    const sig = await signMessageAsync({ message: json.message });
+
+    const data = await fetch("/api/walletLogin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        address,
+        sig,
+        signingToken: json.signingToken,
+      }),
+    });
+    const resUser = await data.json();
+    mutateUser(resUser, false);
+  };
 
   const { modalOpen, handleModalOpen, handleModalClose } = useLoginModalStore(
     (state) => ({
@@ -112,54 +136,6 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
 
-  const handleWalletLogin = async () => {
-    const challenge = await fetch("/api/walletLogin", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const json = await challenge.json();
-    console.log(json);
-    const sig = await signMessageAsync({ message: json.message });
-    console.log(sig);
-
-    const response = await fetch("/api/walletLogin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        address,
-        sig,
-        signingToken: json.signingToken,
-      }),
-    });
-    /*
-    const q = await fetch("/api/graphql", {
-      method: "POST",
-      body: `
-      query {
-        AccountAnalyticLine(domain: [["user_id", "=", 12]]) {
-            id,
-            user_id {
-                name
-            },
-            project_id {
-                id,
-                name
-            },
-            task_id {
-                id,
-                name
-                },
-            name,
-            unit_amount,
-        }
-      }
-      `,
-    });
-    console.log(await q.json());
-    */
-  };
-
   return (
     <React.Fragment>
       <Modal
@@ -184,10 +160,6 @@ export default function AccountMenu() {
             Use your odoo credentials to log in
           </Typography>
           <LoginForm onLoggedIn={handleModalClose} />
-          <hr />
-          <Button color="primary" onClick={handleWalletLogin}>
-            Log in with your wallet
-          </Button>
         </Box>
       </Modal>
 

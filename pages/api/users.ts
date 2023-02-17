@@ -1,28 +1,22 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { request } from "graphql-request";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { OdooUser } from "types";
 
-import { USER_FIELDS } from "@lib/constants";
-import { getSession } from "@lib/odoo";
+import odooClient from "@lib/graphql/odoo";
+import { getUsersQuery } from "@lib/graphql/queries/get-users.query";
 import { sessionOptions } from "@lib/session";
 
 const getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
-  const user = req.session.user;
-
-  if (!user?.isLoggedIn) {
+  const cookie = req.session.cookie;
+  if (!cookie) {
     return res.status(401).end();
   }
-
-  const { username, password } = user;
-  const session = await getSession(process.env.ODOO_ENDPOINT!, process.env.ODOO_DB_NAME!, username, password);
-
-  const data: OdooUser[] = await session.search("res.users", [], {
-    fields: USER_FIELDS[process.env.NEXT_PUBLIC_PROJECT_KEY],
-  });
-
+  const data = await odooClient(cookie, getUsersQuery);
+  const users = data.ResUsers as OdooUser[];
   if (process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom") {
-    return res.status(200).json(data.map((user) => ({ ...user, image: user.avatar_256 })));
+    return res.status(200).json(users.map((user) => ({ ...user, image: user.avatar_256 })));
   }
 
   res.status(200).json(data);

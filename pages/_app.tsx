@@ -53,7 +53,6 @@ export default function App({ Component, pageProps }: DappProps) {
   const pageTitle = Component.title ? `${META.title} | ${Component.title}` : META.title;
   const { asPath } = useRouter();
   const [mounted, setMounted] = useState(!!Component.renderOnServer);
-  console.log("mounted: ", mounted);
 
   const { isLoading, user } = useUser({
     redirectTo: `/login?redirectTo=${asPath}`,

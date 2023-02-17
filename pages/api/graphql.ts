@@ -6,10 +6,10 @@ import { sessionOptions } from "@lib/session";
 async function graphql(req: NextApiRequest, res: NextApiResponse) {
   const cookie = req.session.cookie;
   if (!cookie) {
-    return res.status(403);
+    return res.status(403).json({ message: "Not Authorized" });
   }
 
-  const proxy = await fetch("https://odoo.neokingdom.org/graphql", {
+  const proxy = await fetch(process.env.ODOO_GRAPHQL_ENPOINT, {
     method: "POST",
     redirect: "follow",
     headers: {
