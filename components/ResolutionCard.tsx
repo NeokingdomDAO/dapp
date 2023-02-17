@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import * as React from "react";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -33,7 +35,12 @@ export default function ResolutionCard({ resolution }: { resolution: ResolutionE
       </CardContent>
       <CardActions disableSpacing>
         <Typography variant="caption">{resolution.resolutionType.name}</Typography>
-        <IconButton aria-label="share" sx={{ marginLeft: "auto" }}>
+        <IconButton
+          aria-label="share"
+          sx={{ marginLeft: "auto" }}
+          href={`/resolutions/${resolution.id}/edit`}
+          LinkComponent={Link}
+        >
           <VisibilityIcon />
         </IconButton>
       </CardActions>

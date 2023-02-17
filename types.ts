@@ -183,5 +183,6 @@ export type RewardsResponse = {
 declare global {
   interface Window {
     EasyMDE: any;
+    IpfsHttpClient: any;
   }
 }

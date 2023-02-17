@@ -1,10 +1,9 @@
 import useSWR from "swr";
 import { OdooUser } from "types";
 
-import useUser from "@hooks/useUser";
+import { fetcher } from "@lib/net";
 
-// @ts-ignore
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+import useUser from "@hooks/useUser";
 
 const isSameAddress = (addressLeft: string, addressRight: string) =>
   typeof addressLeft === "string" && // neeeded as odoo sometimes returns false as eth address

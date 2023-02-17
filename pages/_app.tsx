@@ -4,8 +4,9 @@ import { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { SnackbarProvider } from "notistack";
 import { WagmiConfig, configureChains, createClient } from "wagmi";
-import { evmos } from "wagmi/chains";
+import { evmos, evmosTestnet } from "wagmi/chains";
 
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -17,10 +18,11 @@ import Layout from "@components/Layout";
 
 import useUser from "@hooks/useUser";
 
+import ContractsProvider from "../components/ContractsProvider";
 import { newTheme } from "../styles/theme";
 import { META } from "./_document";
 
-const chains = [evmos];
+const chains = [process.env.NEXT_PUBLIC_ENV === "staging" ? evmosTestnet : evmos];
 
 // Wagmi client
 const { provider } = configureChains(chains, [
@@ -66,14 +68,20 @@ export default function App({ Component, pageProps }: DappProps) {
   const appElement = (
     <CssVarsProvider theme={newTheme} defaultMode="system">
       <WagmiConfig client={wagmiClient}>
-        <Layout>
-          {(isLoading || !mounted) && (
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-              <CircularProgress />
-            </Box>
-          )}
-          {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && <Component {...pageProps} />}
-        </Layout>
+        <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+          <Layout>
+            {(isLoading || !mounted) && (
+              <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                <CircularProgress />
+              </Box>
+            )}
+            {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
+              <ContractsProvider>
+                <Component {...pageProps} />
+              </ContractsProvider>
+            )}
+          </Layout>
+        </SnackbarProvider>
       </WagmiConfig>
     </CssVarsProvider>
   );

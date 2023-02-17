@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 
 import { useEffect, useMemo, useState } from "react";
 
-import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 
 import { fetcher } from "@graphql/client";
 import { getResolutionsQuery } from "@graphql/queries/get-resolutions.query";
@@ -23,10 +23,10 @@ Resolutions.title = "Resolutions";
 const REFRESH_EVERY_MS = 3000;
 
 export default function Resolutions() {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { open: openWeb3Modal } = useWeb3Modal();
   const { data, isLoading } = useSWR(getResolutionsQuery, fetcher, { refreshInterval: REFRESH_EVERY_MS });
-  const { acl, isLoading: isLoadingAcl } = useResolutionsAcl(address);
+  const { acl, isLoading: isLoadingAcl } = useResolutionsAcl();
   const [currentTimestamp, setCurrentTimestamp] = useState(Date.now());
 
   useEffect(() => {
@@ -50,9 +50,14 @@ export default function Resolutions() {
     <>
       <Box sx={{ mb: 2 }}>
         {isConnected && acl.isContributor && (
-          <Button component={Link} href="/resolutions/new" variant="outlined">
-            Create new Resolution
-          </Button>
+          <Stack direction="row" spacing={2}>
+            <Button component={Link} href="/resolutions/new" variant="outlined">
+              Create new Resolution
+            </Button>
+            <Button component={Link} href="/resolutions/new?template=monthlyRewards" variant="outlined">
+              Monthly Rewards
+            </Button>
+          </Stack>
         )}
         {!isConnected && (
           <Button onClick={() => openWeb3Modal()} variant="outlined">

@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 
 import { useState } from "react";
 
@@ -6,12 +7,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-import useAlertStore from "@store/alertStore";
-
 import useUser from "@hooks/useUser";
 
 export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
   const { query } = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { mutateUser } = useUser(
     !onLoggedIn
@@ -24,7 +24,6 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
 
   const [user, setUser] = useState<{ username: string; password: string }>({ username: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const openAlert = useAlertStore((state) => state.openAlert);
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
@@ -39,7 +38,7 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
       mutateUser(resUser, false);
       onLoggedIn && onLoggedIn();
     } else {
-      openAlert({ message: "Login Failed: Your email or password is incorrect" });
+      enqueueSnackbar("Login Failed: Your email or password is incorrect", { variant: "error" });
     }
     setIsLoading(false);
   };

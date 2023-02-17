@@ -1,36 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { shallow } from "zustand/shallow";
 
 import React, { useMemo } from "react";
 
-import { Chip, Container, Divider, Slide, Stack, useScrollTrigger, useTheme } from "@mui/material";
-import Alert from "@mui/material/Alert";
+import { Chip, Container, Divider, Slide, Stack, useScrollTrigger } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Snackbar from "@mui/material/Snackbar";
 import Toolbar from "@mui/material/Toolbar";
 
 import TelediskoLogo from "../images/logo-teledisko.png";
-import useAlertStore from "../store/alertStore";
 import AccountMenu from "./AccountMenu";
 import NkdLogo from "./svg-logos/NkdLogo";
 
 const initActiveStyle = (currentPath: string) => (href: string) => currentPath === href;
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const { isAlertOpen, alertMessage, alertSeverity, closeAlert } = useAlertStore(
-    (state) => ({
-      isAlertOpen: state.open,
-      alertMessage: state.message,
-      alertSeverity: state.severity,
-      closeAlert: state.closeAlert,
-    }),
-    shallow,
-  );
-
   const router = useRouter();
   const trigger = useScrollTrigger();
   const isActive = useMemo(() => initActiveStyle(router.asPath), [router.asPath]);
@@ -63,10 +49,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 },
               }}
             >
-              <Link href="/" style={{ display: "inherit" }}>
+              <Link href="/" style={{ display: "flex", height: 70, alignItems: "center" }}>
                 {process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom" && <NkdLogo height={70} />}
                 {process.env.NEXT_PUBLIC_PROJECT_KEY === "teledisko" && (
-                  <Image height={30} src={TelediskoLogo} alt="Teledisko DAO" />
+                  <Image height={35} src={TelediskoLogo} alt="Teledisko DAO" />
                 )}
               </Link>
               <Box sx={{ ml: "auto" }}>
@@ -110,16 +96,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </AppBar>
       </Box>
       <Box component="main" sx={{ p: { md: 3 }, pt: { xs: 18, md: 18 } }}>
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={isAlertOpen}
-          onClose={closeAlert}
-          key="alert-snackbar"
-        >
-          <Alert onClose={closeAlert} severity={alertSeverity} sx={{ width: "100%" }}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
         <Container maxWidth="lg">{children}</Container>
       </Box>
     </>

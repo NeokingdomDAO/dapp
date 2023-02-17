@@ -1,6 +1,7 @@
 import { useWeb3Modal } from "@web3modal/react";
 import Link from "next/link";
 import { useAccount, useSignMessage } from "wagmi";
+import { useSnackbar } from "notistack";
 import { shallow } from "zustand/shallow";
 
 import * as React from "react";
@@ -13,7 +14,6 @@ import Settings from "@mui/icons-material/Settings";
 import { Badge, Modal, Typography, useColorScheme, useTheme } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -23,7 +23,6 @@ import Tooltip from "@mui/material/Tooltip";
 
 import { getLettersFromName } from "@lib/utils";
 
-import useAlertStore from "@store/alertStore";
 import useLoginModalStore from "@store/loginModal";
 
 import useOdooUsers from "@hooks/useOdooUsers";
@@ -56,17 +55,11 @@ export default function AccountMenu() {
 
   const [mounted, setMounted] = React.useState(false);
   const isConnected = mounted && isWalletConnected;
+  const { enqueueSnackbar } = useSnackbar();
 
   const {
     users: [currentOdooUser],
   } = useOdooUsers(user?.ethereum_address);
-
-  const { openAlert } = useAlertStore(
-    (state) => ({
-      openAlert: state.openAlert,
-    }),
-    shallow,
-  );
 
   useEffect(() => {
     setMounted(true);
@@ -112,10 +105,10 @@ export default function AccountMenu() {
       if (res.status === 200) {
         mutateUser(await res.json());
       } else {
-        openAlert({ message: "Logout failed" });
+        enqueueSnackbar("Logout failed");
       }
     } catch (error) {
-      openAlert({ message: "Network Error" });
+      enqueueSnackbar("Network error");
     }
   };
 
@@ -232,7 +225,7 @@ export default function AccountMenu() {
           </MenuItem>
         )}
         {isConnected ? (
-          <MenuItem onClick={() => openWeb3Modal()}>{`${address?.slice(0, 8)}...`}</MenuItem>
+          <MenuItem onClick={() => openWeb3Modal()}>Wallet: {`${address?.slice(0, 8)}...`}</MenuItem>
         ) : (
           <MenuItem onClick={handleConnectWallet}>Connect Wallet</MenuItem>
         )}
