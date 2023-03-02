@@ -1,35 +1,38 @@
-import Link from "next/link";
+import { shallow } from "zustand/shallow";
 
 import { useEffect } from "react";
 
-import { Button } from "@mui/material";
+import { Grid } from "@mui/material";
+
+import useDialogStore from "@store/dialogStore";
+import useProjectTaskStore from "@store/projectTaskStore";
+
+import ProjectCard from "@components/ProjectCard";
+import TrackingDialog from "@components/TrackingDialog";
 
 Tasks.title = "Tasks List";
 Tasks.requireLogin = true;
 
 export default function Tasks() {
-  const fetchTasks = async () => {
-    const data = await fetch("/api/tasks", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const tasks = await data.json();
-    console.log("🐞 > tasks", tasks);
-  };
+  const { projects, fetchProjects } = useProjectTaskStore(
+    ({ projects, fetchProjects }) => ({ projects, fetchProjects }),
+    shallow,
+  );
 
   useEffect(() => {
-    fetchTasks();
+    fetchProjects();
   }, []);
 
   return (
     <>
-      <div>Tasks list</div>
-
-      <br />
-
-      <Button component={Link} href="/tasks/new" variant="outlined">
-        New Task
-      </Button>
+      <Grid container spacing={3}>
+        {projects.map((project) => (
+          <Grid item xs={12} md={6} lg={6} key={project.id}>
+            <ProjectCard project={project} />
+          </Grid>
+        ))}
+      </Grid>
+      <TrackingDialog />
     </>
   );
 }
