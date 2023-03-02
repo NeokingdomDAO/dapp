@@ -13,6 +13,7 @@ export type ProjectTask = {
   id: number;
   name: string;
   display_name: string;
+  effective_hours: number;
   parent_id: { id: number; name: string } | null;
   stage_id: { id: number; name: string };
   child_ids: ProjectTask[];
@@ -62,16 +63,26 @@ const useProjectTaskStore = create<ProjectTaskStore>((set) => ({
   projects: [],
   trackedTask: null,
   fetchProjects: async () => {
-    const response = await fetch("/api/tasks", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    const projects = await response.json();
-    const fakeProjects = addFakeTimesToProjects(projects);
-    console.log("🐞 > projects:", fakeProjects);
-    set({ projects: fakeProjects });
+    const response = await fetch("/api/tasks", { method: "GET" });
+    if (response.ok) {
+      const projects = await response.json();
+      const fakeProjects = addFakeTimesToProjects(projects);
+      console.log("🐞 > projects:", fakeProjects);
+      set({ projects: fakeProjects });
+    }
   },
-  startTrackingTask: (task: ProjectTask) => set({ trackedTask: task }),
+  startTrackingTask: async (task: ProjectTask) => {
+    const response = await fetch(`/api/tasks/${task.id}/time_entry`, {
+      method: "POST",
+      body: JSON.stringify(task),
+    });
+    console.log("🐞 > response:", response);
+    if (response.ok) {
+      const timeEntry = await response.json();
+      console.log("🐞 > timeEntry:", timeEntry);
+      set({ trackedTask: task });
+    }
+  },
   stopTrackingTask: (task: ProjectTask) => set({ trackedTask: null }),
 }));
 

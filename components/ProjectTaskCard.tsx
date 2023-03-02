@@ -1,8 +1,20 @@
-import { Card, CardContent, CardHeader } from "@mui/material";
+import { Card, CardContent, CardHeader, Chip } from "@mui/material";
 
 import { ProjectTask } from "@store/projectTaskStore";
 
 import ProjectSubTask from "./ProjectSubTask";
+
+const stageToColor = (stage: string): any => {
+  if (!stage) return "default";
+  const stageName = stage.toLowerCase().split(" ").join("");
+  const stageToColorMap: { [key: string]: string } = {
+    created: "default",
+    inprogress: "primary",
+    done: "success",
+    approved: "warning",
+  };
+  return stageToColorMap[stageName] || "default";
+};
 
 export default function ProjectTaskCard({ task }: { task: ProjectTask }) {
   return (
@@ -19,6 +31,9 @@ export default function ProjectTaskCard({ task }: { task: ProjectTask }) {
           variant: "h6",
           lineHeight: "1.5rem",
         }}
+        action={
+          <Chip label={task.stage_id.name} color={stageToColor(task.stage_id.name)} variant="outlined" size="small" />
+        }
         sx={{ pb: 2 }}
       />
       <CardContent sx={{ pt: 0 }}>
