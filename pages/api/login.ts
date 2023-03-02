@@ -19,7 +19,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     const cookie = await getOdooCookie(username, password);
     const data = await odooClient(cookie, getUserQuery, { email: username });
     const userData = data.ResUsers[0] as OdooUser;
-    const user = userFactory({ ...userData, isLoggedIn: true });
+    const user = userFactory({ ...userData, username, password, isLoggedIn: true });
     req.session.cookie = cookie;
     req.session.user = user;
     await req.session.save();

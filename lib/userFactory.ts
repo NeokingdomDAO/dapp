@@ -3,6 +3,8 @@ import { OdooUser } from "types";
 export type User = {
   id: number;
   isLoggedIn: boolean;
+  username: string;
+  password: string;
 } & OdooUser;
 
 const userFactory = (user: Partial<User> = {}): User => ({
@@ -11,6 +13,8 @@ const userFactory = (user: Partial<User> = {}): User => ({
   email: "",
   ethereum_address: "",
   display_name: "",
+  username: "",
+  password: "",
   ...user,
 });
 
