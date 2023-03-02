@@ -37,7 +37,7 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { getTaskName, toPrettyDuration } from "@lib/utils";
+import { getTaskName, toPrettyDuration, toPrettyRange } from "@lib/utils";
 
 import useDialogStore from "@store/dialogStore";
 import useProjectTaskStore, { ProjectTask } from "@store/projectTaskStore";
@@ -49,7 +49,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
     shallow,
   );
   const [expanded, setExpanded] = useState<number | false>(false);
-  const openDialog = useDialogStore((state) => state.openDialog);
+  const openDialog = useDialogStore(({ openDialog }) => openDialog);
   const totalTime = useMemo(
     () => task.timesheet_ids.reduce((tot, time) => (tot += time.unit_amount), 0),
     [task.timesheet_ids],
@@ -67,10 +67,10 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
       openDialog({
         open: true,
         message: (
-          <p>
-            You are already tracking <strong>{getTaskName(trackedTask)}</strong>, do you want to switch to
-            <strong>{getTaskName(task)}</strong> instead?
-          </p>
+          <span>
+            You are already tracking <strong>{getTaskName(trackedTask)}</strong>, do you want to switch to{" "}
+            <strong> {getTaskName(task)}</strong> instead?
+          </span>
         ),
         onConfirm: () => {
           stopTrackingTask(trackedTask);
@@ -176,7 +176,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
             <TableHead>
               <TableRow>
                 <TableCell>Duration</TableCell>
-                <TableCell>Range</TableCell>
+                <TableCell sx={{ minWidth: 160 }}>Range</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
@@ -185,7 +185,14 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
               {task.timesheet_ids.map((row) => (
                 <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell>{toPrettyDuration(row.unit_amount)}</TableCell>
-                  <TableCell>-</TableCell>
+                  <TableCell sx={{ minWidth: 160 }}>
+                    {toPrettyRange(row.start, row.end)}
+                    {!row.end && (
+                      <span>
+                        -<strong>now</strong>
+                      </span>
+                    )}
+                  </TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell align="right">
                     <ToggleButtonGroup size="small" exclusive>

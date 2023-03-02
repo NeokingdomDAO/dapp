@@ -25,12 +25,14 @@ export default function Tasks() {
 
   return (
     <>
-      <Grid container spacing={3}>
-        {projects.map((project) => (
-          <Grid item xs={12} md={6} lg={6} key={project.id}>
-            <ProjectCard project={project} />
-          </Grid>
-        ))}
+      <Grid container spacing={2} justifyContent="center">
+        {projects
+          .filter((project) => project.tasks.length)
+          .map((project) => (
+            <Grid item xs={12} md={9} key={project.id}>
+              <ProjectCard project={project} />
+            </Grid>
+          ))}
       </Grid>
       <TrackingDialog />
     </>

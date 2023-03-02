@@ -1,3 +1,5 @@
+import { format, isSameDay } from "date-fns";
+
 import { ProjectTask } from "@store/projectTaskStore";
 
 import { META } from "../pages/_document";
@@ -21,6 +23,16 @@ export function toPrettyDuration(time: number) {
   const hours = Math.trunc(time);
   const mins = Math.round((time - hours) * 60);
   return mins ? `${hours}h ${mins}m` : `${hours}h`;
+}
+
+export function toPrettyRange(start: string, end?: string) {
+  if (!start) return start;
+  const startDate = format(new Date(start), "MMM d hh:mm");
+  if (!end) return startDate;
+  const sameDay = isSameDay(new Date(start), new Date(end));
+  const endDateFormat = sameDay ? "hh:mm" : "MMM d hh:mm";
+  const endDate = format(new Date(end), endDateFormat);
+  return `${startDate} - ${endDate}`;
 }
 
 export function getTaskName(task: ProjectTask) {
