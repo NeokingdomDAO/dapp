@@ -4,3 +4,13 @@ export const USER_FIELDS = {
   neokingdom: [...COMMON_FIELDS, "avatar_256"],
   teledisko: [...COMMON_FIELDS, "image"],
 };
+
+export const STAGE_TO_ID_MAP = {
+  backlog: 29,
+  created: 29,
+  progress: 30,
+  inprogress: 30,
+  done: 31, // 161 !!
+  approved: 32,
+  canceled: 162,
+};

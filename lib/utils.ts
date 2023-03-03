@@ -20,6 +20,22 @@ export const isSameAddress = (addressLeft: string, addressRight: string) =>
   typeof addressRight === "string" && // see ^
   addressLeft.toLowerCase() === addressRight.toLowerCase();
 
+// PROJECTS TASKS UTILS
+export function getTaskTotalHours(task: ProjectTask) {
+  if (!task.parent_id) {
+    // it's a task
+    return (
+      task.child_ids?.reduce((tot, child) => {
+        tot += getTaskTotalHours(child);
+        return tot;
+      }, 0) || 0
+    );
+  } else {
+    // it's a subtask
+    return task.timesheet_ids.reduce((tot, time) => (tot += time.unit_amount), 0);
+  }
+}
+
 export function toPrettyDuration(time: number) {
   const hours = Math.trunc(time);
   const mins = Math.round((time - hours) * 60);

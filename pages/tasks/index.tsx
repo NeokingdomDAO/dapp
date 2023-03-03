@@ -1,3 +1,4 @@
+import { useSnackbar } from "notistack";
 import { shallow } from "zustand/shallow";
 
 import { useEffect } from "react";
@@ -13,14 +14,21 @@ Tasks.title = "Tasks List";
 Tasks.requireLogin = true;
 
 export default function Tasks() {
-  const { projects, fetchProjects } = useProjectTaskStore(
-    ({ projects, fetchProjects }) => ({ projects, fetchProjects }),
+  const { enqueueSnackbar } = useSnackbar();
+  const { projects, error, fetchProjects } = useProjectTaskStore(
+    ({ projects, error, fetchProjects }) => ({ projects, error, fetchProjects }),
     shallow,
   );
 
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      enqueueSnackbar(error.message, { variant: "error" });
+    }
+  }, [error, enqueueSnackbar]);
 
   return (
     <>

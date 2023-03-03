@@ -1,8 +1,8 @@
-import { add, differenceInMinutes, format } from "date-fns";
+import { differenceInMinutes, format } from "date-fns";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { ODOO_DB_NAME, ODOO_ENDPOINT, STAGE_TO_ID_MAP, getSession } from "@lib/odooClient";
+import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
 import { sessionOptions } from "@lib/session";
 import { findActiveTimeEntry, replaceTaskTimeEntry } from "@lib/utils";
 
@@ -21,21 +21,12 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
 
   if (req.method === "POST") {
-    // START TASK - Create new Time Entry
-    const timeEntry = { task_id: Number(taskId), start: format(new Date(), "yyyy-MM-dd HH:mm:ss") };
-    const timeEntryId = await session.create("account.analytic.line", timeEntry);
-    const [newTimeEntry] = await session.read("account.analytic.line", [timeEntryId]);
-    // Move task to In progress
-    await session.update("project.task", Number(taskId), {
-      stage_id: STAGE_TO_ID_MAP["progress"],
-    });
-    res.status(200).json(newTimeEntry);
-  }
-
-  if (req.method === "PUT") {
     // STOP TASK
     const [activeTimeEntry, activeTask] = findActiveTimeEntry(JSON.parse(task));
-    if (!activeTimeEntry || !activeTask) return res.status(404).json({ message: "Active time entry not found" });
+    if (!activeTimeEntry || !activeTask) {
+      // Task is already stopped
+      return res.status(200).json(JSON.parse(task));
+    }
 
     const isSameMin = differenceInMinutes(new Date(activeTimeEntry.start), new Date()) === 0;
     if (isSameMin) {

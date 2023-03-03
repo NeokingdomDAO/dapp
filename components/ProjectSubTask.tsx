@@ -37,23 +37,26 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { getTaskName, toPrettyDuration, toPrettyRange } from "@lib/utils";
+import { getTaskName, getTaskTotalHours, toPrettyDuration, toPrettyRange } from "@lib/utils";
 
 import useDialogStore from "@store/dialogStore";
 import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
 
 export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   const theme = useTheme();
-  const [trackedTask, startTrackingTask, stopTrackingTask, deleteTimeEntry] = useProjectTaskStore(
-    (state) => [state.trackedTask, state.startTrackingTask, state.stopTrackingTask, state.deleteTimeEntry],
+  const [trackedTask, startTrackingTask, stopTrackingTask, deleteTimeEntry, markTaskAsDone] = useProjectTaskStore(
+    (state) => [
+      state.trackedTask,
+      state.startTrackingTask,
+      state.stopTrackingTask,
+      state.deleteTimeEntry,
+      state.markTaskAsDone,
+    ],
     shallow,
   );
   const [expanded, setExpanded] = useState<number | false>(false);
   const openDialog = useDialogStore(({ openDialog }) => openDialog);
-  const totalTime = useMemo(
-    () => task.timesheet_ids.reduce((tot, time) => (tot += time.unit_amount), 0),
-    [task.timesheet_ids],
-  );
+  const totalHours = useMemo(() => getTaskTotalHours(task), [task]);
 
   const handleTaskClick = (taskId: number) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     event.preventDefault();
@@ -129,7 +132,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
       <AccordionDetails>
         <Typography>
           <strong>Total time: </strong>
-          <span>{totalTime ? toPrettyDuration(totalTime) : "-"}</span>
+          <span>{totalHours ? toPrettyDuration(totalHours) : "-"}</span>
         </Typography>
         <Box sx={{ mt: 1, mb: 1, display: "flex" }}>
           {task.stage_id.name === "Done" ? (
@@ -137,7 +140,14 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
               Track Time
             </Button>
           ) : (
-            <Button sx={{ mr: 1 }} variant="outlined" color="success" startIcon={<Done />} size="small">
+            <Button
+              onClick={() => markTaskAsDone(task)}
+              sx={{ mr: 1 }}
+              variant="outlined"
+              color="success"
+              startIcon={<Done />}
+              size="small"
+            >
               Mark as Done
             </Button>
           )}

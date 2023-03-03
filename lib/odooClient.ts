@@ -2,12 +2,6 @@ import { v4 as uuidv4 } from "uuid";
 
 export const ODOO_ENDPOINT = "https://odoo.neokingdom.org/jsonrpc";
 export const ODOO_DB_NAME = "neokingdomdao";
-export const STAGE_TO_ID_MAP = {
-  backlog: 29,
-  progress: 30,
-  done: 31,
-  approved: 32,
-};
 
 async function jsonRpc(url: string, method: string, params: any) {
   const data = {
