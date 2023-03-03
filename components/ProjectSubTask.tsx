@@ -1,6 +1,6 @@
 import { shallow } from "zustand/shallow";
 
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 import {
   CheckCircleRounded,
@@ -21,6 +21,7 @@ import {
   Box,
   Button,
   IconButton,
+  Link,
   Menu,
   MenuItem,
   Paper,
@@ -37,10 +38,13 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { STAGE_TO_ID_MAP } from "@lib/constants";
 import { getTaskName, getTaskTotalHours, toPrettyDuration, toPrettyRange } from "@lib/utils";
 
 import useDialogStore from "@store/dialogStore";
 import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
+
+import EditTimeEntry from "./EditTimeEntry";
 
 export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   const theme = useTheme();
@@ -55,6 +59,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
     shallow,
   );
   const [expanded, setExpanded] = useState<number | false>(false);
+  const [editTimeEntry, setEditTimeEntry] = useState<number | null>(null);
   const openDialog = useDialogStore(({ openDialog }) => openDialog);
   const totalHours = useMemo(() => getTaskTotalHours(task), [task]);
 
@@ -85,6 +90,13 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
     }
   };
 
+  const handleTrackTime = async () => {
+    if (trackedTask) {
+      await stopTrackingTask(trackedTask);
+    }
+    await startTrackingTask(task);
+  };
+
   const handleStopTask = (event: React.SyntheticEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -93,13 +105,17 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
 
   const handleDeleteTimeEntry = (timeEntry: Timesheet) => deleteTimeEntry(timeEntry, task);
 
+  const handleEditTimeEntry = (timeEntry: Timesheet) => {
+    setEditTimeEntry(timeEntry.id);
+  };
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleOptionsClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleOptionsClose = () => setAnchorEl(null);
 
   const renderTaskAction = () => {
-    const isDone = task.stage_id.name === "Done";
+    const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
     if (isDone) {
       return (
         <IconButton sx={{ padding: 0 }} color="success">
@@ -121,6 +137,18 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
     );
   };
 
+  const renderEditTimeEntry = (timeEntry: Timesheet) => {
+    return (
+      <TableRow key={`edit-${timeEntry.id}`} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+        <TableCell colSpan={4}>
+          <Box>
+            <EditTimeEntry timeEntry={timeEntry} task={task} onUpdate={() => setEditTimeEntry(null)} />
+          </Box>
+        </TableCell>
+      </TableRow>
+    );
+  };
+
   return (
     <Accordion variant="outlined" expanded={expanded === task.id} onChange={handleTaskClick(task.id)}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -135,8 +163,14 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
           <span>{totalHours ? toPrettyDuration(totalHours) : "-"}</span>
         </Typography>
         <Box sx={{ mt: 1, mb: 1, display: "flex" }}>
-          {task.stage_id.name === "Done" ? (
-            <Button sx={{ mr: 1 }} variant="outlined" startIcon={<PlayArrow />} size="small">
+          {task.stage_id.id === STAGE_TO_ID_MAP["done"] ? (
+            <Button
+              onClick={() => handleTrackTime()}
+              sx={{ mr: 1 }}
+              variant="outlined"
+              startIcon={<PlayArrow />}
+              size="small"
+            >
               Track Time
             </Button>
           ) : (
@@ -173,8 +207,15 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
               onClose={handleOptionsClose}
             >
               <MenuItem onClick={handleOptionsClose}>
-                <OpenInNew sx={{ mr: 1 }} />
-                Open in Odoo
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_ODOO_ENDPOINT}/web#model=project.task&id=${task.id}&view_type=form`}
+                  target="_blank"
+                  underline="none"
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <OpenInNew sx={{ mr: 1 }} />
+                  Open in Odoo
+                </Link>
               </MenuItem>
               <MenuItem onClick={handleOptionsClose}>
                 <MoreTime sx={{ mr: 1 }} />
@@ -195,32 +236,35 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
             </TableHead>
             <TableBody>
               {task.timesheet_ids.map((row) => (
-                <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                  <TableCell>{toPrettyDuration(row.unit_amount)}</TableCell>
-                  <TableCell sx={{ minWidth: 160 }}>
-                    {toPrettyRange(row.start, row.end)}
-                    {!row.end && (
-                      <span>
-                        -<strong>now</strong>
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="right">
-                    <ToggleButtonGroup size="small" exclusive>
-                      <ToggleButton value="edit">
-                        <Tooltip title="Edit" placement="top">
-                          <ModeEdit fontSize="small" />
-                        </Tooltip>
-                      </ToggleButton>
-                      <ToggleButton value="delete" onClick={() => handleDeleteTimeEntry(row)}>
-                        <Tooltip title="Delete" placement="top">
-                          <Delete fontSize="small" />
-                        </Tooltip>
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  </TableCell>
-                </TableRow>
+                <Fragment key={row.id}>
+                  <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell>{toPrettyDuration(row.unit_amount)}</TableCell>
+                    <TableCell sx={{ minWidth: 160 }}>
+                      {toPrettyRange(row.start, row.end)}
+                      {!row.end && (
+                        <span>
+                          -<strong>now</strong>
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell align="right">
+                      <ToggleButtonGroup size="small" exclusive>
+                        <ToggleButton value="edit">
+                          <Tooltip title="Edit" placement="top" onClick={() => handleEditTimeEntry(row)}>
+                            <ModeEdit fontSize="small" />
+                          </Tooltip>
+                        </ToggleButton>
+                        <ToggleButton value="delete" onClick={() => handleDeleteTimeEntry(row)}>
+                          <Tooltip title="Delete" placement="top">
+                            <Delete fontSize="small" />
+                          </Tooltip>
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                    </TableCell>
+                  </TableRow>
+                  {editTimeEntry === row.id ? renderEditTimeEntry(row) : null}
+                </Fragment>
               ))}
             </TableBody>
           </Table>

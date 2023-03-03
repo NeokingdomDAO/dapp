@@ -13,6 +13,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
 
   const {
     query: { id },
+    body,
   } = req;
   const { username, password } = user;
   const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
@@ -21,6 +22,17 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     // Remove Time Entry
     const removed = await session.remove("account.analytic.line", [Number(id)]);
     return res.status(removed ? 200 : 500).json({ removed });
+  }
+
+  if (req.method === "PUT") {
+    // Update Time Entry
+    try {
+      // TODO: Validate body params
+      const newTimeEntry = await session.update("account.analytic.line", Number(id), JSON.parse(body));
+      res.status(200).json(newTimeEntry);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
   }
 }
 

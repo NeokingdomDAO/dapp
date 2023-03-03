@@ -4,6 +4,7 @@ import produce from "immer";
 import { Project, ProjectTask, Timesheet } from "@store/projectTaskStore";
 
 import { META } from "../pages/_document";
+import { STAGE_NAMES_MAP, STAGE_TO_ID_MAP } from "./constants";
 
 export const getLettersFromName = (name: string) =>
   name
@@ -34,6 +35,12 @@ export function getTaskTotalHours(task: ProjectTask) {
     // it's a subtask
     return task.timesheet_ids.reduce((tot, time) => (tot += time.unit_amount), 0);
   }
+}
+
+export function setTaskStatus(task: ProjectTask, stageName: string) {
+  return produce(task, (draft) => {
+    draft.stage_id = { id: STAGE_TO_ID_MAP[stageName], name: STAGE_NAMES_MAP[stageName] };
+  });
 }
 
 export function toPrettyDuration(time: number) {

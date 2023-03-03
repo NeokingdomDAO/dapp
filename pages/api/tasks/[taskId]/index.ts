@@ -22,8 +22,8 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     // UPDATE TASK
     try {
       // TODO: Validate body params
-      const newTask = await session.update("project.task", Number(taskId), JSON.parse(body));
-      res.status(200).json(newTask);
+      const updated = await session.update("project.task", Number(taskId), JSON.parse(body));
+      res.status(200).json({ updated });
     } catch (err: any) {
       res.status(500).json({ message: err.message });
     }

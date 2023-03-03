@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import { Add, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, CardHeader, Link, Stack, Typography } from "@mui/material";
 
+import { STAGE_TO_ID_MAP } from "@lib/constants";
+
 import { Project } from "@store/projectTaskStore";
 
 import ProjectTaskCard from "./ProjectTaskCard";
@@ -10,11 +12,14 @@ import ProjectTaskCard from "./ProjectTaskCard";
 export default function ProjectCard({ project }: { project: Project }) {
   const [showCompleted, setShowCompleted] = useState(true);
   const tasks = useMemo(
-    () => project.tasks.filter((task) => !task.parent_id && !["Approved", "Done"].includes(task.stage_id.name)),
+    () =>
+      project.tasks.filter(
+        (task) => !task.parent_id && ![STAGE_TO_ID_MAP["approved"], STAGE_TO_ID_MAP["done"]].includes(task.stage_id.id),
+      ),
     [project],
   );
   const completedTasks = useMemo(
-    () => project.tasks.filter((task) => !task.parent_id && task.stage_id.name === "Done"),
+    () => project.tasks.filter((task) => !task.parent_id && task.stage_id.id === STAGE_TO_ID_MAP["done"]),
     [project],
   );
 
