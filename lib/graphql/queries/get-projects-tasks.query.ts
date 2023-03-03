@@ -16,6 +16,9 @@ export const getProjectsTasksQuery = gql`
         display_name
         description
         effective_hours
+        project_id {
+          id
+        }
         stage_id {
           id
           name
@@ -25,6 +28,9 @@ export const getProjectsTasksQuery = gql`
           name
           display_name
           description
+          project_id {
+            id
+          }
           parent_id {
             id
             name

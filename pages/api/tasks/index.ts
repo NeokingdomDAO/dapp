@@ -19,7 +19,7 @@ const mergeProjectTimeEntries = (projects: any[], timeEntries: any[]) => {
             timesheet.end = timeEntry.end;
           }
         });
-        task.child_ids.forEach((child: any) => {
+        task.child_ids?.forEach((child: any) => {
           child.timesheet_ids.forEach((timesheet: any) => {
             const timeEntry = timeEntries.find((te) => Number(te.id) === Number(timesheet.id));
             if (timeEntry) {

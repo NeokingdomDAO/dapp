@@ -37,7 +37,7 @@ export default function ProjectTaskCard({ task }: { task: ProjectTask }) {
         sx={{ pb: 2 }}
       />
       <CardContent sx={{ pt: 0 }}>
-        {task.child_ids.length ? (
+        {task.child_ids?.length ? (
           task.child_ids.map((subTask) => <ProjectSubTask key={subTask.id} task={subTask} />)
         ) : (
           <ProjectSubTask key={task.id} task={task} />

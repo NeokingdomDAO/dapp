@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import { findActiveTimeEntry, pushTaskTimeEntry, replaceTaskInProjects, replaceTaskTimeEntry } from "@lib/utils";
+
 export type Project = {
   id: number;
   name: string;
@@ -12,6 +14,7 @@ export type ProjectTask = {
   name: string;
   display_name: string;
   effective_hours: number;
+  project_id: { id: number };
   parent_id: { id: number; name: string } | null;
   stage_id: { id: number; name: string };
   child_ids: ProjectTask[];
@@ -35,22 +38,21 @@ export interface ProjectTaskStore {
   stopTrackingTask: (task: ProjectTask) => void;
 }
 
-const findActiveTask = (projects: Project[]) => {
-  let activeTask = null;
+const findActiveProjectTask = (projects: Project[]) => {
+  let activeProjectTask = null;
   projects.find((project) => {
     return project.tasks.find((task) => {
-      const timeEntry = task.timesheet_ids.find((ts) => !ts.end);
-      const childTimeEntry = task.timesheet_ids.find((ts) => !ts.end);
-      if (timeEntry || childTimeEntry) {
-        activeTask = task;
+      const [activeTimeEntry, activeTask] = findActiveTimeEntry(task);
+      if (activeTimeEntry) {
+        activeProjectTask = activeTask;
         return true;
       }
     });
   });
-  return activeTask;
+  return activeProjectTask;
 };
 
-const useProjectTaskStore = create<ProjectTaskStore>((set) => ({
+const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   projects: [],
   trackedTask: null,
   fetchProjects: async () => {
@@ -58,23 +60,39 @@ const useProjectTaskStore = create<ProjectTaskStore>((set) => ({
     if (response.ok) {
       const projects = await response.json();
       console.log("🐞 > projects:", projects);
-      const activeTask = findActiveTask(projects);
+      const activeTask = findActiveProjectTask(projects);
       set({ projects, trackedTask: activeTask });
     }
   },
   startTrackingTask: async (task: ProjectTask) => {
-    const response = await fetch(`/api/tasks/${task.id}/time_entry`, {
+    const response = await fetch(`/api/tasks/${task.id}/time_entries`, {
       method: "POST",
       body: JSON.stringify(task),
     });
-    console.log("🐞 > response:", response);
     if (response.ok) {
       const timeEntry = await response.json();
-      console.log("🐞 > timeEntry:", timeEntry);
-      set({ trackedTask: task });
+      const newTask = pushTaskTimeEntry(task, timeEntry);
+      const newProjects = replaceTaskInProjects(get().projects, newTask);
+      set({ projects: newProjects, trackedTask: newTask });
     }
   },
-  stopTrackingTask: (task: ProjectTask) => set({ trackedTask: null }),
+  stopTrackingTask: async (task: ProjectTask) => {
+    const response = await fetch(`/api/tasks/${task.id}/time_entries`, {
+      method: "PUT",
+      body: JSON.stringify(task),
+    });
+    if (response.ok) {
+      const updatedTask = await response.json();
+      const newProjects = replaceTaskInProjects(get().projects, updatedTask);
+      set({ projects: newProjects, trackedTask: null });
+    }
+  },
+  deleteTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
+    const newTask = replaceTaskTimeEntry(task, timeEntry, { delete: true });
+    const newProjects = replaceTaskInProjects(get().projects, newTask);
+    set({ projects: newProjects, trackedTask: null });
+    await fetch(`/api/tasks/${task.id}/time_entries/${timeEntry.id}`, { method: "DELETE" });
+  },
 }));
 
 export default useProjectTaskStore;

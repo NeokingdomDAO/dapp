@@ -40,12 +40,12 @@ import {
 import { getTaskName, toPrettyDuration, toPrettyRange } from "@lib/utils";
 
 import useDialogStore from "@store/dialogStore";
-import useProjectTaskStore, { ProjectTask } from "@store/projectTaskStore";
+import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
 
 export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   const theme = useTheme();
-  const [trackedTask, startTrackingTask, stopTrackingTask] = useProjectTaskStore(
-    (state) => [state.trackedTask, state.startTrackingTask, state.stopTrackingTask],
+  const [trackedTask, startTrackingTask, stopTrackingTask, deleteTimeEntry] = useProjectTaskStore(
+    (state) => [state.trackedTask, state.startTrackingTask, state.stopTrackingTask, state.deleteTimeEntry],
     shallow,
   );
   const [expanded, setExpanded] = useState<number | false>(false);
@@ -72,9 +72,9 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
             <strong> {getTaskName(task)}</strong> instead?
           </span>
         ),
-        onConfirm: () => {
-          stopTrackingTask(trackedTask);
-          startTrackingTask(task);
+        onConfirm: async () => {
+          await stopTrackingTask(trackedTask);
+          await startTrackingTask(task);
         },
       });
     } else {
@@ -87,6 +87,8 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
     event.stopPropagation();
     stopTrackingTask(task);
   };
+
+  const handleDeleteTimeEntry = (timeEntry: Timesheet) => deleteTimeEntry(timeEntry, task);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -201,7 +203,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
                           <ModeEdit fontSize="small" />
                         </Tooltip>
                       </ToggleButton>
-                      <ToggleButton value="delete">
+                      <ToggleButton value="delete" onClick={() => handleDeleteTimeEntry(row)}>
                         <Tooltip title="Delete" placement="top">
                           <Delete fontSize="small" />
                         </Tooltip>
