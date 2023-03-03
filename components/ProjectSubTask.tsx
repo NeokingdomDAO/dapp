@@ -20,6 +20,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Chip,
   IconButton,
   Link,
   Menu,
@@ -39,7 +40,7 @@ import {
 } from "@mui/material";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
-import { getTaskName, getTaskTotalHours, toPrettyDuration, toPrettyRange } from "@lib/utils";
+import { getTaskName, getTaskTotalHours, stageToColor, toPrettyDuration, toPrettyRange } from "@lib/utils";
 
 import useDialogStore from "@store/dialogStore";
 import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
@@ -152,9 +153,12 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   return (
     <Accordion variant="outlined" expanded={expanded === task.id} onChange={handleTaskClick(task.id)}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Box sx={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
-          {renderTaskAction()}
-          <Typography sx={{ ml: 1 }}>{task.name}</Typography>
+        <Box sx={{ width: "100%", pr: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Box sx={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
+            {renderTaskAction()}
+            <Typography sx={{ ml: 1 }}>{task.name}</Typography>
+          </Box>
+          <Chip label={task.stage_id.name} color={stageToColor(task.stage_id.name)} variant="outlined" size="small" />
         </Box>
       </AccordionSummary>
       <AccordionDetails>

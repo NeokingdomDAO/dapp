@@ -96,8 +96,8 @@ export const pushTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet) => {
 
 export const replaceTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet, options: { delete?: boolean } = {}) => {
   return produce(task, (draft) => {
-    if (!draft.parent_id) {
-      // it's a task
+    if (!draft.parent_id && draft.child_ids?.length) {
+      // it's a task with subtasks
       draft.child_ids?.some((child, childIdx) => {
         const timeIdx = child.timesheet_ids.findIndex((timesheet) => timesheet.id === timeEntry.id);
         if (timeIdx > -1) {
@@ -110,7 +110,7 @@ export const replaceTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet, op
         }
       });
     } else {
-      // it's a subtask
+      // it's a task or subtask
       const timesheetIdx = draft.timesheet_ids.findIndex((timesheet) => timesheet.id === timeEntry.id);
       if (timesheetIdx > -1) {
         if (options.delete) {
@@ -155,4 +155,16 @@ export const replaceTaskInProjects = (
       }
     }
   });
+};
+
+export const stageToColor = (stage: string): any => {
+  if (!stage) return "default";
+  const stageName = stage.toLowerCase().split(" ").join("");
+  const stageToColorMap: { [key: string]: string } = {
+    created: "default",
+    inprogress: "primary",
+    done: "success",
+    approved: "warning",
+  };
+  return stageToColorMap[stageName] || "default";
 };

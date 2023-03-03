@@ -109,7 +109,6 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     const stoppedTask = await get().stopTrackingTask(task);
     if (stoppedTask) {
       const updatedTask = setTaskStatus(stoppedTask, "done");
-      console.log("🐞 > updatedTask:", updatedTask);
       const newProjects = replaceTaskInProjects(get().projects, updatedTask);
       set({ projects: newProjects });
       const totalHours = getTaskTotalHours(stoppedTask);
@@ -122,16 +121,22 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       });
       if (!response.ok) {
         const error = await response.json();
-        console.log("🐞 > error:", error);
         const newProjects = replaceTaskInProjects(get().projects, stoppedTask);
         set({ alert: { message: error.message, type: "error" }, projects: newProjects });
       }
     }
   },
   deleteTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
-    const newTask = replaceTaskTimeEntry(task, timeEntry, { delete: true });
+    let newTask = replaceTaskTimeEntry(task, timeEntry, { delete: true });
+    if (!newTask.timesheet_ids.length) {
+      newTask = setTaskStatus(newTask, "created");
+      fetch(`/api/tasks/${task.id}`, {
+        method: "PUT",
+        body: JSON.stringify({ stage_id: newTask.stage_id.id }),
+      });
+    }
     const newProjects = replaceTaskInProjects(get().projects, newTask);
-    set({ projects: newProjects, trackedTask: null });
+    set({ projects: newProjects });
     const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
     if (response.ok) {
       set({ alert: { message: "Time Entry successfully deleted!", type: "success" } });
