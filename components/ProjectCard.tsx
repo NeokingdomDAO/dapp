@@ -10,7 +10,7 @@ import { Project } from "@store/projectTaskStore";
 import ProjectTaskCard from "./ProjectTaskCard";
 
 export default function ProjectCard({ project }: { project: Project }) {
-  const [showCompleted, setShowCompleted] = useState(true);
+  const [hideCompleted, setHideCompleted] = useState(true);
   const tasks = useMemo(
     () =>
       project.tasks.filter(
@@ -38,10 +38,10 @@ export default function ProjectCard({ project }: { project: Project }) {
           <Button
             variant="outlined"
             size="small"
-            startIcon={showCompleted ? <VisibilityOff /> : <Visibility />}
-            onClick={() => setShowCompleted(!showCompleted)}
+            startIcon={hideCompleted ? <Visibility /> : <VisibilityOff />}
+            onClick={() => setHideCompleted(!hideCompleted)}
           >
-            {showCompleted ? "Hide" : "Show"} Completed ({completedTasks.length})
+            {hideCompleted ? "Show" : "Hide"} Completed ({completedTasks.length})
           </Button>
         )}
         <Button sx={{ ml: 1 }} variant="outlined" color="success" startIcon={<Add />} size="small">
@@ -49,9 +49,9 @@ export default function ProjectCard({ project }: { project: Project }) {
         </Button>
       </Box>
       <CardContent sx={{ pt: 0, pb: 0 }}>
-        {showCompleted && completedTasks.map((task) => <ProjectTaskCard key={task.id} task={task} />)}
+        {!hideCompleted && completedTasks.map((task) => <ProjectTaskCard key={task.id} task={task} />)}
         {tasks.map((task) => (
-          <ProjectTaskCard key={task.id} task={task} />
+          <ProjectTaskCard hideCompleted={hideCompleted} key={task.id} task={task} />
         ))}
       </CardContent>
     </Card>

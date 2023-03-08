@@ -21,17 +21,17 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "POST") {
     // START TASK - Create new Time Entry
-    const timeEntry = { task_id: Number(taskId), start: format(new Date(), "yyyy-MM-dd HH:mm:ss") };
-    const timeEntryId = await session.create("account.analytic.line", timeEntry);
-    const [newTimeEntry] = await session.read("account.analytic.line", [timeEntryId]);
-    // Move task to In progress
     try {
+      const timeEntry = { task_id: Number(taskId), start: format(new Date(), "yyyy-MM-dd HH:mm:ss") };
+      const timeEntryId = await session.create("account.analytic.line", timeEntry);
+      const [newTimeEntry] = await session.read("account.analytic.line", [timeEntryId]);
+      // Move task to In progress
       await session.update("project.task", Number(taskId), {
         stage_id: STAGE_TO_ID_MAP["progress"],
       });
       res.status(200).json(newTimeEntry);
-    } catch (err) {
-      res.status(500).json(err);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
     }
   }
 }

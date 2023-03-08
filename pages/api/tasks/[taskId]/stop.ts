@@ -13,10 +13,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
-  const {
-    query: { taskId },
-    body: task,
-  } = req;
+  const { body: task } = req;
   const { username, password } = user;
   const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
 

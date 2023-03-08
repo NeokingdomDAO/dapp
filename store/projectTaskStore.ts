@@ -77,6 +77,9 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       console.log("🐞 > projects:", projects);
       const activeTask = findActiveProjectTask(projects);
       set({ projects, trackedTask: activeTask });
+    } else {
+      const error = await response.json();
+      set({ alert: { message: error.message, type: "error" } });
     }
   },
   startTrackingTask: async (task: ProjectTask) => {
@@ -90,6 +93,9 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       const newTask = setTaskStatus(taskWithTimeEntries, "progress");
       const newProjects = replaceTaskInProjects(get().projects, newTask);
       set({ projects: newProjects, trackedTask: newTask });
+    } else {
+      const error = await response.json();
+      set({ alert: { message: error.message, type: "error" } });
     }
   },
   stopTrackingTask: async (task: ProjectTask) => {
@@ -125,6 +131,9 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         const error = await response.json();
         const newProjects = replaceTaskInProjects(get().projects, stoppedTask);
         set({ alert: { message: error.message, type: "error" }, projects: newProjects });
+      } else {
+        const error = await response.json();
+        set({ alert: { message: error.message, type: "error" } });
       }
     }
   },
