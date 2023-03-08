@@ -51,10 +51,10 @@ export function toPrettyDuration(time: number) {
 
 export function toPrettyRange(start: string, end?: string) {
   if (!start) return start;
-  const startDate = format(new Date(start), "MMM d hh:mm");
+  const startDate = format(new Date(start), "MMM d, HH:mm");
   if (!end) return startDate;
   const sameDay = isSameDay(new Date(start), new Date(end));
-  const endDateFormat = sameDay ? "hh:mm" : "MMM d hh:mm";
+  const endDateFormat = sameDay ? "HH:mm" : "MMM d, HH:mm";
   const endDate = format(new Date(end), endDateFormat);
   return `${startDate} - ${endDate}`;
 }

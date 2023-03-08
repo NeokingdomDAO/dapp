@@ -21,6 +21,7 @@ import {
   Box,
   Button,
   Chip,
+  Collapse,
   IconButton,
   Link,
   Menu,
@@ -107,7 +108,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   const handleDeleteTimeEntry = (timeEntry: Timesheet) => deleteTimeEntry(timeEntry, task);
 
   const handleEditTimeEntry = (timeEntry: Timesheet) => {
-    setEditTimeEntry(timeEntry.id);
+    setEditTimeEntry(editTimeEntry ? null : timeEntry.id);
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -135,18 +136,6 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
       <IconButton sx={{ padding: 0, border: `1px solid ${theme.palette.grey[300]}` }} onClick={handleStartTask}>
         <PlayArrow sx={{ fontSize: 30 }} />
       </IconButton>
-    );
-  };
-
-  const renderEditTimeEntry = (timeEntry: Timesheet) => {
-    return (
-      <TableRow key={`edit-${timeEntry.id}`} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-        <TableCell colSpan={4}>
-          <Box>
-            <EditTimeEntry timeEntry={timeEntry} task={task} onUpdate={() => setEditTimeEntry(null)} />
-          </Box>
-        </TableCell>
-      </TableRow>
     );
   };
 
@@ -241,7 +230,10 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
             <TableBody>
               {task.timesheet_ids.map((row) => (
                 <Fragment key={row.id}>
-                  <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow
+                    key={row.id}
+                    sx={{ "& > *": { borderBottom: "unset" }, "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell>{toPrettyDuration(row.unit_amount)}</TableCell>
                     <TableCell sx={{ minWidth: 160 }}>
                       {toPrettyRange(row.start, row.end)}
@@ -267,7 +259,18 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
                       </ToggleButtonGroup>
                     </TableCell>
                   </TableRow>
-                  {editTimeEntry === row.id ? renderEditTimeEntry(row) : null}
+                  <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
+                    <Collapse in={editTimeEntry === row.id} timeout="auto" unmountOnExit>
+                      <Box>
+                        <EditTimeEntry
+                          timeEntry={row}
+                          task={task}
+                          onCancel={() => setEditTimeEntry(null)}
+                          onUpdate={() => setEditTimeEntry(null)}
+                        />
+                      </Box>
+                    </Collapse>
+                  </TableCell>
                 </Fragment>
               ))}
             </TableBody>

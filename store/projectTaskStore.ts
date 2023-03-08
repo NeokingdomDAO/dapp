@@ -126,6 +126,25 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       }
     }
   },
+  updateTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
+    const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        start: timeEntry.start,
+        end: timeEntry.end,
+        name: timeEntry.name,
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const newTask = replaceTaskTimeEntry(task, { ...timeEntry, unit_amount: data.unit_amount });
+      const newProjects = replaceTaskInProjects(get().projects, newTask);
+      set({ projects: newProjects, alert: { message: "Time Entry successfully updated!", type: "success" } });
+    } else {
+      const error = await response.json();
+      set({ alert: { message: error.message, type: "error" } });
+    }
+  },
   deleteTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
     let newTask = replaceTaskTimeEntry(task, timeEntry, { delete: true });
     if (!newTask.timesheet_ids.length) {
@@ -140,25 +159,6 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
     if (response.ok) {
       set({ alert: { message: "Time Entry successfully deleted!", type: "success" } });
-    } else {
-      const error = await response.json();
-      set({ alert: { message: error.message, type: "error" } });
-    }
-  },
-  updateTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
-    const newTask = replaceTaskTimeEntry(task, timeEntry);
-    const newProjects = replaceTaskInProjects(get().projects, newTask);
-    set({ projects: newProjects });
-    const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        start: timeEntry.start,
-        end: timeEntry.end,
-        name: timeEntry.name,
-      }),
-    });
-    if (response.ok) {
-      set({ alert: { message: "Time Entry successfully updated!", type: "success" } });
     } else {
       const error = await response.json();
       set({ alert: { message: error.message, type: "error" } });

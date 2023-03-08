@@ -28,8 +28,13 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     // Update Time Entry
     try {
       // TODO: Validate body params
-      const newTimeEntry = await session.update("account.analytic.line", Number(id), JSON.parse(body));
-      res.status(200).json(newTimeEntry);
+      const updated = await session.update("account.analytic.line", Number(id), JSON.parse(body));
+      if (updated) {
+        const [newTimeEntry] = await session.read("account.analytic.line", [Number(id)]);
+        res.status(200).json(newTimeEntry);
+      } else {
+        throw new Error("Unable to update time entry");
+      }
     } catch (err: any) {
       res.status(500).json({ message: err.message });
     }
