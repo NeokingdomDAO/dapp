@@ -44,6 +44,8 @@ export const getProjectsTasksQuery = gql`
             name
             display_name
             unit_amount
+            start
+            end
           }
         }
         parent_id {
@@ -55,6 +57,8 @@ export const getProjectsTasksQuery = gql`
           name
           display_name
           unit_amount
+          start
+          end
         }
       }
     }
