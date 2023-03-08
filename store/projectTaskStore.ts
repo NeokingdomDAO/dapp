@@ -131,9 +131,6 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         const error = await response.json();
         const newProjects = replaceTaskInProjects(get().projects, stoppedTask);
         set({ alert: { message: error.message, type: "error" }, projects: newProjects });
-      } else {
-        const error = await response.json();
-        set({ alert: { message: error.message, type: "error" } });
       }
     }
   },
