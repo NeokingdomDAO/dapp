@@ -1,38 +1,36 @@
 import { format } from "date-fns";
 
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { useState } from "react";
 
-import { Box, Button, FormControl, FormLabel, TextField } from "@mui/material";
+import { Box, Button, FormControl, FormLabel } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
+import { Timesheet } from "@store/projectTaskStore";
 
 import TextArea from "./TextArea";
 
-export default function EditTimeEntry({
+export default function TimeEntryForm({
   timeEntry,
-  task,
-  onUpdate,
+  onConfirm,
   onCancel,
 }: {
-  timeEntry: Timesheet;
-  task: ProjectTask;
-  onUpdate: (data: any) => void;
-  onCancel?: (data: any) => void;
+  timeEntry?: Timesheet;
+  onConfirm: (data: any) => void;
+  onCancel?: () => void;
 }) {
-  const updateTimeEntry = useProjectTaskStore((state) => state.updateTimeEntry);
+  const now = new Date();
+  const dateFormat = "yyyy-MM-dd HH:mm:ss";
 
   const [form, setForm] = useState<{ start: string; end?: string; name: string }>({
-    start: timeEntry.start,
-    end: timeEntry.end,
-    name: timeEntry.name,
+    start: timeEntry ? timeEntry.start : format(now, dateFormat),
+    end: timeEntry ? timeEntry.end : format(now, dateFormat),
+    name: timeEntry ? timeEntry.name : "",
   });
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
-    const data = { ...timeEntry, ...form };
-    updateTimeEntry(data, task);
-    onUpdate && onUpdate(data);
+    const data = { ...(timeEntry || {}), ...form };
+    onConfirm(data);
   };
 
   return (
@@ -45,7 +43,7 @@ export default function EditTimeEntry({
             format="yyyy/MM/dd HH:mm"
             ampm={false}
             value={form.start ? new Date(form.start) : null}
-            onChange={(datetime: Date) => setForm({ ...form, start: format(datetime, "yyyy-MM-dd HH:mm:ss") })}
+            onChange={(datetime: Date) => setForm({ ...form, start: format(datetime, dateFormat) })}
           />
           <DateTimePicker
             sx={{ ml: 2 }}
@@ -54,7 +52,7 @@ export default function EditTimeEntry({
             format="yyyy/MM/dd HH:mm"
             ampm={false}
             value={form.end ? new Date(form.end) : null}
-            onChange={(datetime: Date) => setForm({ ...form, end: format(datetime, "yyyy-MM-dd HH:mm:ss") })}
+            onChange={(datetime: Date) => setForm({ ...form, end: format(datetime, dateFormat) })}
           />
         </Box>
         <Box sx={{ mt: 2, mb: 2 }}>
@@ -83,7 +81,7 @@ export default function EditTimeEntry({
             sx={{ flex: "50%" }}
             disabled={!form.start || !form.end || !form.name}
           >
-            Save
+            {timeEntry ? "Update" : "Create"}
           </Button>
         </Box>
       </Box>

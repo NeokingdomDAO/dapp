@@ -23,8 +23,8 @@ export const isSameAddress = (addressLeft: string, addressRight: string) =>
 
 // PROJECTS TASKS UTILS
 export function getTaskTotalHours(task: ProjectTask) {
-  if (!task.parent_id) {
-    // it's a task
+  if (!task.parent_id && task.child_ids?.length) {
+    // it's a task with subtasks
     return (
       task.child_ids?.reduce((tot, child) => {
         tot += getTaskTotalHours(child);
@@ -32,7 +32,6 @@ export function getTaskTotalHours(task: ProjectTask) {
       }, 0) || 0
     );
   } else {
-    // it's a subtask
     return task.timesheet_ids.reduce((tot, time) => (tot += time.unit_amount), 0);
   }
 }
@@ -94,7 +93,11 @@ export const pushTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet) => {
   });
 };
 
-export const replaceTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet, options: { delete?: boolean } = {}) => {
+export const replaceTaskTimeEntry = (
+  task: ProjectTask,
+  timeEntry: Timesheet,
+  options: { delete?: boolean; add?: boolean } = {},
+) => {
   return produce(task, (draft) => {
     if (!draft.parent_id && draft.child_ids?.length) {
       // it's a task with subtasks
@@ -120,6 +123,12 @@ export const replaceTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet, op
         }
       }
     }
+  });
+};
+
+export const addTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet) => {
+  return produce(task, (draft) => {
+    draft.timesheet_ids.unshift(timeEntry);
   });
 };
 

@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 import {
+  addTaskTimeEntry,
   findActiveTimeEntry,
   getTaskTotalHours,
   pushTaskTimeEntry,
@@ -46,8 +47,9 @@ export interface ProjectTaskStore {
   startTrackingTask: (task: ProjectTask) => void;
   stopTrackingTask: (task: ProjectTask) => Promise<ProjectTask | undefined>;
   markTaskAsDone: (task: ProjectTask) => void;
-  deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
+  createTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<boolean>;
   updateTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
+  deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
 }
 
 const findActiveProjectTask = (projects: Project[]) => {
@@ -124,6 +126,28 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         const newProjects = replaceTaskInProjects(get().projects, stoppedTask);
         set({ alert: { message: error.message, type: "error" }, projects: newProjects });
       }
+    }
+  },
+  createTimeEntry: async (timeEntry: Timesheet, task: ProjectTask): Promise<boolean> => {
+    const response = await fetch(`/api/time_entries`, {
+      method: "POST",
+      body: JSON.stringify({
+        task_id: task.id,
+        start: timeEntry.start,
+        end: timeEntry.end,
+        name: timeEntry.name,
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const newTask = addTaskTimeEntry(task, { ...timeEntry, id: data.id, unit_amount: data.unit_amount });
+      const newProjects = replaceTaskInProjects(get().projects, newTask);
+      set({ projects: newProjects, alert: { message: "Time Entry successfully created!", type: "success" } });
+      return true;
+    } else {
+      const error = await response.json();
+      set({ alert: { message: error.message, type: "error" } });
+      return false;
     }
   },
   updateTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {

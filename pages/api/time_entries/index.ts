@@ -11,33 +11,24 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
-  const {
-    query: { id },
-    body,
-  } = req;
+  const { body } = req;
   const { username, password } = user;
   const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
 
-  if (req.method === "PUT") {
-    // Update Time Entry
+  if (req.method === "POST") {
+    // Create New Time Entry
     try {
       // TODO: Validate body params
-      const updated = await session.update("account.analytic.line", Number(id), JSON.parse(body));
-      if (updated) {
-        const [newTimeEntry] = await session.read("account.analytic.line", [Number(id)]);
+      const newTimeEntryId = await session.create("account.analytic.line", JSON.parse(body));
+      if (newTimeEntryId) {
+        const [newTimeEntry] = await session.read("account.analytic.line", [Number(newTimeEntryId)]);
         res.status(200).json(newTimeEntry);
       } else {
-        throw new Error("Unable to update time entry");
+        throw new Error("Unable to create time entry");
       }
     } catch (err: any) {
       res.status(500).json({ message: err.message });
     }
-  }
-
-  if (req.method === "DELETE") {
-    // Remove Time Entry
-    const removed = await session.remove("account.analytic.line", [Number(id)]);
-    return res.status(removed ? 200 : 500).json({ removed });
   }
 }
 

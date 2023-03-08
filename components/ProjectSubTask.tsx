@@ -1,3 +1,4 @@
+import { Rowdies } from "@next/font/google";
 import { shallow } from "zustand/shallow";
 
 import { Fragment, useMemo, useState } from "react";
@@ -46,22 +47,34 @@ import { getTaskName, getTaskTotalHours, stageToColor, toPrettyDuration, toPrett
 import useDialogStore from "@store/dialogStore";
 import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
 
-import EditTimeEntry from "./EditTimeEntry";
+import TimeEntryForm from "./TimeEntryForm";
 
 export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   const theme = useTheme();
-  const [trackedTask, startTrackingTask, stopTrackingTask, deleteTimeEntry, markTaskAsDone] = useProjectTaskStore(
+  const [
+    trackedTask,
+    startTrackingTask,
+    stopTrackingTask,
+    markTaskAsDone,
+    createTimeEntry,
+    updateTimeEntry,
+    deleteTimeEntry,
+  ] = useProjectTaskStore(
     (state) => [
       state.trackedTask,
       state.startTrackingTask,
       state.stopTrackingTask,
-      state.deleteTimeEntry,
       state.markTaskAsDone,
+      state.createTimeEntry,
+      state.updateTimeEntry,
+      state.deleteTimeEntry,
     ],
     shallow,
   );
+
   const [expanded, setExpanded] = useState<number | false>(false);
-  const [editTimeEntry, setEditTimeEntry] = useState<number | null>(null);
+  const [updateTimeEntryOpen, setUpdateTimeEntryOpen] = useState<number | boolean>(false);
+  const [createTimeEntryOpen, setCreateTimeEntryOpen] = useState<boolean>(false);
   const openDialog = useDialogStore(({ openDialog }) => openDialog);
   const totalHours = useMemo(() => getTaskTotalHours(task), [task]);
 
@@ -105,16 +118,18 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
     stopTrackingTask(task);
   };
 
+  const handleNewTimeEntry = () => {
+    setCreateTimeEntryOpen(true);
+    setMenuOptions(null);
+  };
+  const handleEditTimeEntry = (timeEntry: Timesheet) =>
+    setUpdateTimeEntryOpen(updateTimeEntryOpen ? false : timeEntry.id);
   const handleDeleteTimeEntry = (timeEntry: Timesheet) => deleteTimeEntry(timeEntry, task);
 
-  const handleEditTimeEntry = (timeEntry: Timesheet) => {
-    setEditTimeEntry(editTimeEntry ? null : timeEntry.id);
-  };
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleOptionsClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
-  const handleOptionsClose = () => setAnchorEl(null);
+  const [menuOptions, setMenuOptions] = useState<null | HTMLElement>(null);
+  const openMenuOptions = Boolean(menuOptions);
+  const handleOptionsClick = (event: React.MouseEvent<HTMLElement>) => setMenuOptions(event.currentTarget);
+  const handleOptionsClose = () => setMenuOptions(null);
 
   const renderTaskAction = () => {
     const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
@@ -145,14 +160,16 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
         <Box sx={{ width: "100%", pr: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Box sx={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
             {renderTaskAction()}
-            <Typography sx={{ ml: 1 }}>{task.name}</Typography>
+            <Typography id={`task-${task.id}`} sx={{ ml: 1 }}>
+              {task.name}
+            </Typography>
           </Box>
           <Chip label={task.stage_id.name} color={stageToColor(task.stage_id.name)} variant="outlined" size="small" />
         </Box>
       </AccordionSummary>
       <AccordionDetails>
         <Typography>
-          <strong>Total time: </strong>
+          <strong>Total time:</strong>
           <span>{totalHours ? toPrettyDuration(totalHours) : "-"}</span>
         </Typography>
         <Box sx={{ mt: 1, mb: 1, display: "flex" }}>
@@ -184,8 +201,8 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
               id="options-button"
               size="small"
               variant="outlined"
-              aria-controls={open ? "options-menu" : undefined}
-              aria-expanded={open ? "true" : undefined}
+              aria-controls={openMenuOptions ? "options-menu" : undefined}
+              aria-expanded={openMenuOptions ? "true" : undefined}
               aria-haspopup="true"
               onClick={handleOptionsClick}
               sx={{ minWidth: "40px" }}
@@ -195,8 +212,8 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
             <Menu
               id="options-menu"
               MenuListProps={{ "aria-labelledby": "options-button" }}
-              anchorEl={anchorEl}
-              open={open}
+              anchorEl={menuOptions}
+              open={openMenuOptions}
               onClose={handleOptionsClose}
             >
               <MenuItem onClick={handleOptionsClose}>
@@ -210,7 +227,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
                   Open in Odoo
                 </Link>
               </MenuItem>
-              <MenuItem onClick={handleOptionsClose}>
+              <MenuItem onClick={handleNewTimeEntry}>
                 <MoreTime sx={{ mr: 1 }} />
                 New Time Entry
               </MenuItem>
@@ -228,11 +245,26 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
               </TableRow>
             </TableHead>
             <TableBody>
+              <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
+                <Collapse in={createTimeEntryOpen} timeout="auto" unmountOnExit>
+                  <Box>
+                    <TimeEntryForm
+                      onCancel={() => setCreateTimeEntryOpen(false)}
+                      onConfirm={async (payload) => {
+                        const success = await createTimeEntry(payload, task);
+                        if (success) {
+                          setCreateTimeEntryOpen(false);
+                        }
+                      }}
+                    />
+                  </Box>
+                </Collapse>
+              </TableCell>
               {task.timesheet_ids.map((row) => (
                 <Fragment key={row.id}>
                   <TableRow
                     key={row.id}
-                    sx={{ "& > *": { borderBottom: "unset" }, "&:last-child td, &:last-child th": { border: 0 } }}
+                    sx={{ "& > td": { borderBottom: "unset" }, "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>{toPrettyDuration(row.unit_amount)}</TableCell>
                     <TableCell sx={{ minWidth: 160 }}>
@@ -247,7 +279,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
                     <TableCell align="right">
                       <ToggleButtonGroup size="small" exclusive>
                         <ToggleButton value="edit">
-                          <Tooltip title="Edit" placement="top" onClick={() => handleEditTimeEntry(row)}>
+                          <Tooltip title="Update" placement="top" onClick={() => handleEditTimeEntry(row)}>
                             <ModeEdit fontSize="small" />
                           </Tooltip>
                         </ToggleButton>
@@ -260,13 +292,15 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
                     </TableCell>
                   </TableRow>
                   <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
-                    <Collapse in={editTimeEntry === row.id} timeout="auto" unmountOnExit>
+                    <Collapse in={updateTimeEntryOpen === row.id} timeout="auto" unmountOnExit>
                       <Box>
-                        <EditTimeEntry
+                        <TimeEntryForm
                           timeEntry={row}
-                          task={task}
-                          onCancel={() => setEditTimeEntry(null)}
-                          onUpdate={() => setEditTimeEntry(null)}
+                          onCancel={() => setUpdateTimeEntryOpen(false)}
+                          onConfirm={(data) => {
+                            updateTimeEntry(data, task);
+                            setUpdateTimeEntryOpen(false);
+                          }}
                         />
                       </Box>
                     </Collapse>
