@@ -15,6 +15,7 @@ export type Project = {
   id: number;
   name: string;
   display_name: string;
+  tag_ids: Array<{ id: number; name: string }>;
   tasks: ProjectTask[];
 };
 
@@ -22,12 +23,22 @@ export type ProjectTask = {
   id: number;
   name: string;
   display_name: string;
+  date_deadline: string;
   effective_hours: number;
+  user_id: { id: number; name: string };
+  approval_user_id: { id: number; name: string };
+  tier_id: Tier;
   project_id: { id: number };
+  tag_ids: Array<{ id: number; name: string }>;
   parent_id: { id: number; name: string } | null;
   stage_id: { id: number; name: string };
   child_ids: ProjectTask[];
   timesheet_ids: Timesheet[];
+};
+
+export type Tier = {
+  id: number;
+  name: string;
 };
 
 export type Timesheet = {

@@ -37,21 +37,19 @@ export default function TimeEntryForm({
       <Box sx={{ maxWidth: "500px" }}>
         <Box sx={{ display: "flex", justifyContent: "left", mt: 3 }}>
           <DateTimePicker
-            required
             label="Start"
             format="yyyy/MM/dd HH:mm"
             ampm={false}
             value={form.start ? new Date(form.start) : null}
-            onChange={(datetime: Date) => setForm({ ...form, start: format(datetime, dateFormat) })}
+            onChange={(datetime: any) => setForm({ ...form, start: format(datetime, dateFormat) })}
           />
           <DateTimePicker
             sx={{ ml: 2 }}
-            required
             label="End"
             format="yyyy/MM/dd HH:mm"
             ampm={false}
             value={form.end ? new Date(form.end) : null}
-            onChange={(datetime: Date) => setForm({ ...form, end: format(datetime, dateFormat) })}
+            onChange={(datetime: any) => setForm({ ...form, end: format(datetime, dateFormat) })}
           />
         </Box>
         <Box sx={{ mt: 2, mb: 2 }}>

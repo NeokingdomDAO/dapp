@@ -105,8 +105,10 @@ export type ResolutionFormState = {
 };
 
 export type OdooUser = {
+  id: number;
   email: string;
   ethereum_address: string;
+  name: string;
   display_name: string;
   image?: string;
   avatar_256?: string;

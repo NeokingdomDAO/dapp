@@ -7,7 +7,10 @@ export const getProjectsTasksQuery = gql`
       name
       description
       display_name
-      tag_ids
+      tag_ids {
+        id
+        name
+      }
       task_count
       task_count_with_subtasks
       tasks {
@@ -16,6 +19,23 @@ export const getProjectsTasksQuery = gql`
         display_name
         description
         effective_hours
+        date_deadline
+        user_id {
+          id
+          name
+        }
+        approval_user_id {
+          id
+          name
+        }
+        tier_id {
+          id
+          name
+        }
+        tag_ids {
+          id
+          name
+        }
         project_id {
           id
         }
