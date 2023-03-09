@@ -2,17 +2,17 @@ import { format } from "date-fns";
 
 import { useState } from "react";
 
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, FormControl, FormLabel, TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-import { Timesheet } from "@store/projectTaskStore";
+import { ProjectTask } from "@store/projectTaskStore";
 
-export default function TimeEntryForm({
-  timeEntry,
+export default function TaskForm({
+  task,
   onConfirm,
   onCancel,
 }: {
-  timeEntry?: Timesheet;
+  task?: ProjectTask;
   onConfirm: (data: any) => void;
   onCancel?: () => void;
 }) {
@@ -23,12 +23,12 @@ export default function TimeEntryForm({
     start: format(now, dateFormat),
     end: format(now, dateFormat),
     name: "",
-    ...(timeEntry || {}),
+    ...(task || {}),
   });
 
   const onSubmit = async (event: any) => {
     event.preventDefault();
-    const data = { ...(timeEntry || {}), ...form };
+    const data = { ...(task || {}), ...form };
     onConfirm(data);
   };
 
@@ -59,7 +59,6 @@ export default function TimeEntryForm({
             sx={{ width: "100%" }}
             id="newEntry-description"
             label="Description"
-            placeholder="Insert Description"
             multiline
             required
             rows={4}
@@ -81,7 +80,7 @@ export default function TimeEntryForm({
             sx={{ flex: "50%" }}
             disabled={!form.start || !form.end || !form.name}
           >
-            {timeEntry ? "Update" : "Create"}
+            {task ? "Update" : "Create"}
           </Button>
         </Box>
       </Box>

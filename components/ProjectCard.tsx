@@ -1,7 +1,9 @@
+import Link from "next/link";
+
 import { useMemo, useState } from "react";
 
 import { Add, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, CardHeader, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader } from "@mui/material";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 
@@ -44,7 +46,15 @@ export default function ProjectCard({ project }: { project: Project }) {
             {hideCompleted ? "Show" : "Hide"} Completed ({completedTasks.length})
           </Button>
         )}
-        <Button sx={{ ml: 1 }} variant="outlined" color="success" startIcon={<Add />} size="small">
+        <Button
+          component={Link}
+          href="/tasks/new"
+          sx={{ ml: 1 }}
+          variant="outlined"
+          color="success"
+          startIcon={<Add />}
+          size="small"
+        >
           New Task
         </Button>
       </Box>
