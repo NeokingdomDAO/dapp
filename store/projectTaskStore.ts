@@ -62,6 +62,8 @@ export interface ProjectTaskStore {
   stopTrackingTask: (task: ProjectTask) => Promise<ProjectTask | undefined>;
   markTaskAsDone: (task: ProjectTask) => void;
   createTask: (task: ProjectTask) => Promise<ProjectTask>;
+  updateTask: (task: ProjectTask) => void;
+  deleteTask: (task: ProjectTask) => void;
   createTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<boolean>;
   updateTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
   deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
@@ -160,6 +162,31 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       set({ alert: { message: `Task ${newtask.name} successfully created`, type: "success" } });
       get().fetchProjects();
       return newtask;
+    } else {
+      const error = await response.json();
+      set({ alert: { message: error.message, type: "error" } });
+    }
+  },
+  updateTask: async (task: ProjectTask) => {
+    const response = await fetch(`/api/tasks/${task.id}`, {
+      method: "PUT",
+      body: JSON.stringify(task),
+    });
+    if (response.ok) {
+      set({ alert: { message: `Task ${task.name} successfully updated`, type: "success" } });
+      get().fetchProjects();
+    } else {
+      const error = await response.json();
+      set({ alert: { message: error.message, type: "error" } });
+    }
+  },
+  deleteTask: async (task: ProjectTask) => {
+    const response = await fetch(`/api/tasks/${task.id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      set({ alert: { message: `Task ${task.name} successfully deleted`, type: "success" } });
+      get().fetchProjects();
     } else {
       const error = await response.json();
       set({ alert: { message: error.message, type: "error" } });

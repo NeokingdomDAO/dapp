@@ -28,6 +28,16 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
       res.status(500).json({ message: err.message });
     }
   }
+
+  if (req.method === "DELETE") {
+    // DELETE TASK
+    try {
+      const deleted = await session.remove("project.task", [Number(taskId)]);
+      res.status(200).json({ deleted });
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
+  }
 }
 
 export default withIronSessionApiRoute(tasksRoute, sessionOptions);
