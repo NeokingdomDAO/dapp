@@ -5,7 +5,7 @@ export const USER_FIELDS = {
   teledisko: [...COMMON_FIELDS, "image"],
 };
 
-export const STAGE_TO_ID_MAP: { [key: string]: number } = {
+export const STAGE_TO_ID_MAP: Record<string, number> = {
   backlog: 29,
   created: 29,
   progress: 30,
@@ -15,7 +15,7 @@ export const STAGE_TO_ID_MAP: { [key: string]: number } = {
   canceled: 162,
 };
 
-export const STAGE_NAMES_MAP: { [key: string]: string } = {
+export const STAGE_NAMES_MAP: Record<string, string> = {
   backlog: "Backlog",
   created: "Created",
   progress: "In Progress",
@@ -23,4 +23,11 @@ export const STAGE_NAMES_MAP: { [key: string]: string } = {
   done: "Done",
   approved: "Approved",
   canceled: "Canceled",
+};
+
+export const STAGE_TO_COLOR_MAP: Record<string, string> = {
+  created: "default",
+  inprogress: "primary",
+  done: "success",
+  approved: "warning",
 };

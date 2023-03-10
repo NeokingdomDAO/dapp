@@ -92,7 +92,6 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     const response = await fetch("/api/tasks", { method: "GET" });
     if (response.ok) {
       const projects = await response.json();
-      console.log("🐞 > projects:", projects);
       const activeTask = findActiveProjectTask(projects);
       set({ projects, trackedTask: activeTask });
     } else {

@@ -4,7 +4,7 @@ import produce from "immer";
 import { Project, ProjectTask, Timesheet } from "@store/projectTaskStore";
 
 import { META } from "../pages/_document";
-import { STAGE_NAMES_MAP, STAGE_TO_ID_MAP } from "./constants";
+import { STAGE_NAMES_MAP, STAGE_TO_COLOR_MAP, STAGE_TO_ID_MAP } from "./constants";
 
 export const getLettersFromName = (name: string) =>
   name
@@ -186,11 +186,5 @@ export const addTaskInProjects = (projects: Project[], task: ProjectTask) => {
 export const stageToColor = (stage: string): any => {
   if (!stage) return "default";
   const stageName = stage.toLowerCase().split(" ").join("");
-  const stageToColorMap: { [key: string]: string } = {
-    created: "default",
-    inprogress: "primary",
-    done: "success",
-    approved: "warning",
-  };
-  return stageToColorMap[stageName] || "default";
+  return STAGE_TO_COLOR_MAP[stageName] || "default";
 };

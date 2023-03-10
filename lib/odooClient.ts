@@ -46,7 +46,7 @@ async function call(
   });
 }
 
-function tuplify(query: { [key: string]: string } | string[] = {}) {
+function tuplify(query: Record<string, string> | string[] = {}) {
   if (Array.isArray(query)) {
     return query;
   }
