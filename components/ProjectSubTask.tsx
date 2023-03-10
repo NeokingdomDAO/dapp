@@ -1,4 +1,3 @@
-import { Rowdies } from "@next/font/google";
 import { shallow } from "zustand/shallow";
 
 import { Fragment, useMemo, useState } from "react";
