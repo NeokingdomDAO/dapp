@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 import {
+  addTaskInProjects,
   addTaskTimeEntry,
   findActiveTimeEntry,
   getTaskTotalHours,
@@ -25,6 +26,7 @@ export type ProjectTask = {
   display_name: string;
   date_deadline: string;
   effective_hours: number;
+  write_date: string;
   user_id: { id: number; name: string };
   approval_user_id: { id: number; name: string };
   tier_id: Tier;
@@ -54,10 +56,12 @@ export interface ProjectTaskStore {
   projects: Project[];
   trackedTask: ProjectTask | null;
   alert: { message: string; type: any } | null;
+  setAlert: (alert: { message: string; type: string } | null) => void;
   fetchProjects: () => Promise<void>;
   startTrackingTask: (task: ProjectTask) => void;
   stopTrackingTask: (task: ProjectTask) => Promise<ProjectTask | undefined>;
   markTaskAsDone: (task: ProjectTask) => void;
+  createTask: (task: ProjectTask) => Promise<ProjectTask>;
   createTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<boolean>;
   updateTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
   deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
@@ -81,6 +85,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   projects: [],
   trackedTask: null,
   alert: null,
+  setAlert: (alert: { message: string; type: string } | null) => set({ alert }),
   fetchProjects: async () => {
     const response = await fetch("/api/tasks", { method: "GET" });
     if (response.ok) {
@@ -143,6 +148,21 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         const newProjects = replaceTaskInProjects(get().projects, stoppedTask);
         set({ alert: { message: error.message, type: "error" }, projects: newProjects });
       }
+    }
+  },
+  createTask: async (task: ProjectTask) => {
+    const response = await fetch(`/api/tasks`, {
+      method: "POST",
+      body: JSON.stringify(task),
+    });
+    if (response.ok) {
+      const newtask = await response.json();
+      set({ alert: { message: `Task ${newtask.name} successfully created`, type: "success" } });
+      get().fetchProjects();
+      return newtask;
+    } else {
+      const error = await response.json();
+      set({ alert: { message: error.message, type: "error" } });
     }
   },
   createTimeEntry: async (timeEntry: Timesheet, task: ProjectTask): Promise<boolean> => {

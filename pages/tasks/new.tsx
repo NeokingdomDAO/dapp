@@ -1,6 +1,4 @@
-import { useSnackbar } from "notistack";
-
-import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 import { Grid, Typography } from "@mui/material";
 
@@ -12,14 +10,8 @@ NewTask.title = "New task";
 NewTask.requireLogin = true;
 
 export default function NewTask() {
-  const { enqueueSnackbar } = useSnackbar();
-  const { alert } = useProjectTaskStore(({ alert }) => ({ alert }));
-
-  useEffect(() => {
-    if (alert) {
-      enqueueSnackbar(alert.message, { variant: alert.type });
-    }
-  }, [alert, enqueueSnackbar]);
+  const router = useRouter();
+  const createTask = useProjectTaskStore((state) => state.createTask);
 
   return (
     <>
@@ -28,7 +20,12 @@ export default function NewTask() {
           <Typography variant="h3">New Task</Typography>
         </Grid>
         <Grid item xs={12} md={9}>
-          <TaskForm onConfirm={(data) => console.log(data)} />
+          <TaskForm
+            onConfirm={async (data) => {
+              const task = await createTask(data);
+              if (task) router.push("/tasks");
+            }}
+          />
         </Grid>
       </Grid>
     </>

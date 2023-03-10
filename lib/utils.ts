@@ -166,6 +166,23 @@ export const replaceTaskInProjects = (
   });
 };
 
+export const addTaskInProjects = (projects: Project[], task: ProjectTask) => {
+  return produce(projects, (drafts) => {
+    const projectIdx = drafts.findIndex((draft) => draft.id === task.project_id.id);
+    if (projectIdx > -1) {
+      if (!task.parent_id) {
+        drafts[projectIdx].tasks.push(task);
+      } else {
+        // it's a subtask
+        const parentIdx = drafts[projectIdx].tasks.findIndex((parent) => parent.id === task.parent_id?.id);
+        if (parentIdx > 1) {
+          drafts[projectIdx].tasks[parentIdx].child_ids.push(task);
+        }
+      }
+    }
+  });
+};
+
 export const stageToColor = (stage: string): any => {
   if (!stage) return "default";
   const stageName = stage.toLowerCase().split(" ").join("");

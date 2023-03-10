@@ -20,6 +20,7 @@ export const getProjectsTasksQuery = gql`
         description
         effective_hours
         date_deadline
+        write_date
         user_id {
           id
           name
