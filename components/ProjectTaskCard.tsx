@@ -69,7 +69,7 @@ export default function ProjectTaskCard({ task, hideCompleted }: { task: Project
         }
         sx={{ pb: 2 }}
       />
-      <CardContent sx={{ pt: 0 }}>
+      <CardContent sx={{ pt: 0, padding: 0 }}>
         {editTask === task.id ? (
           <TaskForm
             task={task}

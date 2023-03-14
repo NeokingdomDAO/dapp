@@ -156,7 +156,12 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   };
 
   return (
-    <Accordion variant="outlined" expanded={expanded === task.id} onChange={handleTaskClick(task.id)}>
+    <Accordion
+      sx={{ border: 0 }}
+      variant="outlined"
+      expanded={expanded === task.id}
+      onChange={handleTaskClick(task.id)}
+    >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box sx={{ width: "100%", pr: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Box sx={{ display: "flex", justifyContent: "left", alignItems: "center" }}>
