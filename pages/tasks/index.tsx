@@ -15,8 +15,8 @@ Tasks.requireLogin = true;
 
 export default function Tasks() {
   const { enqueueSnackbar } = useSnackbar();
-  const { projects, alert, fetchProjects } = useProjectTaskStore(
-    ({ projects, alert, fetchProjects }) => ({ projects, alert, fetchProjects }),
+  const { projects, alert, setAlert, fetchProjects } = useProjectTaskStore(
+    ({ projects, alert, setAlert, fetchProjects }) => ({ projects, alert, setAlert, fetchProjects }),
     shallow,
   );
 
@@ -26,9 +26,9 @@ export default function Tasks() {
 
   useEffect(() => {
     if (alert) {
-      enqueueSnackbar(alert.message, { variant: alert.type });
+      enqueueSnackbar(alert.message, { variant: alert.type, onClose: () => setAlert(null) });
     }
-  }, [alert, enqueueSnackbar]);
+  }, [alert, enqueueSnackbar, setAlert]);
 
   return (
     <>
