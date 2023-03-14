@@ -106,11 +106,8 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       body: JSON.stringify(task),
     });
     if (response.ok) {
-      const timeEntry = await response.json();
-      const taskWithTimeEntries = pushTaskTimeEntry(task, timeEntry);
-      const newTask = setTaskStatus(taskWithTimeEntries, "progress");
-      const newProjects = replaceTaskInProjects(get().projects, newTask);
-      set({ projects: newProjects, trackedTask: newTask });
+      set({ trackedTask: task });
+      await get().fetchProjects();
     } else {
       const error = await response.json();
       set({ alert: { message: error.message, type: "error" } });

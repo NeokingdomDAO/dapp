@@ -52,10 +52,10 @@ export const getProjectsTasksQuery = gql`
           project_id {
             id
           }
-          parent_id {
-            id
-            name
-          }
+          # parent_id {
+          #   id
+          #   name
+          # }
           stage_id {
             id
             name
@@ -69,10 +69,10 @@ export const getProjectsTasksQuery = gql`
             end
           }
         }
-        # parent_id {
-        #  id
-        #  name
-        # }
+        parent_id {
+          id
+          name
+        }
         timesheet_ids {
           id
           name
