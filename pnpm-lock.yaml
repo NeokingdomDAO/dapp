@@ -22,6 +22,7 @@ specifiers:
   '@web3modal/ethereum': ^2.1.2
   '@web3modal/react': ^2.1.2
   date-fns: ^2.29.3
+  date-fns-tz: ^2.0.0
   easymde: ^2.18.0
   eslint: 8.30.0
   eslint-config-next: 13.1.1
@@ -70,6 +71,7 @@ dependencies:
   '@web3modal/ethereum': 2.1.2_ethers@5.7.2
   '@web3modal/react': 2.1.2_biqbaboplfbrettd7655fr4n2y
   date-fns: 2.29.3
+  date-fns-tz: 2.0.0_date-fns@2.29.3
   easymde: 2.18.0
   ethers: 5.7.2
   graphql: 16.6.0
@@ -4893,6 +4895,14 @@ packages:
   /damerau-levenshtein/1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
+
+  /date-fns-tz/2.0.0_date-fns@2.29.3:
+    resolution: {integrity: sha512-OAtcLdB9vxSXTWHdT8b398ARImVwQMyjfYGkKD2zaGpHseG2UPHbHjXELReErZFxWdSLph3c2zOaaTyHfOhERQ==}
+    peerDependencies:
+      date-fns: '>=2.0.0'
+    dependencies:
+      date-fns: 2.29.3
+    dev: false
 
   /date-fns/2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}

@@ -1,7 +1,9 @@
-import { differenceInMinutes, format } from "date-fns";
+import { differenceInMinutes } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
+import { ODOO_DATE_FORMAT } from "@lib/constants";
 import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
 import { sessionOptions } from "@lib/session";
 import { findActiveTimeEntry, replaceTaskTimeEntry } from "@lib/utils";
@@ -19,26 +21,29 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "POST") {
     // STOP TASK
-    const [activeTimeEntry, activeTask] = findActiveTimeEntry(JSON.parse(task));
-    if (!activeTimeEntry || !activeTask) {
-      // Task is already stopped
-      return res.status(200).json(JSON.parse(task));
-    }
+    try {
+      const [activeTimeEntry, activeTask] = findActiveTimeEntry(JSON.parse(task));
+      if (!activeTimeEntry || !activeTask) {
+        // Task is already stopped
+        return res.status(200).json(JSON.parse(task));
+      }
 
-    const isSameMin = differenceInMinutes(new Date(activeTimeEntry.start), new Date()) === 0;
-    if (isSameMin) {
-      // Delete time entry
-      await session.remove("account.analytic.line", [Number(activeTimeEntry.id)]);
-      const newTask = replaceTaskTimeEntry(activeTask, activeTimeEntry, { delete: true });
-      res.status(200).json(newTask);
-    } else {
-      // Update time entry
-      await session.update("account.analytic.line", Number(activeTimeEntry.id), {
-        end: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-      });
-      const [updatedTimeEntry] = await session.read("account.analytic.line", [Number(activeTimeEntry.id)]);
-      const newTask = replaceTaskTimeEntry(activeTask, updatedTimeEntry);
-      res.status(200).json(newTask);
+      const isSameMin = differenceInMinutes(new Date(`${activeTimeEntry.start}Z`), new Date()) === 0;
+      if (isSameMin) {
+        // Delete time entry
+        await session.remove("account.analytic.line", [Number(activeTimeEntry.id)]);
+        const newTask = replaceTaskTimeEntry(activeTask, activeTimeEntry, { delete: true });
+        res.status(200).json(newTask);
+      } else {
+        // Update time entry
+        const end = formatInTimeZone(new Date(), "UTC", ODOO_DATE_FORMAT);
+        await session.update("account.analytic.line", Number(activeTimeEntry.id), { end });
+        const [updatedTimeEntry] = await session.read("account.analytic.line", [Number(activeTimeEntry.id)]);
+        const newTask = replaceTaskTimeEntry(activeTask, updatedTimeEntry);
+        res.status(200).json(newTask);
+      }
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
     }
   }
 }

@@ -1,6 +1,7 @@
+import { formatInTimeZone } from "date-fns-tz";
 import { create } from "zustand";
 
-import { STAGE_TO_ID_MAP } from "@lib/constants";
+import { ODOO_DATE_FORMAT, STAGE_TO_ID_MAP } from "@lib/constants";
 import {
   addTaskInProjects,
   addTaskTimeEntry,
@@ -122,8 +123,8 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       const updatedTask = await response.json();
-      const newProjects = replaceTaskInProjects(get().projects, updatedTask);
-      set({ projects: newProjects, trackedTask: null });
+      set({ trackedTask: null });
+      await get().fetchProjects();
       return updatedTask;
     } else {
       const error = await response.json();
@@ -133,9 +134,6 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   markTaskAsDone: async (task: ProjectTask) => {
     const stoppedTask = await get().stopTrackingTask(task);
     if (stoppedTask) {
-      const updatedTask = setTaskStatus(stoppedTask, "done");
-      const newProjects = replaceTaskInProjects(get().projects, updatedTask);
-      set({ projects: newProjects });
       const totalHours = getTaskTotalHours(stoppedTask);
       const response = await fetch(`/api/tasks/${task.id}`, {
         method: "PUT",
@@ -146,9 +144,9 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       });
       if (!response.ok) {
         const error = await response.json();
-        const newProjects = replaceTaskInProjects(get().projects, stoppedTask);
-        set({ alert: { message: error.message, type: "error" }, projects: newProjects });
+        set({ alert: { message: error.message, type: "error" } });
       }
+      await get().fetchProjects();
     }
   },
   createTask: async (task: ProjectTask) => {
@@ -158,8 +156,8 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       const newtask = await response.json();
+      await get().fetchProjects();
       set({ alert: { message: `Task ${newtask.name} successfully created`, type: "success" } });
-      get().fetchProjects();
       return newtask;
     } else {
       const error = await response.json();
@@ -172,8 +170,8 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       body: JSON.stringify(task),
     });
     if (response.ok) {
+      await get().fetchProjects();
       set({ alert: { message: `Task ${task.name} successfully updated`, type: "success" } });
-      get().fetchProjects();
     } else {
       const error = await response.json();
       set({ alert: { message: error.message, type: "error" } });
@@ -184,8 +182,8 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       method: "DELETE",
     });
     if (response.ok) {
-      set({ alert: { message: `Task ${task.name} successfully deleted`, type: "success" } });
       get().fetchProjects();
+      set({ alert: { message: `Task ${task.name} successfully deleted`, type: "success" } });
     } else {
       const error = await response.json();
       set({ alert: { message: error.message, type: "error" } });
@@ -196,16 +194,14 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       method: "POST",
       body: JSON.stringify({
         task_id: task.id,
-        start: timeEntry.start,
-        end: timeEntry.end,
+        start: formatInTimeZone(new Date(timeEntry.start), "UTC", ODOO_DATE_FORMAT),
+        end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
         name: timeEntry.name,
       }),
     });
     if (response.ok) {
-      const data = await response.json();
-      const newTask = addTaskTimeEntry(task, { ...timeEntry, id: data.id, unit_amount: data.unit_amount });
-      const newProjects = replaceTaskInProjects(get().projects, newTask);
-      set({ projects: newProjects, alert: { message: "Time Entry successfully created!", type: "success" } });
+      await get().fetchProjects();
+      set({ alert: { message: "Time Entry successfully created!", type: "success" } });
       return true;
     } else {
       const error = await response.json();
@@ -217,16 +213,14 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
       method: "PUT",
       body: JSON.stringify({
-        start: timeEntry.start,
-        end: timeEntry.end,
+        start: formatInTimeZone(new Date(timeEntry.start), "UTC", ODOO_DATE_FORMAT),
+        end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
         name: timeEntry.name,
       }),
     });
     if (response.ok) {
-      const data = await response.json();
-      const newTask = replaceTaskTimeEntry(task, { ...timeEntry, unit_amount: data.unit_amount });
-      const newProjects = replaceTaskInProjects(get().projects, newTask);
-      set({ projects: newProjects, alert: { message: "Time Entry successfully updated!", type: "success" } });
+      await get().fetchProjects();
+      set({ alert: { message: "Time Entry successfully updated!", type: "success" } });
     } else {
       const error = await response.json();
       set({ alert: { message: error.message, type: "error" } });

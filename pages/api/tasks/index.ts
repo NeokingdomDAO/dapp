@@ -34,8 +34,9 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     // List all Projects Tasks
     try {
-      const projectIds = await getUserProjectIds(user.id);
-      const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, { projectIds, userId: user.id });
+      const userId = user.id;
+      const projectIds = await getUserProjectIds(userId);
+      const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, { projectIds, userId });
       res.status(200).json(data.ProjectProject);
     } catch (err: any) {
       res.status(500).json({ message: err.message });

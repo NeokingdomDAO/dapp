@@ -1,8 +1,8 @@
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { STAGE_TO_ID_MAP } from "@lib/constants";
+import { ODOO_DATE_FORMAT, STAGE_TO_ID_MAP } from "@lib/constants";
 import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
 import { sessionOptions } from "@lib/session";
 
@@ -22,7 +22,8 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     // START TASK - Create new Time Entry
     try {
-      const timeEntry = { task_id: Number(taskId), start: format(new Date(), "yyyy-MM-dd HH:mm:ss") };
+      const start = formatInTimeZone(new Date(), "UTC", ODOO_DATE_FORMAT);
+      const timeEntry = { task_id: Number(taskId), start };
       const timeEntryId = await session.create("account.analytic.line", timeEntry);
       const [newTimeEntry] = await session.read("account.analytic.line", [timeEntryId]);
       // Move task to In progress

@@ -20,10 +20,10 @@ export default function TimeEntryForm({
   const dateFormat = "yyyy-MM-dd HH:mm:ss";
 
   const [form, setForm] = useState<{ start: string; end?: string; name: string }>({
-    start: format(now, dateFormat),
-    end: format(now, dateFormat),
     name: "",
     ...(timeEntry || {}),
+    start: format(timeEntry?.start ? new Date(`${timeEntry.start}Z`) : now, dateFormat),
+    end: format(timeEntry?.end ? new Date(`${timeEntry.end}Z`) : now, dateFormat),
   });
 
   const onSubmit = async (event: any) => {
