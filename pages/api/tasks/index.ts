@@ -2,10 +2,14 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { getProjectsTasksQuery } from "@graphql/queries/get-projects-tasks.query";
+import { getUserTasksQuery } from "@graphql/queries/get-user-tasks.query";
 
+import { STAGE_TO_ID_MAP } from "@lib/constants";
 import odooGraphQLClient from "@lib/graphql/odoo";
 import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
 import { sessionOptions } from "@lib/session";
+
+import { ProjectTask } from "@store/projectTaskStore";
 
 async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   const cookie = req.session.cookie;
@@ -18,10 +22,24 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   const { username, password } = user;
   const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
 
+  const getUserProjectIds = async (userId: number) => {
+    const projectIds = new Set<number>([]);
+    const userTasks = await odooGraphQLClient(cookie, getUserTasksQuery, { user_id: userId });
+    userTasks.ProjectTask.forEach(
+      (task: ProjectTask) => task.stage_id.id !== STAGE_TO_ID_MAP["approved"] && projectIds.add(task.project_id.id),
+    );
+    return Array.from(projectIds);
+  };
+
   if (req.method === "GET") {
     // List all Projects Tasks
-    const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, { userId: user.id });
-    res.status(200).json(data.ProjectProject);
+    try {
+      const projectIds = await getUserProjectIds(user.id);
+      const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, { projectIds, userId: user.id });
+      res.status(200).json(data.ProjectProject);
+    } catch (err: any) {
+      res.status(500).json({ message: err.message });
+    }
   }
 
   if (req.method === "POST") {

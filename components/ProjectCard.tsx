@@ -31,7 +31,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       sx={{
         height: "100%",
         position: "relative",
-        pb: 8,
+        pb: 0,
       }}
     >
       <CardHeader title={project.name} sx={{ pb: 0 }} />
