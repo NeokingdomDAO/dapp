@@ -1,10 +1,10 @@
 import { format, isSameDay } from "date-fns";
 import produce from "immer";
 
-import { Project, ProjectTask, Timesheet } from "@store/projectTaskStore";
+import { ProjectTask, Timesheet } from "@store/projectTaskStore";
 
 import { META } from "../pages/_document";
-import { STAGE_NAMES_MAP, STAGE_TO_COLOR_MAP, STAGE_TO_ID_MAP } from "./constants";
+import { STAGE_TO_COLOR_MAP } from "./constants";
 
 export const getLettersFromName = (name: string) =>
   name
@@ -34,12 +34,6 @@ export function getTaskTotalHours(task: ProjectTask) {
   } else {
     return task.timesheet_ids.reduce((tot, time) => (tot += time.unit_amount), 0);
   }
-}
-
-export function setTaskStatus(task: ProjectTask, stageName: string) {
-  return produce(task, (draft) => {
-    draft.stage_id = { id: STAGE_TO_ID_MAP[stageName], name: STAGE_NAMES_MAP[stageName] };
-  });
 }
 
 export function toPrettyDuration(time: number) {
@@ -80,19 +74,6 @@ export const findActiveTimeEntry = (task: ProjectTask): [Timesheet | null, Proje
   return [null, null];
 };
 
-export const pushTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet) => {
-  return produce(task, (draft) => {
-    if (draft.child_ids?.length) {
-      const childIdx = draft.child_ids.findIndex((child) => child.id === task.id);
-      if (childIdx !== -1) {
-        draft.child_ids[childIdx].timesheet_ids.unshift(timeEntry);
-      }
-    } else {
-      draft.timesheet_ids.unshift(timeEntry);
-    }
-  });
-};
-
 export const replaceTaskTimeEntry = (
   task: ProjectTask,
   timeEntry: Timesheet,
@@ -120,63 +101,6 @@ export const replaceTaskTimeEntry = (
           draft.timesheet_ids.splice(timesheetIdx, 1);
         } else {
           draft.timesheet_ids[timesheetIdx] = timeEntry;
-        }
-      }
-    }
-  });
-};
-
-export const addTaskTimeEntry = (task: ProjectTask, timeEntry: Timesheet) => {
-  return produce(task, (draft) => {
-    draft.timesheet_ids.unshift(timeEntry);
-  });
-};
-
-export const replaceTaskInProjects = (
-  projects: Project[],
-  projectTask: ProjectTask,
-  options: { delete?: boolean } = {},
-) => {
-  return produce(projects, (drafts) => {
-    const projectIdx = drafts.findIndex((draft) => draft.id === projectTask.project_id.id);
-    if (projectIdx > -1) {
-      if (!projectTask.parent_id) {
-        // it's a task
-        const taskIdx = drafts[projectIdx].tasks.findIndex((task) => !task.parent_id && task.id === projectTask.id);
-        if (options.delete) {
-          delete drafts[projectIdx].tasks[taskIdx];
-        } else {
-          drafts[projectIdx].tasks[taskIdx] = projectTask;
-        }
-      } else {
-        // it's a subtask
-        drafts[projectIdx].tasks.some((task, taskIdx) => {
-          const childIdx = task.child_ids?.findIndex((child) => child.id === projectTask.id);
-          if (childIdx > -1) {
-            if (options.delete) {
-              delete drafts[projectIdx].tasks[taskIdx].child_ids[childIdx];
-            } else {
-              drafts[projectIdx].tasks[taskIdx].child_ids[childIdx] = projectTask;
-            }
-            return true;
-          }
-        });
-      }
-    }
-  });
-};
-
-export const addTaskInProjects = (projects: Project[], task: ProjectTask) => {
-  return produce(projects, (drafts) => {
-    const projectIdx = drafts.findIndex((draft) => draft.id === task.project_id.id);
-    if (projectIdx > -1) {
-      if (!task.parent_id) {
-        drafts[projectIdx].tasks.push(task);
-      } else {
-        // it's a subtask
-        const parentIdx = drafts[projectIdx].tasks.findIndex((parent) => parent.id === task.parent_id?.id);
-        if (parentIdx > 1) {
-          drafts[projectIdx].tasks[parentIdx].child_ids.push(task);
         }
       }
     }

@@ -17,16 +17,6 @@ export const STAGE_TO_ID_MAP: Record<string, number> = {
   canceled: 162,
 };
 
-export const STAGE_NAMES_MAP: Record<string, string> = {
-  backlog: "Backlog",
-  created: "Created",
-  progress: "In Progress",
-  inprogress: "In Progress",
-  done: "Done",
-  approved: "Approved",
-  canceled: "Canceled",
-};
-
 export const STAGE_TO_COLOR_MAP: Record<string, string> = {
   created: "default",
   inprogress: "primary",

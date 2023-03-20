@@ -2,16 +2,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { create } from "zustand";
 
 import { ODOO_DATE_FORMAT, STAGE_TO_ID_MAP } from "@lib/constants";
-import {
-  addTaskInProjects,
-  addTaskTimeEntry,
-  findActiveTimeEntry,
-  getTaskTotalHours,
-  pushTaskTimeEntry,
-  replaceTaskInProjects,
-  replaceTaskTimeEntry,
-  setTaskStatus,
-} from "@lib/utils";
+import { findActiveTimeEntry, getTaskTotalHours, replaceTaskTimeEntry } from "@lib/utils";
 
 export type Project = {
   id: number;
@@ -226,16 +217,14 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   deleteTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
     let newTask = replaceTaskTimeEntry(task, timeEntry, { delete: true });
     if (!newTask.timesheet_ids.length) {
-      newTask = setTaskStatus(newTask, "created");
       fetch(`/api/tasks/${task.id}`, {
         method: "PUT",
-        body: JSON.stringify({ stage_id: newTask.stage_id.id }),
+        body: JSON.stringify({ stage_id: STAGE_TO_ID_MAP["created"] }),
       });
     }
-    const newProjects = replaceTaskInProjects(get().projects, newTask);
-    set({ projects: newProjects });
     const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
     if (response.ok) {
+      await get().fetchProjects();
       set({ alert: { message: "Time Entry successfully deleted!", type: "success" } });
     } else {
       const error = await response.json();
