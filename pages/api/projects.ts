@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
-import { OdooUser } from "types";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 import odooGraphQLClient from "@lib/graphql/odoo";
@@ -29,7 +28,11 @@ const getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const userId = user.id;
   const projectIds = await getUserProjectIds(userId);
-  const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, { projectIds, userId });
+  const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, {
+    projectIds,
+    userId,
+    approvedId: STAGE_TO_ID_MAP["approved"],
+  });
   res.status(200).json(data.ProjectProject);
 };
 

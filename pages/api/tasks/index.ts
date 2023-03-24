@@ -25,9 +25,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   const getUserProjectIds = async (userId: number) => {
     const projectIds = new Set<number>([]);
     const userTasks = await odooGraphQLClient(cookie, getUserTasksQuery, { user_id: userId });
-    userTasks.ProjectTask.forEach(
-      (task: ProjectTask) => task.stage_id.id !== STAGE_TO_ID_MAP["approved"] && projectIds.add(task.project_id.id),
-    );
+    userTasks.ProjectTask.forEach((task: ProjectTask) => projectIds.add(task.project_id.id));
     return Array.from(projectIds);
   };
 
@@ -36,7 +34,11 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     try {
       const userId = user.id;
       const projectIds = await getUserProjectIds(userId);
-      const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, { projectIds, userId });
+      const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, {
+        projectIds,
+        userId,
+        approvedId: STAGE_TO_ID_MAP["approved"],
+      });
       res.status(200).json(data.ProjectProject);
     } catch (err: any) {
       res.status(500).json({ message: err.message });
