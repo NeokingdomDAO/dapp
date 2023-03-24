@@ -1,9 +1,10 @@
-import { useSnackbar } from "notistack";
 import { useAccount } from "wagmi";
 
 import { ReactElement } from "react";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
+
+import { useSnackbar } from "@hooks/useSnackbar";
 
 const MAX_TX_WAIT = 60000; // 1 minute
 

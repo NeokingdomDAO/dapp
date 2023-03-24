@@ -1,6 +1,5 @@
 import { useWeb3Modal } from "@web3modal/react";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 
 import { useState } from "react";
 
@@ -9,6 +8,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
+import { useSnackbar } from "@hooks/useSnackbar";
 import useUser from "@hooks/useUser";
 
 export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {

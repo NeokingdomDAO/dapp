@@ -1,8 +1,9 @@
 import { Signer } from "ethers";
-import { useSnackbar } from "notistack";
 import { useAccount, useDisconnect, useNetwork, useSigner } from "wagmi";
 
 import { useEffect, useState } from "react";
+
+import { useSnackbar } from "@hooks/useSnackbar";
 
 import { ContractsContextType } from "../contexts/ContractsContext";
 import {

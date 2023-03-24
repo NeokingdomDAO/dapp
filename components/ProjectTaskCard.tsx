@@ -5,14 +5,17 @@ import { Card, CardContent, CardHeader, IconButton, Menu, MenuItem } from "@mui/
 
 import useProjectTaskStore, { ProjectTask } from "@store/projectTaskStore";
 
+import { useSnackbar } from "@hooks/useSnackbar";
+
 import { STAGE_TO_ID_MAP } from "../lib/constants";
 import ProjectSubTask from "./ProjectSubTask";
 import TaskForm from "./TaskForm";
 
 export default function ProjectTaskCard({ task, hideCompleted }: { task: ProjectTask; hideCompleted?: boolean }) {
   const [editTask, setEditTask] = useState<number | null>(null);
-  const updateTask = useProjectTaskStore((state) => state.updateTask);
-  const deleteTask = useProjectTaskStore((state) => state.deleteTask);
+  const { enqueueSnackbar } = useSnackbar();
+  const updateTask = useProjectTaskStore(enqueueSnackbar)((state) => state.updateTask);
+  const deleteTask = useProjectTaskStore(enqueueSnackbar)((state) => state.deleteTask);
 
   const [taskMenu, setTaskMenu] = useState<null | HTMLElement>(null);
   const openTaskMenu = Boolean(taskMenu);

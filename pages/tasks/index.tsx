@@ -1,4 +1,3 @@
-import { useSnackbar } from "notistack";
 import { shallow } from "zustand/shallow";
 
 import { useEffect } from "react";
@@ -10,25 +9,21 @@ import useProjectTaskStore from "@store/projectTaskStore";
 import ProjectCard from "@components/ProjectCard";
 import TrackingDialog from "@components/TrackingDialog";
 
+import { useSnackbar } from "@hooks/useSnackbar";
+
 Tasks.title = "Tasks List";
 Tasks.requireLogin = true;
 
 export default function Tasks() {
   const { enqueueSnackbar } = useSnackbar();
-  const { projects, alert, setAlert, fetchProjects } = useProjectTaskStore(
-    ({ projects, alert, setAlert, fetchProjects }) => ({ projects, alert, setAlert, fetchProjects }),
+  const { projects, fetchProjects } = useProjectTaskStore(enqueueSnackbar)(
+    ({ projects, fetchProjects }) => ({ projects, fetchProjects }),
     shallow,
   );
 
   useEffect(() => {
     fetchProjects();
   }, []);
-
-  useEffect(() => {
-    if (alert) {
-      enqueueSnackbar(alert.message, { variant: alert.type, onClose: () => setAlert(null) });
-    }
-  }, [alert, enqueueSnackbar, setAlert]);
 
   return (
     <>

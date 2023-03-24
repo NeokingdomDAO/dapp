@@ -6,12 +6,15 @@ import useProjectTaskStore from "@store/projectTaskStore";
 
 import TaskForm from "@components/TaskForm";
 
+import { useSnackbar } from "@hooks/useSnackbar";
+
 NewTask.title = "New task";
 NewTask.requireLogin = true;
 
 export default function NewTask() {
   const router = useRouter();
-  const createTask = useProjectTaskStore((state) => state.createTask);
+  const { enqueueSnackbar } = useSnackbar();
+  const createTask = useProjectTaskStore(enqueueSnackbar)((state) => state.createTask);
 
   return (
     <>

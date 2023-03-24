@@ -46,10 +46,13 @@ import { getTaskName, getTaskTotalHours, stageToColor, toPrettyDuration, toPrett
 import useDialogStore from "@store/dialogStore";
 import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
 
+import { useSnackbar } from "@hooks/useSnackbar";
+
 import TimeEntryForm from "./TimeEntryForm";
 
 export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const [
     trackedTask,
     startTrackingTask,
@@ -58,7 +61,7 @@ export default function ProjectSubTask({ task }: { task: ProjectTask }) {
     createTimeEntry,
     updateTimeEntry,
     deleteTimeEntry,
-  ] = useProjectTaskStore(
+  ] = useProjectTaskStore(enqueueSnackbar)(
     (state) => [
       state.trackedTask,
       state.startTrackingTask,

@@ -1,6 +1,5 @@
 import { useWeb3Modal } from "@web3modal/react";
 import Link from "next/link";
-import { useSnackbar } from "notistack";
 import { useAccount, useSignMessage } from "wagmi";
 import { shallow } from "zustand/shallow";
 
@@ -25,6 +24,7 @@ import { getLettersFromName } from "@lib/utils";
 import useLoginModalStore from "@store/loginModal";
 
 import useOdooUsers from "@hooks/useOdooUsers";
+import { useSnackbar } from "@hooks/useSnackbar";
 import useUser from "@hooks/useUser";
 
 import LoginForm from "./LoginForm";
