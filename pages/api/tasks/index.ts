@@ -22,10 +22,8 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
 
   const getUserProjectIds = async (userId: number) => {
-    const projectIds = new Set<number>([]);
     const userTasks = await odooGraphQLClient(cookie, getUserTasksQuery, { user_id: userId });
-    userTasks.ProjectTask.forEach((task: ProjectTask) => projectIds.add(task.project_id.id));
-    return Array.from(projectIds);
+    return [...new Set(userTasks.ProjectTask.map((t: ProjectTask) => t.project_id.id))];
   };
 
   if (req.method === "GET") {
