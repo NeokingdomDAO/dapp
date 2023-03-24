@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getProjectsTasksQuery } from "@graphql/queries/get-projects-tasks.query";
 import { getUserTasksQuery } from "@graphql/queries/get-user-tasks.query";
 
-import { STAGE_TO_ID_MAP } from "@lib/constants";
 import odooGraphQLClient from "@lib/graphql/odoo";
 import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
 import { sessionOptions } from "@lib/session";
@@ -37,7 +36,6 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
       const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, {
         projectIds,
         userId,
-        approvedId: STAGE_TO_ID_MAP["approved"],
       });
       res.status(200).json(data.ProjectProject);
     } catch (err: any) {

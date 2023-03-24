@@ -1,7 +1,9 @@
 import { gql } from "graphql-request";
 
+import { STAGE_TO_ID_MAP } from "../../constants";
+
 export const getProjectsTasksQuery = gql`
-  query GetProjectsTasks($projectIds: [Int]!, $userId: Int!, $approvedId: Int!) {
+  query GetProjectsTasks($projectIds: [Int]!, $userId: Int!) {
     ProjectProject(domain: [["id", "in", $projectIds]]) {
       id
       name
@@ -13,7 +15,7 @@ export const getProjectsTasksQuery = gql`
       }
       task_count
       task_count_with_subtasks
-      tasks(domain: [["user_ids", "in", [$userId]], ["stage_id.id", "!=", $approvedId]]) {
+      tasks(domain: [["user_ids", "in", [$userId]], ["stage_id.id", "!=", ${STAGE_TO_ID_MAP["approved"]} ]]) {
         id
         name
         display_name
@@ -44,7 +46,7 @@ export const getProjectsTasksQuery = gql`
           id
           name
         }
-        child_ids(domain: [["stage_id.id", "!=", $approvedId]]) {
+        child_ids(domain: [["stage_id.id", "!=", ${STAGE_TO_ID_MAP["approved"]}]]) {
           id
           name
           display_name
