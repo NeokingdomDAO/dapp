@@ -43,8 +43,8 @@ export type Timesheet = {
   name: string;
   display_name: string;
   unit_amount: number;
-  start: string;
-  end?: string;
+  start: number;
+  end?: number;
 };
 export interface ProjectTaskStore {
   projects: Project[];

@@ -28,7 +28,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json(JSON.parse(task));
       }
 
-      const isSameMin = differenceInMinutes(new Date(`${activeTimeEntry.start}Z`), new Date()) === 0;
+      const isSameMin = differenceInMinutes(new Date(activeTimeEntry.start * 1000), new Date()) === 0;
       if (isSameMin) {
         // Delete time entry
         await session.remove("account.analytic.line", [Number(activeTimeEntry.id)]);
