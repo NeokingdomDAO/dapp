@@ -13,6 +13,9 @@ NewTask.requireLogin = true;
 
 export default function NewTask() {
   const router = useRouter();
+  const {
+    query: { projectId },
+  } = router;
   const { enqueueSnackbar } = useSnackbar();
   const createTask = useProjectTaskStore(enqueueSnackbar)((state) => state.createTask);
 
@@ -24,6 +27,7 @@ export default function NewTask() {
         </Grid>
         <Grid item xs={12} md={9}>
           <TaskForm
+            projectId={Number(projectId)}
             onConfirm={async (data) => {
               const task = await createTask(data);
               if (task) router.push("/tasks");

@@ -11,6 +11,7 @@ import {
   FormControl,
   Grid,
   InputLabel,
+  ListSubheader,
   MenuItem,
   OutlinedInput,
   Select,
@@ -38,16 +39,18 @@ type FormData = {
 
 export default function TaskForm({
   task,
+  projectId,
   onConfirm,
   onCancel,
 }: {
   task?: ProjectTask;
+  projectId?: number;
   onConfirm: (data: any) => void;
   onCancel?: () => void;
 }) {
   const { user } = useUser();
   const { data: users } = useSWR<OdooUser[]>("/api/users", fetcher);
-  const { data: projects } = useSWR<Project[]>("/api/projects", fetcher);
+  const { data: projects } = useSWR<{ user: Project[]; other: Project[] }>("/api/projects/all", fetcher);
   const { data: tiers } = useSWR<Project[]>("/api/tiers", fetcher);
 
   const [selectedProject, setSelectedProject] = useState<Project | undefined>();
@@ -67,21 +70,41 @@ export default function TaskForm({
     [selectedProject, lastTask, user, task],
   );
 
-  const { control, reset, handleSubmit } = useForm<FormData>({ defaultValues });
+  const { control, getValues, reset, handleSubmit } = useForm<FormData>({ defaultValues });
 
   useEffect(() => {
-    if (projects?.length && !selectedProject) {
-      setSelectedProject(projects[0]);
-      const lastTask = projects[0].tasks
-        .sort((a, b) => compareAsc(new Date(a.write_date), new Date(b.write_date)))
-        .pop();
-      setLastTask(lastTask);
+    if (projects?.user?.length) {
+      const defaultProject = projectId && !selectedProject && projects.user.find((proj) => proj.id === projectId);
+      const project = defaultProject || selectedProject;
+      if (project) {
+        if (!selectedProject) {
+          setSelectedProject(project);
+        }
+        const [lastTask] = project.tasks
+          .sort((a, b) => compareAsc(new Date(a.write_date), new Date(b.write_date)))
+          .slice(-1);
+        setLastTask(lastTask);
+      }
     }
-  }, [projects, selectedProject]);
+  }, [projects, selectedProject, projectId]);
+
+  const checkValues = (values: any, defaultValues: any) => (key: string) => {
+    return values[key] && values[key] !== -1 ? values[key] : defaultValues[key];
+  };
 
   useEffect(() => {
-    reset(defaultValues);
-  }, [defaultValues, reset]);
+    const values = getValues();
+    const getValue = checkValues(values, defaultValues);
+    reset({
+      name: getValue("name"),
+      project_id: getValue("project_id"),
+      tag_ids: defaultValues.tag_ids,
+      user_id: getValue("user_id"),
+      approval_user_id: getValue("approval_user_id"),
+      tier_id: getValue("tier_id"),
+      date_deadline: getValue("date_deadline"),
+    });
+  }, [defaultValues, reset, getValues]);
 
   return (
     <Box
@@ -111,12 +134,26 @@ export default function TaskForm({
                 <Select
                   labelId="task-project"
                   id="task-project-select"
+                  required
                   value={value}
-                  onChange={(e) => onChange(Number(e.target.value))}
+                  onChange={(e) => {
+                    const projectId = Number(e.target.value);
+                    const userProject = projects?.user.find((proj) => proj.id === projectId);
+                    const otherProject = projects?.other.find((proj) => proj.id === projectId);
+                    setSelectedProject(userProject || otherProject);
+                    onChange(projectId);
+                  }}
                   label="Project"
                   {...fields}
                 >
-                  {projects?.map((project) => (
+                  <ListSubheader>My Projects</ListSubheader>
+                  {projects?.user?.map((project) => (
+                    <MenuItem key={project.id} value={project.id}>
+                      {project.name}
+                    </MenuItem>
+                  ))}
+                  <ListSubheader>Other</ListSubheader>
+                  {projects?.other?.map((project) => (
                     <MenuItem key={project.id} value={project.id}>
                       {project.name}
                     </MenuItem>
@@ -139,6 +176,7 @@ export default function TaskForm({
                   labelId="task-tags"
                   id="task-tags-select"
                   multiple
+                  required
                   input={<OutlinedInput id="select-multiple-tags" label="Tags" />}
                   renderValue={(selected) => (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -146,7 +184,7 @@ export default function TaskForm({
                         <Chip
                           sx={{ height: "23px" }}
                           key={value}
-                          label={selectedProject?.tag_ids.find((tag) => tag.id === value)?.name}
+                          label={selectedProject?.tag_ids.find((tag) => tag.id === value)?.name || value}
                         />
                       ))}
                     </Box>
@@ -178,7 +216,7 @@ export default function TaskForm({
               name="user_id"
               control={control}
               render={({ field }) => (
-                <Select labelId="task-assignee" id="task-assignee-select" label="Assignee" {...field}>
+                <Select required labelId="task-assignee" id="task-assignee-select" label="Assignee" {...field}>
                   {users?.map((user: OdooUser) => (
                     <MenuItem key={user.id} value={user.id}>
                       {user.name}
@@ -197,7 +235,7 @@ export default function TaskForm({
               name="tier_id"
               control={control}
               render={({ field }) => (
-                <Select labelId="task-tier" id="task-tier-select" label="Tier" {...field}>
+                <Select required labelId="task-tier" id="task-tier-select" label="Tier" {...field}>
                   {tiers?.map((tier: Tier) => (
                     <MenuItem key={tier.id} value={tier.id}>
                       {tier.name}
@@ -216,7 +254,7 @@ export default function TaskForm({
               name="approval_user_id"
               control={control}
               render={({ field }) => (
-                <Select labelId="task-controller" id="task-controller-select" label="Controller" {...field}>
+                <Select required labelId="task-controller" id="task-controller-select" label="Controller" {...field}>
                   {users?.map((user: OdooUser) => (
                     <MenuItem key={user.id} value={user.id}>
                       {user.name}

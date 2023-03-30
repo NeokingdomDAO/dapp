@@ -48,7 +48,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         )}
         <Button
           component={Link}
-          href="/tasks/new"
+          href={`/tasks/new?projectId=${project.id}`}
           sx={{ ml: 1 }}
           variant="outlined"
           color="success"
