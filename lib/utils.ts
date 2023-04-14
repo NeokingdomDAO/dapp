@@ -1,7 +1,7 @@
 import { format, isSameDay } from "date-fns";
 import produce from "immer";
 
-import { ProjectTask, Timesheet } from "@store/projectTaskStore";
+import { Project, ProjectTask, Timesheet } from "@store/projectTaskStore";
 
 import { META } from "../pages/_document";
 import { STAGE_NAME, STAGE_TO_COLOR_MAP } from "./constants";
@@ -76,6 +76,20 @@ export const findActiveTimeEntry = (task: ProjectTask): [Timesheet | null, Proje
   });
   if (childTimeEntry && childTask) return [childTimeEntry, childTask];
   return [null, null];
+};
+
+export const findActiveProjectTask = (projects: Project[]): ProjectTask | null => {
+  let activeProjectTask = null;
+  projects.find((project) => {
+    return project.tasks.find((task: ProjectTask) => {
+      const [activeTimeEntry, activeTask] = findActiveTimeEntry(task);
+      if (activeTimeEntry) {
+        activeProjectTask = activeTask;
+        return true;
+      }
+    });
+  });
+  return activeProjectTask;
 };
 
 export const replaceTaskTimeEntry = (

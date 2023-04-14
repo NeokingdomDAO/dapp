@@ -1,9 +1,10 @@
 import { formatInTimeZone } from "date-fns-tz";
 import { EnqueueSnackbar } from "notistack";
+import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
 import { ODOO_DATE_FORMAT, STAGE_TO_ID_MAP } from "@lib/constants";
-import { findActiveTimeEntry, getTaskTotalHours, replaceTaskTimeEntry } from "@lib/utils";
+import { getTaskTotalHours, replaceTaskTimeEntry } from "@lib/utils";
 
 let showAlert: EnqueueSnackbar;
 
@@ -47,9 +48,9 @@ export type Timesheet = {
   end?: number;
 };
 export interface ProjectTaskStore {
-  projects: Project[];
+  projectKey: string;
   trackedTask: ProjectTask | null;
-  fetchProjects: () => Promise<void>;
+  setActiveTask: (trackedTask: ProjectTask | null) => void;
   startTrackingTask: (task: ProjectTask) => void;
   stopTrackingTask: (task: ProjectTask) => Promise<ProjectTask | undefined>;
   markTaskAsDone: (task: ProjectTask) => void;
@@ -61,42 +62,17 @@ export interface ProjectTaskStore {
   deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
 }
 
-const findActiveProjectTask = (projects: Project[]) => {
-  let activeProjectTask = null;
-  projects.find((project) => {
-    return project.tasks.find((task) => {
-      const [activeTimeEntry, activeTask] = findActiveTimeEntry(task);
-      if (activeTimeEntry) {
-        activeProjectTask = activeTask;
-        return true;
-      }
-    });
-  });
-  return activeProjectTask;
-};
-
 const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
-  projects: [],
+  projectKey: uuid(),
   trackedTask: null,
-  fetchProjects: async () => {
-    const response = await fetch("/api/tasks", { method: "GET" });
-    if (response.ok) {
-      const projects = await response.json();
-      const activeTask = findActiveProjectTask(projects);
-      set({ projects, trackedTask: activeTask });
-    } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
-    }
-  },
+  setActiveTask: (trackedTask: ProjectTask | null) => set({ trackedTask }),
   startTrackingTask: async (task: ProjectTask) => {
     const response = await fetch(`/api/tasks/${task.id}/start`, {
       method: "POST",
       body: JSON.stringify(task),
     });
     if (response.ok) {
-      set({ trackedTask: task });
-      await get().fetchProjects();
+      set({ projectKey: uuid(), trackedTask: task });
     } else {
       const error = await response.json();
       showAlert(error.message, { variant: "error" });
@@ -109,8 +85,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       const updatedTask = await response.json();
-      set({ trackedTask: null });
-      await get().fetchProjects();
+      set({ projectKey: uuid(), trackedTask: null });
       return updatedTask;
     } else {
       const error = await response.json();
@@ -132,7 +107,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         const error = await response.json();
         showAlert(error.message, { variant: "error" });
       }
-      await get().fetchProjects();
+      set({ projectKey: uuid() });
     }
   },
   createTask: async (task: ProjectTask) => {
@@ -142,7 +117,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       const newtask = await response.json();
-      await get().fetchProjects();
+      set({ projectKey: uuid() });
       showAlert(`Task ${newtask.name} successfully created`, { variant: "success" });
       return newtask;
     } else {
@@ -156,7 +131,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       body: JSON.stringify(task),
     });
     if (response.ok) {
-      await get().fetchProjects();
+      set({ projectKey: uuid() });
       showAlert(`Task ${task.name} successfully updated`, { variant: "success" });
     } else {
       const error = await response.json();
@@ -168,7 +143,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       method: "DELETE",
     });
     if (response.ok) {
-      get().fetchProjects();
+      set({ projectKey: uuid() });
       showAlert(`Task ${task.name} successfully deleted`, { variant: "success" });
     } else {
       const error = await response.json();
@@ -186,7 +161,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       }),
     });
     if (response.ok) {
-      await get().fetchProjects();
+      set({ projectKey: uuid() });
       showAlert("Time Entry successfully created!", { variant: "success" });
       return true;
     } else {
@@ -205,7 +180,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       }),
     });
     if (response.ok) {
-      await get().fetchProjects();
+      set({ projectKey: uuid() });
       showAlert("Time Entry successfully updated!", { variant: "success" });
     } else {
       const error = await response.json();
@@ -222,7 +197,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     }
     const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
     if (response.ok) {
-      await get().fetchProjects();
+      set({ projectKey: uuid() });
       showAlert("Time Entry successfully deleted!", { variant: "success" });
     } else {
       const error = await response.json();
