@@ -7,17 +7,17 @@ export default function useErrorHandler() {
   const { mutateUser } = useUser();
 
   const handleActionResponse = (response: ActionResponse) => {
-    if (!response) return;
+    if (!response) return response;
     const { alert, error } = response;
     if (alert) {
       enqueueSnackbar(alert.message, { variant: alert.variant });
     }
     if (error) {
       if (error.status === 401) {
-        return mutateUser();
+        mutateUser();
+        return response;
       }
       enqueueSnackbar(error.message, { variant: "error" });
-      return error;
     }
     return response;
   };

@@ -53,16 +53,18 @@ export type ActionResponse = {
 export interface ProjectTaskStore {
   projectKey: string;
   trackedTask: ProjectTask | null;
-  setActiveTask: (trackedTask: ProjectTask | null) => void;
-  startTrackingTask: (task: ProjectTask) => Promise<ActionResponse | undefined>;
-  stopTrackingTask: (task: ProjectTask) => Promise<ActionResponse>;
-  markTaskAsDone: (task: ProjectTask) => Promise<ActionResponse | undefined>;
-  createTask: (task: ProjectTask) => Promise<ActionResponse>;
-  updateTask: (task: ProjectTask) => Promise<ActionResponse>;
-  deleteTask: (task: ProjectTask) => Promise<ActionResponse>;
-  createTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
-  updateTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
-  deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
+  actions: {
+    setActiveTask: (trackedTask: ProjectTask | null) => void;
+    startTrackingTask: (task: ProjectTask) => Promise<ActionResponse | undefined>;
+    stopTrackingTask: (task: ProjectTask) => Promise<ActionResponse>;
+    markTaskAsDone: (task: ProjectTask) => Promise<ActionResponse | undefined>;
+    createTask: (task: ProjectTask) => Promise<ActionResponse>;
+    updateTask: (task: ProjectTask) => Promise<ActionResponse>;
+    deleteTask: (task: ProjectTask) => Promise<ActionResponse>;
+    createTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
+    updateTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
+    deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
+  };
 }
 
 const buildError = async (response: Response) => ({ ...(await response.json()), status: response.status });
@@ -70,134 +72,138 @@ const buildError = async (response: Response) => ({ ...(await response.json()), 
 const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   projectKey: uuid(),
   trackedTask: null,
-  setActiveTask: (trackedTask: ProjectTask | null) => set({ trackedTask }),
-  startTrackingTask: async (task: ProjectTask) => {
-    const response = await fetch(`/api/tasks/${task.id}/start`, {
-      method: "POST",
-      body: JSON.stringify(task),
-    });
-    if (response.ok) {
-      set({ projectKey: uuid(), trackedTask: task });
-    } else {
-      const error = await buildError(response);
-      return { error };
-    }
-  },
-  stopTrackingTask: async (task: ProjectTask) => {
-    const response = await fetch(`/api/tasks/${task.id}/stop`, {
-      method: "POST",
-      body: JSON.stringify(task),
-    });
-    if (response.ok) {
-      const updatedTask = await response.json();
-      set({ projectKey: uuid(), trackedTask: null });
-      return { data: updatedTask };
-    } else {
-      return { error: await buildError(response) };
-    }
-  },
-  markTaskAsDone: async (task: ProjectTask) => {
-    const { data: stoppedTask } = await get().stopTrackingTask(task);
-    if (stoppedTask) {
-      const totalHours = getTaskTotalHours(stoppedTask);
+  actions: {
+    setActiveTask: (trackedTask: ProjectTask | null) => set({ trackedTask }),
+    startTrackingTask: async (task: ProjectTask) => {
+      const response = await fetch(`/api/tasks/${task.id}/start`, {
+        method: "POST",
+        body: JSON.stringify(task),
+      });
+      if (response.ok) {
+        set({ projectKey: uuid(), trackedTask: task });
+      } else {
+        const error = await buildError(response);
+        return { error };
+      }
+    },
+    stopTrackingTask: async (task: ProjectTask) => {
+      const response = await fetch(`/api/tasks/${task.id}/stop`, {
+        method: "POST",
+        body: JSON.stringify(task),
+      });
+      if (response.ok) {
+        const updatedTask = await response.json();
+        set({ projectKey: uuid(), trackedTask: null });
+        return { data: updatedTask };
+      } else {
+        return { error: await buildError(response) };
+      }
+    },
+    markTaskAsDone: async (task: ProjectTask) => {
+      const { data: stoppedTask } = await get().stopTrackingTask(task);
+      if (stoppedTask) {
+        const totalHours = getTaskTotalHours(stoppedTask);
+        const response = await fetch(`/api/tasks/${task.id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            stage_id: STAGE_TO_ID_MAP["done"],
+            effective_hours: totalHours,
+          }),
+        });
+        if (response.ok) {
+          set({ projectKey: uuid() });
+        } else {
+          return { error: await buildError(response) };
+        }
+      }
+    },
+    createTask: async (task: ProjectTask) => {
+      const response = await fetch(`/api/tasks`, {
+        method: "POST",
+        body: JSON.stringify(task),
+      });
+      if (response.ok) {
+        const newtask = await response.json();
+        set({ projectKey: uuid() });
+        return { data: newtask, alert: { message: `Task ${newtask.name} successfully created`, variant: "success" } };
+      } else {
+        return { error: await buildError(response) };
+      }
+    },
+    updateTask: async (task: ProjectTask) => {
       const response = await fetch(`/api/tasks/${task.id}`, {
         method: "PUT",
+        body: JSON.stringify(task),
+      });
+      if (response.ok) {
+        set({ projectKey: uuid() });
+        return { alert: { message: `Task ${task.name} successfully updated`, variant: "success" } };
+      } else {
+        return { error: await buildError(response) };
+      }
+    },
+    deleteTask: async (task: ProjectTask) => {
+      const response = await fetch(`/api/tasks/${task.id}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        set({ projectKey: uuid() });
+        return { alert: { message: `Task ${task.name} successfully deleted`, variant: "success" } };
+      } else {
+        return { error: await buildError(response) };
+      }
+    },
+    createTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
+      const response = await fetch(`/api/time_entries`, {
+        method: "POST",
         body: JSON.stringify({
-          stage_id: STAGE_TO_ID_MAP["done"],
-          effective_hours: totalHours,
+          task_id: task.id,
+          start: formatInTimeZone(new Date(timeEntry.start), "UTC", ODOO_DATE_FORMAT),
+          end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
+          name: timeEntry.name,
         }),
       });
       if (response.ok) {
         set({ projectKey: uuid() });
+        return { alert: { message: "Time Entry successfully created!", variant: "success" } };
       } else {
         return { error: await buildError(response) };
       }
-    }
-  },
-  createTask: async (task: ProjectTask) => {
-    const response = await fetch(`/api/tasks`, {
-      method: "POST",
-      body: JSON.stringify(task),
-    });
-    if (response.ok) {
-      const newtask = await response.json();
-      set({ projectKey: uuid() });
-      return { data: newtask, alert: { message: `Task ${newtask.name} successfully created`, variant: "success" } };
-    } else {
-      return { error: await buildError(response) };
-    }
-  },
-  updateTask: async (task: ProjectTask) => {
-    const response = await fetch(`/api/tasks/${task.id}`, {
-      method: "PUT",
-      body: JSON.stringify(task),
-    });
-    if (response.ok) {
-      set({ projectKey: uuid() });
-      return { alert: { message: `Task ${task.name} successfully updated`, variant: "success" } };
-    } else {
-      return { error: await buildError(response) };
-    }
-  },
-  deleteTask: async (task: ProjectTask) => {
-    const response = await fetch(`/api/tasks/${task.id}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      set({ projectKey: uuid() });
-      return { alert: { message: `Task ${task.name} successfully deleted`, variant: "success" } };
-    } else {
-      return { error: await buildError(response) };
-    }
-  },
-  createTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
-    const response = await fetch(`/api/time_entries`, {
-      method: "POST",
-      body: JSON.stringify({
-        task_id: task.id,
-        start: formatInTimeZone(new Date(timeEntry.start), "UTC", ODOO_DATE_FORMAT),
-        end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
-        name: timeEntry.name,
-      }),
-    });
-    if (response.ok) {
-      set({ projectKey: uuid() });
-      return { alert: { message: "Time Entry successfully created!", variant: "success" } };
-    } else {
-      return { error: await buildError(response) };
-    }
-  },
-  updateTimeEntry: async (timeEntry: Timesheet) => {
-    const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        start: formatInTimeZone(new Date(timeEntry.start), "UTC", ODOO_DATE_FORMAT),
-        end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
-        name: timeEntry.name,
-      }),
-    });
-    if (response.ok) {
-      set({ projectKey: uuid() });
-      return { alert: { message: "Time Entry successfully updated!", variant: "success" } };
-    } else {
-      return { error: await buildError(response) };
-    }
-  },
-  deleteTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
-    if (task.timesheet_ids.length === 1) {
-      fetch(`/api/tasks/${task.id}`, {
+    },
+    updateTimeEntry: async (timeEntry: Timesheet) => {
+      const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
         method: "PUT",
-        body: JSON.stringify({ stage_id: STAGE_TO_ID_MAP["created"] }),
+        body: JSON.stringify({
+          start: formatInTimeZone(new Date(timeEntry.start), "UTC", ODOO_DATE_FORMAT),
+          end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
+          name: timeEntry.name,
+        }),
       });
-    }
-    const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
-    if (response.ok) {
-      set({ projectKey: uuid() });
-      return { alert: { message: "Time Entry successfully deleted!", variant: "success" } };
-    } else {
-      return { error: await buildError(response) };
-    }
+      if (response.ok) {
+        set({ projectKey: uuid() });
+        return { alert: { message: "Time Entry successfully updated!", variant: "success" } };
+      } else {
+        return { error: await buildError(response) };
+      }
+    },
+    deleteTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
+      if (task.timesheet_ids.length === 1) {
+        fetch(`/api/tasks/${task.id}`, {
+          method: "PUT",
+          body: JSON.stringify({ stage_id: STAGE_TO_ID_MAP["created"] }),
+        });
+      }
+      const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
+      if (response.ok) {
+        set({ projectKey: uuid() });
+        return { alert: { message: "Time Entry successfully deleted!", variant: "success" } };
+      } else {
+        return { error: await buildError(response) };
+      }
+    },
   },
 }));
 
 export default useProjectTaskStore;
+
+export const useProjectTaskActions = () => useProjectTaskStore((state) => state.actions);

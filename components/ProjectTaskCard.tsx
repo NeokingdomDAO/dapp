@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import { Card, CardContent, CardHeader, IconButton, Menu, MenuItem } from "@mui/material";
 
-import useProjectTaskStore, { ProjectTask } from "@store/projectTaskStore";
+import { ProjectTask, useProjectTaskActions } from "@store/projectTaskStore";
 
 import useErrorHandler from "../hooks/useErrorHandler";
 import { STAGE_TO_ID_MAP } from "../lib/constants";
@@ -13,11 +13,10 @@ import TaskForm from "./TaskForm";
 export default function ProjectTaskCard({ task, hideCompleted }: { task: ProjectTask; hideCompleted?: boolean }) {
   const [editTask, setEditTask] = useState<number | null>(null);
   const { handleError } = useErrorHandler();
-  const updateTaskAction = useProjectTaskStore((state) => state.updateTask);
-  const deleteTaskAction = useProjectTaskStore((state) => state.deleteTask);
 
-  const updateTask = handleError(updateTaskAction);
-  const deleteTask = handleError(deleteTaskAction);
+  const actions = useProjectTaskActions();
+  const updateTask = handleError(actions.updateTask);
+  const deleteTask = handleError(actions.deleteTask);
 
   const [taskMenu, setTaskMenu] = useState<null | HTMLElement>(null);
   const openTaskMenu = Boolean(taskMenu);

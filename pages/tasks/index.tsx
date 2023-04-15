@@ -8,7 +8,7 @@ import { Grid, Skeleton } from "@mui/material";
 import { fetcher } from "@lib/net";
 import { findActiveProjectTask } from "@lib/utils";
 
-import useProjectTaskStore, { Project } from "@store/projectTaskStore";
+import useProjectTaskStore, { Project, useProjectTaskActions } from "@store/projectTaskStore";
 
 import ProjectCard from "@components/ProjectCard";
 import TrackingDialog from "@components/TrackingDialog";
@@ -18,10 +18,8 @@ Tasks.requireLogin = true;
 
 export default function Tasks() {
   const { data: projects, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
-  const { projectKey, setActiveTask } = useProjectTaskStore(
-    ({ projectKey, setActiveTask }) => ({ projectKey, setActiveTask }),
-    shallow,
-  );
+  const projectKey = useProjectTaskStore((state) => state.projectKey);
+  const { setActiveTask } = useProjectTaskActions();
 
   useEffect(() => {
     mutate();

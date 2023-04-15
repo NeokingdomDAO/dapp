@@ -44,7 +44,7 @@ import { STAGE_TO_ID_MAP } from "@lib/constants";
 import { getTaskName, getTaskTotalHours, stageToColor, toPrettyDuration, toPrettyRange } from "@lib/utils";
 
 import useDialogStore from "@store/dialogStore";
-import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
+import useProjectTaskStore, { ProjectTask, Timesheet, useProjectTaskActions } from "@store/projectTaskStore";
 
 import useErrorHandler from "@hooks/useErrorHandler";
 
@@ -53,34 +53,15 @@ import TimeEntryForm from "./TimeEntryForm";
 export default function ProjectSubTask({ task }: { task: ProjectTask }) {
   const theme = useTheme();
   const { handleError } = useErrorHandler();
+  const trackedTask = useProjectTaskStore((state) => state.trackedTask);
 
-  const [
-    trackedTask,
-    startTrackingTaskAction,
-    stopTrackingTaskAction,
-    markTaskAsDoneAction,
-    createTimeEntryAction,
-    updateTimeEntryAction,
-    deleteTimeEntryAction,
-  ] = useProjectTaskStore(
-    (state) => [
-      state.trackedTask,
-      state.startTrackingTask,
-      state.stopTrackingTask,
-      state.markTaskAsDone,
-      state.createTimeEntry,
-      state.updateTimeEntry,
-      state.deleteTimeEntry,
-    ],
-    shallow,
-  );
-
-  const startTrackingTask = handleError(startTrackingTaskAction);
-  const stopTrackingTask = handleError(stopTrackingTaskAction);
-  const markTaskAsDone = handleError(markTaskAsDoneAction);
-  const createTimeEntry = handleError(createTimeEntryAction);
-  const updateTimeEntry = handleError(updateTimeEntryAction);
-  const deleteTimeEntry = handleError(deleteTimeEntryAction);
+  const actions = useProjectTaskActions();
+  const startTrackingTask = handleError(actions.startTrackingTask);
+  const stopTrackingTask = handleError(actions.stopTrackingTask);
+  const markTaskAsDone = handleError(actions.markTaskAsDone);
+  const createTimeEntry = handleError(actions.createTimeEntry);
+  const updateTimeEntry = handleError(actions.updateTimeEntry);
+  const deleteTimeEntry = handleError(actions.deleteTimeEntry);
 
   const [expanded, setExpanded] = useState<number | false>(false);
   const [updateTimeEntryOpen, setUpdateTimeEntryOpen] = useState<number | boolean>(false);
