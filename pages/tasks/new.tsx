@@ -8,6 +8,8 @@ import TaskForm from "@components/TaskForm";
 
 import { useSnackbar } from "@hooks/useSnackbar";
 
+import useErrorHandler from "../../hooks/useErrorHandler";
+
 NewTask.title = "New task";
 NewTask.requireLogin = true;
 
@@ -16,8 +18,8 @@ export default function NewTask() {
   const {
     query: { projectId },
   } = router;
-  const { enqueueSnackbar } = useSnackbar();
-  const createTask = useProjectTaskStore(enqueueSnackbar)((state) => state.createTask);
+  const { handleError } = useErrorHandler();
+  const createTask = useProjectTaskStore((state) => state.createTask);
 
   return (
     <>
@@ -29,7 +31,7 @@ export default function NewTask() {
           <TaskForm
             projectId={Number(projectId)}
             onConfirm={async (data) => {
-              const task = await createTask(data);
+              const task = await handleError(createTask)(data);
               if (task) router.push("/tasks");
             }}
           />

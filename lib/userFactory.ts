@@ -12,6 +12,7 @@ const userFactory = (user: Partial<User> = {}): User => ({
   isLoggedIn: false,
   email: "",
   ethereum_address: "",
+  name: "",
   display_name: "",
   username: "",
   password: "",

@@ -8,24 +8,18 @@ import { Grid, Skeleton } from "@mui/material";
 import { fetcher } from "@lib/net";
 import { findActiveProjectTask } from "@lib/utils";
 
-import useCustomProjectTaskStore, { Project } from "@store/projectTaskStore";
+import useProjectTaskStore, { Project } from "@store/projectTaskStore";
 
 import ProjectCard from "@components/ProjectCard";
 import TrackingDialog from "@components/TrackingDialog";
-
-import { useSnackbar } from "@hooks/useSnackbar";
 
 Tasks.title = "Tasks List";
 Tasks.requireLogin = true;
 
 export default function Tasks() {
-  const { enqueueSnackbar } = useSnackbar();
   const { data: projects, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
-  const { projectKey, setActiveTask } = useCustomProjectTaskStore(enqueueSnackbar)(
-    ({ projectKey, setActiveTask }) => ({
-      projectKey,
-      setActiveTask,
-    }),
+  const { projectKey, setActiveTask } = useProjectTaskStore(
+    ({ projectKey, setActiveTask }) => ({ projectKey, setActiveTask }),
     shallow,
   );
 

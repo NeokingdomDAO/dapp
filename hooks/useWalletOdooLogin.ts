@@ -23,7 +23,7 @@ export default function useWalletOdooLogin() {
         const json = await challenge.json();
         const sig = await signMessageAsync({ message: json.message });
 
-        const data = await fetch("/api/walletLogin", {
+        await fetch("/api/walletLogin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -32,8 +32,7 @@ export default function useWalletOdooLogin() {
             signingToken: json.signingToken,
           }),
         });
-        const resUser = await data.json();
-        mutateUser(resUser, false);
+        mutateUser();
       } catch (_) {
         enqueueSnackbar("There was an error signing in", { variant: "error" });
       }

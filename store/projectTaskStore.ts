@@ -1,12 +1,9 @@
 import { formatInTimeZone } from "date-fns-tz";
-import { EnqueueSnackbar } from "notistack";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
 import { ODOO_DATE_FORMAT, STAGE_TO_ID_MAP } from "@lib/constants";
-import { getTaskTotalHours, replaceTaskTimeEntry } from "@lib/utils";
-
-let showAlert: EnqueueSnackbar;
+import { getTaskTotalHours } from "@lib/utils";
 
 export type Project = {
   id: number;
@@ -47,20 +44,28 @@ export type Timesheet = {
   start: number;
   end?: number;
 };
+
+export type ActionResponse = {
+  data?: any;
+  error?: any;
+  alert?: { message: string; variant: any };
+};
 export interface ProjectTaskStore {
   projectKey: string;
   trackedTask: ProjectTask | null;
   setActiveTask: (trackedTask: ProjectTask | null) => void;
-  startTrackingTask: (task: ProjectTask) => void;
-  stopTrackingTask: (task: ProjectTask) => Promise<ProjectTask | undefined>;
-  markTaskAsDone: (task: ProjectTask) => void;
-  createTask: (task: ProjectTask) => Promise<ProjectTask>;
-  updateTask: (task: ProjectTask) => void;
-  deleteTask: (task: ProjectTask) => void;
-  createTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<boolean>;
-  updateTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
-  deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
+  startTrackingTask: (task: ProjectTask) => Promise<ActionResponse | undefined>;
+  stopTrackingTask: (task: ProjectTask) => Promise<ActionResponse>;
+  markTaskAsDone: (task: ProjectTask) => Promise<ActionResponse | undefined>;
+  createTask: (task: ProjectTask) => Promise<ActionResponse>;
+  updateTask: (task: ProjectTask) => Promise<ActionResponse>;
+  deleteTask: (task: ProjectTask) => Promise<ActionResponse>;
+  createTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
+  updateTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
+  deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
 }
+
+const buildError = async (response: Response) => ({ ...(await response.json()), status: response.status });
 
 const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   projectKey: uuid(),
@@ -74,8 +79,8 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     if (response.ok) {
       set({ projectKey: uuid(), trackedTask: task });
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
+      const error = await buildError(response);
+      return { error };
     }
   },
   stopTrackingTask: async (task: ProjectTask) => {
@@ -86,14 +91,13 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     if (response.ok) {
       const updatedTask = await response.json();
       set({ projectKey: uuid(), trackedTask: null });
-      return updatedTask;
+      return { data: updatedTask };
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
+      return { error: await buildError(response) };
     }
   },
   markTaskAsDone: async (task: ProjectTask) => {
-    const stoppedTask = await get().stopTrackingTask(task);
+    const { data: stoppedTask } = await get().stopTrackingTask(task);
     if (stoppedTask) {
       const totalHours = getTaskTotalHours(stoppedTask);
       const response = await fetch(`/api/tasks/${task.id}`, {
@@ -103,11 +107,11 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
           effective_hours: totalHours,
         }),
       });
-      if (!response.ok) {
-        const error = await response.json();
-        showAlert(error.message, { variant: "error" });
+      if (response.ok) {
+        set({ projectKey: uuid() });
+      } else {
+        return { error: await buildError(response) };
       }
-      set({ projectKey: uuid() });
     }
   },
   createTask: async (task: ProjectTask) => {
@@ -118,11 +122,9 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     if (response.ok) {
       const newtask = await response.json();
       set({ projectKey: uuid() });
-      showAlert(`Task ${newtask.name} successfully created`, { variant: "success" });
-      return newtask;
+      return { data: newtask, alert: { message: `Task ${newtask.name} successfully created`, variant: "success" } };
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
+      return { error: await buildError(response) };
     }
   },
   updateTask: async (task: ProjectTask) => {
@@ -132,10 +134,9 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       set({ projectKey: uuid() });
-      showAlert(`Task ${task.name} successfully updated`, { variant: "success" });
+      return { alert: { message: `Task ${task.name} successfully updated`, variant: "success" } };
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
+      return { error: await buildError(response) };
     }
   },
   deleteTask: async (task: ProjectTask) => {
@@ -144,13 +145,12 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       set({ projectKey: uuid() });
-      showAlert(`Task ${task.name} successfully deleted`, { variant: "success" });
+      return { alert: { message: `Task ${task.name} successfully deleted`, variant: "success" } };
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
+      return { error: await buildError(response) };
     }
   },
-  createTimeEntry: async (timeEntry: Timesheet, task: ProjectTask): Promise<boolean> => {
+  createTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
     const response = await fetch(`/api/time_entries`, {
       method: "POST",
       body: JSON.stringify({
@@ -162,15 +162,12 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       set({ projectKey: uuid() });
-      showAlert("Time Entry successfully created!", { variant: "success" });
-      return true;
+      return { alert: { message: "Time Entry successfully created!", variant: "success" } };
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
-      return false;
+      return { error: await buildError(response) };
     }
   },
-  updateTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
+  updateTimeEntry: async (timeEntry: Timesheet) => {
     const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
       method: "PUT",
       body: JSON.stringify({
@@ -181,15 +178,13 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     });
     if (response.ok) {
       set({ projectKey: uuid() });
-      showAlert("Time Entry successfully updated!", { variant: "success" });
+      return { alert: { message: "Time Entry successfully updated!", variant: "success" } };
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
+      return { error: await buildError(response) };
     }
   },
   deleteTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
-    let newTask = replaceTaskTimeEntry(task, timeEntry, { delete: true });
-    if (!newTask.timesheet_ids.length) {
+    if (task.timesheet_ids.length === 1) {
       fetch(`/api/tasks/${task.id}`, {
         method: "PUT",
         body: JSON.stringify({ stage_id: STAGE_TO_ID_MAP["created"] }),
@@ -198,15 +193,11 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
     if (response.ok) {
       set({ projectKey: uuid() });
-      showAlert("Time Entry successfully deleted!", { variant: "success" });
+      return { alert: { message: "Time Entry successfully deleted!", variant: "success" } };
     } else {
-      const error = await response.json();
-      showAlert(error.message, { variant: "error" });
+      return { error: await buildError(response) };
     }
   },
 }));
 
-export default function useCustomProjectTaskStore(enqueueSnackbar: EnqueueSnackbar) {
-  showAlert = enqueueSnackbar;
-  return useProjectTaskStore;
-}
+export default useProjectTaskStore;

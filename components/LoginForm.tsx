@@ -54,8 +54,7 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
       body: JSON.stringify({ ...user }),
     });
     if (res.status === 200) {
-      const resUser = await res.json();
-      mutateUser(resUser, false);
+      mutateUser();
       onLoggedIn && onLoggedIn();
     } else {
       enqueueSnackbar("Login Failed: Your email or password is incorrect", { variant: "error" });

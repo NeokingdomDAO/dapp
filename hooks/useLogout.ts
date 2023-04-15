@@ -31,7 +31,7 @@ export default function useLogout() {
         headers: { "Content-Type": "application/json" },
       });
       if (res.status === 200) {
-        mutateUser(await res.json());
+        mutateUser();
       } else {
         enqueueSnackbar("Logout failed, please try again later", { variant: "error" });
       }
