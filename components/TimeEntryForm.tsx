@@ -24,7 +24,11 @@ export default function TimeEntryForm({
     name: "",
     ...(timeEntry || {}),
     start: format(timeEntry?.start ? new Date(timeEntry.start * 1000) : now, dateFormat),
-    end: format(timeEntry?.end ? new Date(timeEntry.end * 1000) : now, dateFormat),
+    end: timeEntry
+      ? timeEntry.end
+        ? format(new Date(timeEntry.end * 1000), dateFormat)
+        : undefined
+      : format(now, dateFormat),
   });
 
   const onSubmit = async (event: any) => {
@@ -81,7 +85,7 @@ export default function TimeEntryForm({
             variant="contained"
             loading={isLoading}
             sx={{ flex: "50%" }}
-            disabled={!form.start || !form.end || !form.name}
+            disabled={!form.start || !form.name}
           >
             {timeEntry ? "Update" : "Create"}
           </LoadingButton>
