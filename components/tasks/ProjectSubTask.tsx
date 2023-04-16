@@ -1,5 +1,3 @@
-import { shallow } from "zustand/shallow";
-
 import { Fragment, useMemo, useState } from "react";
 
 import {

@@ -1,5 +1,4 @@
 import useSWR from "swr";
-import { shallow } from "zustand/shallow";
 
 import { useEffect } from "react";
 
@@ -10,8 +9,8 @@ import { findActiveProjectTask } from "@lib/utils";
 
 import useProjectTaskStore, { Project, useProjectTaskActions } from "@store/projectTaskStore";
 
-import ProjectCard from "@components/ProjectCard";
-import TrackingDialog from "@components/TrackingDialog";
+import ProjectCard from "@components/tasks/ProjectCard";
+import TrackingDialog from "@components/tasks/TrackingDialog";
 
 Tasks.title = "Tasks List";
 Tasks.requireLogin = true;

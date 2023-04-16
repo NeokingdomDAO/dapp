@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import { Card, CardContent, CardHeader, IconButton, Menu, MenuItem } from "@mui/material";
 
+import { STAGE_TO_ID_MAP } from "@lib/constants";
+
 import { ProjectTask, useProjectTaskActions } from "@store/projectTaskStore";
 
-import useErrorHandler from "../hooks/useErrorHandler";
-import { STAGE_TO_ID_MAP } from "../lib/constants";
+import useErrorHandler from "@hooks/useErrorHandler";
+
 import ProjectSubTask from "./ProjectSubTask";
 import TaskForm from "./TaskForm";
 

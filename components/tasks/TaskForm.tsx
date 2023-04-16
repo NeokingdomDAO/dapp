@@ -21,13 +21,13 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { fetcher } from "@lib/net";
 import { getDateFromOdooTimestamp } from "@lib/utils";
+import { toDatetime } from "@lib/utils";
 
 import { Project, ProjectTask, Tier } from "@store/projectTaskStore";
 
 import useUser from "@hooks/useUser";
 
-import { toDatetime } from "../lib/utils";
-import { OdooUser } from "../types";
+import { OdooUser } from "../../types";
 
 type FormData = {
   name: string;

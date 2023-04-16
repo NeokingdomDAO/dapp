@@ -4,9 +4,9 @@ import { Grid, Typography } from "@mui/material";
 
 import { useProjectTaskActions } from "@store/projectTaskStore";
 
-import TaskForm from "@components/TaskForm";
+import TaskForm from "@components/tasks/TaskForm";
 
-import useErrorHandler from "../../hooks/useErrorHandler";
+import useErrorHandler from "@hooks/useErrorHandler";
 
 NewTask.title = "New task";
 NewTask.requireLogin = true;
