@@ -26,6 +26,7 @@ export default function Tasks() {
 
   useEffect(() => {
     if (projects) {
+      console.log("🐞 > projects:", projects);
       const activeTask = findActiveProjectTask(projects);
       setActiveTask(activeTask);
     }

@@ -41,9 +41,12 @@ export function toDatetime(date: number) {
 }
 
 export function toPrettyDuration(time: number) {
-  const hours = Math.trunc(time);
-  const mins = Math.round((time - hours) * 60);
-  return mins ? `${hours}h ${mins}m` : `${hours}h`;
+  if (!time) return "00h 00m";
+  const hours = Math.trunc(time).toString().padStart(2, "0");
+  const mins = Math.round((time - Number(hours)) * 60)
+    .toString()
+    .padStart(2, "0");
+  return mins ? `${hours}h ${mins}m` : `${hours}h 00m`;
 }
 
 export function toPrettyRange(start: number, end?: number) {
