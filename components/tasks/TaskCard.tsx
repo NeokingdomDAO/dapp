@@ -7,14 +7,17 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Grid,
   Typography,
   useTheme,
 } from "@mui/material";
 
+import { toPrettyDuration } from "@lib/utils";
+
 import { ProjectTask } from "@store/projectTaskStore";
 
-import { toPrettyDuration } from "../../lib/utils";
 import Stopwatch from "./Stopwatch";
+import TimeEntry from "./TimeEntry";
 
 export default function TaskCard({ task }: { task: ProjectTask }) {
   const theme = useTheme();
@@ -64,6 +67,13 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
               <strong>Total time:</strong>
               <span>{toPrettyDuration(task.effective_hours)}</span>
             </Typography>
+            <Grid container sx={{ m: 0, width: "100%" }} spacing={0}>
+              {task.timesheet_ids.map((row) => (
+                <Grid item sx={{ pl: 0, pt: 0, p: 0 }} xs={12} sm={4} key={row.id}>
+                  <TimeEntry task={task} timeEntry={row} />
+                </Grid>
+              ))}
+            </Grid>
           </AccordionDetails>
         </Accordion>
       </CardContent>

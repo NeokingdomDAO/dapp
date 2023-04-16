@@ -40,56 +40,57 @@ export default function TimeEntryForm({
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }} component="form" onSubmit={onSubmit} autoComplete="off">
-      <Box sx={{ maxWidth: "500px" }}>
-        <Box sx={{ display: "flex", justifyContent: "left", mt: 3 }}>
-          <DateTimePicker
-            label="Start"
-            format="yyyy/MM/dd HH:mm"
-            ampm={false}
-            value={form.start ? new Date(form.start) : null}
-            onChange={(datetime: any) => setForm({ ...form, start: format(datetime, dateFormat) })}
-          />
-          <DateTimePicker
-            sx={{ ml: 2 }}
-            label="End"
-            format="yyyy/MM/dd HH:mm"
-            ampm={false}
-            value={form.end ? new Date(form.end) : null}
-            onChange={(datetime: any) => setForm({ ...form, end: format(datetime, dateFormat) })}
-          />
-        </Box>
-        <Box sx={{ mt: 2, mb: 2 }}>
-          <TextField
-            sx={{ width: "100%" }}
-            id="newEntry-description"
-            label="Description"
-            placeholder="Insert Description"
-            multiline
-            required
-            rows={4}
-            value={form.name}
-            onChange={(e: any) => setForm({ ...form, name: e.target.value })}
-            variant="outlined"
-          />
-        </Box>
-        <Box sx={{ display: "flex", mb: 2 }}>
-          {onCancel && (
-            <Button onClick={onCancel} variant="outlined" sx={{ mr: 2, flex: "50%" }}>
-              Cancel
-            </Button>
-          )}
+    <Box sx={{ p: "5px" }} component="form" onSubmit={onSubmit} autoComplete="off">
+      <Box sx={{ mt: "8px", mb: 2 }}>
+        <DateTimePicker
+          label="Start"
+          format="yyyy/MM/dd HH:mm"
+          ampm={false}
+          value={form.start ? new Date(form.start) : null}
+          onChange={(datetime: any) => setForm({ ...form, start: format(datetime, dateFormat) })}
+          sx={{ width: "100%" }}
+        />
+      </Box>
+      <Box sx={{ mt: 2, mb: 2 }}>
+        <DateTimePicker
+          label="End"
+          format="yyyy/MM/dd HH:mm"
+          ampm={false}
+          value={form.end ? new Date(form.end) : null}
+          onChange={(datetime: any) => setForm({ ...form, end: format(datetime, dateFormat) })}
+          sx={{ width: "100%" }}
+        />
+      </Box>
+      <Box sx={{ mt: 2, mb: 2 }}>
+        <TextField
+          sx={{ width: "100%" }}
+          id="newEntry-description"
+          label="Description"
+          placeholder="Insert Description"
+          multiline
+          required
+          rows={4}
+          value={form.name}
+          onChange={(e: any) => setForm({ ...form, name: e.target.value })}
+          variant="outlined"
+        />
+      </Box>
+      <Box sx={{ display: "flex", mb: 2 }}>
+        {onCancel && (
+          <Button onClick={onCancel} variant="outlined" sx={{ mr: 2, flex: "50%" }}>
+            Cancel
+          </Button>
+        )}
 
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={isLoading}
-            sx={{ flex: "50%" }}
-            disabled={!form.start || !form.name}
-          >
-            {timeEntry ? "Update" : "Create"}
-          </LoadingButton>
-        </Box>
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          loading={isLoading}
+          sx={{ flex: "50%" }}
+          disabled={!form.start || !form.name}
+        >
+          {timeEntry ? "Update" : "Create"}
+        </LoadingButton>
       </Box>
     </Box>
   );

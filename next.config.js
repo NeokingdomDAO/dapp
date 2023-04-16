@@ -8,7 +8,7 @@ const withPWA = require("next-pwa")({
   dest: "public",
 });
 
-module.exports = withPWA({
+const nextConfig = {
   reactStrictMode: false,
   compiler: {
     emotion: true,
@@ -24,4 +24,6 @@ module.exports = withPWA({
     LATEST_COMMIT_HASH: commitHash,
     PACKAGE_VERSION: pkg.version,
   },
-});
+};
+
+module.exports = process.env.NODE_ENV === "development" ? nextConfig : withPWA(nextConfig);
