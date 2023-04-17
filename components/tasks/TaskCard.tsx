@@ -1,4 +1,4 @@
-import { ReactElement, ReactEventHandler, useState } from "react";
+import { useState } from "react";
 
 import {
   Add,
@@ -16,32 +16,30 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
   Chip,
   Divider,
-  Grid,
   IconButton,
   Link,
   Menu,
   MenuItem,
-  Typography,
   useTheme,
 } from "@mui/material";
 
-import { stageToColor, toPrettyDuration } from "@lib/utils";
+import { stageToColor } from "@lib/utils";
 
 import { ProjectTask, useProjectTaskActions } from "@store/projectTaskStore";
 
 import useErrorHandler from "@hooks/useErrorHandler";
 
+import useDialogStore from "../../store/dialogStore";
+import ActionCardBtn from "./ActionBtn";
 import Stopwatch from "./Stopwatch";
 import SubTaskCard from "./SubTaskCard";
 import TaskForm from "./TaskForm";
-import TimeEntry from "./TimeEntry";
-import TimeEntryForm from "./TimeEntryForm";
+import TimeEntryList from "./TimeEntryList";
 
 export default function TaskCard({ task }: { task: ProjectTask }) {
   const theme = useTheme();
@@ -51,16 +49,40 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
 
   const { handleError } = useErrorHandler();
   const actions = useProjectTaskActions();
+  const createTask = handleError(actions.createTask);
   const updateTask = handleError(actions.updateTask);
   const deleteTask = handleError(actions.deleteTask);
   const markTaskAsDone = handleError(actions.markTaskAsDone);
-  const createTimeEntry = handleError(actions.createTimeEntry);
 
   const [editTask, setEditTask] = useState<number | null>(null);
   const [taskMenu, setTaskMenu] = useState<null | HTMLElement>(null);
   const openTaskMenu = Boolean(taskMenu);
   const handleOpenTaskMenu = (event: React.MouseEvent<HTMLElement>) => setTaskMenu(event.currentTarget);
   const handleCloseTaskMenu = () => setTaskMenu(null);
+  const openDialog = useDialogStore(({ openDialog }) => openDialog);
+  const closeDialog = useDialogStore(({ closeDialog }) => closeDialog);
+
+  const createNewSubTask = () => {
+    openDialog({
+      open: true,
+      title: (
+        <Box sx={{ display: "flex" }}>
+          <Box sx={{ fontWeight: "200" }}>New sub-task for</Box>
+          <Box sx={{ ml: "4px" }}>{task.name}</Box>
+        </Box>
+      ),
+      message: (
+        <TaskForm
+          parentTask={task}
+          onCancel={() => closeDialog()}
+          onConfirm={(data) => {
+            createTask({ ...data, parent_id: task.id });
+            closeDialog();
+          }}
+        />
+      ),
+    });
+  };
 
   const cardHeaderActions = () => (
     <>
@@ -106,7 +128,7 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
           Mark As Done
         </MenuItem>
         <MenuItem
-          key="mark-as-done-task"
+          key="new-time-entry"
           onClick={() => {
             setStopwatchExpanded(true);
             addNewTimeEntry(true);
@@ -115,6 +137,16 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
         >
           <MoreTimeOutlined sx={{ mr: 1 }} />
           New Time Entry
+        </MenuItem>
+        <MenuItem
+          key="new-sub-task"
+          onClick={() => {
+            createNewSubTask();
+            handleCloseTaskMenu();
+          }}
+        >
+          <Add sx={{ mr: 1 }} />
+          New Sub-task
         </MenuItem>
         <Divider />
         <MenuItem
@@ -185,54 +217,16 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
               />
             </AccordionSummary>
             <AccordionDetails sx={{ padding: 0, pt: "8px" }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography>
-                  <strong>Total time:</strong>
-                  <span>{toPrettyDuration(task.effective_hours)}</span>
-                </Typography>
-                <CardBtn onClick={() => addNewTimeEntry(!newTimeEntry)}>
-                  <MoreTimeOutlined sx={{ fontSize: "1rem", mr: "3px" }} />
-                  <span>New Time Entry</span>
-                </CardBtn>
-              </Box>
-              <Grid container sx={{ m: 0, width: "100%" }} spacing={0}>
-                {newTimeEntry && (
-                  <Grid item sx={{ pl: 0, pt: 0, p: 0 }} xs={12} sm={4}>
-                    <Box
-                      sx={{
-                        m: "5px",
-                        ml: 0,
-                        p: "5px",
-                        borderRadius: "3px",
-                        border: `1px solid ${theme.palette.divider}`,
-                        position: "relative",
-                      }}
-                    >
-                      <TimeEntryForm
-                        onConfirm={(data) => {
-                          createTimeEntry(data, task);
-                          addNewTimeEntry(false);
-                        }}
-                        onCancel={() => addNewTimeEntry(false)}
-                      />
-                    </Box>
-                  </Grid>
-                )}
-                {task.timesheet_ids.map((row) => (
-                  <Grid item sx={{ pl: 0, pt: 0, p: 0 }} xs={12} sm={4} key={row.id}>
-                    <TimeEntry task={task} timeEntry={row} />
-                  </Grid>
-                ))}
-              </Grid>
+              <TimeEntryList task={task} showNewTimeEntry={newTimeEntry} />
             </AccordionDetails>
           </Accordion>
 
           <Box sx={{ mt: 2 }}>
             {!task.child_ids.length ? (
-              <CardBtn onClick={() => setSubtasksExpanded(!subtasksExpanded)}>
+              <ActionCardBtn onClick={() => setSubtasksExpanded(!subtasksExpanded)}>
                 <Add sx={{ fontSize: "1rem" }} />
                 <span>Add Sub-task</span>
-              </CardBtn>
+              </ActionCardBtn>
             ) : (
               <Accordion sx={{ border: 0 }} variant="outlined" expanded={subtasksExpanded}>
                 <AccordionSummary
@@ -246,7 +240,7 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
                     "& .MuiAccordionSummary-content.Mui-expanded": { margin: 0 },
                   }}
                 >
-                  <CardBtn onClick={() => setSubtasksExpanded(!subtasksExpanded)}>
+                  <ActionCardBtn onClick={() => setSubtasksExpanded(!subtasksExpanded)}>
                     {subtasksExpanded ? (
                       <KeyboardArrowDown sx={{ fontSize: "1rem" }} />
                     ) : (
@@ -254,12 +248,12 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
                     )}
                     <span>Sub-tasks</span>
                     <Box sx={{ ml: ".25rem", fontWeight: "500" }}>{task.child_ids.length}</Box>
-                  </CardBtn>
+                  </ActionCardBtn>
                   {subtasksExpanded ? (
-                    <CardBtn>
+                    <ActionCardBtn onClick={() => createNewSubTask()}>
                       <Add sx={{ fontSize: "1rem" }} />
                       <span>Create New</span>
-                    </CardBtn>
+                    </ActionCardBtn>
                   ) : null}
                 </AccordionSummary>
                 <AccordionDetails sx={{ padding: 0, pt: "8px" }}>
@@ -273,33 +267,5 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
         </CardContent>
       )}
     </Card>
-  );
-}
-
-function CardBtn({ onClick, children }: { onClick?: ReactEventHandler; children: ReactElement[] }) {
-  const theme = useTheme();
-  return (
-    <Box
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onClick && onClick(e);
-      }}
-      sx={{
-        display: "inline-flex",
-        alignItems: "center",
-        borderRadius: "3px",
-        p: "3px 4px",
-        pr: "8px",
-        m: 0,
-        fontSize: "0.9rem",
-        "&:hover": {
-          background: theme.palette.action.hover,
-          cursor: "pointer",
-        },
-      }}
-    >
-      {...children}
-    </Box>
   );
 }

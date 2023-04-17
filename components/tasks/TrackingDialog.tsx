@@ -58,12 +58,16 @@ export default function TrackingDialog() {
         <DialogContentText id={dialog.id}>{dialog.message}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel} variant="text">
-          {dialog.cancelBtnText}
-        </Button>
-        <Button onClick={handleConfirm} variant="contained">
-          {dialog.confirmBtnText}
-        </Button>
+        {dialog.onCancel && (
+          <Button onClick={handleCancel} variant="text">
+            {dialog.cancelBtnText}
+          </Button>
+        )}
+        {dialog.onConfirm && (
+          <Button onClick={handleConfirm} variant="contained">
+            {dialog.confirmBtnText}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

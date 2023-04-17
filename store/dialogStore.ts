@@ -3,7 +3,7 @@ import { create } from "zustand";
 export type DialogState = {
   id?: string;
   open: boolean;
-  title?: string;
+  title?: string | React.ReactElement;
   message?: string | React.ReactElement;
   cancelBtnText?: string;
   confirmBtnText?: string;
@@ -22,8 +22,6 @@ const defaultState = {
   title: "Are you sure?",
   cancelBtnText: "Cancel",
   confirmBtnText: "Confirm",
-  onConfirm: () => null,
-  onCancel: () => null,
 };
 
 const useDialogStore = create<DialogStore>((set) => ({

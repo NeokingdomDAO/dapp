@@ -41,11 +41,13 @@ type FormData = {
 
 export default function TaskForm({
   task,
+  parentTask,
   projectId,
   onConfirm,
   onCancel,
 }: {
   task?: ProjectTask;
+  parentTask?: ProjectTask;
   projectId?: number;
   onConfirm: (data: any) => void;
   onCancel?: () => void;
@@ -62,14 +64,22 @@ export default function TaskForm({
   const defaultValues = useMemo(
     () => ({
       name: task ? task.name : "",
-      project_id: task ? task.project_id.id : selectedProject?.id || -1,
-      tag_ids: task ? task.tag_ids.map((tag) => tag.id) : lastTask?.tag_ids?.map((tag) => tag.id) || [],
-      user_id: task ? task.user_id.id : user?.id || -1,
-      approval_user_id: task ? task.approval_user_id.id : lastTask?.approval_user_id?.id || -1,
-      tier_id: task ? task.tier_id.id : lastTask?.tier_id?.id || -1,
+      project_id: parentTask ? parentTask.project_id.id : task ? task.project_id.id : selectedProject?.id || -1,
+      tag_ids: parentTask
+        ? parentTask.tag_ids.map((tag) => tag.id)
+        : task
+        ? task.tag_ids.map((tag) => tag.id)
+        : lastTask?.tag_ids?.map((tag) => tag.id) || [],
+      user_id: parentTask ? parentTask.user_id.id : task ? task.user_id.id : user?.id || -1,
+      approval_user_id: parentTask
+        ? parentTask.approval_user_id.id
+        : task
+        ? task.approval_user_id.id
+        : lastTask?.approval_user_id?.id || -1,
+      tier_id: parentTask ? parentTask.tier_id.id : task ? task.tier_id.id : lastTask?.tier_id?.id || -1,
       date_deadline: format(task ? toDatetime(task.date_deadline) : endOfMonth(new Date()), dateFormat),
     }),
-    [selectedProject, lastTask, user, task],
+    [selectedProject, lastTask, user, task, parentTask],
   );
 
   const { control, getValues, reset, handleSubmit } = useForm<FormData>({ defaultValues });
@@ -77,8 +87,10 @@ export default function TaskForm({
   useEffect(() => {
     if (projects?.user?.length) {
       const taskProject = task && !selectedProject && projects.user.find((proj) => proj.id === task.project_id.id);
+      const parentProject =
+        parentTask && !selectedProject && projects.user.find((proj) => proj.id === parentTask.project_id.id);
       const defaultProject = projectId && !selectedProject && projects.user.find((proj) => proj.id === projectId);
-      const project = taskProject || defaultProject || selectedProject;
+      const project = parentProject || taskProject || defaultProject || selectedProject;
       if (project) {
         if (!selectedProject) {
           setSelectedProject(project);
@@ -89,7 +101,7 @@ export default function TaskForm({
         setLastTask(lastTask);
       }
     }
-  }, [projects, selectedProject, projectId, task]);
+  }, [projects, selectedProject, projectId, task, parentTask]);
 
   const checkValues = (values: any, defaultValues: any) => (key: string) => {
     return values[key] && values[key] !== -1 ? values[key] : defaultValues[key];
@@ -113,7 +125,11 @@ export default function TaskForm({
     <Box
       sx={{ display: "flex", justifyContent: "center" }}
       component="form"
-      onSubmit={handleSubmit(onConfirm)}
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleSubmit(onConfirm)();
+        reset(defaultValues);
+      }}
       autoComplete="off"
     >
       <Grid sx={{ width: "100%", maxWidth: "500px" }} container spacing={2} justifyContent="center">
@@ -138,7 +154,7 @@ export default function TaskForm({
                   labelId="task-project"
                   id="task-project-select"
                   required
-                  disabled={Boolean(task)}
+                  disabled={Boolean(parentTask) || Boolean(task)}
                   value={value}
                   onChange={(e) => {
                     const projectId = Number(e.target.value);
