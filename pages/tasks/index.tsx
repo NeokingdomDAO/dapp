@@ -14,6 +14,7 @@ import TrackingDialog from "@components/tasks/TrackingDialog";
 
 Tasks.title = "Tasks List";
 Tasks.requireLogin = true;
+Tasks.fullWidth = true;
 
 export default function Tasks() {
   const { data: projects, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
@@ -34,7 +35,7 @@ export default function Tasks() {
 
   return (
     <>
-      <Grid container spacing={2} justifyContent="center">
+      <Grid sx={{ pl: 0, pr: 0 }} container spacing={2} justifyContent="center">
         {isLoading ? (
           <Grid item xs={12} md={9}>
             <Skeleton sx={{ minHeight: "500px", transform: "none" }} />
