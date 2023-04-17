@@ -20,6 +20,7 @@ export default function TimeEntryForm({
   const now = new Date();
   const dateFormat = "yyyy-MM-dd HH:mm:ss";
   const [isLoading, setIsLoading] = useState(false);
+
   const [form, setForm] = useState<{ start: string; end?: string; name: string }>({
     name: "",
     ...(timeEntry || {}),

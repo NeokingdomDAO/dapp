@@ -83,7 +83,7 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
               sx={{
                 overflow: "auto",
                 "&::-webkit-scrollbar": { display: "none" },
-                "-ms-overflow-style": "none",
+                msOverflowStyle: "none",
                 scrollbarWidth: "none",
               }}
             >
