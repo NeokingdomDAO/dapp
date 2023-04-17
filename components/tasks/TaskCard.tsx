@@ -1,3 +1,5 @@
+import styled from "@emotion/styled";
+
 import { useState } from "react";
 
 import {
@@ -10,11 +12,13 @@ import {
   MoreTimeOutlined,
   MoreVert,
   OpenInNew,
+  PlayArrow,
 } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Avatar,
   Box,
   Card,
   CardContent,
@@ -30,16 +34,21 @@ import {
 
 import { stageToColor } from "@lib/utils";
 
-import { ProjectTask, useProjectTaskActions } from "@store/projectTaskStore";
+import useDialogStore from "@store/dialogStore";
+import useProjectTaskStore, { ProjectTask, useProjectTaskActions } from "@store/projectTaskStore";
 
 import useErrorHandler from "@hooks/useErrorHandler";
 
-import useDialogStore from "../../store/dialogStore";
+import { STAGE_TO_ID_MAP, TAGS_COLORS } from "../../lib/constants";
 import ActionCardBtn from "./ActionBtn";
 import Stopwatch from "./Stopwatch";
 import SubTaskCard from "./SubTaskCard";
 import TaskForm from "./TaskForm";
 import TimeEntryList from "./TimeEntryList";
+
+const StopwatchStyled = styled(Stopwatch)`
+  margin: 4px 8px 4px 0;
+`;
 
 export default function TaskCard({ task }: { task: ProjectTask }) {
   const theme = useTheme();
@@ -48,11 +57,14 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
   const [newTimeEntry, addNewTimeEntry] = useState<boolean>(false);
 
   const { handleError } = useErrorHandler();
+  const trackedTask = useProjectTaskStore((state) => state.trackedTask);
   const actions = useProjectTaskActions();
   const createTask = handleError(actions.createTask);
   const updateTask = handleError(actions.updateTask);
   const deleteTask = handleError(actions.deleteTask);
   const markTaskAsDone = handleError(actions.markTaskAsDone);
+  const startTrackingTask = handleError(actions.startTrackingTask);
+  const stopTrackingTask = handleError(actions.stopTrackingTask);
 
   const [editTask, setEditTask] = useState<number | null>(null);
   const [taskMenu, setTaskMenu] = useState<null | HTMLElement>(null);
@@ -61,6 +73,8 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
   const handleCloseTaskMenu = () => setTaskMenu(null);
   const openDialog = useDialogStore(({ openDialog }) => openDialog);
   const closeDialog = useDialogStore(({ closeDialog }) => closeDialog);
+
+  const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
 
   const createNewSubTask = () => {
     openDialog({
@@ -82,6 +96,13 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
         />
       ),
     });
+  };
+
+  const trackTime = async () => {
+    if (trackedTask) {
+      await stopTrackingTask(trackedTask);
+    }
+    await startTrackingTask(task);
   };
 
   const cardHeaderActions = () => (
@@ -117,16 +138,30 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
             Open in Odoo
           </Link>
         </MenuItem>
-        <MenuItem
-          key="mark-as-done-task"
-          onClick={() => {
-            markTaskAsDone(task);
-            handleCloseTaskMenu();
-          }}
-        >
-          <Done sx={{ mr: 1 }} />
-          Mark As Done
-        </MenuItem>
+        {isDone ? (
+          <MenuItem
+            key="track-time-task"
+            onClick={() => {
+              trackTime(task);
+              handleCloseTaskMenu();
+            }}
+          >
+            <PlayArrow sx={{ mr: 1 }} />
+            Track Time
+          </MenuItem>
+        ) : (
+          <MenuItem
+            key="mark-as-done-task"
+            onClick={() => {
+              markTaskAsDone(task);
+              handleCloseTaskMenu();
+            }}
+          >
+            <Done sx={{ mr: 1 }} />
+            Mark As Done
+          </MenuItem>
+        )}
+
         <MenuItem
           key="new-time-entry"
           onClick={() => {
@@ -203,18 +238,30 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
                 p: 0,
                 minHeight: 0,
                 "&.Mui-expanded": { minHeight: 0 },
-                "& .MuiAccordionSummary-content": { margin: 0 },
+                "& .MuiAccordionSummary-content": { margin: 0, display: "flex", flexWrap: "wrap", width: "100%" },
                 "& .MuiAccordionSummary-content.Mui-expanded": { margin: 0 },
               }}
             >
-              <Stopwatch task={task} />
+              <StopwatchStyled task={task} onClick={() => setStopwatchExpanded(!stopwatchExpanded)} />
               <Chip
-                sx={{ ml: "30px" }}
+                sx={{ m: "4px 8px 4px 0" }}
                 label={task.stage_id.name}
                 color={stageToColor(task.stage_id.name)}
                 variant="outlined"
-                size="small"
               />
+              {task.tag_ids.map((tag) => (
+                <Chip
+                  key={tag.id}
+                  sx={{
+                    m: "4px 8px 4px 0",
+                    ...(TAGS_COLORS[tag.id]
+                      ? { color: TAGS_COLORS[tag.id], border: `1px solid ${TAGS_COLORS[tag.id]}` }
+                      : {}),
+                  }}
+                  label={tag.name}
+                  variant="outlined"
+                />
+              ))}
             </AccordionSummary>
             <AccordionDetails sx={{ padding: 0, pt: "8px" }}>
               <TimeEntryList task={task} showNewTimeEntry={newTimeEntry} />
@@ -223,7 +270,12 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
 
           <Box sx={{ mt: 2 }}>
             {!task.child_ids.length ? (
-              <ActionCardBtn onClick={() => setSubtasksExpanded(!subtasksExpanded)}>
+              <ActionCardBtn
+                onClick={() => {
+                  createNewSubTask();
+                  setSubtasksExpanded(!subtasksExpanded);
+                }}
+              >
                 <Add sx={{ fontSize: "1rem" }} />
                 <span>Add Sub-task</span>
               </ActionCardBtn>

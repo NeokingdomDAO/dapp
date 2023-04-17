@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { ReactEventHandler, SyntheticEvent, useEffect, useState } from "react";
 
 import { AccessAlarm, CheckCircleRounded, PlayArrow, Stop } from "@mui/icons-material";
-import { Box, IconButton, keyframes, useTheme } from "@mui/material";
+import { Box, Chip, keyframes, useTheme } from "@mui/material";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 import { getTaskName, toPrettyDuration } from "@lib/utils";
@@ -17,7 +17,15 @@ const blink = keyframes`
   to { opacity: 1; }
 `;
 
-export default function Stopwatch({ task }: { task: ProjectTask }) {
+export default function StopwatchSlim({
+  task,
+  className,
+  onClick,
+}: {
+  className?: string;
+  task: ProjectTask;
+  onClick?: ReactEventHandler;
+}) {
   const theme = useTheme();
 
   const { handleError } = useErrorHandler();
@@ -28,6 +36,7 @@ export default function Stopwatch({ task }: { task: ProjectTask }) {
   const stopTrackingTask = handleError(actions.stopTrackingTask);
 
   const openDialog = useDialogStore(({ openDialog }) => openDialog);
+  const closeDialog = useDialogStore(({ closeDialog }) => closeDialog);
 
   const { seconds, minutes, hours, isRunning, start: startTime, pause: pauseTime, reset: resetTime } = useStopwatch({});
 
@@ -46,7 +55,7 @@ export default function Stopwatch({ task }: { task: ProjectTask }) {
     const hh = hours.toString().padStart(2, "0");
     const mm = minutes.toString().padStart(2, "0");
     const ss = seconds.toString().padStart(2, "0");
-    return `${hh}:${mm}:${ss}`;
+    return <Box sx={{ minWidth: "60px" }}>{`${hh}:${mm}:${ss}`}</Box>;
   };
 
   const handleStartTask = async (event: React.SyntheticEvent) => {
@@ -62,6 +71,7 @@ export default function Stopwatch({ task }: { task: ProjectTask }) {
             <strong> {getTaskName(task)}</strong> instead?
           </span>
         ),
+        onCancel: () => closeDialog(),
         onConfirm: async () => {
           await stopTrackingTask(trackedTask);
           await startTrackingTask(task);
@@ -81,69 +91,38 @@ export default function Stopwatch({ task }: { task: ProjectTask }) {
     pauseTime();
   };
 
+  const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
+
   const renderTaskAction = () => {
-    const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
     if (isDone) {
-      return (
-        <IconButton sx={{ padding: 0 }} color="success">
-          <CheckCircleRounded fontSize="large" />
-        </IconButton>
-      );
+      return <CheckCircleRounded color="success" />;
     }
     if (isPlaying) {
-      return (
-        <IconButton sx={{ padding: 0, border: `1px solid ${theme.palette.primary.main}` }} onClick={handleStopTask}>
-          <Stop sx={{ fontSize: 30 }} color="primary" />
-        </IconButton>
-      );
+      return <Stop color="primary" onClick={handleStopTask} />;
     }
-    return (
-      <IconButton sx={{ padding: 0, border: `1px solid ${theme.palette.grey[300]}` }} onClick={handleStartTask}>
-        <PlayArrow sx={{ fontSize: 30 }} />
-      </IconButton>
-    );
+    return <PlayArrow onClick={handleStartTask} />;
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Box
-        sx={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          lineHeight: 1,
-          borderRadius: "3px",
-          padding: "2px",
-          border: `1px solid ${theme.palette.divider}`,
-          minWidth: "109px",
-          "&:hover": {
-            cursor: "pointer",
-            backgroundColor: theme.palette.action.hover,
-          },
-        }}
-      >
-        <AccessAlarm
-          sx={{
-            color: isPlaying ? theme.palette.error.main : theme.palette.text.primary,
-            animation: isPlaying ? `${blink} 1.5s linear infinite` : "none",
-          }}
-          fontSize="small"
-        />
-        <Box sx={{ pl: "2px", pr: "5px" }}>
-          {isPlaying ? stopwatchCounter() : toPrettyDuration(task.effective_hours)}
-        </Box>
-        <Box
-          sx={{
-            position: "absolute",
-            right: "-22px",
-            top: "-3px",
-            background: theme.palette.background.paper,
-            borderRadius: "50%",
-          }}
-        >
-          {renderTaskAction()}
-        </Box>
-      </Box>
-    </Box>
+    <Chip
+      className={className}
+      icon={renderTaskAction()}
+      color={isDone ? "success" : undefined}
+      variant="outlined"
+      onClick={(e: SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick && onClick(e);
+      }}
+      sx={{
+        "& .MuiChip-deleteIcon": {
+          color: theme.palette.error.main,
+          animation: `${blink} 1.5s linear infinite`,
+        },
+      }}
+      onDelete={isPlaying ? () => null : undefined}
+      deleteIcon={isPlaying ? <AccessAlarm /> : undefined}
+      label={isPlaying ? stopwatchCounter() : toPrettyDuration(task.effective_hours)}
+    />
   );
 }

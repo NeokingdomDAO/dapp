@@ -7,7 +7,7 @@ import {
   AccordionSummary,
   Box,
   Card,
-  CardHeader,
+  Chip,
   Divider,
   IconButton,
   Link,
@@ -16,10 +16,13 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { stageToColor } from "@lib/utils";
+
 import { ProjectTask, useProjectTaskActions } from "@store/projectTaskStore";
 
 import useErrorHandler from "@hooks/useErrorHandler";
 
+import Stopwatch from "./Stopwatch";
 import TaskForm from "./TaskForm";
 import TimeEntryList from "./TimeEntryList";
 
@@ -49,7 +52,7 @@ export default function SubTaskCard({ task }: { task: ProjectTask }) {
           e.stopPropagation();
           setTaskMenu(e.currentTarget);
         }}
-        sx={{ p: 0 }}
+        sx={{ p: "4px" }}
       >
         <MoreVert />
       </IconButton>
@@ -142,8 +145,20 @@ export default function SubTaskCard({ task }: { task: ProjectTask }) {
               "& .MuiAccordionSummary-content.Mui-expanded": { margin: 0 },
             }}
           >
-            <Box sx={{ pr: "20px" }} onClick={() => setSubtaskExpanded(!subtaskExpanded)}>
-              {task.name}
+            <Box
+              sx={{ width: "100%", pr: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}
+              onClick={() => setSubtaskExpanded(!subtaskExpanded)}
+            >
+              <Box>{task.name}</Box>
+              <Box sx={{ display: "flex" }}>
+                <Stopwatch task={task} onClick={() => setSubtaskExpanded(!subtaskExpanded)} />
+                <Chip
+                  sx={{ ml: "8px" }}
+                  label={task.stage_id.name}
+                  color={stageToColor(task.stage_id.name)}
+                  variant="outlined"
+                />
+              </Box>
             </Box>
             <Box sx={{ position: "absolute", right: 0, top: 0 }}>{cardHeaderActions()}</Box>
           </AccordionSummary>

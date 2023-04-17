@@ -10,7 +10,7 @@ import { findActiveProjectTask } from "@lib/utils";
 import useProjectTaskStore, { Project, useProjectTaskActions } from "@store/projectTaskStore";
 
 import ProjectCard from "@components/tasks/ProjectCard";
-import TrackingDialog from "@components/tasks/TrackingDialog";
+import TaskDialog from "@components/tasks/TaskDialog";
 
 Tasks.title = "Tasks List";
 Tasks.requireLogin = true;
@@ -27,7 +27,6 @@ export default function Tasks() {
 
   useEffect(() => {
     if (projects) {
-      console.log("🐞 > projects:", projects);
       const activeTask = findActiveProjectTask(projects);
       setActiveTask(activeTask);
     }
@@ -50,7 +49,7 @@ export default function Tasks() {
             ))
         )}
       </Grid>
-      <TrackingDialog />
+      <TaskDialog />
     </>
   );
 }

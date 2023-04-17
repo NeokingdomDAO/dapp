@@ -28,12 +28,14 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     try {
       const start = formatInTimeZone(new Date(), "UTC", ODOO_DATE_FORMAT);
       const timeEntry = { task_id: Number(taskId), start };
-      const timeEntryId = await session.create("account.analytic.line", timeEntry);
-      const [newTimeEntry] = await session.read("account.analytic.line", [timeEntryId]);
       // Move task to In progress
+      console.log("here??", STAGE_TO_ID_MAP["progress"], Number(taskId));
       await session.update("project.task", Number(taskId), {
         stage_id: STAGE_TO_ID_MAP["progress"],
       });
+      console.log("updated");
+      const timeEntryId = await session.create("account.analytic.line", timeEntry);
+      const [newTimeEntry] = await session.read("account.analytic.line", [timeEntryId]);
       res.status(200).json(newTimeEntry);
     } catch (err: any) {
       res.status(500).json({ message: err.message });

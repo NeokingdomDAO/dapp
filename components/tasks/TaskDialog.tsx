@@ -23,7 +23,7 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function TrackingDialog() {
+export default function TaskDialog() {
   const theme = useTheme();
   const dialog = useDialogStore();
 
