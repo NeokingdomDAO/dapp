@@ -100,7 +100,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
       }
     },
     markTaskAsDone: async (task: ProjectTask) => {
-      const { data: stoppedTask } = await get().stopTrackingTask(task);
+      const { data: stoppedTask } = await get().actions.stopTrackingTask(task);
       if (stoppedTask) {
         const totalHours = getTaskTotalHours(stoppedTask);
         const response = await fetch(`/api/tasks/${task.id}`, {
@@ -112,6 +112,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         });
         if (response.ok) {
           set({ projectKey: uuid() });
+          return { alert: { message: "Task completed!", variant: "success" } };
         } else {
           return { error: await buildError(response) };
         }
