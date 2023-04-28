@@ -18,7 +18,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -53,7 +52,7 @@ const StopwatchStyled = styled(Stopwatch)`
 export default function TaskCard({ task }: { task: ProjectTask }) {
   const theme = useTheme();
   const [stopwatchExpanded, setStopwatchExpanded] = useState<boolean>(false);
-  const [subtasksExpanded, setSubtasksExpanded] = useState<boolean>(false);
+  const [subtasksExpanded, setSubtasksExpanded] = useState<boolean>(Boolean(task.child_ids.length));
   const [newTimeEntry, addNewTimeEntry] = useState<boolean>(false);
 
   const { handleError } = useErrorHandler();
@@ -98,7 +97,7 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
     });
   };
 
-  const trackTime = async () => {
+  const trackTime = async (task: ProjectTask) => {
     if (trackedTask) {
       await stopTrackingTask(trackedTask);
     }
@@ -242,7 +241,9 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
                 "& .MuiAccordionSummary-content.Mui-expanded": { margin: 0 },
               }}
             >
-              <StopwatchStyled task={task} onClick={() => setStopwatchExpanded(!stopwatchExpanded)} />
+              {!task.child_ids.length && (
+                <StopwatchStyled task={task} onClick={() => setStopwatchExpanded(!stopwatchExpanded)} />
+              )}
               <Chip
                 sx={{ m: "4px 8px 4px 0" }}
                 label={task.stage_id.name}

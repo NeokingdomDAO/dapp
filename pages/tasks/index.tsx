@@ -17,7 +17,7 @@ Tasks.requireLogin = true;
 Tasks.fullWidth = true;
 
 export default function Tasks() {
-  const { data: projects, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
+  const { data: projects, error, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
   const projectKey = useProjectTaskStore((state) => state.projectKey);
   const { setActiveTask } = useProjectTaskActions();
 
@@ -32,6 +32,8 @@ export default function Tasks() {
     }
   }, [projects, setActiveTask]);
 
+  console.log("err, projs", error, projects);
+
   return (
     <>
       <Grid sx={{ pl: 0, pr: 0 }} container spacing={2} justifyContent="center">
@@ -39,15 +41,15 @@ export default function Tasks() {
           <Grid item xs={12} md={9}>
             <Skeleton sx={{ minHeight: "500px", transform: "none" }} />
           </Grid>
-        ) : (
+        ) : !error && projects ? (
           projects
             ?.filter((project) => project.tasks.length)
-            .map((project) => (
+            ?.map((project) => (
               <Grid item xs={12} md={9} key={project.id}>
                 <ProjectCard project={project} />
               </Grid>
             ))
-        )}
+        ) : null}
       </Grid>
       <TaskDialog />
     </>

@@ -116,22 +116,23 @@ export default function StopwatchSlim({
   };
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box className={className} sx={{ position: "relative" }}>
       <Box
+        className="stopwatch-"
         sx={{
           position: "absolute",
           left: "-2px",
-          top: "4px",
+          top: 0,
           zIndex: 1,
           background: theme.palette.background.paper,
-          border: `1px solid ${isDone ? theme.palette.success.main : theme.palette.grey[300]}`,
+          border: `1px solid ${isDone ? theme.palette.success.main : theme.palette.grey[400]}`,
           borderRadius: "50%",
         }}
       >
         {renderTaskAction()}
       </Box>
       <Chip
-        className={className}
+        className="stopwatch-chip"
         icon={<PlayArrow />}
         color={isDone ? "success" : undefined}
         variant="outlined"
