@@ -8,7 +8,7 @@ import {
   ModeEditOutlined,
   MoreVert,
 } from "@mui/icons-material";
-import { Box, IconButton, Menu, MenuItem, useTheme } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 
 import { toPrettyDuration, toPrettyRange } from "@lib/utils";
 
@@ -38,7 +38,7 @@ export default function TimeEntry({ task, timeEntry }: { task: ProjectTask; time
         aria-expanded={openTaskMenu ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleOpenTaskMenu}
-        sx={{ position: "absolute", p: "2px", right: "1px", top: "2px" }}
+        sx={{ position: "absolute", p: "2px", right: 0, top: 0 }}
       >
         <MoreVert fontSize="small" />
       </IconButton>
@@ -72,7 +72,7 @@ export default function TimeEntry({ task, timeEntry }: { task: ProjectTask; time
       sx={{
         m: "5px",
         ml: 0,
-        p: "5px",
+        p: 1,
         borderRadius: "3px",
         border: `1px solid ${theme.palette.divider}`,
         position: "relative",
@@ -88,30 +88,25 @@ export default function TimeEntry({ task, timeEntry }: { task: ProjectTask; time
           onCancel={() => setEditMode(false)}
         />
       ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            flexDirection: "column",
-          }}
-        >
-          {renderMenu()}
-          <Box sx={{ minWidth: "100px", display: "flex", alignItems: "center" }}>
-            <AccessTimeOutlined fontSize="small" sx={{ mr: "5px" }} />
-            {toPrettyDuration(timeEntry.unit_amount)}
+        <Box>
+          <Box sx={{ m: 1, display: "flex", pr: "24px", position: "relative" }}>
+            <Box>
+              <Typography variant="subtitle2" component="h6">
+                {toPrettyRange(timeEntry.start, timeEntry.end)}
+                {!timeEntry.end && (
+                  <span>
+                    -<strong>now</strong>
+                  </span>
+                )}{" "}
+                ({toPrettyDuration(timeEntry.unit_amount)})
+              </Typography>
+            </Box>
+            {renderMenu()}
           </Box>
-          <Box sx={{ minWidth: "150px", display: "flex", alignItems: "center" }}>
-            <CalendarMonthOutlined fontSize="small" sx={{ mr: "5px" }} />
-            {toPrettyRange(timeEntry.start, timeEntry.end)}
-            {!timeEntry.end && (
-              <span>
-                -<strong>now</strong>
-              </span>
-            )}
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", pl: "25px", position: "relative" }}>
-            <ModeEditOutlined fontSize="small" sx={{ position: "absolute", left: 0, top: "3px" }} />
-            {timeEntry.name}
+          <Box sx={{ p: 1, pt: 0 }}>
+            <Typography variant="body2" component="h6">
+              {timeEntry.name}
+            </Typography>
           </Box>
         </Box>
       )}

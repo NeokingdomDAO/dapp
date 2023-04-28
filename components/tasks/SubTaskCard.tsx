@@ -13,6 +13,7 @@ import {
   Link,
   Menu,
   MenuItem,
+  Typography,
   useTheme,
 } from "@mui/material";
 
@@ -146,10 +147,19 @@ export default function SubTaskCard({ task }: { task: ProjectTask }) {
             }}
           >
             <Box
-              sx={{ width: "100%", pr: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}
+              sx={{
+                width: "100%",
+                pr: "40px",
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
               onClick={() => setSubtaskExpanded(!subtaskExpanded)}
             >
-              <Box>{task.name}</Box>
+              <Typography sx={{ pr: 1 }} variant="h6" fontWeight="400" component="h6">
+                {task.name}
+              </Typography>
               <Box sx={{ display: "flex" }}>
                 <Stopwatch task={task} onClick={() => setSubtaskExpanded(!subtaskExpanded)} />
                 <Chip

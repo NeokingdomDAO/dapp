@@ -26,8 +26,7 @@ export default function TimeEntryList({ task, showNewTimeEntry }: { task: Projec
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography>
-          <strong>Total time:</strong>
-          <span>{toPrettyDuration(task.effective_hours)}</span>
+          <strong>Total time:</strong> <span>{toPrettyDuration(task.effective_hours)}</span>
         </Typography>
         <ActionCardBtn onClick={() => addNewTimeEntry(!newTimeEntry)}>
           <MoreTimeOutlined sx={{ fontSize: "1rem", mr: "3px" }} />
