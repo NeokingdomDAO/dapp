@@ -66,8 +66,12 @@ export function getTaskName(task: ProjectTask) {
   return task.name;
 }
 
+export const findActiveTimesheet = (task: ProjectTask): Timesheet | undefined => {
+  return task.timesheet_ids.find((te) => !te.end);
+};
+
 export const findActiveTimeEntry = (task: ProjectTask): [Timesheet | null, ProjectTask | null] => {
-  const timeEntry = task.timesheet_ids.find((te) => !te.end);
+  const timeEntry = findActiveTimesheet(task);
   if (timeEntry) return [timeEntry, task];
   let childTimeEntry;
   const childTask = task.child_ids?.find((child) => {

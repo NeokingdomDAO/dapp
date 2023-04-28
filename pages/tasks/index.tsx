@@ -12,18 +12,27 @@ import useProjectTaskStore, { Project, useProjectTaskActions } from "@store/proj
 import ProjectCard from "@components/tasks/ProjectCard";
 import TaskDialog from "@components/tasks/TaskDialog";
 
+import useUser from "@hooks/useUser";
+
 Tasks.title = "Tasks List";
 Tasks.requireLogin = true;
 Tasks.fullWidth = true;
 
 export default function Tasks() {
+  const { mutateUser } = useUser();
   const { data: projects, error, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
   const projectKey = useProjectTaskStore((state) => state.projectKey);
   const { setActiveTask } = useProjectTaskActions();
 
   useEffect(() => {
-    mutate();
+    mutate(); // force revalidate
   }, [projectKey, mutate]);
+
+  useEffect(() => {
+    if (error) {
+      mutateUser();
+    }
+  }, [error, mutateUser]);
 
   useEffect(() => {
     if (projects) {
@@ -31,8 +40,6 @@ export default function Tasks() {
       setActiveTask(activeTask);
     }
   }, [projects, setActiveTask]);
-
-  console.log("err, projs", error, projects);
 
   return (
     <>

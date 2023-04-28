@@ -1,4 +1,4 @@
-import { useInterval, useLocalStorage } from "usehooks-ts";
+import { useInterval } from "usehooks-ts";
 
 import { useState } from "react";
 
@@ -9,8 +9,7 @@ export default function useStopwatch({
   autoStart?: boolean;
   offsetTimestamp?: number;
 }) {
-  const [startTime, setStartTime] = useLocalStorage("stopWatch_startTime", 0);
-  const [passedSeconds, setPassedSeconds] = useState(getSecondsFromExpiry(offsetTimestamp || startTime, true) || 0);
+  const [passedSeconds, setPassedSeconds] = useState(getSecondsFromExpiry(offsetTimestamp, true) || 0);
   const [prevTime, setPrevTime] = useState(new Date());
   const [seconds, setSeconds] = useState(passedSeconds + getSecondsFromPrevTime(prevTime || 0, true));
   const [isRunning, setIsRunning] = useState(autoStart);
@@ -24,9 +23,6 @@ export default function useStopwatch({
 
   function start() {
     const newPrevTime = new Date();
-    if (!startTime) {
-      setStartTime(newPrevTime.getTime());
-    }
     setPrevTime(newPrevTime);
     setIsRunning(true);
     setSeconds(passedSeconds + getSecondsFromPrevTime(newPrevTime, true));
@@ -40,7 +36,6 @@ export default function useStopwatch({
   function reset(offset = 0, newAutoStart = true) {
     const newPassedSeconds = getSecondsFromExpiry(offset, true) || 0;
     const newPrevTime = new Date();
-    setStartTime(0);
     setPrevTime(newPrevTime);
     setPassedSeconds(newPassedSeconds);
     setIsRunning(newAutoStart);
