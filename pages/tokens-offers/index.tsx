@@ -67,7 +67,9 @@ export default function Tokens() {
     <>
       <UserBalance />
       <Alert severity="info" sx={{ mb: 2 }}>
-        Difference between governance and NEOK tokens
+        <strong>Governance Tokens</strong>provide holders with voting and dividend rights, but must be offered to
+        contributors before becoming available for trading in the secondary market. <strong>NEOK Tokens</strong> do not
+        possess these rights or limitations, allowing for unrestricted trading on the secondary market at any time.
       </Alert>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} aria-label="tasks tabs">
