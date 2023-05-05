@@ -71,11 +71,11 @@ export default function TimeEntry({ task, timeEntry }: { task: ProjectTask; time
     <Box
       sx={{
         m: "5px",
-        ml: 0,
         p: 1,
         borderRadius: "3px",
         border: `1px solid ${theme.palette.divider}`,
         position: "relative",
+        height: "calc(100% - 10px)",
       }}
     >
       {isEditMode ? (

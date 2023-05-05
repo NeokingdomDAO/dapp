@@ -24,7 +24,7 @@ export default function TimeEntryList({ task, showNewTimeEntry }: { task: Projec
 
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: "0 5px" }}>
         <Typography>
           <strong>Total time:</strong> <span>{toPrettyDuration(task.effective_hours)}</span>
         </Typography>
