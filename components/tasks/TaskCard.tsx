@@ -7,6 +7,7 @@ import {
   Delete,
   Done,
   Edit,
+  ExpandMore,
   KeyboardArrowDown,
   KeyboardArrowRight,
   MoreTimeOutlined,
@@ -74,6 +75,7 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
   const closeDialog = useDialogStore(({ closeDialog }) => closeDialog);
 
   const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
+  const hasSubtasks = task.child_ids.length;
 
   const createNewSubTask = () => {
     openDialog({
@@ -230,9 +232,10 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
             sx={{ border: 0 }}
             variant="outlined"
             expanded={stopwatchExpanded}
-            onChange={() => setStopwatchExpanded(!stopwatchExpanded)}
+            onChange={() => !hasSubtasks && setStopwatchExpanded(!stopwatchExpanded)}
           >
             <AccordionSummary
+              expandIcon={!hasSubtasks ? <ExpandMore /> : null}
               sx={{
                 p: 0,
                 minHeight: 0,
@@ -241,9 +244,7 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
                 "& .MuiAccordionSummary-content.Mui-expanded": { margin: 0 },
               }}
             >
-              {!task.child_ids.length && (
-                <StopwatchStyled task={task} onClick={() => setStopwatchExpanded(!stopwatchExpanded)} />
-              )}
+              {!hasSubtasks && <StopwatchStyled task={task} onClick={() => setStopwatchExpanded(!stopwatchExpanded)} />}
               <Chip
                 sx={{ m: "4px 8px 4px 0" }}
                 label={task.stage_id.name}
