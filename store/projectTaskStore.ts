@@ -53,6 +53,7 @@ export type ActionResponse = {
 export interface ProjectTaskStore {
   projectKey: string;
   trackedTask: ProjectTask | null;
+  isLoading: boolean;
   actions: {
     setActiveTask: (trackedTask: ProjectTask | null) => void;
     startTrackingTask: (task: ProjectTask) => Promise<ActionResponse | undefined>;
@@ -72,36 +73,42 @@ const buildError = async (response: Response) => ({ ...(await response.json()), 
 const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   projectKey: uuid(),
   trackedTask: null,
+  isLoading: false,
   actions: {
     setActiveTask: (trackedTask: ProjectTask | null) => set({ trackedTask }),
     startTrackingTask: async (task: ProjectTask) => {
+      set({ isLoading: true, trackedTask: task });
       const response = await fetch(`/api/tasks/${task.id}/start`, {
         method: "POST",
         body: JSON.stringify(task),
       });
       if (response.ok) {
-        set({ projectKey: uuid(), trackedTask: task });
+        set({ projectKey: uuid(), isLoading: false });
       } else {
+        set({ isLoading: false, trackedTask: null });
         const error = await buildError(response);
         return { error };
       }
     },
     stopTrackingTask: async (task: ProjectTask) => {
+      set({ isLoading: true });
       const response = await fetch(`/api/tasks/${task.id}/stop`, {
         method: "POST",
         body: JSON.stringify(task),
       });
       if (response.ok) {
         const updatedTask = await response.json();
-        set({ projectKey: uuid(), trackedTask: null });
+        set({ projectKey: uuid(), trackedTask: null, isLoading: false });
         return { data: updatedTask };
       } else {
+        set({ isLoading: false });
         return { error: await buildError(response) };
       }
     },
     markTaskAsDone: async (task: ProjectTask) => {
       const { data: stoppedTask } = await get().actions.stopTrackingTask(task);
       if (stoppedTask) {
+        set({ isLoading: true });
         const totalHours = getTaskTotalHours(stoppedTask);
         const response = await fetch(`/api/tasks/${task.id}`, {
           method: "PUT",
@@ -111,50 +118,58 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
           }),
         });
         if (response.ok) {
-          set({ projectKey: uuid() });
+          set({ projectKey: uuid(), isLoading: false });
           return { alert: { message: "Task completed!", variant: "success" } };
         } else {
+          set({ isLoading: false });
           return { error: await buildError(response) };
         }
       }
     },
     createTask: async (task: ProjectTask) => {
+      set({ isLoading: true });
       const response = await fetch(`/api/tasks`, {
         method: "POST",
         body: JSON.stringify(task),
       });
       if (response.ok) {
         const newtask = await response.json();
-        set({ projectKey: uuid() });
+        set({ projectKey: uuid(), isLoading: false });
         return { data: newtask, alert: { message: `Task ${newtask.name} successfully created`, variant: "success" } };
       } else {
+        set({ isLoading: false });
         return { error: await buildError(response) };
       }
     },
     updateTask: async (task: ProjectTask) => {
+      set({ isLoading: true });
       const response = await fetch(`/api/tasks/${task.id}`, {
         method: "PUT",
         body: JSON.stringify(task),
       });
       if (response.ok) {
-        set({ projectKey: uuid() });
+        set({ projectKey: uuid(), isLoading: false });
         return { alert: { message: `Task ${task.name} successfully updated`, variant: "success" } };
       } else {
+        set({ isLoading: false });
         return { error: await buildError(response) };
       }
     },
     deleteTask: async (task: ProjectTask) => {
+      set({ isLoading: true });
       const response = await fetch(`/api/tasks/${task.id}`, {
         method: "DELETE",
       });
       if (response.ok) {
-        set({ projectKey: uuid() });
+        set({ projectKey: uuid(), isLoading: false });
         return { alert: { message: `Task ${task.name} successfully deleted`, variant: "success" } };
       } else {
+        set({ isLoading: false });
         return { error: await buildError(response) };
       }
     },
     createTimeEntry: async (timeEntry: Timesheet, task: ProjectTask) => {
+      set({ isLoading: true });
       const response = await fetch(`/api/time_entries`, {
         method: "POST",
         body: JSON.stringify({
@@ -165,13 +180,15 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         }),
       });
       if (response.ok) {
-        set({ projectKey: uuid() });
+        set({ projectKey: uuid(), isLoading: false });
         return { alert: { message: "Time Entry successfully created!", variant: "success" } };
       } else {
+        set({ isLoading: false });
         return { error: await buildError(response) };
       }
     },
     updateTimeEntry: async (timeEntry: Timesheet) => {
+      set({ isLoading: true });
       const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
         method: "PUT",
         body: JSON.stringify({
@@ -181,9 +198,10 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         }),
       });
       if (response.ok) {
-        set({ projectKey: uuid() });
+        set({ projectKey: uuid(), isLoading: false });
         return { alert: { message: "Time Entry successfully updated!", variant: "success" } };
       } else {
+        set({ isLoading: false });
         return { error: await buildError(response) };
       }
     },
@@ -194,11 +212,13 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
           body: JSON.stringify({ stage_id: STAGE_TO_ID_MAP["created"] }),
         });
       }
+      set({ isLoading: true });
       const response = await fetch(`/api/time_entries/${timeEntry.id}`, { method: "DELETE" });
       if (response.ok) {
-        set({ projectKey: uuid() });
+        set({ projectKey: uuid(), isLoading: false });
         return { alert: { message: "Time Entry successfully deleted!", variant: "success" } };
       } else {
+        set({ isLoading: false });
         return { error: await buildError(response) };
       }
     },

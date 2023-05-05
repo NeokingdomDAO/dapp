@@ -1,7 +1,7 @@
-import { ReactEventHandler, SyntheticEvent, useEffect, useMemo, useState } from "react";
+import { ReactEventHandler, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 import { AccessAlarm, CheckCircleRounded, PlayArrow, Stop } from "@mui/icons-material";
-import { Box, Chip, IconButton, keyframes, useTheme } from "@mui/material";
+import { Box, Chip, CircularProgress, IconButton, keyframes, useTheme } from "@mui/material";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 import { findActiveTimesheet, getTaskName, toPrettyDuration } from "@lib/utils";
@@ -31,6 +31,7 @@ export default function StopwatchSlim({
   const { handleError } = useErrorHandler();
   const [isPlaying, setIsPlaying] = useState(false);
   const trackedTask = useProjectTaskStore((state) => state.trackedTask);
+  const isLoading = useProjectTaskStore((state) => state.isLoading);
   const actions = useProjectTaskActions();
   const startTrackingTask = handleError(actions.startTrackingTask);
   const stopTrackingTask = handleError(actions.stopTrackingTask);
@@ -53,7 +54,7 @@ export default function StopwatchSlim({
     reset: resetTime,
   } = useStopwatch({ offsetTimestamp });
 
-  const isTrackingTask = (task: ProjectTask) => trackedTask && trackedTask.id === task.id;
+  const isTrackingTask = useCallback((task: ProjectTask) => trackedTask && trackedTask.id === task.id, [trackedTask]);
 
   useEffect(() => {
     if (isTrackingTask(task)) {
@@ -62,7 +63,7 @@ export default function StopwatchSlim({
     } else {
       setIsPlaying(false);
     }
-  }, [trackedTask, task]);
+  }, [trackedTask, task, isRunning, startTime, isTrackingTask]);
 
   const stopwatchCounter = () => {
     const hh = hours.toString().padStart(2, "0");
@@ -107,6 +108,13 @@ export default function StopwatchSlim({
   const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
 
   const renderTaskAction = () => {
+    if (isLoading && isTrackingTask(task)) {
+      return (
+        <IconButton sx={{ padding: 0 }}>
+          <CircularProgress size={30} />
+        </IconButton>
+      );
+    }
     if (isDone) {
       return (
         <IconButton sx={{ padding: 0 }}>
