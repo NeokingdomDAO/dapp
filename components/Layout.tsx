@@ -117,6 +117,7 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
                   clickable
                 />
               )}
+
               {user?.isLoggedIn && (
                 <Chip
                   label="Tasks"
@@ -126,6 +127,7 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
                   clickable
                 />
               )}
+
               <Chip
                 label="Resolutions"
                 component={Link}
@@ -133,15 +135,17 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
                 variant={isActive("/resolutions") ? "filled" : "outlined"}
                 clickable
               />
+
               {user?.isLoggedIn && (
                 <Chip
-                  label="Tokens and offers"
+                  label="Tokens & Offers"
                   component={Link}
                   href="/tokens-offers"
                   variant={isActive("/tokens-offers") ? "filled" : "outlined"}
                   clickable
                 />
               )}
+
               {!isLoading && typeof window !== "undefined" && user?.isLoggedIn && (
                 <Badge
                   color="success"
@@ -168,6 +172,7 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
                   />
                 </Badge>
               )}
+
               <Chip
                 label="Shareholders"
                 component={Link}

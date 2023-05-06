@@ -53,7 +53,7 @@ export default function NewResolution({
     setConfirmDialogOpen(false);
     const vetoTypeId =
       formProps.typeId === "routineVeto" ? types.find((type) => type.name === "routine")?.id || null : null;
-    const submittedCorrectly = await onSubmit({
+    const submittedSuccessfully = await onSubmit({
       vetoTypeId,
       currentResolution: {
         typeId: formProps.typeId,
@@ -64,7 +64,7 @@ export default function NewResolution({
       executionTo: executionPayload?.map(() => neokingdomTokenContract?.address as string) || [],
     });
 
-    if (submittedCorrectly) {
+    if (submittedSuccessfully) {
       reset();
       router.push("/resolutions");
     }
@@ -84,7 +84,7 @@ export default function NewResolution({
         <title>{enhanceTitleWithPrefix(`New Resolution: ${formProps.title}`)}</title>
       </Head>
       <Typography variant="h3">
-        {formProps.title.trim() ? `Pre draft: ${formProps.title}` : "Pre draft Resolution"}
+        {formProps.title.trim() ? `Pre-draft: ${formProps.title}` : "Pre-draft Resolution"}
       </Typography>
       <ResolutionForm {...formProps} isMonthlyRewards={!!monthlyRewardsResolutionData} />
       {executionPayload && (
@@ -103,7 +103,7 @@ export default function NewResolution({
               Execution Payload
             </Typography>
             <Alert severity="info" sx={{ mb: 4 }}>
-              This payload will be used to automatically mint the tokens for the contributors
+              This payload will be used to automatically mint tokens for the contributors
             </Alert>
             {executionPayload
               .sort((a, b) => (a.tokens < b.tokens ? -1 : 1))
@@ -129,7 +129,7 @@ export default function NewResolution({
         onClick={!!executionPayload ? handlePreSave : handleSave}
         disabled={disabledSubmit}
       >
-        Create pre draft
+        Create pre-draft
       </LoadingButton>
     </>
   );

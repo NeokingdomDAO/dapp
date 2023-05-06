@@ -61,7 +61,7 @@ export default function Dialog({
           Discard
         </Button>
         <Button onClick={handleApprove} variant="contained">
-          Proceed
+          Confirm
         </Button>
       </DialogActions>
     </MUIDialog>

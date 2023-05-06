@@ -76,16 +76,15 @@ export default function ResolutionForm({
       easyMdeInstance?.cleanup();
       easyMdeInstance?.toTextArea();
     };
-  }, [isMonthlyRewards]); // eslint-disable-line
+  }, [isMonthlyRewards]);
 
   return (
     <div>
       {isMonthlyRewards && (
         <Box sx={{ mt: 2 }}>
           <Alert severity="warning">
-            This resolution is for the monthly tokens allocation and therefore it can&apos;t be modified. Please, read
-            the text carefully and make sure the resolution for the token allocation of <b>{getPreviousMonth()}</b>{" "}
-            hasn&apos;t already been created
+            This resolution concerns the monthly token allocation and cannot be modified. Please read the text carefully
+            and ensure that the token allocation resolution for <b>{getPreviousMonth()}</b> has not been created yet.
           </Alert>
         </Box>
       )}
@@ -93,7 +92,7 @@ export default function ResolutionForm({
         sx={{ mt: 2, mb: 2, width: { xs: "100%", md: "50%" } }}
         hiddenLabel
         variant="filled"
-        placeholder="Resolution title"
+        placeholder="Resolution Title"
         value={title}
         onChange={onUpdateTitle}
         disabled={isMonthlyRewards}
@@ -129,7 +128,7 @@ export default function ResolutionForm({
                           dangerouslySetInnerHTML={{
                             __html:
                               RESOLUTION_TYPES_TEXTS[resolutionType.name]?.description ||
-                              "** Testing purposes resolution **",
+                              "** For testing purposes only **",
                           }}
                         />
                       </>

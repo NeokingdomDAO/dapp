@@ -121,7 +121,7 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
         handleApprove={handleApproveDialog}
         descriptionId="dialog-approve-resolution"
       >
-        <span>Make sure you correctly printed the resolution and digitally signed it.</span>
+        <span>Ensure the resolution is printed and digitally signed before approving.</span>
       </Dialog>
       <Dialog
         open={rejectDialogOpen}
@@ -129,10 +129,10 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
         handleApprove={handleApproveRejectDialog}
         descriptionId="dialog-reject-resolution"
       >
-        <span>This action is destructive and the current resolution will be rejected.</span>
+        <span>Rejecting the resolution will permanently remove the current draft. Proceed with caution.</span>
       </Dialog>
       <Typography variant="h3">
-        {formProps.title.trim() ? `Pre draft: ${formProps.title}` : "Pre draft Resolution"}
+        {formProps.title.trim() ? `Preliminary Draft: ${formProps.title}` : "Preliminary Draft Resolution"}
       </Typography>
       <ResolutionForm {...formProps} isMonthlyRewards={(resolution.executionData || []).length > 0} />
       <Box sx={{ pb: 4, pt: 4 }}>
@@ -144,7 +144,7 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
             onClick={handleUpdate}
             disabled={disabledSubmit}
           >
-            Update pre draft
+            Update preliminary draft
           </LoadingButton>
         ) : (
           <Stack direction={{ md: "row" }} spacing={{ xs: 2 }} width="100%">
@@ -155,7 +155,7 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
               href={`/api/pdf/resolutions/${resolution.id}`}
               target="_blank"
             >
-              Export to pdf
+              Export to PDF
             </Button>
             <LoadingButton
               size="large"
@@ -166,7 +166,7 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
               loadingPosition="start"
               startIcon={<VerifiedUserIcon />}
             >
-              Approve pre draft
+              Approve preliminary draft
             </LoadingButton>
             <LoadingButton
               size="large"
@@ -179,7 +179,7 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
               sx={{ marginLeft: { md: "auto !important" } }}
               startIcon={<DeleteIcon />}
             >
-              Reject pre draft
+              Reject preliminary draft
             </LoadingButton>
           </Stack>
         )}

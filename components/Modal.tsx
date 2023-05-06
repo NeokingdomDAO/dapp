@@ -71,7 +71,7 @@ export default function Modal({
         <Box sx={style(size)}>
           <IconButton
             color="primary"
-            aria-label="info"
+            aria-label="close"
             size="small"
             onClick={handleClose}
             sx={{ position: "absolute", top: 6, right: 6 }}

@@ -68,7 +68,7 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
       <Alert severity="warning" sx={{ mt: 2 }}>
         This resolution can be voted on{" "}
         <Link target="_blank" href={`https://dao.legacy.neokingdom.org/#/resolutions/${resolution.id}`}>
-          the old dapp
+          the previous dapp version
         </Link>
       </Alert>
     );
@@ -77,13 +77,13 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
   if (!isConnected) {
     return (
       <Button onClick={handleOpenLoginModalFromLink} variant="outlined" href="/login">
-        Login to vote
+        Log in to vote
       </Button>
     );
   }
 
   if (!acl?.canVote(resolution.voters)) {
-    return <Alert severity="warning">You&apos;re not entitled to vote for this resolution</Alert>;
+    return <Alert severity="warning">You don&apos;t have voting right for this resolution</Alert>;
   }
 
   return (

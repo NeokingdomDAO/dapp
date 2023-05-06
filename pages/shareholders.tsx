@@ -37,13 +37,13 @@ export default function Shareholders() {
         <FormControlLabel
           sx={{ ml: "auto" }}
           control={<Switch checked={onlyManagingBoard} onChange={() => setOnlyManagingBoard((old) => !old)} />}
-          label="Show only managing board"
+          label="Display only managing board members"
         />
       </Box>
       {!user?.isLoggedIn && (
         <Box sx={{ mb: 2 }}>
           <Alert severity="warning">
-            To be able to see shareholders information, please{" "}
+            To view shareholder information, please{" "}
             <Link component={NextLink} href="/login" onClick={handleOpenLoginModalFromLink}>
               log in
             </Link>

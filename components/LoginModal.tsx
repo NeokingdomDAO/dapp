@@ -37,7 +37,7 @@ export default function LoginModal() {
     },
   });
 
-  const handleClick = async () => {
+  const handleSignInClick = async () => {
     await handleWalletOdooLogin();
     handleModalClose();
   };
@@ -48,10 +48,10 @@ export default function LoginModal() {
         {readyToSign ? (
           <>
             <Alert severity="info" sx={{ mb: 2 }}>
-              As your wallet is connected, you can now sign in to odoo signing a message with it.
+              Your wallet is connected. Sign in to Odoo by signing a message with your wallet.
             </Alert>
             <Box sx={{ mt: 2, textAlign: "center" }}>
-              <Button focusRipple variant="contained" onClick={() => handleClick()}>
+              <Button focusRipple variant="contained" onClick={handleSignInClick}>
                 Sign in
               </Button>
               <Divider sx={{ pt: 4, mb: 4 }}>

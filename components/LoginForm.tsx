@@ -58,7 +58,7 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
       mutateUser(resUser);
       onLoggedIn && onLoggedIn();
     } else {
-      enqueueSnackbar("Login Failed: Your email or password is incorrect", { variant: "error" });
+      enqueueSnackbar("Login Failed: Invalid email or password", { variant: "error" });
     }
     setIsLoading(false);
   };
@@ -78,7 +78,7 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
               size="large"
               sx={{ mt: 8, mb: 8 }}
             >
-              Sign in to odoo via wallet
+              Sign in with wallet
             </Button>
           ) : (
             <Button variant="contained" onClick={() => openWeb3Modal()} fullWidth size="large">
@@ -89,13 +89,13 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
             <Chip label="Or" />
           </Divider>
           <Alert severity="info" sx={{ mb: 2 }}>
-            If you don&apos;t have your wallet, you can still log in with your Odoo username and password. Bear in mind
-            you will be only able to use functionalities that don&apos;t require a wallet.
+            If you don&apos;t have a wallet, you can still log in with your Odoo username and password. Please note,
+            features requiring a wallet will be unavailable.
           </Alert>
         </>
       )}
       <Button variant="outlined" onClick={() => setOpenLoginForm((old) => !old)} fullWidth>
-        {openLoginForm ? "Close form" : "Log in via username and password"}
+        {openLoginForm ? "Close Login Form" : "Log in with username and password"}
       </Button>
       {openLoginForm && (
         <Box component="form" onSubmit={onSubmit} autoComplete="off">
@@ -104,7 +104,7 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
               required
               id="odoo-uname"
               name="odoo-uname"
-              label="Odoo username"
+              label="Odoo Username"
               onChange={(e) => setUser({ ...user, username: e.target.value })}
               value={user.username}
               fullWidth
@@ -124,7 +124,7 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
             />
           </Box>
           <Button type="submit" variant="contained" size="large" fullWidth disabled={isLoading}>
-            Login
+            Log In
           </Button>
         </Box>
       )}

@@ -24,13 +24,12 @@ export default function CheckConnected({ fullWidth = false }: { fullWidth?: bool
         severity="warning"
         action={
           <Button variant="outlined" color="warning" size="small" onClick={() => openWeb3Modal()}>
-            Connect
+            Connect Wallet
           </Button>
         }
       >
-        <AlertTitle>Heads up</AlertTitle>
-        It looks you&apos;re just connected through odoo. You should also connect your wallet for a smooth experience in
-        the dapp
+        <AlertTitle>Reminder</AlertTitle>
+        You are currently connected through Odoo. Please connect your wallet for seamless interaction within the dapp.
       </Alert>
     </Component>
   );

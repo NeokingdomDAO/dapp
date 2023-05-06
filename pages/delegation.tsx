@@ -106,14 +106,12 @@ export default function Delegation() {
   return (
     <>
       <Alert severity="info" sx={{ mb: 2 }}>
-        <AlertTitle>Info</AlertTitle>
-        Delegating somebody (i.e. giving a power of attorney) means that this person can use your voting power to vote
-        for resolutions in his/her favor (i.e. your tokens are considered as his/her tokens while voting). Delegations
-        are a great tool for you if you want to be a passive DAO member. However, you need to acknowledge, that the
-        delegated person can vote however he/she wants and does not need a consent from you before each voting takes
-        place. Nevertheless, if you ever feel taking an active stance and want to vote personally on a specific
-        proposal, your personal choice will override the delegated one in DAO system. In addition, you can always end
-        the delegation at your own discretion at any time. Using delegations is not mandatory!
+        <AlertTitle>Delegation Information</AlertTitle>
+        Delegating your voting power to someone else means that they can vote on resolutions using your voting power.
+        This is useful if you want to be a passive DAO member. However, note that the person you delegate to can vote
+        however they choose, without needing your consent for each vote. If you decide to vote on a specific proposal,
+        your personal choice will override the delegated vote in the DAO system. You can also end the delegation any
+        time. Using delegations is optional.
       </Alert>
 
       {delegationData?.signerDelegationStatus?.isDelegating && (
@@ -129,7 +127,7 @@ export default function Delegation() {
                 handleDelegate(
                   walletAddress as string,
                   <span>
-                    Success removing{" "}
+                    Successfully removed{" "}
                     <User address={delegationData?.signerDelegationStatus.delegated as string} isInline />
                   </span>,
                   <span>
@@ -144,13 +142,13 @@ export default function Delegation() {
             </Button>
           }
         >
-          You&apos;re currently delegating{" "}
+          You are currently delegating to{" "}
           <User address={delegationData?.signerDelegationStatus?.delegated as string} isInline />
         </Alert>
       )}
       {delegationData?.signerDelegatedBy.length > 0 && (
         <Alert severity="warning" sx={{ mb: 2 }}>
-          You&apos;re currently being delegated by{" "}
+          You are currently being delegated by{" "}
           {delegationData?.signerDelegatedBy.map((u, index) => (
             <span key={u.address}>
               <User address={u.address} isInline inlineVariant="caption" />
@@ -159,7 +157,7 @@ export default function Delegation() {
                 index >= delegationData?.signerDelegatedBy.length - 2 && <span> and </span>}
             </span>
           ))}{" "}
-          and therefore you can&apos;t delegate
+          and as a result, you cannot delegate
         </Alert>
       )}
       <Box display="flex" justifyContent="flex-end" mb={2}>
@@ -172,7 +170,7 @@ export default function Delegation() {
       {!user?.isLoggedIn && (
         <Box sx={{ mb: 2 }}>
           <Alert severity="warning">
-            To be able to see shareholders information, please{" "}
+            To see shareholders information, please{" "}
             <Link component={NextLink} href="/login" onClick={handleOpenLoginModalFromLink}>
               log in
             </Link>
@@ -203,10 +201,10 @@ export default function Delegation() {
                     handleDelegate(
                       userAddress,
                       <span>
-                        Success delegating <User address={userAddress as string} isInline />
+                        Successfully delegated to <User address={userAddress as string} isInline />
                       </span>,
                       <span>
-                        Error delegating <User address={userAddress as string} isInline />
+                        Error delegating to <User address={userAddress as string} isInline />
                       </span>,
                     )
                   }

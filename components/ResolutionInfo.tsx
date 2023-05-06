@@ -37,7 +37,7 @@ export default function ResolutionInfo({
     : null;
   return (
     <Stack direction="row" alignItems="center">
-      <Typography variant="body2">Type: </Typography>
+      <Typography variant="body2">Resolution Type: </Typography>
       <Chip
         variant="outlined"
         label={`${resolution.resolutionType.name} ${resolution.isNegative ? " (veto)" : ""}`}
@@ -47,7 +47,7 @@ export default function ResolutionInfo({
       {!hideState && (
         <>
           <Typography variant="body2" sx={{ ml: 2 }}>
-            Status:{" "}
+            Resolution Status:{" "}
           </Typography>
           <Chip
             size={chipSize}
@@ -61,7 +61,7 @@ export default function ResolutionInfo({
       {votingUser && (
         <>
           <Typography variant="body2" sx={{ ml: 2, "@media print": { display: "none" } }}>
-            Voted:{" "}
+            Your Vote:{" "}
           </Typography>
           <Chip
             size={chipSize}
