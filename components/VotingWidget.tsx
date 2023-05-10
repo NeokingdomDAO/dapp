@@ -88,7 +88,7 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
 
   return (
     <>
-      {!resolution.isNegative && (
+      {resolution.isNegative && (
         <Alert severity="warning" sx={{ mb: 2 }}>
           <AlertTitle>Heads up</AlertTitle>
           This is a <b>veto resolution</b>. You can either abstain or vote &quot;NO&quot; in order to make it pass.
