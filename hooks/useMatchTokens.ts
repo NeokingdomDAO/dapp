@@ -1,10 +1,10 @@
 import { InternalMarket } from "@contracts/typechain";
+import { useContractsContext } from "contexts/ContractsContext";
 import { parseEther } from "ethers/lib/utils.js";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
 
 import useBlockhainTransaction from "./useBlockchainTransaction";
-import { useContracts } from "./useContracts";
 
 type SubmitParams = {
   amount: number;
@@ -12,7 +12,7 @@ type SubmitParams = {
 };
 
 export default function useMatchTokens() {
-  const { internalMarketContract } = useContracts();
+  const { internalMarketContract } = useContractsContext();
   const { executeTx } = useBlockhainTransaction();
 
   return {

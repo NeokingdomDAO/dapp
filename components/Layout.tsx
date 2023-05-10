@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 
+import { useCheckSubgraphState } from "@hooks/useCheckSubgraphState";
 import useUser from "@hooks/useUser";
 
 import useDelegationStatus from "../hooks/useDelegationStatus";
@@ -25,6 +26,7 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
   const { user } = useUser();
   const router = useRouter();
   const trigger = useScrollTrigger();
+  useCheckSubgraphState();
   const isActive = useMemo(() => initActiveStyle(router.asPath), [router.asPath]);
   const { data, isLoading } = useDelegationStatus();
 

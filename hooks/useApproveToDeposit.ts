@@ -1,13 +1,13 @@
 import { NeokingdomToken } from "@contracts/typechain";
+import { useContractsContext } from "contexts/ContractsContext";
 import { ethers } from "ethers";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
 
 import useBlockhainTransaction from "./useBlockchainTransaction";
-import { useContracts } from "./useContracts";
 
 export default function useApproveToDeposit() {
-  const { neokingdomTokenContract, governanceTokenContractAddress } = useContracts();
+  const { neokingdomTokenContract, governanceTokenContractAddress } = useContractsContext();
   const { executeTx } = useBlockhainTransaction();
 
   return {

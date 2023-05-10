@@ -32,9 +32,6 @@ export default function LoginModal() {
         setIsReadyToSign(true);
       }
     },
-    onDisconnect() {
-      logout(true);
-    },
   });
 
   const handleClick = async () => {

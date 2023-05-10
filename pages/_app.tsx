@@ -25,10 +25,10 @@ import ContractsProvider from "../components/ContractsProvider";
 import { newTheme } from "../styles/theme";
 import { META } from "./_document";
 
-const chains = [process.env.NEXT_PUBLIC_ENV === "staging" ? evmosTestnet : evmos];
+export const SUPPORTED_CHAINS = [process.env.NEXT_PUBLIC_ENV === "staging" ? evmosTestnet : evmos];
 
 // Wagmi client
-const { provider } = configureChains(chains, [
+const { provider } = configureChains(SUPPORTED_CHAINS, [
   w3mProvider({ projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID }),
 ]);
 
@@ -37,13 +37,13 @@ const wagmiClient = createClient({
   connectors: w3mConnectors({
     projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
     version: 1,
-    chains,
+    chains: SUPPORTED_CHAINS,
   }),
   provider,
 });
 
 // Web3Modal Ethereum Client
-const ethereumClient = new EthereumClient(wagmiClient, chains);
+const ethereumClient = new EthereumClient(wagmiClient, SUPPORTED_CHAINS);
 
 interface DappProps extends AppProps {
   Component: NextPage & {

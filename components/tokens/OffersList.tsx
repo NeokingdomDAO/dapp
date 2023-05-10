@@ -1,3 +1,4 @@
+import { useContractsContext } from "contexts/ContractsContext";
 import { Offer } from "types";
 
 import { useState } from "react";
@@ -14,7 +15,6 @@ import Modal from "@components/Modal";
 
 import useApproveToMatchOffer from "@hooks/useApproveToMatchOffer";
 import useCheckAllowance from "@hooks/useCheckAllowance";
-import { useContracts } from "@hooks/useContracts";
 import useMatchTokens from "@hooks/useMatchTokens";
 import { bigIntToNum } from "@hooks/useUserBalanceAndOffers";
 
@@ -24,7 +24,7 @@ export default function OffersList({ offers, noOffersMessage }: { offers: Offer[
   const [matchingOfferOpen, setMatchingOfferOpen] = useState<Offer | null>(null);
   const [matchingTokens, setMatchingTokens] = useState(0);
 
-  const { usdcContract, internalMarketContractAddress } = useContracts();
+  const { usdcContract, internalMarketContractAddress } = useContractsContext();
   const { allowance, refreshAllowanceFromContract } = useCheckAllowance(usdcContract, internalMarketContractAddress);
   const { isLoading, isAwaitingConfirmation, type } = useBlockchainTransactionStore();
   const { onSubmit } = useMatchTokens();

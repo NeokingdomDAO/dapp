@@ -1,12 +1,12 @@
 import useSWR from "swr";
 import { useAccount } from "wagmi";
 
-import { Box, CircularProgress, Divider, Grid, Paper, SxProps, Typography } from "@mui/material";
+import { CircularProgress, Divider, Grid, Paper, Typography } from "@mui/material";
 
 import { fetcher } from "@graphql/client";
 import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
 
-import useUserBalanceAndOffers, { bigIntToNum } from "@hooks/useUserBalanceAndOffers";
+import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
 import DepositTokens from "./DepositTokens";
 import OfferTokens from "./OfferTokens";

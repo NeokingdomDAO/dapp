@@ -1,3 +1,5 @@
+import { useContractsContext } from "contexts/ContractsContext";
+
 import { useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
@@ -12,14 +14,13 @@ import Modal from "@components/Modal";
 
 import useApproveToDeposit from "@hooks/useApproveToDeposit";
 import useCheckAllowance from "@hooks/useCheckAllowance";
-import { useContracts } from "@hooks/useContracts";
 import useDeposit from "@hooks/useDepositNeok";
 import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
 export default function DepositTokens() {
   const [modalOpen, setModalOpen] = useState(false);
   const [depositing, setDepositing] = useState(0);
-  const { neokingdomTokenContract, governanceTokenContractAddress } = useContracts();
+  const { neokingdomTokenContract, governanceTokenContractAddress } = useContractsContext();
   const { allowance, refreshAllowanceFromContract } = useCheckAllowance(
     neokingdomTokenContract,
     governanceTokenContractAddress,
