@@ -20,8 +20,8 @@ export default function useResolutionApprove() {
       executeTx<ResolutionManager["approveResolution"], Parameters<ResolutionManager["approveResolution"]>>({
         contractMethod: resolutionManagerContract?.approveResolution,
         params: [resolutionId],
-        onSuccessMessage: "Pre draft resolution correctly approved",
-        onErrorMessage: "Error approving pre draft resolution",
+        onSuccessMessage: "Preliminary draft resolution correctly approved",
+        onErrorMessage: "Error approving preliminary draft resolution",
         stateKey: BLOCKCHAIN_TX_STATE_KEY,
       }),
   };

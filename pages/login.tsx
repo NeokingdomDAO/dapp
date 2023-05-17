@@ -1,12 +1,12 @@
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 import LoginForm from "@components/LoginForm";
 
 export default function Login() {
   return (
     <Container maxWidth="sm">
-      <h1>Welcome back!</h1>
-      <p>Please sign in to continue.</p>
+      <Typography variant="h4">Welcome back!</Typography>
+      <Typography variant="body2">Please sign in to continue.</Typography>
       <LoginForm />
     </Container>
   );

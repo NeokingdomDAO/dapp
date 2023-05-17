@@ -18,8 +18,8 @@ export default function useResolutionReject() {
       executeTx<ResolutionManager["rejectResolution"], Parameters<ResolutionManager["rejectResolution"]>>({
         contractMethod: resolutionManagerContract?.rejectResolution,
         params: [resolutionId],
-        onSuccessMessage: "Pre draft resolution correctly rejected",
-        onErrorMessage: "Error rejecting pre draft resolution",
+        onSuccessMessage: "Preliminary draft resolution correctly rejected",
+        onErrorMessage: "Error rejecting preliminary draft resolution",
       }),
   };
 }
