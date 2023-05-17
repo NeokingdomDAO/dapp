@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { useAccount } from "wagmi";
 
 import { useMemo } from "react";
 
@@ -42,6 +43,7 @@ export default function Home() {
 
   const { acl, isLoading: isLoadingAcl } = useResolutionsAcl();
   const { currentTimestamp } = useTimestamp();
+  const { isConnected } = useAccount();
 
   const [enhancedResolutions, enhancedResolutionsToVote, stats]: [
     ResolutionEntityEnhanced[],
@@ -121,9 +123,11 @@ export default function Home() {
       <Section inverse={enhancedResolutionsToVote?.length > 0}>
         <ResolutionsStats stats={stats} isLoading={isLoading} totalResolutions={enhancedResolutions.length} />
       </Section>
-      <Section inverse={enhancedResolutionsToVote?.length === 0}>
-        <Tokens />
-      </Section>
+      {isConnected && (
+        <Section inverse={enhancedResolutionsToVote?.length === 0}>
+          <Tokens />
+        </Section>
+      )}
     </>
   );
 }

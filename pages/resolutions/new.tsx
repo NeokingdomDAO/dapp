@@ -1,4 +1,5 @@
 import { NeokingdomToken } from "@contracts/typechain";
+import { useContractsContext } from "contexts/ContractsContext";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useAccount } from "wagmi";
@@ -12,7 +13,6 @@ import { getExecutionPayload } from "@lib/resolutions/common";
 
 import NewResolution from "@components/NewResolution";
 
-import { useContracts } from "@hooks/useContracts";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
 
 import { MonthlyRewardsUserData } from "../../types";
@@ -31,7 +31,7 @@ export default function NewResolutionPage() {
     isMonthlyRewards ? process.env.NEXT_PUBLIC_LAST_MONTH_REWARDS_ENDPOINT : null,
     fetcher,
   );
-  const { neokingdomTokenContract } = useContracts();
+  const { neokingdomTokenContract } = useContractsContext();
 
   const [executionPayload, setExecutionPayload] = useState<MonthlyRewardsUserData[] | null>(null);
 

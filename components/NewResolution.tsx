@@ -44,7 +44,7 @@ export default function NewResolution({
   const { isAwaitingConfirmation, isLoading } = useBlockchainTransactionStore();
   const { reset, ...formProps } = useStore(store, (s) => s);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const { neokingdomTokenContract } = useContractsContext();
+  const { governanceTokenContractAddress } = useContractsContext();
 
   const disabledSubmit = !formProps.typeId || !acl?.canCreate || !formProps.title.trim() || !formProps.content.trim();
   const loadingSubmit = isAwaitingConfirmation || isLoading;
@@ -61,7 +61,7 @@ export default function NewResolution({
         content: formProps.content,
       },
       executionData: executionPayload?.map((user) => user.executionData as string) || [],
-      executionTo: executionPayload?.map(() => neokingdomTokenContract?.address as string) || [],
+      executionTo: executionPayload?.map(() => governanceTokenContractAddress as string) || [],
     });
 
     if (submittedSuccessfully) {

@@ -5,7 +5,7 @@ import { shallow } from "zustand/shallow";
 import { useMemo, useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
-import { Alert, Box, Button, ButtonGroup, CircularProgress, Link, Stack, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, ButtonGroup, CircularProgress, Link, Stack, Typography } from "@mui/material";
 
 import { isSameAddress } from "@lib/utils";
 
@@ -63,6 +63,10 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
     <CircularProgress />;
   }
 
+  if (!acl?.canVote(resolution.voters)) {
+    return <Alert severity="warning">You&apos;re not entitled to vote for this resolution</Alert>;
+  }
+
   if (resolution.isLegacy) {
     return (
       <Alert severity="warning" sx={{ mt: 2 }}>
@@ -77,17 +81,22 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
   if (!isConnected) {
     return (
       <Button onClick={handleOpenLoginModalFromLink} variant="outlined" href="/login">
-        Log in to vote
+        Connect wallet to vote
       </Button>
     );
   }
-
   if (!acl?.canVote(resolution.voters)) {
     return <Alert severity="warning">You don&apos;t have voting right for this resolution</Alert>;
   }
 
   return (
     <>
+      {resolution.isNegative && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          <AlertTitle>Heads up</AlertTitle>
+          This is a <b>veto resolution</b>. You can either abstain or vote &quot;NO&quot; in order to make it pass.
+        </Alert>
+      )}
       <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" justifyContent="center">
         <Typography variant="body1" sx={{ whiteSpace: "nowrap" }}>
           {votingUser ? "You have voted" : "Cast your vote"}

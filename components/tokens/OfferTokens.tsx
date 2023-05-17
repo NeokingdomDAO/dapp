@@ -1,3 +1,5 @@
+import { useContractsContext } from "contexts/ContractsContext";
+
 import { useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
@@ -12,14 +14,13 @@ import Modal from "@components/Modal";
 
 import useApproveToOffer from "@hooks/useApproveToOffer";
 import useCheckAllowance from "@hooks/useCheckAllowance";
-import { useContracts } from "@hooks/useContracts";
 import useOfferTokens from "@hooks/useOfferTokens";
 import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
 export default function OfferTokens() {
   const [modalOpen, setModalOpen] = useState(false);
   const [offered, setOffered] = useState(0);
-  const { governanceTokenContract, internalMarketContractAddress } = useContracts();
+  const { governanceTokenContract, internalMarketContractAddress } = useContractsContext();
   const { allowance, refreshAllowanceFromContract } = useCheckAllowance(
     governanceTokenContract,
     internalMarketContractAddress,

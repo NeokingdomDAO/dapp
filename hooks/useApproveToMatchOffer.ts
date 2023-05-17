@@ -1,13 +1,13 @@
 import { TokenMock } from "@contracts/typechain";
+import { useContractsContext } from "contexts/ContractsContext";
 import { ethers } from "ethers";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
 
 import useBlockhainTransaction from "./useBlockchainTransaction";
-import { useContracts } from "./useContracts";
 
 export default function useApproveToMatchOffer() {
-  const { usdcContract, internalMarketContractAddress } = useContracts();
+  const { usdcContract, internalMarketContractAddress } = useContractsContext();
   const { executeTx } = useBlockhainTransaction();
 
   return {

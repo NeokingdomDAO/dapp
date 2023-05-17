@@ -1,9 +1,9 @@
 import { InternalMarket } from "@contracts/typechain";
+import { useContractsContext } from "contexts/ContractsContext";
 import { parseEther } from "ethers/lib/utils.js";
 import { useAccount } from "wagmi";
 
 import useBlockhainTransaction from "./useBlockchainTransaction";
-import { useContracts } from "./useContracts";
 
 type SubmitParams = {
   amount: number;
@@ -11,7 +11,7 @@ type SubmitParams = {
 };
 
 export default function useWithdrawTokens() {
-  const { internalMarketContract } = useContracts();
+  const { internalMarketContract } = useContractsContext();
   const { executeTx } = useBlockhainTransaction();
   const { address } = useAccount();
 

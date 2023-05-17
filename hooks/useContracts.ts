@@ -1,4 +1,5 @@
 import { Signer } from "ethers";
+import { SUPPORTED_CHAINS } from "pages/_app";
 import { useAccount, useDisconnect, useNetwork, useSigner } from "wagmi";
 
 import { useEffect, useState } from "react";
@@ -79,6 +80,10 @@ export function useContracts() {
       try {
         const chainId = String(chain?.id);
 
+        if (!SUPPORTED_CHAINS.map((chain) => String(chain.id)).includes(chainId)) {
+          throw new Error(`You're connected to an unsupported network, please connect to ${SUPPORTED_CHAINS[0].name}`);
+        }
+
         setContracts({
           resolutionManagerContract: getResolutionManagerContract(chainId, signer),
           neokingdomTokenContract: getNeokingdomTokenContract(chainId, signer),
@@ -91,11 +96,14 @@ export function useContracts() {
         });
       } catch (error) {
         console.error(error);
-        enqueueSnackbar("Your wallet was connected to an unsupported network, please re-connect", { variant: "error" });
-        return disconnect();
+        // @ts-ignore
+        enqueueSnackbar(error?.message, {
+          variant: "error",
+        });
+        disconnect();
       }
     }
-  }, [address, signer, chain?.id, disconnect, enqueueSnackbar]);
+  }, [address, signer, chain?.id]);
 
   return contracts;
 }

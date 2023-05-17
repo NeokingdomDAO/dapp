@@ -1,5 +1,5 @@
 import { SnackbarKey } from "notistack";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId, useDisconnect } from "wagmi";
 
 import { ReactElement, useCallback } from "react";
 
@@ -9,6 +9,11 @@ import { useSnackbar } from "@hooks/useSnackbar";
 
 const NOTIFY_CONTRACT_ERROR_TIMEOUT = 30000;
 const NOTIFY_TX_STUCK_TIMEOUT = 40000;
+
+const CORRECT_NETWORK: any = {
+  9001: "Please connect to evmos mainnet",
+  9000: "Please connect to evmos testnet",
+};
 
 type ExecuteTxParams<TC, TP> = {
   contractMethod: TC | undefined;
@@ -22,6 +27,7 @@ export default function useBlockhainTransaction() {
   const { set, reset, isLoading } = useBlockchainTransactionStore();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { address } = useAccount();
+  const { disconnect } = useDisconnect();
 
   const notifyContractError = useCallback(() => {
     enqueueSnackbar(
@@ -71,11 +77,27 @@ export default function useBlockhainTransaction() {
       enqueueSnackbar(onSuccessMessage, { variant: "success" });
       reset();
       return true;
-    } catch (err) {
+    } catch (err: any) {
+      // @ts-ignore
+      const networkError = CORRECT_NETWORK[err?.network?.chainId];
       if (timeoutTx) clearTimeout(timeoutTx);
       if (timeoutTxStuck) clearTimeout(timeoutTxStuck);
       closeSnackbar(txAlert);
-      enqueueSnackbar(onErrorMessage, { variant: "error" });
+
+      if (networkError) {
+        enqueueSnackbar(`It looks you're connected to the wrong network. ${networkError}`, {
+          variant: "error",
+          onClose: () => {
+            if (networkError) {
+              disconnect();
+            }
+          },
+        });
+      } else {
+        enqueueSnackbar(`${onErrorMessage}. ${err.reason}`, {
+          variant: "error",
+        });
+      }
       console.error(err);
       reset();
       return false;

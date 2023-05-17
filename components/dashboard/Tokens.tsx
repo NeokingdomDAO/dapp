@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { useAccount } from "wagmi";
 
 import { Box, Divider, Typography } from "@mui/material";
 
