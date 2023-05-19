@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
 
 import { ContractsContext } from "../contexts/ContractsContext";
-import useBlockhainTransaction from "./useBlockchainTransaction";
+import useBlockchainTransaction from "./useBlockchainTransaction";
 
 type SubmitParams = {
   amount: number;
@@ -14,7 +14,7 @@ type SubmitParams = {
 
 export default function useOfferTokens() {
   const { internalMarketContract } = useContext(ContractsContext);
-  const { executeTx } = useBlockhainTransaction();
+  const { executeTx } = useBlockchainTransaction();
 
   return {
     onSubmit: async ({ amount }: SubmitParams) => {

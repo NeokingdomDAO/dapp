@@ -4,11 +4,11 @@ import { ethers } from "ethers";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
 
-import useBlockhainTransaction from "./useBlockchainTransaction";
+import useBlockchainTransaction from "./useBlockchainTransaction";
 
 export default function useApproveToDeposit() {
   const { neokingdomTokenContract, governanceTokenContractAddress } = useContractsContext();
-  const { executeTx } = useBlockhainTransaction();
+  const { executeTx } = useBlockchainTransaction();
 
   return {
     onSubmit: async () => {

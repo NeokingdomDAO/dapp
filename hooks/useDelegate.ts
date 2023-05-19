@@ -3,7 +3,7 @@ import { Voting } from "@contracts/typechain";
 import { ReactElement, useContext } from "react";
 
 import { ContractsContext } from "../contexts/ContractsContext";
-import useBlockhainTransaction from "./useBlockchainTransaction";
+import useBlockchainTransaction from "./useBlockchainTransaction";
 
 type SubmitParams = {
   delegatingAddress: string;
@@ -13,7 +13,7 @@ type SubmitParams = {
 
 export default function useDelegate() {
   const { votingContract } = useContext(ContractsContext);
-  const { executeTx } = useBlockhainTransaction();
+  const { executeTx } = useBlockchainTransaction();
 
   return {
     onSubmit: async ({ delegatingAddress, successElement, errorElement }: SubmitParams) => {

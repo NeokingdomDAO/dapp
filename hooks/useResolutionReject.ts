@@ -3,7 +3,7 @@ import { ResolutionManager } from "@contracts/typechain";
 import { useContext } from "react";
 
 import { ContractsContext } from "../contexts/ContractsContext";
-import useBlockhainTransaction from "./useBlockchainTransaction";
+import useBlockchainTransaction from "./useBlockchainTransaction";
 
 type SubmitParams = {
   resolutionId: string;
@@ -11,7 +11,7 @@ type SubmitParams = {
 
 export default function useResolutionReject() {
   const { resolutionManagerContract } = useContext(ContractsContext);
-  const { executeTx } = useBlockhainTransaction();
+  const { executeTx } = useBlockchainTransaction();
 
   return {
     onSubmit: async ({ resolutionId }: SubmitParams) =>

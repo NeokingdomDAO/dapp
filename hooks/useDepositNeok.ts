@@ -4,11 +4,11 @@ import { parseEther } from "ethers/lib/utils.js";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
 
-import useBlockhainTransaction from "./useBlockchainTransaction";
+import useBlockchainTransaction from "./useBlockchainTransaction";
 
 export default function useDeposit() {
   const { internalMarketContract } = useContractsContext();
-  const { executeTx } = useBlockhainTransaction();
+  const { executeTx } = useBlockchainTransaction();
 
   return {
     onSubmit: async ({ amount }: { amount: number }) => {

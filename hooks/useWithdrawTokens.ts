@@ -3,7 +3,7 @@ import { useContractsContext } from "contexts/ContractsContext";
 import { parseEther } from "ethers/lib/utils.js";
 import { useAccount } from "wagmi";
 
-import useBlockhainTransaction from "./useBlockchainTransaction";
+import useBlockchainTransaction from "./useBlockchainTransaction";
 
 type SubmitParams = {
   amount: number;
@@ -12,7 +12,7 @@ type SubmitParams = {
 
 export default function useWithdrawTokens() {
   const { internalMarketContract } = useContractsContext();
-  const { executeTx } = useBlockhainTransaction();
+  const { executeTx } = useBlockchainTransaction();
   const { address } = useAccount();
 
   return {

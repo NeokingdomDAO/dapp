@@ -23,7 +23,7 @@ type ExecuteTxParams<TC, TP> = {
   stateKey?: string;
 };
 
-export default function useBlockhainTransaction() {
+export default function useBlockchainTransaction() {
   const { set, reset, isLoading } = useBlockchainTransactionStore();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { address } = useAccount();
