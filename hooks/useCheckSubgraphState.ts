@@ -40,7 +40,7 @@ export function useCheckSubgraphState() {
   useEffect(() => {
     if (mismatch) {
       const timeout = setTimeout(() => {
-        const key = enqueueSnackbar("UI is being synced with the blockchain, please wait...", {
+        const key = enqueueSnackbar("Data currently out of sync with blockchain. Refresh in progress", {
           variant: "warning",
           persist: true,
         });
@@ -55,7 +55,7 @@ export function useCheckSubgraphState() {
     if (snackbarKey) {
       closeSnackbar(snackbarKey);
       setSnackbarKey(null);
-      enqueueSnackbar("UI is now in sync", { variant: "success" });
+      enqueueSnackbar("Synchronization complete", { variant: "success" });
     }
   }, [mismatch]);
 }

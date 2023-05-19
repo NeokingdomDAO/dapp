@@ -6,13 +6,13 @@ import { fetcher } from "@graphql/client";
 import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
 
 const DEFAULT_ACL = {
-  canCreate: Boolean(false),
-  canUpdate: Boolean(false),
-  canApprove: Boolean(false),
-  canVote: (_: ResolutionVoter[]) => Boolean(false),
-  isShareholder: Boolean(false),
-  isManagingBoard: Boolean(false),
-  isContributor: Boolean(false),
+  canCreate: false,
+  canUpdate: false,
+  canApprove: false,
+  canVote: (_: ResolutionVoter[]) => false,
+  isShareholder: false,
+  isManagingBoard: false,
+  isContributor: false,
 };
 
 export default function useResolutionsAcl(): { acl: ResolutionsAcl; error?: boolean; isLoading?: boolean } {

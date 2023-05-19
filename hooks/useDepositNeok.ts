@@ -15,8 +15,8 @@ export default function useDeposit() {
       return executeTx<InternalMarket["deposit"], Parameters<InternalMarket["deposit"]>>({
         contractMethod: internalMarketContract?.deposit,
         params: [parseEther(String(amount))],
-        onSuccessMessage: `NEOK deposited correctly`,
-        onErrorMessage: `Error approving depositing NEOK`,
+        onSuccessMessage: `NEOK deposited successfully`,
+        onErrorMessage: `Error while depositing NEOK`,
         stateKey: BLOCKCHAIN_TRANSACTION_KEYS.DEPOSIT_NEOK,
       });
     },

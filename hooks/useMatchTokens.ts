@@ -20,8 +20,8 @@ export default function useMatchTokens() {
       return executeTx<InternalMarket["matchOffer"], Parameters<InternalMarket["matchOffer"]>>({
         contractMethod: internalMarketContract?.matchOffer,
         params: [offerUserAddress, parseEther(String(amount))],
-        onSuccessMessage: "Offer correctly matched",
-        onErrorMessage: "Error matching the offer",
+        onSuccessMessage: "Offer successfully matched",
+        onErrorMessage: "Failed to match offer",
         stateKey: BLOCKCHAIN_TRANSACTION_KEYS.MATCH_TOKENS,
       });
     },

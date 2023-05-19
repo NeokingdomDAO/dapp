@@ -19,8 +19,8 @@ export default function useResolutionVote() {
       return executeTx<ResolutionManager["vote"], Parameters<ResolutionManager["vote"]>>({
         contractMethod: resolutionManagerContract?.vote,
         params: [resolutionId, votedYes],
-        onSuccessMessage: `Correctly voted ${votedYes ? "Yes" : "No"}`,
-        onErrorMessage: "Error voting resolution",
+        onSuccessMessage: `Successfully voted ${votedYes ? "Yes" : "No"}`,
+        onErrorMessage: "Error while voting for resolution",
       });
     },
   };

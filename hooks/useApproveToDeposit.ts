@@ -15,8 +15,8 @@ export default function useApproveToDeposit() {
       return executeTx<NeokingdomToken["approve"], Parameters<NeokingdomToken["approve"]>>({
         contractMethod: neokingdomTokenContract?.approve,
         params: [governanceTokenContractAddress as string, ethers.constants.MaxUint256],
-        onSuccessMessage: `Tokens to deposit approved`,
-        onErrorMessage: `Error approving tokens to deposit`,
+        onSuccessMessage: `Approval successful`,
+        onErrorMessage: `Approval failed`,
         stateKey: BLOCKCHAIN_TRANSACTION_KEYS.APPROVE_DEPOSIT_NEOK,
       });
     },

@@ -10,7 +10,7 @@ import { useSnackbar } from "@hooks/useSnackbar";
 const NOTIFY_CONTRACT_ERROR_TIMEOUT = 30000;
 const NOTIFY_TX_STUCK_TIMEOUT = 40000;
 
-const CORRECT_NETWORK: any = {
+const REQUIRED_NETWORK: any = {
   9001: "Please connect to evmos mainnet",
   9000: "Please connect to evmos testnet",
 };
@@ -31,7 +31,7 @@ export default function useBlockhainTransaction() {
 
   const notifyContractError = useCallback(() => {
     enqueueSnackbar(
-      "It looks there's an error with the network, please try reloading the page, or disconnect and reconnect your wallet",
+      "There seems to be a network issue. Please try reloading the page or disconnecting and reconnecting your wallet.",
       { variant: "error" },
     );
     reset();
@@ -39,9 +39,12 @@ export default function useBlockhainTransaction() {
 
   const notifyTxStuckError = useCallback((snackbar: SnackbarKey) => {
     closeSnackbar(snackbar);
-    enqueueSnackbar("It looks the transaction is hanging, feel free to navigate away. It will eventually complete.", {
-      variant: "error",
-    });
+    enqueueSnackbar(
+      "Your transaction has been successfully submitted, however, its inclusion in a block is taking a bit longer than usual. For further details, please check your wallet.",
+      {
+        variant: "warning",
+      },
+    );
     reset();
   }, []);
 
@@ -64,7 +67,7 @@ export default function useBlockhainTransaction() {
       timeoutTx = setTimeout(notifyContractError, NOTIFY_CONTRACT_ERROR_TIMEOUT);
       const tx = await contractMethod.apply(null, params);
       clearTimeout(timeoutTx);
-      txAlert = enqueueSnackbar("Transaction is being executed, hold tight", {
+      txAlert = enqueueSnackbar("Transaction submitted, please wait.", {
         variant: "info",
         autoHideDuration: NOTIFY_TX_STUCK_TIMEOUT,
       });
@@ -79,13 +82,13 @@ export default function useBlockhainTransaction() {
       return true;
     } catch (err: any) {
       // @ts-ignore
-      const networkError = CORRECT_NETWORK[err?.network?.chainId];
+      const networkError = REQUIRED_NETWORK[err?.network?.chainId];
       if (timeoutTx) clearTimeout(timeoutTx);
       if (timeoutTxStuck) clearTimeout(timeoutTxStuck);
       closeSnackbar(txAlert);
 
       if (networkError) {
-        enqueueSnackbar(`It looks you're connected to the wrong network. ${networkError}`, {
+        enqueueSnackbar(`You're connected to the wrong network. ${networkError}`, {
           variant: "error",
           onClose: () => {
             if (networkError) {

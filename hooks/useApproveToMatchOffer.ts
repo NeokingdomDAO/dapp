@@ -15,8 +15,8 @@ export default function useApproveToMatchOffer() {
       return executeTx<TokenMock["approve"], Parameters<TokenMock["approve"]>>({
         contractMethod: usdcContract?.approve,
         params: [internalMarketContractAddress as string, ethers.constants.MaxUint256],
-        onSuccessMessage: `USDC to match offer approved`,
-        onErrorMessage: `Error approving USDC to match offer`,
+        onSuccessMessage: `Approval successful`,
+        onErrorMessage: `Approval failed`,
         stateKey: BLOCKCHAIN_TRANSACTION_KEYS.APPROVE_TO_MATCH_OFFER,
       });
     },

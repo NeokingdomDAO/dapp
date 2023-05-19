@@ -21,8 +21,8 @@ export default function useOfferTokens() {
       return executeTx<InternalMarket["makeOffer"], Parameters<InternalMarket["makeOffer"]>>({
         contractMethod: internalMarketContract?.makeOffer,
         params: [parseEther(String(amount))],
-        onSuccessMessage: "Offer correctly created",
-        onErrorMessage: "Error creating offer",
+        onSuccessMessage: "Offer successfully created",
+        onErrorMessage: "Failed to create offer",
         stateKey: BLOCKCHAIN_TRANSACTION_KEYS.OFFER_TOKENS,
       });
     },

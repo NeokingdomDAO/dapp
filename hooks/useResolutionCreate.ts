@@ -27,8 +27,8 @@ export default function useResolutionCreate() {
       return executeTx<ResolutionManager["createResolution"], Parameters<ResolutionManager["createResolution"]>>({
         contractMethod: resolutionManagerContract?.createResolution,
         params: [ipfsId, resolutionTypeId, !!vetoTypeId, executionTo, executionData],
-        onSuccessMessage: "Preliminary draft resolution correctly created",
-        onErrorMessage: "Error creating preliminary draft resolution",
+        onSuccessMessage: "Preliminary draft resolution successfully created",
+        onErrorMessage: "Error while creating preliminary draft resolution",
       });
     },
   };

@@ -26,8 +26,8 @@ export default function useResolutionUpdate() {
       return executeTx<ResolutionManager["updateResolution"], Parameters<ResolutionManager["updateResolution"]>>({
         contractMethod: resolutionManagerContract?.updateResolution,
         params: [resolutionId, ipfsId, resolutionTypeId, !!vetoTypeId, [], []],
-        onSuccessMessage: "Preliminary draft resolution correctly updated",
-        onErrorMessage: "Error updating preliminary draft resolution",
+        onSuccessMessage: "Preliminary draft resolution successfully updated",
+        onErrorMessage: "Failed to update preliminary draft resolution",
       });
     },
   };

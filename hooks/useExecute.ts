@@ -18,8 +18,8 @@ export default function useExecute() {
       return executeTx<ResolutionManager["executeResolution"], Parameters<ResolutionManager["executeResolution"]>>({
         contractMethod: resolutionManagerContract?.executeResolution,
         params: [resolutionId],
-        onSuccessMessage: `Resolution ${resolutionId} correctly executed`,
-        onErrorMessage: `Error executing resolution ${resolutionId}`,
+        onSuccessMessage: `Successfully executed resolution ${resolutionId}.`,
+        onErrorMessage: `Execution failed for resolution ${resolutionId}.`,
       });
     },
     isLoading,

@@ -30,9 +30,7 @@ export default function useDelegationStatus() {
 
   const delegationUsers = (data?.delegationUsers || []) as DelegationUser[];
 
-  const signerDelegationStatus = (delegationUsers as DelegationUser[]).find((user) =>
-    isSameAddress(user.address, address as string),
-  );
+  const signerDelegationStatus = delegationUsers.find((user) => isSameAddress(user.address, address as string));
 
   // if this is null it means noone has delegated current user, and therefore they can delegate
   const signerDelegatedBy = delegationUsers.filter(

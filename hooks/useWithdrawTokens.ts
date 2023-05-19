@@ -20,11 +20,11 @@ export default function useWithdrawTokens() {
       return executeTx<InternalMarket["withdraw"], Parameters<InternalMarket["withdraw"]>>({
         contractMethod: internalMarketContract?.withdraw,
         params: [toAddress, parseEther(String(amount))],
-        onSuccessMessage: "Tokens correctly withdrew",
+        onSuccessMessage: "Tokens successfully withdrawn",
         onErrorMessage:
           address !== toAddress
-            ? "Error withdrawing tokens. Check the withdrawal address!"
-            : "Error withdrawing tokens. Please try again later",
+            ? "Error withdrawing tokens. Please check the withdrawal address!"
+            : "Error withdrawing tokens. Try again later",
       });
     },
   };

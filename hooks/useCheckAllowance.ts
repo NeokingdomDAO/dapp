@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useSnackbar } from "./useSnackbar";
 
-let globSnackbar: SnackbarKey = "";
+let globalSnackbar: SnackbarKey = "";
 
 export default function useCheckAllowance(
   contract?: GovernanceToken | NeokingdomToken | TokenMock | undefined,
@@ -33,11 +33,11 @@ export default function useCheckAllowance(
           }
         }
       } catch (error) {
-        closeSnackbar(globSnackbar);
-        const stackbarKey = enqueueSnackbar(`You should connect to the ${chains?.[0]?.name} network`, {
+        closeSnackbar(globalSnackbar);
+        const snackbarKey = enqueueSnackbar(`Please connect to the ${chains?.[0]?.name} network`, {
           variant: "error",
         });
-        globSnackbar = stackbarKey;
+        globalSnackbar = snackbarKey;
         disconnect();
       }
     }
