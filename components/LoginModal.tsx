@@ -45,7 +45,7 @@ export default function LoginModal() {
         {readyToSign ? (
           <>
             <Alert severity="info" sx={{ mb: 2 }}>
-              Your wallet is connected. Sign in to Odoo by signing a message with your wallet.
+              Your wallet is connected. Log in to Odoo by signing a message with your wallet.
             </Alert>
             <Box sx={{ mt: 2, textAlign: "center" }}>
               <Button focusRipple variant="contained" onClick={handleSignInClick}>

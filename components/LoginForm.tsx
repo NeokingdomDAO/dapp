@@ -78,7 +78,7 @@ export default function LoginForm({ onLoggedIn }: { onLoggedIn?: () => void }) {
               size="large"
               sx={{ mt: 8, mb: 8 }}
             >
-              Sign in with wallet
+              Log in to odoo with wallet
             </Button>
           ) : (
             <Button variant="contained" onClick={() => openWeb3Modal()} fullWidth size="large">

@@ -90,7 +90,7 @@ export default function ResolutionCard({
             >
               <Countdown
                 targetDate={resolution.resolutionTypeInfo.votingEnds as Date}
-                prefixLabel="Voting ends in"
+                prefixLabel="Voting ends"
                 inline
               />
             </Alert>
@@ -127,7 +127,7 @@ export default function ResolutionCard({
             <Alert severity="info">
               <Countdown
                 targetDate={resolution.resolutionTypeInfo.noticePeriodEnds as Date}
-                prefixLabel="Voting starts in"
+                prefixLabel="Voting starts"
                 inline
               />
             </Alert>

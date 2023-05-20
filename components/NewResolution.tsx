@@ -84,7 +84,7 @@ export default function NewResolution({
         <title>{enhanceTitleWithPrefix(`New Resolution: ${formProps.title}`)}</title>
       </Head>
       <Typography variant="h3">
-        {formProps.title.trim() ? `Pre-draft: ${formProps.title}` : "Pre-draft Resolution"}
+        {formProps.title.trim() ? `Preliminary draft: ${formProps.title}` : "Preliminary draft Resolution"}
       </Typography>
       <ResolutionForm {...formProps} isMonthlyRewards={!!monthlyRewardsResolutionData} />
       {executionPayload && (
@@ -129,7 +129,7 @@ export default function NewResolution({
         onClick={!!executionPayload ? handlePreSave : handleSave}
         disabled={disabledSubmit}
       >
-        Create pre-draft
+        Create preliminary draft
       </LoadingButton>
     </>
   );
