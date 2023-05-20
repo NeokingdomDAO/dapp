@@ -201,10 +201,10 @@ export default function Delegation() {
                     handleDelegate(
                       userAddress,
                       <span>
-                        Successfully delegated to <User address={userAddress as string} isInline />
+                        Successfully delegating <User address={userAddress as string} isInline />
                       </span>,
                       <span>
-                        Error delegating to <User address={userAddress as string} isInline />
+                        Error delegating <User address={userAddress as string} isInline />
                       </span>,
                     )
                   }
