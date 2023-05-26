@@ -5,6 +5,7 @@ import SwipeableViews from "react-swipeable-views";
 
 import { Alert, Badge, Box, CircularProgress, Tab, Tabs } from "@mui/material";
 
+import IBC from "@components/tokens/IBC";
 import OffersList from "@components/tokens/OffersList";
 import UserActions from "@components/tokens/UserActions";
 import UserBalance from "@components/tokens/UserBalance";
@@ -84,6 +85,7 @@ export default function Tokens() {
             {...a11yProps(1)}
           />
           <Tab label="Expired offers" {...a11yProps(1)} />
+          <Tab label="IBC" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
@@ -103,6 +105,9 @@ export default function Tokens() {
           ) : (
             <OffersList offers={data?.expiredOffers || []} noOffersMessage="No expired offers" />
           )}
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <IBC />
         </TabPanel>
       </SwipeableViews>
     </>
