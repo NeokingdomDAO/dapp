@@ -27,7 +27,12 @@ import { formatEther, parseEther } from "ethers/lib/utils.js";
 
 import { useState } from "react";
 
-import { Button, Grid, Paper, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Box, Button, Grid, Paper, Slider, TextField, Typography } from "@mui/material";
+
+import Modal from "@components/Modal";
+
+import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
 const chain: Chain = {
   chainId: 9001,
@@ -55,6 +60,12 @@ const restOptions = {
   headers: { "Content-Type": "application/json" },
 };
 
+const fetchLastBlockCrescent = async () => {
+  const rawResult = await fetch("https://rest.cosmos.directory/crescent/blocks/latest");
+  const result = await rawResult.json();
+  return parseInt(result.block.header.height);
+};
+
 const fetchBalanceByDenom = async (address: string, denom: string) => {
   const queryEndpoint = `${nodeUrl}${generateEndpointBalanceByDenom(address, denom)}`;
   const rawResult = await fetch(queryEndpoint, restOptions);
@@ -73,11 +84,10 @@ const fetchERC20ContractAddress = async () => {
   return result;
 };
 
-const fetchAddress = async () => {
-  const cosmosChainID = "evmos_9001-2"; // Use 'evmos_9000-4' for testnet
+const fetchAddress = async (chain: "evmos" | "crescent" = "evmos") => {
+  const cosmosChainID = chain === "evmos" ? "evmos_9001-2" : "crescent-1";
   const account = await window?.keplr?.getKey(cosmosChainID);
   if (account) {
-    const pk = Buffer.from(account.pubKey).toString("base64");
     return account.bech32Address;
   }
 };
@@ -99,9 +109,12 @@ const fetchAccount = async (address: string) => {
   return result as AccountResponse;
 };
 
-const convertERC20 = async (senderAddress: string) => {
+const convertERC20 = async (senderAddress: string, amount: string) => {
+  console.log("Converting", amount);
+
   const senderHexAddress = evmosToEth(senderAddress);
   const account = await fetchAccount(senderAddress);
+
   const sender: Sender = {
     accountAddress: senderAddress,
     sequence: parseInt(account.account.base_account.sequence),
@@ -126,8 +139,7 @@ const convertERC20 = async (senderAddress: string) => {
 
   const params: MsgConvertERC20Params = {
     contractAddress: "0x655ecB57432CC1370f65e5dc2309588b71b473A9",
-    amount: parseEther("1").toString(),
-    // Addresses
+    amount,
     receiverBech32: senderAddress,
     senderHex: senderHexAddress,
   };
@@ -170,7 +182,8 @@ const convertERC20 = async (senderAddress: string) => {
   console.log("broadcasted", response);
 };
 
-const sendIBC = async (senderAddress: string) => {
+const sendIBC = async (senderAddress: string, receiverAddress: string, amount: string) => {
+  console.log("Sending ", amount);
   const account = await fetchAccount(senderAddress);
   const sender: Sender = {
     accountAddress: senderAddress,
@@ -199,14 +212,14 @@ const sendIBC = async (senderAddress: string) => {
     sourcePort: "transfer",
     sourceChannel: "channel-11",
     // Token
-    amount: parseEther("0.1").toString(),
+    amount,
     denom: "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9",
     // Addresses
-    receiver: "cre1fy45cf4xh55wkyn6rfqxynsu8u7f9qhqrgscfu",
+    receiver: receiverAddress,
     // Timeout
     revisionNumber: 1,
-    revisionHeight: 6700000,
-    timeoutTimestamp: "1687777059000000000",
+    revisionHeight: (await fetchLastBlockCrescent()) + 100,
+    timeoutTimestamp: (Date.now() + 600000).toString() + "000000",
   };
 
   const tx: TxPayload = createTxIBCMsgTransfer(context, params);
@@ -248,19 +261,47 @@ const sendIBC = async (senderAddress: string) => {
 };
 
 export default function IBC() {
-  const [address, setAddress] = useState<string | undefined>();
-  const [balance, setBalance] = useState<string | undefined>();
+  const [addressEvmos, setAddressEvmos] = useState<string | undefined>();
+  const [addressCrescent, setAddressCresent] = useState<string | undefined>();
+  const [balance, setBalance] = useState(0);
+  const [modalConvertOpen, setModalConvertOpen] = useState(false);
+  const [modalSendOpen, setModalSendOpen] = useState(false);
+  const [toConvert, setToConvert] = useState(0);
+  const [toSend, setToSend] = useState(0);
+  const { data } = useUserBalanceAndOffers();
+
+  const neokBalance = data?.balance.neokTokens || 0;
+
+  const handleModalClose = () => {
+    setModalConvertOpen(false);
+    setModalSendOpen(false);
+  };
 
   const handleConnect = async () => {
-    const address = await fetchAddress();
-    if (!address) {
+    const evmosAddress = await fetchAddress("evmos");
+    if (!evmosAddress) {
       console.log("user didn't connect I guess");
       return;
     }
-    setAddress(address);
-    const balance = await fetchBalanceByDenom(address, "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9");
-    setBalance(formatEther(balance.balance.amount));
-    console.log(await fetchAccount(address));
+    setAddressEvmos(evmosAddress);
+
+    const crescentAddress = await fetchAddress("crescent");
+    if (!crescentAddress) {
+      console.log("user didn't connect I guess");
+      return;
+    }
+    setAddressCresent(crescentAddress);
+    const balance = await fetchBalanceByDenom(evmosAddress, "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9");
+    setBalance(parseFloat(formatEther(balance.balance.amount)));
+    console.log(await fetchAccount(evmosAddress));
+  };
+
+  const handleConvertTokens = async () => {
+    convertERC20(addressEvmos!, parseEther(toConvert.toString()).toString());
+  };
+
+  const handleSendTokens = async () => {
+    sendIBC(addressEvmos!, addressCrescent!, parseEther(toConvert.toString()).toString());
   };
 
   return (
@@ -273,7 +314,10 @@ export default function IBC() {
                 🤩 IBC Exxxtravaganza 🤩
               </Typography>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                {address}
+                {addressEvmos}
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                {addressCrescent}
               </Typography>
               <Button variant="contained" color="primary" onClick={() => handleConnect()}>
                 Connect Keplr
@@ -286,14 +330,70 @@ export default function IBC() {
           <Paper sx={paperSx}>
             <div>
               <Typography variant="h5" sx={{ mb: 2 }}>
-                💱 Convert from ERC20 to IBC 💱
+                💱 Convert from ERC-20 to IBC 💱
               </Typography>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                ? ERC-20 NEOK
+                {neokBalance} ERC-20 NEOK
               </Typography>
-              <Button variant="contained" color="primary" onClick={() => convertERC20(address)}>
-                Convert 1 NEOK
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={neokBalance === 0}
+                onClick={() => setModalConvertOpen(true)}
+              >
+                Convert NEOK
               </Button>
+
+              <Modal open={modalConvertOpen} onClose={handleModalClose} size="medium">
+                <>
+                  <Typography variant="h5">Convert tokens</Typography>
+                  <Box sx={{ p: 4 }}>
+                    <Slider
+                      size="small"
+                      value={toConvert}
+                      max={neokBalance}
+                      aria-label="Small"
+                      valueLabelDisplay="auto"
+                      step={1}
+                      marks={[
+                        {
+                          value: neokBalance,
+                          label: "Max Tokens",
+                        },
+                      ]}
+                      onChange={(_, value) => setToConvert(value as number)}
+                    />
+                  </Box>
+                  <Box sx={{ textAlign: "center" }}>
+                    <TextField
+                      id="tokens-number"
+                      label="Tokens"
+                      type="number"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      value={toConvert}
+                      onChange={(e) => {
+                        const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
+                        setToConvert(Math.min(inputValue, neokBalance));
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ textAlign: "center", pt: 4 }}>
+                    <LoadingButton
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      sx={{ mt: 2 }}
+                      disabled={toConvert === 0}
+                      onClick={handleConvertTokens}
+                      loading={false}
+                    >
+                      Convert tokens
+                    </LoadingButton>
+                  </Box>
+                </>
+              </Modal>
             </div>
           </Paper>
         </Grid>
@@ -307,9 +407,65 @@ export default function IBC() {
               <Typography variant="h6" sx={{ mb: 2 }}>
                 {balance} NEOK
               </Typography>
-              <Button variant="contained" color="primary" onClick={() => sendIBC(address)}>
-                send IBC lol sure thing
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={balance === 0}
+                onClick={() => setModalSendOpen(true)}
+              >
+                Send to Crescent
               </Button>
+
+              <Modal open={modalSendOpen} onClose={handleModalClose} size="medium">
+                <>
+                  <Typography variant="h5">Convert tokens</Typography>
+                  <Box sx={{ p: 4 }}>
+                    <Slider
+                      size="small"
+                      value={toSend}
+                      max={balance}
+                      aria-label="Small"
+                      valueLabelDisplay="auto"
+                      step={1}
+                      marks={[
+                        {
+                          value: balance,
+                          label: "Max Tokens",
+                        },
+                      ]}
+                      onChange={(_, value) => setToSend(value as number)}
+                    />
+                  </Box>
+                  <Box sx={{ textAlign: "center" }}>
+                    <TextField
+                      id="tokens-number"
+                      label="Tokens"
+                      type="number"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      value={toSend}
+                      onChange={(e) => {
+                        const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
+                        setToSend(Math.min(inputValue, balance));
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ textAlign: "center", pt: 4 }}>
+                    <LoadingButton
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      sx={{ mt: 2 }}
+                      disabled={toSend === 0}
+                      onClick={handleSendTokens}
+                      loading={false}
+                    >
+                      Send
+                    </LoadingButton>
+                  </Box>
+                </>
+              </Modal>
             </div>
           </Paper>
         </Grid>
