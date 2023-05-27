@@ -1,5 +1,5 @@
 import { evmosToEth } from "@evmos/address-converter";
-import { createMsgConvertERC20, createTxRaw } from "@evmos/proto";
+import { createTxRaw } from "@evmos/proto";
 import {
   AccountResponse,
   BalanceByDenomResponse,
@@ -13,13 +13,11 @@ import {
   Fee,
   IBCMsgTransferParams,
   MsgConvertERC20Params,
-  MsgSendParams,
   Sender,
   TxContext,
   TxPayload,
   createTxIBCMsgTransfer,
   createTxMsgConvertERC20,
-  createTxMsgSend,
 } from "@evmos/transactions";
 import { Window as KeplrWindow } from "@keplr-wallet/types";
 import { Long } from "cosmjs-types/helpers";
@@ -32,6 +30,7 @@ import { Box, Button, Grid, Paper, Slider, TextField, Typography } from "@mui/ma
 
 import Modal from "@components/Modal";
 
+import { useContracts } from "@hooks/useContracts";
 import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
 const chain: Chain = {
@@ -125,7 +124,7 @@ const convertERC20 = async (senderAddress: string, amount: string) => {
   const fee: Fee = {
     amount: "10000000",
     denom: "aevmos",
-    gas: "5000000",
+    gas: "2000000",
   };
 
   const memo = "";
@@ -263,14 +262,13 @@ const sendIBC = async (senderAddress: string, receiverAddress: string, amount: s
 export default function IBC() {
   const [addressEvmos, setAddressEvmos] = useState<string | undefined>();
   const [addressCrescent, setAddressCresent] = useState<string | undefined>();
-  const [balance, setBalance] = useState(0);
+  const [balanceERC, setBalanceERC] = useState(0);
+  const [balanceIBC, setBalanceIBC] = useState(0);
   const [modalConvertOpen, setModalConvertOpen] = useState(false);
   const [modalSendOpen, setModalSendOpen] = useState(false);
   const [toConvert, setToConvert] = useState(0);
   const [toSend, setToSend] = useState(0);
-  const { data } = useUserBalanceAndOffers();
-
-  const neokBalance = data?.balance.neokTokens || 0;
+  const { neokingdomTokenContract } = useContracts();
 
   const handleModalClose = () => {
     setModalConvertOpen(false);
@@ -291,8 +289,12 @@ export default function IBC() {
       return;
     }
     setAddressCresent(crescentAddress);
-    const balance = await fetchBalanceByDenom(evmosAddress, "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9");
-    setBalance(parseFloat(formatEther(balance.balance.amount)));
+
+    const balanceERC = await neokingdomTokenContract!.balanceOf(evmosToEth(evmosAddress));
+    setBalanceERC(parseFloat(formatEther(balanceERC)));
+
+    const balanceIBC = await fetchBalanceByDenom(evmosAddress, "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9");
+    setBalanceIBC(parseFloat(formatEther(balanceIBC.balance.amount)));
     console.log(await fetchAccount(evmosAddress));
   };
 
@@ -301,7 +303,7 @@ export default function IBC() {
   };
 
   const handleSendTokens = async () => {
-    sendIBC(addressEvmos!, addressCrescent!, parseEther(toConvert.toString()).toString());
+    sendIBC(addressEvmos!, addressCrescent!, parseEther(toSend.toString()).toString());
   };
 
   return (
@@ -333,15 +335,15 @@ export default function IBC() {
                 💱 Convert from ERC-20 to IBC 💱
               </Typography>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                {neokBalance} ERC-20 NEOK
+                {balanceERC} NEOK
               </Typography>
               <Button
                 variant="contained"
                 color="primary"
-                disabled={neokBalance === 0}
+                disabled={balanceERC === 0}
                 onClick={() => setModalConvertOpen(true)}
               >
-                Convert NEOK
+                Convert to IBC
               </Button>
 
               <Modal open={modalConvertOpen} onClose={handleModalClose} size="medium">
@@ -351,13 +353,13 @@ export default function IBC() {
                     <Slider
                       size="small"
                       value={toConvert}
-                      max={neokBalance}
+                      max={balanceERC}
                       aria-label="Small"
                       valueLabelDisplay="auto"
                       step={1}
                       marks={[
                         {
-                          value: neokBalance,
+                          value: balanceERC,
                           label: "Max Tokens",
                         },
                       ]}
@@ -375,7 +377,7 @@ export default function IBC() {
                       value={toConvert}
                       onChange={(e) => {
                         const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
-                        setToConvert(Math.min(inputValue, neokBalance));
+                        setToConvert(Math.min(inputValue, balanceERC));
                       }}
                     />
                   </Box>
@@ -405,12 +407,12 @@ export default function IBC() {
                 💰 IBC NEOK balance 💰
               </Typography>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                {balance} NEOK
+                {balanceIBC} NEOK
               </Typography>
               <Button
                 variant="contained"
                 color="primary"
-                disabled={balance === 0}
+                disabled={balanceIBC === 0}
                 onClick={() => setModalSendOpen(true)}
               >
                 Send to Crescent
@@ -418,18 +420,18 @@ export default function IBC() {
 
               <Modal open={modalSendOpen} onClose={handleModalClose} size="medium">
                 <>
-                  <Typography variant="h5">Convert tokens</Typography>
+                  <Typography variant="h5">IBC transfer to Crescent</Typography>
                   <Box sx={{ p: 4 }}>
                     <Slider
                       size="small"
                       value={toSend}
-                      max={balance}
+                      max={balanceIBC}
                       aria-label="Small"
                       valueLabelDisplay="auto"
                       step={1}
                       marks={[
                         {
-                          value: balance,
+                          value: balanceIBC,
                           label: "Max Tokens",
                         },
                       ]}
@@ -447,7 +449,7 @@ export default function IBC() {
                       value={toSend}
                       onChange={(e) => {
                         const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
-                        setToSend(Math.min(inputValue, balance));
+                        setToSend(Math.min(inputValue, balanceIBC));
                       }}
                     />
                   </Box>
