@@ -26,7 +26,7 @@ import { formatEther, parseEther } from "ethers/lib/utils.js";
 import { useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Grid, Paper, Slider, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Grid, Paper, Slider, TextField, Typography } from "@mui/material";
 
 import Modal from "@components/Modal";
 
@@ -308,12 +308,15 @@ export default function IBC() {
 
   return (
     <>
+      <Alert variant="filled" severity="warning" sx={{ mb: 2 }}>
+        HERE BE DRAGONS: these features are not stable yet, use with caution.
+      </Alert>
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} lg={12}>
           <Paper sx={paperSx}>
             <div>
               <Typography variant="h5" sx={{ mb: 2 }}>
-                🤩 IBC Exxxtravaganza 🤩
+                🤩 IBC Extravaganza 🤩
               </Typography>
               <Typography variant="h6" sx={{ mb: 2 }}>
                 {addressEvmos}
