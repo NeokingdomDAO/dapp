@@ -23,7 +23,7 @@ import { Window as KeplrWindow } from "@keplr-wallet/types";
 import { Long } from "cosmjs-types/helpers";
 import { formatEther, parseEther } from "ethers/lib/utils.js";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
 import { Alert, Box, Button, Grid, Paper, Slider, TextField, Typography } from "@mui/material";
@@ -266,9 +266,20 @@ export default function IBC() {
   const [balanceIBC, setBalanceIBC] = useState(0);
   const [modalConvertOpen, setModalConvertOpen] = useState(false);
   const [modalSendOpen, setModalSendOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [toConvert, setToConvert] = useState(0);
   const [toSend, setToSend] = useState(0);
   const { neokingdomTokenContract } = useContracts();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (addressEvmos && addressCrescent) {
+        handleConnect();
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleModalClose = () => {
     setModalConvertOpen(false);
@@ -295,15 +306,20 @@ export default function IBC() {
 
     const balanceIBC = await fetchBalanceByDenom(evmosAddress, "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9");
     setBalanceIBC(parseFloat(formatEther(balanceIBC.balance.amount)));
-    console.log(await fetchAccount(evmosAddress));
   };
 
   const handleConvertTokens = async () => {
-    convertERC20(addressEvmos!, parseEther(toConvert.toString()).toString());
+    setIsLoading(true);
+    await convertERC20(addressEvmos!, parseEther(toConvert.toString()).toString());
+    setIsLoading(false);
+    handleModalClose();
   };
 
   const handleSendTokens = async () => {
-    sendIBC(addressEvmos!, addressCrescent!, parseEther(toSend.toString()).toString());
+    setIsLoading(true);
+    await sendIBC(addressEvmos!, addressCrescent!, parseEther(toSend.toString()).toString());
+    setIsLoading(false);
+    handleModalClose();
   };
 
   return (
@@ -392,7 +408,7 @@ export default function IBC() {
                       sx={{ mt: 2 }}
                       disabled={toConvert === 0}
                       onClick={handleConvertTokens}
-                      loading={false}
+                      loading={isLoading}
                     >
                       Convert tokens
                     </LoadingButton>
@@ -464,7 +480,7 @@ export default function IBC() {
                       sx={{ mt: 2 }}
                       disabled={toSend === 0}
                       onClick={handleSendTokens}
-                      loading={false}
+                      loading={isLoading}
                     >
                       Send
                     </LoadingButton>
