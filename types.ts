@@ -1,3 +1,5 @@
+import { Window as KeplrWindow } from "@keplr-wallet/types";
+
 export type ResolutionVoter = {
   id: string;
   votingPower: string;
@@ -224,3 +226,7 @@ export type Task = {
     name: string;
   } | null;
 };
+
+declare global {
+  interface Window extends KeplrWindow {}
+}

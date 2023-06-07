@@ -33,7 +33,11 @@ import Modal from "@components/Modal";
 import { useContracts } from "@hooks/useContracts";
 import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
-const chain: Chain = {
+const chainCrescent: Chain = {
+  cosmosChainId: "crescent-1",
+};
+
+const chainEvmos: Chain = {
   chainId: 9001,
   cosmosChainId: "evmos_9001-2",
 };
@@ -53,7 +57,9 @@ export interface TokenPairResponse {
   ];
 }
 
-const nodeUrl = "https://rest.cosmos.directory/evmos";
+const nodeUrlEvmos = "https://rest.cosmos.directory/evmos";
+const nodeUrlCrescent = "https://rest.cosmos.directory/crescent";
+
 const restOptions = {
   method: "GET",
   headers: { "Content-Type": "application/json" },
@@ -65,7 +71,7 @@ const fetchLastBlockCrescent = async () => {
   return parseInt(result.block.header.height);
 };
 
-const fetchBalanceByDenom = async (address: string, denom: string) => {
+const fetchBalanceByDenom = async (address: string, denom: string, nodeUrl: string) => {
   const queryEndpoint = `${nodeUrl}${generateEndpointBalanceByDenom(address, denom)}`;
   const rawResult = await fetch(queryEndpoint, restOptions);
 
@@ -74,7 +80,7 @@ const fetchBalanceByDenom = async (address: string, denom: string) => {
   return result;
 };
 
-const fetchERC20ContractAddress = async () => {
+const fetchERC20ContractAddress = async (nodeUrl: string) => {
   const queryEndpoint = `${nodeUrl}/evmos/erc20/v1/token_pairs`;
   const rawResult = await fetch(queryEndpoint, restOptions);
 
@@ -91,7 +97,7 @@ const fetchAddress = async (chain: "evmos" | "crescent" = "evmos") => {
   }
 };
 
-const fetchAccount = async (address: string) => {
+const fetchAccount = async (address: string, nodeUrl: string) => {
   // Find node urls for either mainnet or testnet here:
   // https://docs.evmos.org/develop/api/networks.
   const queryEndpoint = `${nodeUrl}${generateEndpointAccount(address)}`;
@@ -112,7 +118,7 @@ const convertERC20 = async (senderAddress: string, amount: string) => {
   console.log("Converting", amount);
 
   const senderHexAddress = evmosToEth(senderAddress);
-  const account = await fetchAccount(senderAddress);
+  const account = await fetchAccount(senderAddress, nodeUrlEvmos);
 
   const sender: Sender = {
     accountAddress: senderAddress,
@@ -130,7 +136,7 @@ const convertERC20 = async (senderAddress: string, amount: string) => {
   const memo = "";
 
   const context: TxContext = {
-    chain,
+    chain: chainEvmos,
     sender,
     fee,
     memo,
@@ -146,10 +152,10 @@ const convertERC20 = async (senderAddress: string, amount: string) => {
   const tx: TxPayload = createTxMsgConvertERC20(context, params);
   const { signDirect } = tx;
 
-  const signResponse = await window?.keplr?.signDirect(chain.cosmosChainId, sender.accountAddress, {
+  const signResponse = await window?.keplr?.signDirect(chainEvmos.cosmosChainId, sender.accountAddress, {
     bodyBytes: signDirect.body.toBinary(),
     authInfoBytes: signDirect.authInfo.toBinary(),
-    chainId: chain.cosmosChainId,
+    chainId: chainEvmos.cosmosChainId,
     accountNumber: new Long(sender.accountNumber),
   });
 
@@ -174,22 +180,33 @@ const convertERC20 = async (senderAddress: string, amount: string) => {
     body: generatePostBodyBroadcast(signedTx),
   };
 
-  const broadcastEndpoint = `${nodeUrl}${generateEndpointBroadcast()}`;
+  const broadcastEndpoint = `${nodeUrlEvmos}${generateEndpointBroadcast()}`;
   const broadcastPost = await fetch(broadcastEndpoint, postOptions);
 
   const response = await broadcastPost.json();
   console.log("broadcasted", response);
 };
 
-const sendIBC = async (senderAddress: string, receiverAddress: string, amount: string) => {
+const sendIBC = async (senderAddress: string, receiverAddress: string, amount: string, nodeUrl: string) => {
   console.log("Sending ", amount);
-  const account = await fetchAccount(senderAddress);
-  const sender: Sender = {
-    accountAddress: senderAddress,
-    sequence: parseInt(account.account.base_account.sequence),
-    accountNumber: parseInt(account.account.base_account.account_number),
-    pubkey: account.account.base_account.pub_key!.key,
-  };
+  const account = await fetchAccount(senderAddress, nodeUrl);
+  console.log(account, Object.keys(account));
+  let sender: Sender;
+  if (nodeUrl === nodeUrlCrescent) {
+    sender = {
+      accountAddress: senderAddress,
+      sequence: parseInt(account.account.sequence),
+      accountNumber: parseInt(account.account.account_number),
+      pubkey: account.account.pub_key.key,
+    };
+  } else {
+    sender = {
+      accountAddress: senderAddress,
+      sequence: parseInt(account.account.base_account.sequence),
+      accountNumber: parseInt(account.account.base_account.account_number),
+      pubkey: account.account.base_account.pub_key!.key,
+    };
+  }
 
   const fee: Fee = {
     amount: "10000000",
@@ -198,6 +215,8 @@ const sendIBC = async (senderAddress: string, receiverAddress: string, amount: s
   };
 
   const memo = "";
+
+  const chain = nodeUrl === "crescent" ? chainCrescent : chainEvmos;
 
   const context: TxContext = {
     chain,
@@ -252,7 +271,7 @@ const sendIBC = async (senderAddress: string, receiverAddress: string, amount: s
     body: generatePostBodyBroadcast(signedTx),
   };
 
-  const broadcastEndpoint = `${nodeUrl}${generateEndpointBroadcast()}`;
+  const broadcastEndpoint = `${nodeUrlEvmos}${generateEndpointBroadcast()}`;
   const broadcastPost = await fetch(broadcastEndpoint, postOptions);
 
   const response = await broadcastPost.json();
@@ -264,11 +283,15 @@ export default function IBC() {
   const [addressCrescent, setAddressCresent] = useState<string | undefined>();
   const [balanceERC, setBalanceERC] = useState(0);
   const [balanceIBC, setBalanceIBC] = useState(0);
+  const [balanceIBC2, setBalanceIBC2] = useState(0);
+  const [balanceIBC3, setBalanceIBC3] = useState(0);
   const [modalConvertOpen, setModalConvertOpen] = useState(false);
   const [modalSendOpen, setModalSendOpen] = useState(false);
+  const [modalSendEvmosOpen, setModalSendEvmosOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [toConvert, setToConvert] = useState(0);
   const [toSend, setToSend] = useState(0);
+  const [toSendEvmos, setToSendEvmos] = useState(0);
   const { neokingdomTokenContract } = useContracts();
 
   useEffect(() => {
@@ -284,6 +307,7 @@ export default function IBC() {
   const handleModalClose = () => {
     setModalConvertOpen(false);
     setModalSendOpen(false);
+    setModalSendEvmosOpen(false);
   };
 
   const handleConnect = async () => {
@@ -304,8 +328,26 @@ export default function IBC() {
     const balanceERC = await neokingdomTokenContract!.balanceOf(evmosToEth(evmosAddress));
     setBalanceERC(parseFloat(formatEther(balanceERC)));
 
-    const balanceIBC = await fetchBalanceByDenom(evmosAddress, "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9");
+    const balanceIBC = await fetchBalanceByDenom(
+      evmosAddress,
+      "erc20/0x655ecB57432CC1370f65e5dc2309588b71b473A9",
+      nodeUrlEvmos,
+    );
     setBalanceIBC(parseFloat(formatEther(balanceIBC.balance.amount)));
+
+    const balanceIBC2 = await fetchBalanceByDenom(
+      crescentAddress,
+      "ibc/4DD3698C2FCEA87CDE843D3EA6228F2589A4DF6655A7C16D766010D9CA2E69FB",
+      nodeUrlCrescent,
+    );
+    setBalanceIBC2(parseFloat(formatEther(balanceIBC2.balance.amount)));
+
+    const balanceIBC3 = await fetchBalanceByDenom(
+      evmosAddress,
+      "ibc/4DD3698C2FCEA87CDE843D3EA6228F2589A4DF6655A7C16D766010D9CA2E69FB",
+      nodeUrlEvmos,
+    );
+    setBalanceIBC3(parseFloat(formatEther(balanceIBC3.balance.amount)));
   };
 
   const handleConvertTokens = async () => {
@@ -317,7 +359,14 @@ export default function IBC() {
 
   const handleSendTokens = async () => {
     setIsLoading(true);
-    await sendIBC(addressEvmos!, addressCrescent!, parseEther(toSend.toString()).toString());
+    await sendIBC(addressEvmos!, addressCrescent!, parseEther(toSend.toString()).toString(), nodeUrlEvmos);
+    setIsLoading(false);
+    handleModalClose();
+  };
+
+  const handleSendTokensEvmos = async () => {
+    setIsLoading(true);
+    await sendIBC(addressCrescent!, addressEvmos!, parseEther(toSendEvmos.toString()).toString(), nodeUrlCrescent);
     setIsLoading(false);
     handleModalClose();
   };
@@ -487,6 +536,98 @@ export default function IBC() {
                   </Box>
                 </>
               </Modal>
+            </div>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6} lg={6}>
+          <Paper sx={paperSx}>
+            <div>
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                💰 IBC NEOK balance2 💰
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                {balanceIBC2} NEOK
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={balanceIBC2 === 0}
+                onClick={() => setModalSendEvmosOpen(true)}
+              >
+                Send to EVMOS
+              </Button>
+
+              <Modal open={modalSendEvmosOpen} onClose={handleModalClose} size="medium">
+                <>
+                  <Typography variant="h5">IBC transfer to EVMOS</Typography>
+                  <Box sx={{ p: 4 }}>
+                    <Slider
+                      size="small"
+                      value={toSendEvmos}
+                      max={balanceIBC2}
+                      aria-label="Small"
+                      valueLabelDisplay="auto"
+                      step={1}
+                      marks={[
+                        {
+                          value: balanceIBC2,
+                          label: "Max Tokens",
+                        },
+                      ]}
+                      onChange={(_, value) => setToSendEvmos(value as number)}
+                    />
+                  </Box>
+                  <Box sx={{ textAlign: "center" }}>
+                    <TextField
+                      id="tokens-number"
+                      label="Tokens"
+                      type="number"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      value={toSendEvmos}
+                      onChange={(e) => {
+                        const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
+                        setToSend(Math.min(inputValue, balanceIBC2));
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ textAlign: "center", pt: 4 }}>
+                    <LoadingButton
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      sx={{ mt: 2 }}
+                      disabled={toSendEvmos === 0}
+                      onClick={handleSendTokensEvmos}
+                      loading={isLoading}
+                    >
+                      Send
+                    </LoadingButton>
+                  </Box>
+                </>
+              </Modal>
+            </div>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6} lg={6}>
+          <Paper sx={paperSx}>
+            <div>
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                💰 IBC NEOK balance3 💰
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                {balanceIBC3} NEOK
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={balanceIBC3 === 0}
+                onClick={() => setModalSendEvmosOpen(true)}
+              >
+                Send to EVMOS
+              </Button>
             </div>
           </Paper>
         </Grid>

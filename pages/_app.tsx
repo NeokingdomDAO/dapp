@@ -22,6 +22,7 @@ import Layout from "@components/Layout";
 import useUser from "@hooks/useUser";
 
 import ContractsProvider from "../components/ContractsProvider";
+import KeplrProvider from "../components/ibc/KeplrProvider";
 import { newTheme } from "../styles/theme";
 import { META } from "./_document";
 
@@ -92,12 +93,14 @@ export default function App({ Component, pageProps }: DappProps) {
                 </Box>
               )}
               {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
-                <ContractsProvider>
-                  <>
-                    <CheckConnected fullWidth={!!Component.fullWidth} />
-                    <Component {...pageProps} />
-                  </>
-                </ContractsProvider>
+                <KeplrProvider>
+                  <ContractsProvider>
+                    <>
+                      <CheckConnected fullWidth={!!Component.fullWidth} />
+                      <Component {...pageProps} />
+                    </>
+                  </ContractsProvider>
+                </KeplrProvider>
               )}
             </Layout>
           </StyledSnackbarProvider>

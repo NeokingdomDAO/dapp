@@ -207,6 +207,14 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
                 variant={isActive("/shareholders") ? "filled" : "outlined"}
                 clickable
               />
+
+              <Chip
+                label="IBC tools"
+                component={Link}
+                href="/ibc"
+                variant={isActive("/ibc") ? "filled" : "outlined"}
+                clickable
+              />
             </Stack>
           </Toolbar>
         </AppBar>
