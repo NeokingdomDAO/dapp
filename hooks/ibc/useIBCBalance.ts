@@ -1,18 +1,34 @@
+import { evmosToEth } from "@evmos/address-converter";
 import { BalanceByDenomResponse, generateEndpointBalanceByDenom } from "@evmos/provider";
+import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 
 import { useEffect, useState } from "react";
 
+import { useContracts } from "@hooks/useContracts";
+
 import { COSMOS_NODE_URL, DENOMS, restOptions } from "./utils";
 
+type Balance = {
+  balance?: BigNumber;
+  balanceFloat?: number;
+  ibc?: BigNumber;
+  ibcFloat?: number;
+  erc?: BigNumber;
+  ercFloat?: number;
+};
+
 export default function useIBCBalance({ address }: { address?: string }) {
-  const [balance, setBalance] = useState<string>();
-  const [balanceFloat, setBalanceFloat] = useState<number>();
+  const { neokingdomTokenContract } = useContracts();
+  const [balance, setBalance] = useState<Balance>({});
   const [error, setError] = useState<string>();
 
   useEffect(() => {
     let nodeUrl: string;
     let denom: string;
+    let ethAddress: string;
+    let b: Balance = {};
+
     if (!address) {
       return;
     }
@@ -20,6 +36,7 @@ export default function useIBCBalance({ address }: { address?: string }) {
     if (address.startsWith("evmos")) {
       nodeUrl = COSMOS_NODE_URL["evmos"];
       denom = DENOMS["evmos"];
+      ethAddress = evmosToEth(address);
     } else if (address.startsWith("cre")) {
       nodeUrl = COSMOS_NODE_URL["crescent"];
       denom = DENOMS["crescent"];
@@ -35,20 +52,33 @@ export default function useIBCBalance({ address }: { address?: string }) {
         rawResult = await fetch(queryEndpoint, restOptions);
       } catch (e) {
         setError((e as any).toString());
-        setBalance(undefined);
-        setBalanceFloat(undefined);
+        setBalance({});
         return;
       }
       const result = (await rawResult.json()) as BalanceByDenomResponse;
-      console.log("useIBCBalance", result);
       const amount = result.balance.amount;
-      setBalance(amount);
-      setBalanceFloat(parseFloat(formatEther(amount)));
+      b.ibc = BigNumber.from(amount);
+      b.ibcFloat = parseFloat(formatEther(amount));
+
+      b.erc = BigNumber.from(0);
+      b.ercFloat = 0;
+
+      if (ethAddress) {
+        const balanceErc20 = await neokingdomTokenContract!.balanceOf(ethAddress);
+        b.erc = balanceErc20;
+        b.ercFloat = parseFloat(formatEther(b.erc));
+      }
+
+      b.balance = b.ibc.add(b.erc);
+      b.balanceFloat = parseFloat(formatEther(b.balance));
+      console.log("useIBCBalance", ethAddress, b);
+      setBalance(b);
     };
+
     reload();
     const interval = setInterval(reload, 5000);
     return () => clearInterval(interval);
   }, [address]);
 
-  return { balance, balanceFloat, error };
+  return { ...balance, error };
 }

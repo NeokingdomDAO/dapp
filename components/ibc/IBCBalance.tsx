@@ -15,7 +15,7 @@ import { CHAIN_TO_NAME, CosmosChains } from "@hooks/ibc/utils";
 
 export default function IBCBalance({ chain }: { chain: CosmosChains }) {
   const otherChain = chain === "evmos" ? "crescent" : "evmos";
-  const { address, error: addressError } = useIBCAccount(chain);
+  const { address, ethAddress, error: addressError } = useIBCAccount(chain);
   const { address: otherAddress, error: otherAddressError } = useIBCAccount(otherChain);
   const { balance, balanceFloat, error: balanceError } = useIBCBalance({ address });
   const [modalOpen, setModalOpen] = useState(false);
@@ -24,7 +24,7 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
 
   const handleSendTokens = async () => {
     await send(address!, otherAddress!, parseEther(toSend.toString()).toString());
-    //handleModalClose();
+    setModalOpen(false);
   };
 
   return (
@@ -36,7 +36,7 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
         <Alert severity="error">{addressError}</Alert>
       ) : balanceError ? (
         <Alert severity="error">{balanceError}</Alert>
-      ) : balance && balanceFloat ? (
+      ) : balance && balanceFloat !== undefined ? (
         <>
           <p>
             Address: {address}
@@ -48,6 +48,20 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
             >
               <LaunchIcon fontSize="inherit" />
             </IconButton>
+            <br />
+            {ethAddress && (
+              <>
+                EVM Address: {ethAddress}
+                <IconButton
+                  aria-label="open in EVMOS block explorer"
+                  size="small"
+                  href={`https://escan.live/address/${ethAddress}`}
+                  target="_new"
+                >
+                  <LaunchIcon fontSize="inherit" />
+                </IconButton>
+              </>
+            )}
             <br />
             Balance: {balance ? formatEther(balance) : "…"} NEOK
           </p>
@@ -81,7 +95,7 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
                   onChange={(_, value) => setToSend(value as number)}
                 />
               </Box>
-              <Box sx={{ textAlign: "center" }}>
+              <Box sx={{ textAlign: "center" }} mb={5}>
                 <TextField
                   id="tokens-number"
                   label="Tokens"
@@ -96,6 +110,10 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
                   }}
                 />
               </Box>
+
+              <Typography variant="body1">
+                Receiver: <strong>{otherAddress}</strong>
+              </Typography>
               <Box sx={{ textAlign: "center", pt: 4 }}>
                 <LoadingButton
                   fullWidth
