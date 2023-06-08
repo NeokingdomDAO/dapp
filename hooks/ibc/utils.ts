@@ -35,10 +35,15 @@ export const restOptions = {
   headers: { "Content-Type": "application/json" },
 };
 
-const fetchLastBlockCrescent = async () => {
-  const rawResult = await fetch("https://rest.cosmos.directory/crescent/blocks/latest");
-  const result = await rawResult.json();
-  return parseInt(result.block.header.height);
+const fetchLastBlock = async (chain: CosmosChains) => {
+  if (chain === "evmos") {
+    // Make it dynamic
+    return 13794606;
+  } else {
+    const rawResult = await fetch("https://rest.cosmos.directory/crescent/blocks/latest");
+    const result = await rawResult.json();
+    return parseInt(result.block.header.height);
+  }
 };
 
 const fetchAccount = async (address: string, nodeUrl: string) => {
@@ -56,6 +61,101 @@ const fetchAccount = async (address: string, nodeUrl: string) => {
 
   const result = await rawResult.json();
   return result as AccountResponse;
+};
+
+// unable to resolve type URL /ethermint.crypto.v1.ethsecp256k1.PubKey: tx parse error
+export const sendFromCrescent = async (senderAddress: string, receiverAddress: string, amount: string) => {
+  const nodeUrl = COSMOS_NODE_URL["crescent"];
+
+  console.log("Sending ", amount);
+  const account = await fetchAccount(senderAddress, nodeUrl);
+  console.log(account, Object.keys(account));
+  let sender: Sender;
+
+  sender = {
+    accountAddress: senderAddress,
+    // @ts-ignore
+    sequence: parseInt(account.account.sequence),
+    // @ts-ignore
+    accountNumber: parseInt(account.account.account_number),
+    // @ts-ignore
+    pubkey: account.account.pub_key.key,
+  };
+
+  const fee: Fee = {
+    amount: "1000000",
+    denom: "ucre",
+    gas: "2000000",
+  };
+
+  const memo = "";
+
+  //const chain = nodeUrl === "crescent" ? chainCrescent : chainEvmos;
+
+  const chain = {
+    chainId: 1,
+    cosmosChainId: "crescent-1",
+  };
+
+  const context: TxContext = {
+    chain,
+    sender,
+    fee,
+    memo,
+  };
+
+  const params: IBCMsgTransferParams = {
+    // Connection
+    sourcePort: "transfer",
+    sourceChannel: "channel-7",
+    // Token
+    amount,
+    denom: DENOMS["crescent"],
+    // Addresses
+    receiver: receiverAddress,
+    // Timeout
+    revisionNumber: 1,
+    revisionHeight: (await fetchLastBlock("evmos")) + 100,
+    timeoutTimestamp: (Date.now() + 600000).toString() + "000000",
+  };
+
+  const tx: TxPayload = createTxIBCMsgTransfer(context, params);
+  const { signDirect } = tx;
+
+  const signResponse = await window?.keplr?.signDirect(chain.cosmosChainId, sender.accountAddress, {
+    bodyBytes: signDirect.body.toBinary(),
+    authInfoBytes: signDirect.authInfo.toBinary(),
+    chainId: chain.cosmosChainId,
+    accountNumber: new Long(sender.accountNumber),
+  });
+
+  if (!signResponse) {
+    console.log("user denied sig");
+    return;
+  }
+
+  console.log("Tx signed");
+
+  const signatures = [new Uint8Array(Buffer.from(signResponse.signature.signature, "base64"))];
+
+  const { signed } = signResponse;
+
+  const signedTx = createTxRaw(signed.bodyBytes, signed.authInfoBytes, signatures);
+
+  console.log("Raw tx", signedTx);
+
+  const postOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: generatePostBodyBroadcast(signedTx),
+  };
+
+  const broadcastEndpoint = `${nodeUrl}${generateEndpointBroadcast()}`;
+  const broadcastPost = await fetch(broadcastEndpoint, postOptions);
+
+  const response = await broadcastPost.json();
+
+  console.log("broadcasted", response);
 };
 
 export const sendFromEvmos = async (senderAddress: string, receiverAddress: string, amount: string) => {
@@ -106,7 +206,7 @@ export const sendFromEvmos = async (senderAddress: string, receiverAddress: stri
     receiver: receiverAddress,
     // Timeout
     revisionNumber: 1,
-    revisionHeight: (await fetchLastBlockCrescent()) + 100,
+    revisionHeight: (await fetchLastBlock("crescent")) + 100,
     timeoutTimestamp: (Date.now() + 600000).toString() + "000000",
   };
 
@@ -125,7 +225,7 @@ export const sendFromEvmos = async (senderAddress: string, receiverAddress: stri
     return;
   }
 
-  console.log("Tx signed");
+  console.log("Tx signed", signResponse);
 
   const signatures = [new Uint8Array(Buffer.from(signResponse.signature.signature, "base64"))];
 
@@ -147,4 +247,5 @@ export const sendFromEvmos = async (senderAddress: string, receiverAddress: stri
   const response = await broadcastPost.json();
 
   console.log("broadcasted", response);
+  return response;
 };
