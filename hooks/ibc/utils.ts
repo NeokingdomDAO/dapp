@@ -7,6 +7,9 @@ import {
 } from "@evmos/provider";
 import { Fee, IBCMsgTransferParams, Sender, TxContext, TxPayload, createTxIBCMsgTransfer } from "@evmos/transactions";
 import { Long } from "cosmjs-types/helpers";
+import { BigNumber } from "ethers";
+import { formatEther } from "ethers/lib/utils.js";
+import { SecretNetworkClient, stringToCoin } from "secretjs";
 
 export const CHAIN_TO_ID = {
   evmos: "evmos_9001-2",
@@ -33,6 +36,76 @@ export type CosmosChains = keyof typeof CHAIN_TO_ID;
 export const restOptions = {
   method: "GET",
   headers: { "Content-Type": "application/json" },
+};
+
+const getBalance = async () => {
+  const chainId = CHAIN_TO_ID["crescent"];
+  const url = COSMOS_NODE_URL["crescent"];
+
+  const secretjs = new SecretNetworkClient({
+    url,
+    chainId,
+  });
+
+  const balance = await secretjs.query.bank.balance(
+    {
+      address: "cre1fy45cf4xh55wkyn6rfqxynsu8u7f9qhqrgscfu",
+      denom: DENOMS["crescent"],
+    } /*,
+  // optional: query at a specific height (using an archive node) 
+  [["x-cosmos-block-height", "2000000"]]
+  */,
+  );
+
+  if (balance) {
+    const value = BigNumber.from(balance.balance?.amount);
+    console.log(`I have ${formatEther(value)} porcodio!`);
+  }
+};
+
+export const sendFromCrescent = async (senderAddress: string, receiverAddress: string, amount: string) => {
+  const chainId = CHAIN_TO_ID["crescent"];
+  const url = COSMOS_NODE_URL["crescent"];
+  if (!window.keplr) {
+    return;
+  }
+
+  await window.keplr.enable(chainId);
+
+  const keplrOfflineSigner = window.keplr.getOfflineSignerOnlyAmino(chainId);
+  const [{ address: myAddress }] = await keplrOfflineSigner.getAccounts();
+
+  const secretjs = new SecretNetworkClient({
+    url,
+    chainId,
+    wallet: keplrOfflineSigner,
+    walletAddress: myAddress,
+    encryptionUtils: window.keplr.getEnigmaUtils(chainId),
+  });
+
+  const tx = await secretjs.tx.ibc.transfer(
+    {
+      sender: senderAddress,
+      receiver: receiverAddress,
+      source_channel: "channel-7",
+      source_port: "transfer",
+      token: {
+        amount,
+        denom: DENOMS["crescent"],
+      },
+      timeout_timestamp: String(Math.floor(Date.now() / 1000) + 10 * 60), // 10 minutes
+      memo: "Complaining is silly. Either act or forget",
+    },
+    {
+      broadcastCheckIntervalMs: 100,
+      gasLimit: 200_000,
+      ibcTxsOptions: {
+        resolveResponsesCheckIntervalMs: 250,
+      },
+    },
+  );
+  console.log(tx);
+  return tx;
 };
 
 const fetchLastBlock = async (chain: CosmosChains) => {
@@ -64,7 +137,7 @@ const fetchAccount = async (address: string, nodeUrl: string) => {
 };
 
 // unable to resolve type URL /ethermint.crypto.v1.ethsecp256k1.PubKey: tx parse error
-export const sendFromCrescent = async (senderAddress: string, receiverAddress: string, amount: string) => {
+export const sendFromCrescent2 = async (senderAddress: string, receiverAddress: string, amount: string) => {
   const nodeUrl = COSMOS_NODE_URL["crescent"];
 
   console.log("Sending ", amount);
