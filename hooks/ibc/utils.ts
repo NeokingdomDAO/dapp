@@ -80,7 +80,8 @@ export const sendFromCrescent = async (senderAddress: string, receiverAddress: s
     chainId,
     wallet: keplrOfflineSigner,
     walletAddress: myAddress,
-    encryptionUtils: window.keplr.getEnigmaUtils(chainId),
+    // Only used in Secret
+    // encryptionUtils: window.keplr.getEnigmaUtils(chainId),
   });
 
   const tx = await secretjs.tx.ibc.transfer(
@@ -104,6 +105,7 @@ export const sendFromCrescent = async (senderAddress: string, receiverAddress: s
       },
     },
   );
+  // https://www.mintscan.io/evmos/txs/2AF50D0BA7925878F24FD26D9ADE29B22A267D7AD27D5BC5A15ED296F55F89F7
   console.log(tx);
   return tx;
 };
