@@ -9,6 +9,7 @@ import { Fee, IBCMsgTransferParams, Sender, TxContext, TxPayload, createTxIBCMsg
 import { Long } from "cosmjs-types/helpers";
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
+import { EnqueueSnackbar } from "notistack";
 import { SecretNetworkClient, stringToCoin } from "secretjs";
 
 export const CHAIN_TO_ID = {
@@ -19,6 +20,11 @@ export const CHAIN_TO_ID = {
 export const CHAIN_TO_NAME = {
   evmos: "EVMOS",
   crescent: "Crescent",
+} as const;
+
+export const OTHER_CHAIN = {
+  evmos: "crescent",
+  crescent: "evmos",
 } as const;
 
 export const COSMOS_NODE_URL = {
@@ -106,8 +112,7 @@ export const sendFromCrescent = async (senderAddress: string, receiverAddress: s
     },
   );
   // https://www.mintscan.io/evmos/txs/2AF50D0BA7925878F24FD26D9ADE29B22A267D7AD27D5BC5A15ED296F55F89F7
-  console.log(tx);
-  return tx;
+  return { snackbarId: null, response: tx };
 };
 
 const fetchLastBlock = async (chain: CosmosChains) => {
@@ -233,15 +238,17 @@ export const sendFromCrescent2 = async (senderAddress: string, receiverAddress: 
   console.log("broadcasted", response);
 };
 
-export const sendFromEvmos = async (senderAddress: string, receiverAddress: string, amount: string) => {
+export const sendFromEvmos = async (
+  senderAddress: string,
+  receiverAddress: string,
+  amount: string,
+  enqueueSnackbar: EnqueueSnackbar,
+) => {
   const nodeUrl = COSMOS_NODE_URL["evmos"];
 
-  console.log("Sending ", amount);
   const account = await fetchAccount(senderAddress, nodeUrl);
-  console.log(account, Object.keys(account));
-  let sender: Sender;
 
-  sender = {
+  const sender: Sender = {
     accountAddress: senderAddress,
     sequence: parseInt(account.account.base_account.sequence),
     accountNumber: parseInt(account.account.base_account.account_number),
@@ -255,8 +262,6 @@ export const sendFromEvmos = async (senderAddress: string, receiverAddress: stri
   };
 
   const memo = "";
-
-  //const chain = nodeUrl === "crescent" ? chainCrescent : chainEvmos;
 
   const chain = {
     chainId: 9001,
@@ -296,19 +301,19 @@ export const sendFromEvmos = async (senderAddress: string, receiverAddress: stri
   });
 
   if (!signResponse) {
-    console.log("user denied sig");
-    return;
+    throw new Error("User denied signature");
   }
 
-  console.log("Tx signed", signResponse);
+  const snackbarId = enqueueSnackbar("Transaction in progress, please wait...", {
+    variant: "info",
+    autoHideDuration: 10000,
+  });
 
   const signatures = [new Uint8Array(Buffer.from(signResponse.signature.signature, "base64"))];
 
   const { signed } = signResponse;
 
   const signedTx = createTxRaw(signed.bodyBytes, signed.authInfoBytes, signatures);
-
-  console.log("Raw tx", signedTx);
 
   const postOptions = {
     method: "POST",
@@ -321,6 +326,5 @@ export const sendFromEvmos = async (senderAddress: string, receiverAddress: stri
 
   const response = await broadcastPost.json();
 
-  console.log("broadcasted", response);
-  return response;
+  return { response, snackbarId };
 };

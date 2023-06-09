@@ -1,28 +1,33 @@
 import { useState } from "react";
 
+import { useSnackbar } from "@hooks/useSnackbar";
+
 import { sendFromCrescent, sendFromEvmos } from "./utils";
 
 export default function useIBCSend() {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const send = async (senderAddress: string, receiverAddress: string, amount: string) => {
-    setError(undefined);
-
     try {
       setIsLoading(true);
-      if (senderAddress.startsWith("evmos")) {
-        await sendFromEvmos(senderAddress, receiverAddress, amount);
-      } else {
-        await sendFromCrescent(senderAddress, receiverAddress, amount);
+      const res = senderAddress.startsWith("evmos")
+        ? await sendFromEvmos(senderAddress, receiverAddress, amount, enqueueSnackbar)
+        : await sendFromCrescent(senderAddress, receiverAddress, amount);
+      if (res?.snackbarId) {
+        closeSnackbar(res?.snackbarId);
       }
+      enqueueSnackbar(`Transaction correctly executed`, { variant: "success" });
+      setIsLoading(false);
     } catch (e) {
+      setIsLoading(false);
       console.error(e);
-      setError((e as any).toString());
+      enqueueSnackbar(`Transaction error: ${e}`, { variant: "error" });
+      return false;
     }
 
-    setIsLoading(false);
+    return true;
   };
 
-  return { send, isLoading, error };
+  return { send, isLoading };
 }

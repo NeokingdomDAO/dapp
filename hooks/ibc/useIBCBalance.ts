@@ -18,7 +18,7 @@ type Balance = {
   ercFloat?: number;
 };
 
-export default function useIBCBalance({ address }: { address?: string }) {
+export default function useIBCBalance({ address }: { address?: string | undefined }) {
   const { neokingdomTokenContract } = useContracts();
   const [balance, setBalance] = useState<Balance>({});
   const [error, setError] = useState<string>();
@@ -27,7 +27,6 @@ export default function useIBCBalance({ address }: { address?: string }) {
     let nodeUrl: string;
     let denom: string;
     let ethAddress: string;
-    let b: Balance = {};
 
     if (!address) {
       return;
@@ -47,6 +46,10 @@ export default function useIBCBalance({ address }: { address?: string }) {
     const queryEndpoint = `${nodeUrl}${generateEndpointBalanceByDenom(address, denom)}`;
 
     const reload = async () => {
+      let b: Balance = {};
+      if (!neokingdomTokenContract) {
+        return;
+      }
       let rawResult: Response;
       try {
         rawResult = await fetch(queryEndpoint, restOptions);
@@ -64,21 +67,20 @@ export default function useIBCBalance({ address }: { address?: string }) {
       b.ercFloat = 0;
 
       if (ethAddress) {
-        const balanceErc20 = await neokingdomTokenContract!.balanceOf(ethAddress);
+        const balanceErc20 = (await neokingdomTokenContract?.balanceOf(ethAddress)) as BigNumber;
         b.erc = balanceErc20;
         b.ercFloat = parseFloat(formatEther(b.erc));
       }
 
       b.balance = b.ibc.add(b.erc);
       b.balanceFloat = parseFloat(formatEther(b.balance));
-      console.log("useIBCBalance", ethAddress, b);
       setBalance(b);
     };
 
     reload();
     const interval = setInterval(reload, 5000);
     return () => clearInterval(interval);
-  }, [address]);
+  }, [address, neokingdomTokenContract]);
 
   return { ...balance, error };
 }
