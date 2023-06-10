@@ -2,10 +2,9 @@ import { NeokingdomToken, NeokingdomToken__factory } from "@contracts/typechain"
 import { Provider } from "@ethersproject/providers";
 import { evmosToEth } from "@evmos/address-converter";
 import { BalanceByDenomResponse, generateEndpointBalanceByDenom } from "@evmos/provider";
-import { useContractsContext } from "contexts/ContractsContext";
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
-import { useNetwork, useProvider } from "wagmi";
+import { useProvider } from "wagmi";
 
 import { useEffect, useState } from "react";
 
@@ -26,28 +25,22 @@ const networks: Record<string, any> =
   process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom" ? networksNeoKingdom : networksTeledisko;
 
 const getNeokingdomTokenContract = (chainId: string, provider: Provider): NeokingdomToken => {
-  console.log("chainid is", chainId);
   const address = networks[chainId]["NeokingdomToken"]?.address;
   return NeokingdomToken__factory.connect(address, provider);
 };
 
 export default function useIBCBalance({ address }: { address?: string | undefined }) {
-  //const { neokingdomTokenContract } = useContractsContext();
   const provider = useProvider();
   const [balance, setBalance] = useState<Balance>({});
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { chain } = useNetwork();
-  const chainId = chain?.id ? String(chain?.id) : undefined;
 
   useEffect(() => {
-    console.log(`chain id is "${chainId}"`);
-
-    if (!address || !chainId) {
+    if (!address) {
       return;
     }
 
-    const neokingdomTokenContract = getNeokingdomTokenContract(chainId, provider);
+    const neokingdomTokenContract = getNeokingdomTokenContract("9001", provider);
     let nodeUrl: string;
     let denom: string;
     let ethAddress: string;
@@ -103,9 +96,9 @@ export default function useIBCBalance({ address }: { address?: string | undefine
     };
 
     reload();
-    const interval = setInterval(reload, 5000);
-    return () => clearInterval(interval);
-  }, [address, chainId, provider]);
+    // const interval = setInterval(reload, 5000);
+    // return () => clearInterval(interval);
+  }, [address, provider]);
 
   return { ...balance, error, isLoading };
 }

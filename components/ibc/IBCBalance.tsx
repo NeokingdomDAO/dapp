@@ -24,9 +24,10 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
   const otherChain = OTHER_CHAIN[chain];
   const otherAddress = networks?.[otherChain].address;
 
+  // use isLoadingBalance just the first time the page loads
   const { balance, balanceFloat, error: balanceError, isLoading: isLoadingBalance } = useIBCBalance({ address });
   const [modalOpen, setModalOpen] = useState(false);
-  const { send, isLoading } = useIBCSend();
+  const { send, isLoading } = useIBCSend(); // todo gian check this hook
   const [toSend, setToSend] = useState(0);
 
   const [newAddress, setNewAddress] = useState("");
@@ -38,6 +39,7 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
   };
 
   const handleSendTokens = async () => {
+    // here show user the fact that the modal closes as soon as the balance is updated (check if the new reloaded balance is different thanthe old one)
     const success = await send(address!, newAddress!, parseEther(toSend.toString()).toString());
     if (success) {
       handleModalClose();

@@ -5,7 +5,7 @@ import { Alert, Button, Grid, Paper } from "@mui/material";
 import IBCBalance from "@components/ibc/IBCBalance";
 
 export default function IBC() {
-  const { hasKeplr, disconnect } = useKeplrContext();
+  const { networks, hasKeplr, disconnect } = useKeplrContext();
 
   if (!hasKeplr)
     return (
@@ -23,17 +23,19 @@ export default function IBC() {
 
   return (
     <>
-      <Alert
-        severity="info"
-        action={
-          <Button size="small" variant="outlined" onClick={() => typeof disconnect === "function" && disconnect()}>
-            Disconnect Keplr
-          </Button>
-        }
-        sx={{ mb: 2 }}
-      >
-        You&apos;re now connected to Keplr
-      </Alert>
+      {networks?.["evmos"]?.address && networks?.["crescent"]?.address && (
+        <Alert
+          severity="info"
+          action={
+            <Button size="small" variant="outlined" onClick={() => typeof disconnect === "function" && disconnect()}>
+              Disconnect Keplr
+            </Button>
+          }
+          sx={{ mb: 2 }}
+        >
+          You&apos;re now connected to Keplr
+        </Alert>
+      )}
 
       <Grid item xs={12} sx={{ mb: 2 }}>
         <Paper sx={paperSx}>
