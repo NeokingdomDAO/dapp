@@ -30,14 +30,15 @@ export default function useIBCBalance({ address }: { address?: string | undefine
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    let neokingdomTokenContract = new ethers.Contract(tokenContractAddress, erc20Abi, provider) as NeokingdomToken;
     let nodeUrl: string;
     let denom: string;
     let ethAddress: string;
 
-    if (!address) {
+    if (!address || !provider) {
       return;
     }
+
+    let neokingdomTokenContract = new ethers.Contract(tokenContractAddress, erc20Abi, provider) as NeokingdomToken;
 
     if (address.startsWith("evmos")) {
       nodeUrl = COSMOS_NODE_URL["evmos"];
