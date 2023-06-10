@@ -22,6 +22,7 @@ export default function useIBCBalance({ address }: { address?: string | undefine
   const { neokingdomTokenContract } = useContracts();
   const [balance, setBalance] = useState<Balance>({});
   const [error, setError] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     let nodeUrl: string;
@@ -50,12 +51,14 @@ export default function useIBCBalance({ address }: { address?: string | undefine
       if (!neokingdomTokenContract) {
         return;
       }
+      setIsLoading(true);
       let rawResult: Response;
       try {
         rawResult = await fetch(queryEndpoint, restOptions);
       } catch (e) {
         setError((e as any).toString());
         setBalance({});
+        setIsLoading(false);
         return;
       }
       const result = (await rawResult.json()) as BalanceByDenomResponse;
@@ -75,6 +78,7 @@ export default function useIBCBalance({ address }: { address?: string | undefine
       b.balance = b.ibc.add(b.erc);
       b.balanceFloat = parseFloat(formatEther(b.balance));
       setBalance(b);
+      setIsLoading(false);
     };
 
     reload();
@@ -82,5 +86,5 @@ export default function useIBCBalance({ address }: { address?: string | undefine
     return () => clearInterval(interval);
   }, [address, neokingdomTokenContract]);
 
-  return { ...balance, error };
+  return { ...balance, error, isLoading };
 }

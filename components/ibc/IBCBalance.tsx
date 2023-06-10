@@ -24,7 +24,7 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
   const otherChain = OTHER_CHAIN[chain];
   const otherAddress = networks?.[otherChain].address;
 
-  const { balance, balanceFloat, error: balanceError } = useIBCBalance({ address });
+  const { balance, balanceFloat, error: balanceError, isLoading: isLoadingBalance } = useIBCBalance({ address });
   const [modalOpen, setModalOpen] = useState(false);
   const { send, isLoading } = useIBCSend();
   const [toSend, setToSend] = useState(0);
@@ -48,7 +48,7 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
     setNewAddress(otherAddress || "");
   }, [otherAddress]);
 
-  if (isConnecting) {
+  if (isConnecting || isLoadingBalance) {
     return <CircularProgress />;
   }
 
@@ -76,7 +76,7 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
     );
   }
 
-  if (balanceError || balanceFloat === undefined) {
+  if (balanceError || typeof balanceFloat === "undefined") {
     return <Alert severity="warning">{balanceError || "It looks there is a problem calculating the balance"}</Alert>;
   }
 
