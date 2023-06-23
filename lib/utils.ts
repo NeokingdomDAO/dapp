@@ -90,13 +90,15 @@ export const findActiveTimeEntry = (task: ProjectTask): [Timesheet | null, Proje
 export const findActiveProjectTask = (projects: Project[]): ProjectTask | null => {
   let activeProjectTask = null;
   projects.find((project) => {
-    return project.tasks.find((task: ProjectTask) => {
-      const [activeTimeEntry, activeTask] = findActiveTimeEntry(task);
-      if (activeTimeEntry) {
-        activeProjectTask = activeTask;
-        return true;
-      }
-    });
+    return project.tasks
+      .filter((task) => task !== null)
+      .find((task: ProjectTask) => {
+        const [activeTimeEntry, activeTask] = findActiveTimeEntry(task);
+        if (activeTimeEntry) {
+          activeProjectTask = activeTask;
+          return true;
+        }
+      });
   });
   return activeProjectTask;
 };

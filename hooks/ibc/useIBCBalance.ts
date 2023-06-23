@@ -2,7 +2,7 @@ import { NeokingdomToken, NeokingdomToken__factory } from "@contracts/typechain"
 import { Provider } from "@ethersproject/providers";
 import { evmosToEth } from "@evmos/address-converter";
 import { BalanceByDenomResponse, generateEndpointBalanceByDenom } from "@evmos/provider";
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 import { useProvider } from "wagmi";
 

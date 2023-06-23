@@ -15,13 +15,19 @@ export default function ProjectCard({ project }: { project: Project }) {
   const [hideCompleted, setHideCompleted] = useState(true);
   const tasks = useMemo(
     () =>
-      project.tasks.filter(
-        (task) => !task.parent_id && ![STAGE_TO_ID_MAP["approved"], STAGE_TO_ID_MAP["done"]].includes(task.stage_id.id),
-      ),
+      project.tasks
+        .filter((task) => task !== null)
+        .filter(
+          (task) =>
+            !task.parent_id && ![STAGE_TO_ID_MAP["approved"], STAGE_TO_ID_MAP["done"]].includes(task.stage_id.id),
+        ),
     [project],
   );
   const completedTasks = useMemo(
-    () => project.tasks.filter((task) => !task.parent_id && task.stage_id.id === STAGE_TO_ID_MAP["done"]),
+    () =>
+      project.tasks
+        .filter((task) => task !== null)
+        .filter((task) => !task.parent_id && task.stage_id.id === STAGE_TO_ID_MAP["done"]),
     [project],
   );
 
