@@ -38,13 +38,13 @@ export default function Modal({
   size = "medium",
 }: {
   open: boolean;
-  onClose?: () => void;
+  onClose?: (event?: {}, reason?: string) => void;
   children: ReactElement;
   title?: string;
   size?: "small" | "medium" | "large";
 }) {
-  const handleClose = () => {
-    typeof onClose === "function" && onClose();
+  const handleClose = (event?: {}, reason?: string) => {
+    typeof onClose === "function" && onClose(event, reason);
   };
   const theme = useTheme();
 

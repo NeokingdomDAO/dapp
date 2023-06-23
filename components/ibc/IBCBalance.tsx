@@ -1,7 +1,7 @@
 import { useKeplrContext } from "contexts/KeplrContext";
 import { formatEther, parseEther } from "ethers/lib/utils";
 
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 
 import LaunchIcon from "@mui/icons-material/Launch";
 import { LoadingButton } from "@mui/lab";
@@ -21,28 +21,45 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
 
   const address = networks?.[chain].address;
   const ethAddress = networks?.[chain].ethAddress;
+
   const otherChain = OTHER_CHAIN[chain];
   const otherAddress = networks?.[otherChain].address;
 
-  // use isLoadingBalance just the first time the page loads
-  const { balance, balanceFloat, error: balanceError, isLoading: isLoadingBalance } = useIBCBalance({ address });
+  const { balance, balanceFloat, error: balanceError, reload } = useIBCBalance({ address });
   const [modalOpen, setModalOpen] = useState(false);
-  const { send, isLoading } = useIBCSend(); // todo gian check this hook
+  const [isLoadingBalance, setIsLoadingBalance] = useState(true);
+  const [isLoadingBalanceAfterSend, setIsLoadingBalanceAfterSend] = useState(false);
+  const { send, isLoading } = useIBCSend();
   const [toSend, setToSend] = useState(0);
+  const [currentBalance, setCurrentBalance] = useState<number | undefined>();
 
   const [newAddress, setNewAddress] = useState("");
 
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setNewAddress(otherAddress || "");
-    setToSend(0);
+  const handleModalClose = (event?: {}, reason?: string) => {
+    if (reason !== "backdropClick" && isLoadingBalanceAfterSend) {
+      setModalOpen(false);
+      setNewAddress(otherAddress || "");
+      setToSend(0);
+    }
   };
 
+  let checkBalanceInterval: ReturnType<typeof setInterval> | undefined;
+
+  useEffect(() => {
+    console.log("currBalance - newBalance", currentBalance, balanceFloat);
+    if (balance) setIsLoadingBalance(false);
+    if (isLoadingBalanceAfterSend && currentBalance !== balanceFloat) {
+      checkBalanceInterval && clearInterval(checkBalanceInterval);
+      handleModalClose();
+    }
+  }, [balance, balanceFloat, isLoadingBalanceAfterSend, currentBalance, checkBalanceInterval]);
+
   const handleSendTokens = async () => {
-    // here show user the fact that the modal closes as soon as the balance is updated (check if the new reloaded balance is different thanthe old one)
+    setCurrentBalance(balanceFloat);
     const success = await send(address!, newAddress!, parseEther(toSend.toString()).toString());
     if (success) {
-      handleModalClose();
+      setIsLoadingBalanceAfterSend(true);
+      checkBalanceInterval = setInterval(() => reload(address), 1000);
     }
   };
 
@@ -82,6 +99,75 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
     return <Alert severity="warning">{balanceError || "It looks there is a problem calculating the balance"}</Alert>;
   }
 
+  const renderToSendForm = () => {
+    return (
+      <Box>
+        <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
+        <Box sx={{ p: 4 }}>
+          <Slider
+            size="small"
+            value={toSend}
+            max={balanceFloat}
+            aria-label="Small"
+            valueLabelDisplay="auto"
+            step={calculateSteps(balanceFloat)}
+            marks={[
+              {
+                value: balanceFloat,
+                label: "Max Tokens",
+              },
+            ]}
+            onChange={(_, value) => setToSend(value as number)}
+          />
+        </Box>
+        <Box sx={{ textAlign: "center" }} mb={5}>
+          <TextField
+            id="tokens-number"
+            label="Tokens"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={toSend}
+            onChange={(e) => {
+              const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
+              setToSend(Math.min(inputValue, balanceFloat));
+            }}
+          />
+        </Box>
+
+        <ChangeableAddress
+          initialAddress={otherAddress}
+          newAddress={newAddress as string}
+          setAddress={(a) => setNewAddress(a)}
+        />
+
+        <Box sx={{ textAlign: "center", pt: 4 }}>
+          <LoadingButton
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+            disabled={toSend === 0}
+            onClick={handleSendTokens}
+            loading={isLoading}
+          >
+            Send
+          </LoadingButton>
+        </Box>
+      </Box>
+    );
+  };
+
+  const renderLoadingBalance = () => {
+    return (
+      <Box>
+        <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
+        ..Loading Balance..
+      </Box>
+    );
+  };
+
   return (
     <div>
       <Typography variant="h5" sx={{ mb: 2 }}>
@@ -120,62 +206,8 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
           Send to {CHAIN_TO_NAME[otherChain]}
         </Button>
 
-        <Modal open={modalOpen} onClose={handleModalClose}>
-          <Box>
-            <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
-            <Box sx={{ p: 4 }}>
-              <Slider
-                size="small"
-                value={toSend}
-                max={balanceFloat}
-                aria-label="Small"
-                valueLabelDisplay="auto"
-                step={calculateSteps(balanceFloat)}
-                marks={[
-                  {
-                    value: balanceFloat,
-                    label: "Max Tokens",
-                  },
-                ]}
-                onChange={(_, value) => setToSend(value as number)}
-              />
-            </Box>
-            <Box sx={{ textAlign: "center" }} mb={5}>
-              <TextField
-                id="tokens-number"
-                label="Tokens"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={toSend}
-                onChange={(e) => {
-                  const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
-                  setToSend(Math.min(inputValue, balanceFloat));
-                }}
-              />
-            </Box>
-
-            <ChangeableAddress
-              initialAddress={otherAddress}
-              newAddress={newAddress as string}
-              setAddress={(a) => setNewAddress(a)}
-            />
-
-            <Box sx={{ textAlign: "center", pt: 4 }}>
-              <LoadingButton
-                fullWidth
-                variant="contained"
-                color="primary"
-                sx={{ mt: 2 }}
-                disabled={toSend === 0}
-                onClick={handleSendTokens}
-                loading={isLoading}
-              >
-                Send
-              </LoadingButton>
-            </Box>
-          </Box>
+        <Modal open={modalOpen} onClose={() => null}>
+          {isLoadingBalanceAfterSend ? renderLoadingBalance() : renderToSendForm()}
         </Modal>
       </>
     </div>

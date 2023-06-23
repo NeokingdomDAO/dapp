@@ -9,6 +9,9 @@ export default function useIBCSend() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const send = async (senderAddress: string, receiverAddress: string, amount: string) => {
+    console.log("🐞 > senderAddress:", senderAddress);
+    console.log("🐞 > receiverAddress:", receiverAddress);
+    console.log("🐞 > amount:", amount);
     try {
       setIsLoading(true);
       const res = senderAddress.startsWith("evmos")

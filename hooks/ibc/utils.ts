@@ -131,14 +131,15 @@ const fetchAccount = async (address: string, nodeUrl: string) => {
   // https://docs.evmos.org/develop/api/networks.
   const queryEndpoint = `${nodeUrl}${generateEndpointAccount(address)}`;
 
-  const restOptions = {
+  console.log("🐞 > queryEndpoint:", queryEndpoint);
+  // Note that the node will return a 400 status code if the account does not exist.
+  const rawResult = await fetch(queryEndpoint, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
-  };
-
-  // Note that the node will return a 400 status code if the account does not exist.
-  const rawResult = await fetch(queryEndpoint, restOptions);
-
+  });
+  if (!rawResult.ok) {
+    console.log("error fetching account", rawResult);
+  }
   const result = await rawResult.json();
   return result as AccountResponse;
 };
@@ -247,6 +248,7 @@ export const sendFromEvmos = async (
   const nodeUrl = COSMOS_NODE_URL["evmos"];
 
   const account = await fetchAccount(senderAddress, nodeUrl);
+  console.log("🐞 > account:", account);
 
   const sender: Sender = {
     accountAddress: senderAddress,

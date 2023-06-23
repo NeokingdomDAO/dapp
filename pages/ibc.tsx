@@ -5,7 +5,7 @@ import { Alert, Button, Grid, Paper } from "@mui/material";
 import IBCBalance from "@components/ibc/IBCBalance";
 
 export default function IBC() {
-  const { networks, hasKeplr, disconnect } = useKeplrContext();
+  const { networks, hasKeplr, connect, disconnect } = useKeplrContext();
 
   if (!hasKeplr)
     return (
@@ -20,6 +20,29 @@ export default function IBC() {
         It looks you don&apos;t have the Kepr wallet installed. Please install it to use this feature.
       </Alert>
     );
+
+  const connectKeplr = () => {
+    if (typeof connect === "function") {
+      connect("crescent");
+      connect("evmos");
+    }
+  };
+
+  if (!networks?.["evmos"]?.address && !networks?.["crescent"]?.address) {
+    return (
+      <Alert
+        severity="info"
+        action={
+          <Button size="small" variant="outlined" onClick={connectKeplr}>
+            Connect Keplr
+          </Button>
+        }
+        sx={{ mb: 2 }}
+      >
+        Please connect your Keplr wallet
+      </Alert>
+    );
+  }
 
   return (
     <>

@@ -62,11 +62,5 @@ export default function useConnectKeplr() {
     }
   };
 
-  // try to connect on mount
-  useEffect(() => {
-    connect("crescent");
-    connect("evmos");
-  }, []);
-
   return { hasKeplr, keplr, isConnecting, connect, disconnect, networks };
 }
