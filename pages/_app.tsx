@@ -11,7 +11,7 @@ import { evmos, evmosTestnet } from "wagmi/chains";
 import * as React from "react";
 import { useEffect, useState } from "react";
 
-import { Box, CircularProgress, styled } from "@mui/material";
+import { Box, CircularProgress, CssBaseline, styled } from "@mui/material";
 import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -52,6 +52,8 @@ interface DappProps extends AppProps {
     requireLogin?: boolean;
     renderOnServer?: boolean;
     fullWidth?: boolean;
+    noLayout?: boolean;
+    customCss?: string;
   };
   pageProps: any;
 }
@@ -86,23 +88,28 @@ export default function App({ Component, pageProps }: DappProps) {
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             preventDuplicate
           >
-            <Layout fullWidth={!!Component.fullWidth}>
-              {(isLoading || !mounted) && (
-                <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                  <CircularProgress />
-                </Box>
-              )}
-              {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
-                <KeplrProvider>
-                  <ContractsProvider>
-                    <>
-                      <CheckConnected fullWidth={!!Component.fullWidth} />
-                      <Component {...pageProps} />
-                    </>
-                  </ContractsProvider>
-                </KeplrProvider>
-              )}
-            </Layout>
+            <CssBaseline />
+            {Component.noLayout ? (
+              <Component {...pageProps} />
+            ) : (
+              <Layout fullWidth={!!Component.fullWidth}>
+                {(isLoading || !mounted) && (
+                  <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                    <CircularProgress />
+                  </Box>
+                )}
+                {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
+                  <KeplrProvider>
+                    <ContractsProvider>
+                      <>
+                        <CheckConnected fullWidth={!!Component.fullWidth} />
+                        <Component {...pageProps} />
+                      </>
+                    </ContractsProvider>
+                  </KeplrProvider>
+                )}
+              </Layout>
+            )}
           </StyledSnackbarProvider>
         </WagmiConfig>
       </LocalizationProvider>
@@ -117,6 +124,7 @@ export default function App({ Component, pageProps }: DappProps) {
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
         />
+        {Component.customCss && <style>{Component.customCss}</style>}
       </Head>
       {appElement}
       <Web3Modal

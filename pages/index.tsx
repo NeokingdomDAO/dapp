@@ -1,18 +1,15 @@
-import useSWR from "swr";
 import { useAccount } from "wagmi";
 
 import { useMemo } from "react";
 
 import { Grid, Typography } from "@mui/material";
 
-import { fetcher } from "@graphql/client";
-import { getResolutionsQuery } from "@graphql/queries/get-resolutions.query";
-
 import { RESOLUTION_STATES, getEnhancedResolutions } from "@lib/resolutions/common";
 
 import ResolutionCard from "@components/ResolutionCard";
 import Section from "@components/Section";
 import Header from "@components/dashboard/Header";
+import InvestorsReport from "@components/dashboard/InvestorsReport";
 import Tasks from "@components/dashboard/Tasks";
 import Tokens from "@components/dashboard/Tokens";
 
@@ -26,8 +23,6 @@ import { ResolutionEntityEnhanced } from "../types";
 Home.renderOnServer = false;
 Home.requireLogin = true;
 Home.fullWidth = true;
-
-const REFRESH_EVERY_MS = 5000;
 
 const emptyStats = {
   withQuorum: 0,
@@ -128,6 +123,14 @@ export default function Home() {
           <Tokens />
         </Section>
       )}
+      <Section inverse={isConnected && enhancedResolutionsToVote?.length > 0}>
+        <>
+          <Typography variant="h4" sx={{ mb: 4 }}>
+            Investors transparency report
+          </Typography>
+          <InvestorsReport />
+        </>
+      </Section>
     </>
   );
 }

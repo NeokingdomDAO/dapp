@@ -60,7 +60,6 @@ export default function Layout({ children, fullWidth = false }: { children: Reac
         </Alert>
       </Snackbar>
       <LoginModal />
-      <CssBaseline />
       <Box
         sx={{
           backgroundColor: "rgba(255, 255, 255, 0.9)",

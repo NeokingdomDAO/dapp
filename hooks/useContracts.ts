@@ -37,6 +37,10 @@ const getNeokingdomTokenContract = (chainId: string, signer: Signer): Neokingdom
   return NeokingdomToken__factory.connect(address, signer);
 };
 
+export const getNeokingdomTokenContractAddress = (chainId: string): string => {
+  return networks[chainId]["NeokingdomToken"]?.address;
+};
+
 const getVotingContract = (chainId: string, signer: Signer): Voting => {
   const address = networks[chainId]["Voting"]?.address;
   return Voting__factory.connect(address, signer);
