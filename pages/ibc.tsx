@@ -1,11 +1,16 @@
 import { useKeplrContext } from "contexts/KeplrContext";
 
-import { Alert, Button, Grid, Paper } from "@mui/material";
+import { Alert, Button, CircularProgress, Grid, Paper } from "@mui/material";
 
-import IBCBalance from "@components/ibc/IBCBalance";
+import IBCBalanceEvmos from "@components/ibc/IBCBalanceEvmos";
+
+import IBCBalanceCrescent from "../components/ibc/IBCBalanceCrescent";
+import useCosmosAccount from "../hooks/ibc/useCosmosAccount";
 
 export default function IBC() {
   const { networks, hasKeplr, connect, disconnect } = useKeplrContext();
+  const address = networks?.["evmos"].address;
+  const { account: cosmosAccount, isLoading: isLoadingCosmosAccount } = useCosmosAccount(address as string);
 
   if (!hasKeplr)
     return (
@@ -62,12 +67,12 @@ export default function IBC() {
 
       <Grid item xs={12} sx={{ mb: 2 }}>
         <Paper sx={paperSx}>
-          <IBCBalance chain="evmos" />
+          {isLoadingCosmosAccount ? <CircularProgress /> : <IBCBalanceEvmos cosmosAccount={cosmosAccount} />}
         </Paper>
       </Grid>
       <Grid item xs={12} sx={{ mb: 2 }}>
         <Paper sx={paperSx}>
-          <IBCBalance chain="crescent" />
+          <IBCBalanceCrescent />
         </Paper>
       </Grid>
     </>

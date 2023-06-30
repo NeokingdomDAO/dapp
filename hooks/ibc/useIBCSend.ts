@@ -1,21 +1,22 @@
+import { AccountResponse } from "@evmos/provider";
+
 import { useState } from "react";
 
 import { useSnackbar } from "@hooks/useSnackbar";
 
+import useCosmosAccount from "./useCosmosAccount";
 import { sendFromCrescent, sendFromEvmos } from "./utils";
 
-export default function useIBCSend() {
+export default function useIBCSend(senderAddress: string) {
   const [isLoading, setIsLoading] = useState(false);
+  const { account } = useCosmosAccount(senderAddress);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const send = async (senderAddress: string, receiverAddress: string, amount: string) => {
-    console.log("🐞 > senderAddress:", senderAddress);
-    console.log("🐞 > receiverAddress:", receiverAddress);
-    console.log("🐞 > amount:", amount);
+  const send = async (receiverAddress: string, amount: string) => {
     try {
       setIsLoading(true);
       const res = senderAddress.startsWith("evmos")
-        ? await sendFromEvmos(senderAddress, receiverAddress, amount, enqueueSnackbar)
+        ? await sendFromEvmos(account as AccountResponse["account"], receiverAddress, amount, enqueueSnackbar)
         : await sendFromCrescent(senderAddress, receiverAddress, amount);
       if (res?.snackbarId) {
         closeSnackbar(res?.snackbarId);

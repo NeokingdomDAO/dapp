@@ -54,7 +54,6 @@ export default function useIBCBalance({ address }: { address?: string | undefine
   const reload = useCallback(
     async (address?: string) => {
       if (!address) return null;
-
       const balance: Balance = {};
       const neokingdomTokenContract = getNeokingdomTokenContract("9001", provider);
       if (!neokingdomTokenContract) {
@@ -74,8 +73,8 @@ export default function useIBCBalance({ address }: { address?: string | undefine
         return;
       }
       const result: BalanceByDenomResponse = await res.json();
-      console.log("balance result is", result);
       const amount = result.balance.amount;
+      console.log("reload balance", amount, address);
       balance.ibc = BigNumber.from(amount);
       balance.ibcFloat = parseFloat(formatEther(amount));
 

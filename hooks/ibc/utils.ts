@@ -240,21 +240,16 @@ export const sendFromCrescent2 = async (senderAddress: string, receiverAddress: 
 };
 
 export const sendFromEvmos = async (
-  senderAddress: string,
+  account: AccountResponse["account"],
   receiverAddress: string,
   amount: string,
   enqueueSnackbar: EnqueueSnackbar,
 ) => {
-  const nodeUrl = COSMOS_NODE_URL["evmos"];
-
-  const account = await fetchAccount(senderAddress, nodeUrl);
-  console.log("🐞 > account:", account);
-
   const sender: Sender = {
-    accountAddress: senderAddress,
-    sequence: parseInt(account.account.base_account.sequence),
-    accountNumber: parseInt(account.account.base_account.account_number),
-    pubkey: account.account.base_account.pub_key!.key,
+    accountAddress: account.base_account.address,
+    sequence: parseInt(account.base_account.sequence),
+    accountNumber: parseInt(account.base_account.account_number),
+    pubkey: account.base_account.pub_key!.key,
   };
 
   const fee: Fee = {
@@ -323,6 +318,7 @@ export const sendFromEvmos = async (
     body: generatePostBodyBroadcast(signedTx),
   };
 
+  const nodeUrl = COSMOS_NODE_URL["evmos"];
   const broadcastEndpoint = `${nodeUrl}${generateEndpointBroadcast()}`;
   const broadcastPost = await fetch(broadcastEndpoint, postOptions);
 

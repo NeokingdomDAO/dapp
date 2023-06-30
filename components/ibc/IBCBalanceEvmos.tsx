@@ -1,7 +1,8 @@
+import { AccountResponse } from "@evmos/provider";
 import { useKeplrContext } from "contexts/KeplrContext";
 import { formatEther, parseEther } from "ethers/lib/utils";
 
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import LaunchIcon from "@mui/icons-material/Launch";
 import { LoadingButton } from "@mui/lab";
@@ -14,10 +15,11 @@ import Modal from "@components/Modal";
 
 import useIBCBalance from "@hooks/ibc/useIBCBalance";
 import useIBCSend from "@hooks/ibc/useIBCSend";
-import { CHAIN_TO_NAME, CosmosChains, OTHER_CHAIN } from "@hooks/ibc/utils";
+import { CHAIN_TO_NAME, OTHER_CHAIN } from "@hooks/ibc/utils";
 
-export default function IBCBalance({ chain }: { chain: CosmosChains }) {
+export default function IBCBalanceEvmos({ cosmosAccount }: { cosmosAccount: AccountResponse["account"] | null }) {
   const { connect, networks, isConnecting } = useKeplrContext();
+  const chain = "evmos";
 
   const address = networks?.[chain].address;
   const ethAddress = networks?.[chain].ethAddress;
@@ -29,15 +31,17 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
   const [isLoadingBalanceAfterSend, setIsLoadingBalanceAfterSend] = useState(false);
-  const { send, isLoading } = useIBCSend();
+  const { send, isLoading } = useIBCSend(address as string);
   const [toSend, setToSend] = useState(0);
   const [currentBalance, setCurrentBalance] = useState<number | undefined>();
 
   const [newAddress, setNewAddress] = useState("");
 
   const handleModalClose = (event?: {}, reason?: string) => {
-    if (reason !== "backdropClick" && isLoadingBalanceAfterSend) {
+    console.log("🐞 > handleModalClose:", isLoadingBalanceAfterSend, reason);
+    if (!isLoadingBalanceAfterSend || (isLoadingBalanceAfterSend && reason === "forceClose")) {
       setModalOpen(false);
+      // setIsLoadingBalanceAfterSend(false);
       setNewAddress(otherAddress || "");
       setToSend(0);
     }
@@ -46,20 +50,30 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
   let checkBalanceInterval: ReturnType<typeof setInterval> | undefined;
 
   useEffect(() => {
-    console.log("currBalance - newBalance", currentBalance, balanceFloat);
+    console.log(
+      "🐞 > useEffect:",
+      balance,
+      balanceFloat,
+      isLoadingBalanceAfterSend,
+      currentBalance,
+      checkBalanceInterval,
+    );
     if (balance) setIsLoadingBalance(false);
     if (isLoadingBalanceAfterSend && currentBalance !== balanceFloat) {
+      console.log("🐞 > checkBalanceInterval:", checkBalanceInterval);
       checkBalanceInterval && clearInterval(checkBalanceInterval);
-      handleModalClose();
+      handleModalClose({}, "forceClose");
     }
-  }, [balance, balanceFloat, isLoadingBalanceAfterSend, currentBalance, checkBalanceInterval]);
+  }, [balanceFloat, isLoadingBalanceAfterSend, currentBalance, checkBalanceInterval]);
 
   const handleSendTokens = async () => {
     setCurrentBalance(balanceFloat);
-    const success = await send(address!, newAddress!, parseEther(toSend.toString()).toString());
+    const success = await send(newAddress!, parseEther(toSend.toString()).toString());
+    console.log("🐞 > success:", success);
     if (success) {
       setIsLoadingBalanceAfterSend(true);
       checkBalanceInterval = setInterval(() => reload(address), 1000);
+      console.log("🐞 > checkBalanceInterval:", checkBalanceInterval);
     }
   };
 
@@ -163,7 +177,10 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
     return (
       <Box>
         <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
-        ..Loading Balance..
+        <Box sx={{ mt: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <Typography variant="h6">Waiting for transaction to complete...</Typography>
+          <CircularProgress sx={{ mt: 2 }} />
+        </Box>
       </Box>
     );
   };
@@ -202,11 +219,23 @@ export default function IBCBalance({ chain }: { chain: CosmosChains }) {
           Balance: {balance ? formatEther(balance) : "…"} NEOK
         </p>
 
-        <Button variant="contained" color="primary" disabled={!balance} onClick={() => setModalOpen(true)}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!balance || !cosmosAccount?.base_account.pub_key}
+          onClick={() => setModalOpen(true)}
+        >
           Send to {CHAIN_TO_NAME[otherChain]}
         </Button>
 
-        <Modal open={modalOpen} onClose={() => null}>
+        {!cosmosAccount?.base_account.pub_key && (
+          <Alert sx={{ mt: 2 }} severity="warning">
+            It looks like you don&apos;t have a Public Key for this account. <br /> It means that you must perform at
+            least one transaction before sending Evmos to Crescent.
+          </Alert>
+        )}
+
+        <Modal open={modalOpen} onClose={isLoadingBalanceAfterSend ? () => true : handleModalClose}>
           {isLoadingBalanceAfterSend ? renderLoadingBalance() : renderToSendForm()}
         </Modal>
       </>
