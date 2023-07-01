@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import networksNeoKingdom from "../../networks/neokingdom.json";
 import networksTeledisko from "../../networks/teledisko.json";
+import useIbcStore from "../../store/ibcStore";
 import { COSMOS_NODE_URL, DENOMS, restOptions } from "./utils";
 
 type Balance = {
@@ -33,6 +34,8 @@ export default function useIBCBalance({ address }: { address?: string | undefine
   const provider = useProvider();
   const [balance, setBalance] = useState<Balance>({});
   const [error, setError] = useState<string>();
+  const setEvmosBalance = useIbcStore(({ setEvmosBalance }) => setEvmosBalance);
+  const setCrescentBalance = useIbcStore(({ setEvmosBalance }) => setEvmosBalance);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getQueryEndpoint = (address: string) => {
@@ -74,7 +77,6 @@ export default function useIBCBalance({ address }: { address?: string | undefine
       }
       const result: BalanceByDenomResponse = await res.json();
       const amount = result.balance.amount;
-      console.log("reload balance", amount, address);
       balance.ibc = BigNumber.from(amount);
       balance.ibcFloat = parseFloat(formatEther(amount));
 
@@ -90,6 +92,7 @@ export default function useIBCBalance({ address }: { address?: string | undefine
 
       balance.balance = balance.ibc.add(balance.erc);
       balance.balanceFloat = parseFloat(formatEther(balance.balance));
+      console.log(`🐞 > Reload ${address.startsWith("evmos") ? "evmos" : "crescent"} balance:`, balance.balanceFloat);
       setBalance(balance);
       setIsLoading(false);
       setError("");

@@ -5,11 +5,11 @@ import { Alert, Box, Button, IconButton, InputAdornment, TextField } from "@mui/
 
 export default function ChangeableAddress({
   initialAddress,
-  newAddress,
+  address,
   setAddress,
 }: {
   initialAddress: string | undefined;
-  newAddress: string;
+  address: string;
   setAddress: (a: string) => void;
 }) {
   const [changeAddress, setChangeAddress] = useState(false);
@@ -37,7 +37,7 @@ export default function ChangeableAddress({
             shrink: true,
           }}
           fullWidth
-          value={newAddress}
+          value={address}
           onChange={(e) => {
             setAddress(e.target.value);
           }}

@@ -1,16 +1,15 @@
 import { useKeplrContext } from "contexts/KeplrContext";
 
-import { Alert, Button, CircularProgress, Grid, Paper } from "@mui/material";
+import { useState } from "react";
+
+import { Alert, Button, Grid, Paper } from "@mui/material";
 
 import IBCBalanceEvmos from "@components/ibc/IBCBalanceEvmos";
 
 import IBCBalanceCrescent from "../components/ibc/IBCBalanceCrescent";
-import useCosmosAccount from "../hooks/ibc/useCosmosAccount";
 
 export default function IBC() {
   const { networks, hasKeplr, connect, disconnect } = useKeplrContext();
-  const address = networks?.["evmos"].address;
-  const { account: cosmosAccount, isLoading: isLoadingCosmosAccount } = useCosmosAccount(address as string);
 
   if (!hasKeplr)
     return (
@@ -33,7 +32,7 @@ export default function IBC() {
     }
   };
 
-  if (!networks?.["evmos"]?.address && !networks?.["crescent"]?.address) {
+  if (!networks?.evmos?.address && !networks?.crescent?.address) {
     return (
       <Alert
         severity="info"
@@ -51,7 +50,7 @@ export default function IBC() {
 
   return (
     <>
-      {networks?.["evmos"]?.address && networks?.["crescent"]?.address && (
+      {networks?.evmos?.address && networks?.crescent?.address && (
         <Alert
           severity="info"
           action={
@@ -61,19 +60,21 @@ export default function IBC() {
           }
           sx={{ mb: 2 }}
         >
-          You&apos;re now connected to Keplr
+          You&apos;re connected to Keplr
         </Alert>
       )}
 
-      <Grid item xs={12} sx={{ mb: 2 }}>
-        <Paper sx={paperSx}>
-          {isLoadingCosmosAccount ? <CircularProgress /> : <IBCBalanceEvmos cosmosAccount={cosmosAccount} />}
-        </Paper>
-      </Grid>
-      <Grid item xs={12} sx={{ mb: 2 }}>
-        <Paper sx={paperSx}>
-          <IBCBalanceCrescent />
-        </Paper>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Paper sx={paperSx}>
+            <IBCBalanceEvmos />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper sx={paperSx}>
+            <IBCBalanceCrescent />
+          </Paper>
+        </Grid>
       </Grid>
     </>
   );

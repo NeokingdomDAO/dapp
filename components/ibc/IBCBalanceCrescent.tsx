@@ -1,7 +1,8 @@
 import { useKeplrContext } from "contexts/KeplrContext";
 import { formatEther, parseEther } from "ethers/lib/utils";
+import { shallow } from "zustand/shallow";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import LaunchIcon from "@mui/icons-material/Launch";
 import { LoadingButton } from "@mui/lab";
@@ -9,81 +10,91 @@ import { Alert, Box, Button, CircularProgress, IconButton, Slider, TextField, Ty
 
 import { calculateSteps } from "@lib/utils";
 
+import useIbcStore from "@store/ibcStore";
+
 import ChangeableAddress from "@components/ChangeableAddress";
 import Modal from "@components/Modal";
 
 import useIBCBalance from "@hooks/ibc/useIBCBalance";
 import useIBCSend from "@hooks/ibc/useIBCSend";
-import { CHAIN_TO_NAME, OTHER_CHAIN } from "@hooks/ibc/utils";
 
 export default function IBCBalanceCrescent() {
-  const chain = "crescent";
   const { connect, networks, isConnecting } = useKeplrContext();
-  const address = networks?.[chain].address;
-  const ethAddress = networks?.[chain].ethAddress;
+  const {
+    stopCrescentInterval,
+    isLoadingBalanceAfterSend,
+    setCrescentBalance,
+    setPrevCrescentBalance,
+    setIsLoadingBalanceAfterSend,
+    resetStore,
+  } = useIbcStore(
+    (state) => ({
+      isLoadingBalanceAfterSend: state.isLoadingBalanceAfterSend,
+      stopCrescentInterval: state.stopCrescentInterval,
+      setCrescentBalance: state.setCrescentBalance,
+      setPrevCrescentBalance: state.setPrevCrescentBalance,
+      setIsLoadingBalanceAfterSend: state.setIsLoadingBalanceAfterSend,
+      resetStore: state.resetStore,
+    }),
+    shallow,
+  );
 
-  const otherChain = OTHER_CHAIN[chain];
-  const otherAddress = networks?.[otherChain].address;
+  const chain = "crescent";
+  const evmosAddress = networks?.evmos.address;
+  const crescentAddress = networks?.crescent.address;
 
-  const { balance, balanceFloat, error: balanceError, reload } = useIBCBalance({ address });
+  const { balance, balanceFloat, error: balanceError, reload } = useIBCBalance({ address: crescentAddress });
+  const { sendTokens, isLoading } = useIBCSend(crescentAddress as string);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
-  const [isLoadingBalanceAfterSend, setIsLoadingBalanceAfterSend] = useState(false);
-  const { send, isLoading } = useIBCSend(address as string);
-  const [toSend, setToSend] = useState(0);
-  const [currentBalance, setCurrentBalance] = useState<number | undefined>();
 
-  const [newAddress, setNewAddress] = useState("");
+  const [targetAddress, setTargetAddress] = useState<string | undefined>();
+  const [tokenToSend, setTokenToSend] = useState(0);
 
-  const handleModalClose = (event?: {}, reason?: string) => {
-    console.log("🐞 > handleModalClose:", isLoadingBalanceAfterSend, reason);
-    if (!isLoadingBalanceAfterSend || (isLoadingBalanceAfterSend && reason === "forceClose")) {
-      setModalOpen(false);
-      // setIsLoadingBalanceAfterSend(false);
-      setNewAddress(otherAddress || "");
-      setToSend(0);
-    }
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setTargetAddress(evmosAddress);
+    setTokenToSend(0);
   };
 
-  let checkBalanceInterval: ReturnType<typeof setInterval> | undefined;
+  useEffect(() => {
+    setTargetAddress(evmosAddress);
+  }, [evmosAddress]);
 
   useEffect(() => {
-    console.log(
-      "🐞 > useEffect:",
-      balance,
-      balanceFloat,
-      isLoadingBalanceAfterSend,
-      currentBalance,
-      checkBalanceInterval,
-    );
-    if (balance) setIsLoadingBalance(false);
-    if (isLoadingBalanceAfterSend && currentBalance !== balanceFloat) {
-      console.log("🐞 > checkBalanceInterval:", checkBalanceInterval);
-      checkBalanceInterval && clearInterval(checkBalanceInterval);
-      handleModalClose({}, "forceClose");
+    if (balanceFloat !== undefined) {
+      setIsLoadingBalance(false);
+      setCrescentBalance(balanceFloat);
     }
-  }, [balanceFloat, isLoadingBalanceAfterSend, currentBalance, checkBalanceInterval]);
+  }, [balanceFloat]);
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>();
+  useEffect(() => {
+    if (isLoadingBalanceAfterSend && !intervalRef.current && !stopCrescentInterval) {
+      intervalRef.current = setInterval(() => reload(crescentAddress), 1000);
+    }
+    if (stopCrescentInterval) {
+      intervalRef.current && clearInterval(intervalRef.current);
+      intervalRef.current = undefined;
+    }
+  }, [isLoadingBalanceAfterSend, stopCrescentInterval]);
 
   const handleSendTokens = async () => {
-    setCurrentBalance(balanceFloat);
-    const success = await send(newAddress!, parseEther(toSend.toString()).toString());
-    console.log("🐞 > success:", success);
+    setPrevCrescentBalance(balanceFloat || 0);
+    const amount = parseEther(tokenToSend.toString()).toString();
+    const success = await sendTokens(targetAddress!, amount);
     if (success) {
       setIsLoadingBalanceAfterSend(true);
-      checkBalanceInterval = setInterval(() => reload(address), 1000);
-      console.log("🐞 > checkBalanceInterval:", checkBalanceInterval);
+      handleModalClose();
     }
   };
-
-  useEffect(() => {
-    setNewAddress(otherAddress || "");
-  }, [otherAddress]);
 
   if (isConnecting || isLoadingBalance) {
     return <CircularProgress />;
   }
 
-  if (!networks?.[chain].address) {
+  if (!evmosAddress) {
     return (
       <Alert
         severity="warning"
@@ -114,11 +125,11 @@ export default function IBCBalanceCrescent() {
   const renderToSendForm = () => {
     return (
       <Box>
-        <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
+        <Typography variant="h5">Send to Evmos</Typography>
         <Box sx={{ p: 4 }}>
           <Slider
             size="small"
-            value={toSend}
+            value={tokenToSend}
             max={balanceFloat}
             aria-label="Small"
             valueLabelDisplay="auto"
@@ -129,7 +140,7 @@ export default function IBCBalanceCrescent() {
                 label: "Max Tokens",
               },
             ]}
-            onChange={(_, value) => setToSend(value as number)}
+            onChange={(_, value) => setTokenToSend(value as number)}
           />
         </Box>
         <Box sx={{ textAlign: "center" }} mb={5}>
@@ -140,18 +151,18 @@ export default function IBCBalanceCrescent() {
             InputLabelProps={{
               shrink: true,
             }}
-            value={toSend}
+            value={tokenToSend}
             onChange={(e) => {
               const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
-              setToSend(Math.min(inputValue, balanceFloat));
+              setTokenToSend(Math.min(inputValue, balanceFloat));
             }}
           />
         </Box>
 
         <ChangeableAddress
-          initialAddress={otherAddress}
-          newAddress={newAddress as string}
-          setAddress={(a) => setNewAddress(a)}
+          initialAddress={evmosAddress}
+          address={targetAddress as string}
+          setAddress={(value) => setTargetAddress(value)}
         />
 
         <Box sx={{ textAlign: "center", pt: 4 }}>
@@ -160,7 +171,7 @@ export default function IBCBalanceCrescent() {
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
-            disabled={toSend === 0}
+            disabled={tokenToSend === 0}
             onClick={handleSendTokens}
             loading={isLoading}
           >
@@ -171,60 +182,47 @@ export default function IBCBalanceCrescent() {
     );
   };
 
-  const renderLoadingBalance = () => {
-    return (
-      <Box>
-        <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
-        <Box sx={{ mt: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="h6">Waiting for transaction to complete...</Typography>
-          <CircularProgress sx={{ mt: 2 }} />
-        </Box>
-      </Box>
-    );
-  };
-
   return (
     <div>
       <Typography variant="h5" sx={{ mb: 2 }}>
-        {CHAIN_TO_NAME[chain]} account
+        Crescent account
       </Typography>
-      <>
-        <p>
-          Address: {address}
-          <IconButton
-            aria-label="open in Mintscan"
-            size="small"
-            href={`https://www.mintscan.io/${chain}/account/${address}`}
-            target="_new"
-          >
-            <LaunchIcon fontSize="inherit" />
-          </IconButton>
-          <br />
-          {ethAddress && (
-            <>
-              EVM Address: {ethAddress}
-              <IconButton
-                aria-label="open in EVMOS block explorer"
-                size="small"
-                href={`https://escan.live/address/${ethAddress}`}
-                target="_new"
-              >
-                <LaunchIcon fontSize="inherit" />
-              </IconButton>
-            </>
+      <p>
+        Address: {crescentAddress}
+        <IconButton
+          aria-label="open in Mintscan"
+          size="small"
+          href={`https://www.mintscan.io/${chain}/account/${crescentAddress}`}
+          target="_new"
+        >
+          <LaunchIcon fontSize="inherit" />
+        </IconButton>
+        <br />
+        <Box>
+          Balance:{" "}
+          {isLoadingBalanceAfterSend ? (
+            <CircularProgress sx={{ ml: 1 }} size={14} />
+          ) : (
+            `${balance ? formatEther(balance) : "…"} NEOK`
           )}
-          <br />
-          Balance: {balance ? formatEther(balance) : "…"} NEOK
-        </p>
+        </Box>
+      </p>
 
-        <Button variant="contained" color="primary" disabled={!balance} onClick={() => setModalOpen(true)}>
-          Send to {CHAIN_TO_NAME[otherChain]}
-        </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!balanceFloat || isLoadingBalanceAfterSend}
+        onClick={() => {
+          setModalOpen(true);
+          resetStore();
+        }}
+      >
+        Send to Evmos
+      </Button>
 
-        <Modal open={modalOpen} onClose={isLoadingBalanceAfterSend ? () => true : handleModalClose}>
-          {isLoadingBalanceAfterSend ? renderLoadingBalance() : renderToSendForm()}
-        </Modal>
-      </>
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        {renderToSendForm()}
+      </Modal>
     </div>
   );
 }

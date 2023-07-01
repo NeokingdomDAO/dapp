@@ -1,8 +1,8 @@
-import { AccountResponse } from "@evmos/provider";
 import { useKeplrContext } from "contexts/KeplrContext";
 import { formatEther, parseEther } from "ethers/lib/utils";
+import { shallow } from "zustand/shallow";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import LaunchIcon from "@mui/icons-material/Launch";
 import { LoadingButton } from "@mui/lab";
@@ -10,82 +10,94 @@ import { Alert, Box, Button, CircularProgress, IconButton, Slider, TextField, Ty
 
 import { calculateSteps } from "@lib/utils";
 
+import useIbcStore from "@store/ibcStore";
+
 import ChangeableAddress from "@components/ChangeableAddress";
 import Modal from "@components/Modal";
 
+import useCosmosAccount from "@hooks/ibc/useCosmosAccount";
 import useIBCBalance from "@hooks/ibc/useIBCBalance";
 import useIBCSend from "@hooks/ibc/useIBCSend";
-import { CHAIN_TO_NAME, OTHER_CHAIN } from "@hooks/ibc/utils";
 
-export default function IBCBalanceEvmos({ cosmosAccount }: { cosmosAccount: AccountResponse["account"] | null }) {
+export default function IBCBalanceEvmos() {
   const { connect, networks, isConnecting } = useKeplrContext();
+  const {
+    isLoadingBalanceAfterSend,
+    stopEvmosInterval,
+    setEvmosBalance,
+    setPrevEvmosBalance,
+    setIsLoadingBalanceAfterSend,
+    resetStore,
+  } = useIbcStore(
+    (state) => ({
+      isLoadingBalanceAfterSend: state.isLoadingBalanceAfterSend,
+      stopEvmosInterval: state.stopEvmosInterval,
+      setEvmosBalance: state.setEvmosBalance,
+      setPrevEvmosBalance: state.setPrevEvmosBalance,
+      setIsLoadingBalanceAfterSend: state.setIsLoadingBalanceAfterSend,
+      resetStore: state.resetStore,
+    }),
+    shallow,
+  );
+
   const chain = "evmos";
+  const evmosAddress = networks?.evmos.address;
+  const ethAddress = networks?.evmos.ethAddress;
+  const crescentAddress = networks?.crescent.address;
 
-  const address = networks?.[chain].address;
-  const ethAddress = networks?.[chain].ethAddress;
+  const { account: cosmosAccount, isLoading: isLoadingCosmosAccount } = useCosmosAccount(evmosAddress as string);
+  const { balance, balanceFloat, error: balanceError, reload } = useIBCBalance({ address: evmosAddress });
+  const { sendTokens, isLoading } = useIBCSend(evmosAddress as string);
 
-  const otherChain = OTHER_CHAIN[chain];
-  const otherAddress = networks?.[otherChain].address;
-
-  const { balance, balanceFloat, error: balanceError, reload } = useIBCBalance({ address });
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
-  const [isLoadingBalanceAfterSend, setIsLoadingBalanceAfterSend] = useState(false);
-  const { send, isLoading } = useIBCSend(address as string);
-  const [toSend, setToSend] = useState(0);
-  const [currentBalance, setCurrentBalance] = useState<number | undefined>();
 
-  const [newAddress, setNewAddress] = useState("");
+  const [targetAddress, setTargetAddress] = useState<string | undefined>();
+  const [tokenToSend, setTokenToSend] = useState(0);
 
-  const handleModalClose = (event?: {}, reason?: string) => {
-    console.log("🐞 > handleModalClose:", isLoadingBalanceAfterSend, reason);
-    if (!isLoadingBalanceAfterSend || (isLoadingBalanceAfterSend && reason === "forceClose")) {
-      setModalOpen(false);
-      // setIsLoadingBalanceAfterSend(false);
-      setNewAddress(otherAddress || "");
-      setToSend(0);
-    }
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setTargetAddress(crescentAddress);
+    setTokenToSend(0);
   };
 
-  let checkBalanceInterval: ReturnType<typeof setInterval> | undefined;
+  useEffect(() => {
+    setTargetAddress(crescentAddress);
+  }, [crescentAddress]);
 
   useEffect(() => {
-    console.log(
-      "🐞 > useEffect:",
-      balance,
-      balanceFloat,
-      isLoadingBalanceAfterSend,
-      currentBalance,
-      checkBalanceInterval,
-    );
-    if (balance) setIsLoadingBalance(false);
-    if (isLoadingBalanceAfterSend && currentBalance !== balanceFloat) {
-      console.log("🐞 > checkBalanceInterval:", checkBalanceInterval);
-      checkBalanceInterval && clearInterval(checkBalanceInterval);
-      handleModalClose({}, "forceClose");
+    if (balanceFloat !== undefined) {
+      setIsLoadingBalance(false);
+      setEvmosBalance(balanceFloat);
     }
-  }, [balanceFloat, isLoadingBalanceAfterSend, currentBalance, checkBalanceInterval]);
+  }, [balanceFloat]);
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>();
+  useEffect(() => {
+    if (isLoadingBalanceAfterSend && !intervalRef.current && !stopEvmosInterval) {
+      intervalRef.current = setInterval(() => reload(evmosAddress), 1000);
+    }
+    if (stopEvmosInterval) {
+      intervalRef.current && clearInterval(intervalRef.current);
+      intervalRef.current = undefined;
+    }
+  }, [isLoadingBalanceAfterSend, stopEvmosInterval]);
 
   const handleSendTokens = async () => {
-    setCurrentBalance(balanceFloat);
-    const success = await send(newAddress!, parseEther(toSend.toString()).toString());
-    console.log("🐞 > success:", success);
+    setPrevEvmosBalance(balanceFloat || 0);
+    const amount = parseEther(tokenToSend.toString()).toString();
+    const success = await sendTokens(targetAddress!, amount, cosmosAccount);
     if (success) {
       setIsLoadingBalanceAfterSend(true);
-      checkBalanceInterval = setInterval(() => reload(address), 1000);
-      console.log("🐞 > checkBalanceInterval:", checkBalanceInterval);
+      handleModalClose();
     }
   };
 
-  useEffect(() => {
-    setNewAddress(otherAddress || "");
-  }, [otherAddress]);
-
-  if (isConnecting || isLoadingBalance) {
+  if (isConnecting || isLoadingBalance || isLoadingCosmosAccount) {
     return <CircularProgress />;
   }
 
-  if (!networks?.[chain].address) {
+  if (!evmosAddress) {
     return (
       <Alert
         severity="warning"
@@ -116,11 +128,11 @@ export default function IBCBalanceEvmos({ cosmosAccount }: { cosmosAccount: Acco
   const renderToSendForm = () => {
     return (
       <Box>
-        <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
+        <Typography variant="h5">Send to Crescent</Typography>
         <Box sx={{ p: 4 }}>
           <Slider
             size="small"
-            value={toSend}
+            value={tokenToSend}
             max={balanceFloat}
             aria-label="Small"
             valueLabelDisplay="auto"
@@ -131,7 +143,7 @@ export default function IBCBalanceEvmos({ cosmosAccount }: { cosmosAccount: Acco
                 label: "Max Tokens",
               },
             ]}
-            onChange={(_, value) => setToSend(value as number)}
+            onChange={(_, value) => setTokenToSend(value as number)}
           />
         </Box>
         <Box sx={{ textAlign: "center" }} mb={5}>
@@ -142,18 +154,18 @@ export default function IBCBalanceEvmos({ cosmosAccount }: { cosmosAccount: Acco
             InputLabelProps={{
               shrink: true,
             }}
-            value={toSend}
+            value={tokenToSend}
             onChange={(e) => {
               const inputValue = Number(e.target.value) < 0 ? 0 : Number(e.target.value);
-              setToSend(Math.min(inputValue, balanceFloat));
+              setTokenToSend(Math.min(inputValue, balanceFloat));
             }}
           />
         </Box>
 
         <ChangeableAddress
-          initialAddress={otherAddress}
-          newAddress={newAddress as string}
-          setAddress={(a) => setNewAddress(a)}
+          initialAddress={crescentAddress}
+          address={targetAddress as string}
+          setAddress={(value) => setTargetAddress(value)}
         />
 
         <Box sx={{ textAlign: "center", pt: 4 }}>
@@ -162,7 +174,7 @@ export default function IBCBalanceEvmos({ cosmosAccount }: { cosmosAccount: Acco
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
-            disabled={toSend === 0}
+            disabled={tokenToSend === 0}
             onClick={handleSendTokens}
             loading={isLoading}
           >
@@ -173,72 +185,68 @@ export default function IBCBalanceEvmos({ cosmosAccount }: { cosmosAccount: Acco
     );
   };
 
-  const renderLoadingBalance = () => {
-    return (
-      <Box>
-        <Typography variant="h5">Send to {CHAIN_TO_NAME[otherChain]}</Typography>
-        <Box sx={{ mt: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="h6">Waiting for transaction to complete...</Typography>
-          <CircularProgress sx={{ mt: 2 }} />
-        </Box>
-      </Box>
-    );
-  };
-
   return (
     <div>
       <Typography variant="h5" sx={{ mb: 2 }}>
-        {CHAIN_TO_NAME[chain]} account
+        Evmos account
       </Typography>
-      <>
-        <p>
-          Address: {address}
-          <IconButton
-            aria-label="open in Mintscan"
-            size="small"
-            href={`https://www.mintscan.io/${chain}/account/${address}`}
-            target="_new"
-          >
-            <LaunchIcon fontSize="inherit" />
-          </IconButton>
-          <br />
-          {ethAddress && (
-            <>
-              EVM Address: {ethAddress}
-              <IconButton
-                aria-label="open in EVMOS block explorer"
-                size="small"
-                href={`https://escan.live/address/${ethAddress}`}
-                target="_new"
-              >
-                <LaunchIcon fontSize="inherit" />
-              </IconButton>
-            </>
-          )}
-          <br />
-          Balance: {balance ? formatEther(balance) : "…"} NEOK
-        </p>
-
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={!balance || !cosmosAccount?.base_account.pub_key}
-          onClick={() => setModalOpen(true)}
+      <p>
+        Address: {evmosAddress}
+        <IconButton
+          aria-label="open in Mintscan"
+          size="small"
+          href={`https://www.mintscan.io/${chain}/account/${evmosAddress}`}
+          target="_new"
         >
-          Send to {CHAIN_TO_NAME[otherChain]}
-        </Button>
-
-        {!cosmosAccount?.base_account.pub_key && (
-          <Alert sx={{ mt: 2 }} severity="warning">
-            It looks like you don&apos;t have a Public Key for this account. <br /> It means that you must perform at
-            least one transaction before sending Evmos to Crescent.
-          </Alert>
+          <LaunchIcon fontSize="inherit" />
+        </IconButton>
+        <br />
+        {ethAddress && (
+          <>
+            EVM Address: {ethAddress}
+            <IconButton
+              aria-label="open in EVMOS block explorer"
+              size="small"
+              href={`https://escan.live/address/${ethAddress}`}
+              target="_new"
+            >
+              <LaunchIcon fontSize="inherit" />
+            </IconButton>
+          </>
         )}
+        <br />
+        <Box>
+          Balance:{" "}
+          {isLoadingBalanceAfterSend ? (
+            <CircularProgress sx={{ ml: 1 }} size={14} />
+          ) : (
+            `${balance ? formatEther(balance) : "…"} NEOK`
+          )}
+        </Box>
+      </p>
 
-        <Modal open={modalOpen} onClose={isLoadingBalanceAfterSend ? () => true : handleModalClose}>
-          {isLoadingBalanceAfterSend ? renderLoadingBalance() : renderToSendForm()}
-        </Modal>
-      </>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!balanceFloat || !cosmosAccount?.base_account.pub_key || isLoadingBalanceAfterSend}
+        onClick={() => {
+          setModalOpen(true);
+          resetStore();
+        }}
+      >
+        Send to Crescent
+      </Button>
+
+      {!cosmosAccount?.base_account.pub_key && (
+        <Alert sx={{ mt: 2 }} severity="warning">
+          It seems that you don&apos;t have a Public Key associated to this account. <br />
+          You should do at least one transaction before sending Evmos to Crescent.
+        </Alert>
+      )}
+
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        {renderToSendForm()}
+      </Modal>
     </div>
   );
 }
