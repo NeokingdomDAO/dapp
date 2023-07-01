@@ -66,14 +66,10 @@ export default function IBC() {
 
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <Paper sx={paperSx}>
-            <IBCBalanceEvmos />
-          </Paper>
+          <IBCBalanceEvmos />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper sx={paperSx}>
-            <IBCBalanceCrescent />
-          </Paper>
+          <IBCBalanceCrescent />
         </Grid>
       </Grid>
     </>

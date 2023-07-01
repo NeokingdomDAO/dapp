@@ -1,12 +1,27 @@
 import { useKeplrContext } from "contexts/KeplrContext";
 import { formatEther, parseEther } from "ethers/lib/utils";
+import Image from "next/image";
 import { shallow } from "zustand/shallow";
 
 import { useEffect, useRef, useState } from "react";
 
+import { Send } from "@mui/icons-material";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { LoadingButton } from "@mui/lab";
-import { Alert, Box, Button, CircularProgress, IconButton, Slider, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  IconButton,
+  Slider,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { calculateSteps } from "@lib/utils";
 
@@ -17,6 +32,8 @@ import Modal from "@components/Modal";
 
 import useIBCBalance from "@hooks/ibc/useIBCBalance";
 import useIBCSend from "@hooks/ibc/useIBCSend";
+
+import CrescentLogo from "../../images/crescent.svg";
 
 export default function IBCBalanceCrescent() {
   const { connect, networks, isConnecting } = useKeplrContext();
@@ -48,6 +65,7 @@ export default function IBCBalanceCrescent() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
+  const [showAddress, setShowAddress] = useState(false);
 
   const [targetAddress, setTargetAddress] = useState<string | undefined>();
   const [tokenToSend, setTokenToSend] = useState(0);
@@ -125,7 +143,12 @@ export default function IBCBalanceCrescent() {
   const renderToSendForm = () => {
     return (
       <Box>
-        <Typography variant="h5">Send to Evmos</Typography>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Image src={CrescentLogo} alt="Evmos" height={40} />
+          <Typography sx={{ ml: 2 }} variant="h5">
+            Send NEOK to Evmos
+          </Typography>
+        </Box>
         <Box sx={{ p: 4 }}>
           <Slider
             size="small"
@@ -175,7 +198,7 @@ export default function IBCBalanceCrescent() {
             onClick={handleSendTokens}
             loading={isLoading}
           >
-            Send
+            Send to Evmos
           </LoadingButton>
         </Box>
       </Box>
@@ -183,46 +206,56 @@ export default function IBCBalanceCrescent() {
   };
 
   return (
-    <div>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Crescent account
-      </Typography>
-      <p>
-        Address: {crescentAddress}
-        <IconButton
-          aria-label="open in Mintscan"
-          size="small"
-          href={`https://www.mintscan.io/${chain}/account/${crescentAddress}`}
-          target="_new"
-        >
-          <LaunchIcon fontSize="inherit" />
-        </IconButton>
-        <br />
-        <Box>
-          Balance:{" "}
-          {isLoadingBalanceAfterSend ? (
-            <CircularProgress sx={{ ml: 1 }} size={14} />
-          ) : (
-            `${balance ? formatEther(balance) : "…"} NEOK`
-          )}
-        </Box>
-      </p>
-
-      <Button
-        variant="contained"
-        color="primary"
-        disabled={!balanceFloat || isLoadingBalanceAfterSend}
-        onClick={() => {
-          setModalOpen(true);
-          resetStore();
-        }}
-      >
-        Send to Evmos
-      </Button>
-
+    <>
+      <Card sx={{ cursor: "pointer" }} onClick={() => setShowAddress(!showAddress)}>
+        <CardHeader
+          avatar={<Image src={CrescentLogo} alt="Crescent" height={40} />}
+          action={
+            <Button
+              sx={{ mt: 1 }}
+              variant="outlined"
+              endIcon={<Send />}
+              disabled={!balanceFloat || isLoadingBalanceAfterSend}
+              onClick={(event) => {
+                event.stopPropagation();
+                setModalOpen(true);
+                resetStore();
+              }}
+            >
+              Send
+            </Button>
+          }
+          title={<Typography sx={{ color: "rgb(235, 175, 118)" }}>Crescent</Typography>}
+          subheader={
+            <Box>
+              Balance:
+              {isLoadingBalanceAfterSend ? (
+                <CircularProgress sx={{ ml: 1 }} size={14} />
+              ) : (
+                ` ${balance ? formatEther(balance) : "…"} NEOK`
+              )}
+            </Box>
+          }
+        />
+        {showAddress && (
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              Address: {crescentAddress}
+              <IconButton
+                aria-label="open in Mintscan"
+                size="small"
+                href={`https://www.mintscan.io/${chain}/account/${crescentAddress}`}
+                target="_new"
+              >
+                <LaunchIcon fontSize="inherit" />
+              </IconButton>
+            </Typography>
+          </CardContent>
+        )}
+      </Card>
       <Modal open={modalOpen} onClose={handleModalClose}>
         {renderToSendForm()}
       </Modal>
-    </div>
+    </>
   );
 }

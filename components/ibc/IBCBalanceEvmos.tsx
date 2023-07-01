@@ -1,12 +1,28 @@
 import { useKeplrContext } from "contexts/KeplrContext";
 import { formatEther, parseEther } from "ethers/lib/utils";
+import Image from "next/image";
 import { shallow } from "zustand/shallow";
 
 import { useEffect, useRef, useState } from "react";
 
+import { Send } from "@mui/icons-material";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { LoadingButton } from "@mui/lab";
-import { Alert, Box, Button, CircularProgress, IconButton, Slider, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  IconButton,
+  Slider,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { calculateSteps } from "@lib/utils";
 
@@ -18,6 +34,8 @@ import Modal from "@components/Modal";
 import useCosmosAccount from "@hooks/ibc/useCosmosAccount";
 import useIBCBalance from "@hooks/ibc/useIBCBalance";
 import useIBCSend from "@hooks/ibc/useIBCSend";
+
+import EvmosLogo from "../../images/evmos.png";
 
 export default function IBCBalanceEvmos() {
   const { connect, networks, isConnecting } = useKeplrContext();
@@ -51,6 +69,7 @@ export default function IBCBalanceEvmos() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoadingBalance, setIsLoadingBalance] = useState(true);
+  const [showAddress, setShowAddress] = useState(false);
 
   const [targetAddress, setTargetAddress] = useState<string | undefined>();
   const [tokenToSend, setTokenToSend] = useState(0);
@@ -128,7 +147,12 @@ export default function IBCBalanceEvmos() {
   const renderToSendForm = () => {
     return (
       <Box>
-        <Typography variant="h5">Send to Crescent</Typography>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Image src={EvmosLogo} alt="Evmos" height={40} />
+          <Typography sx={{ ml: 2 }} variant="h5">
+            Send NEOK to Crescent
+          </Typography>
+        </Box>
         <Box sx={{ p: 4 }}>
           <Slider
             size="small"
@@ -178,7 +202,7 @@ export default function IBCBalanceEvmos() {
             onClick={handleSendTokens}
             loading={isLoading}
           >
-            Send
+            Send to Crescent
           </LoadingButton>
         </Box>
       </Box>
@@ -186,56 +210,68 @@ export default function IBCBalanceEvmos() {
   };
 
   return (
-    <div>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Evmos account
-      </Typography>
-      <p>
-        Address: {evmosAddress}
-        <IconButton
-          aria-label="open in Mintscan"
-          size="small"
-          href={`https://www.mintscan.io/${chain}/account/${evmosAddress}`}
-          target="_new"
-        >
-          <LaunchIcon fontSize="inherit" />
-        </IconButton>
-        <br />
-        {ethAddress && (
-          <>
-            EVM Address: {ethAddress}
-            <IconButton
-              aria-label="open in EVMOS block explorer"
-              size="small"
-              href={`https://escan.live/address/${ethAddress}`}
-              target="_new"
+    <>
+      <Card sx={{ cursor: "pointer" }} onClick={() => setShowAddress(!showAddress)}>
+        <CardHeader
+          avatar={<Image src={EvmosLogo} alt="Evmos" height={40} />}
+          action={
+            <Button
+              sx={{ mt: 1 }}
+              variant="outlined"
+              endIcon={<Send />}
+              disabled={!balanceFloat || !cosmosAccount?.base_account.pub_key || isLoadingBalanceAfterSend}
+              onClick={(event) => {
+                event.stopPropagation();
+                setModalOpen(true);
+                resetStore();
+              }}
             >
-              <LaunchIcon fontSize="inherit" />
-            </IconButton>
-          </>
+              Send
+            </Button>
+          }
+          title={<Typography sx={{ color: "rgb(237, 78, 51)" }}>EVMOS</Typography>}
+          subheader={
+            <Box>
+              Balance:
+              {isLoadingBalanceAfterSend ? (
+                <CircularProgress sx={{ ml: 1 }} size={14} />
+              ) : (
+                ` ${balance ? formatEther(balance) : "…"} NEOK`
+              )}
+            </Box>
+          }
+        />
+        {showAddress && (
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              Address: {evmosAddress}
+              <IconButton
+                aria-label="open in Mintscan"
+                size="small"
+                href={`https://www.mintscan.io/${chain}/account/${evmosAddress}`}
+                target="_new"
+              >
+                <LaunchIcon fontSize="inherit" />
+              </IconButton>
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {ethAddress && (
+                <>
+                  EVM Address: {ethAddress}
+                  <IconButton
+                    aria-label="open in EVMOS block explorer"
+                    size="small"
+                    href={`https://escan.live/address/${ethAddress}`}
+                    target="_new"
+                  >
+                    <LaunchIcon fontSize="inherit" />
+                  </IconButton>
+                </>
+              )}
+            </Typography>
+          </CardContent>
         )}
-        <br />
-        <Box>
-          Balance:{" "}
-          {isLoadingBalanceAfterSend ? (
-            <CircularProgress sx={{ ml: 1 }} size={14} />
-          ) : (
-            `${balance ? formatEther(balance) : "…"} NEOK`
-          )}
-        </Box>
-      </p>
-
-      <Button
-        variant="contained"
-        color="primary"
-        disabled={!balanceFloat || !cosmosAccount?.base_account.pub_key || isLoadingBalanceAfterSend}
-        onClick={() => {
-          setModalOpen(true);
-          resetStore();
-        }}
-      >
-        Send to Crescent
-      </Button>
+      </Card>
 
       {!cosmosAccount?.base_account.pub_key && (
         <Alert sx={{ mt: 2 }} severity="warning">
@@ -247,6 +283,6 @@ export default function IBCBalanceEvmos() {
       <Modal open={modalOpen} onClose={handleModalClose}>
         {renderToSendForm()}
       </Modal>
-    </div>
+    </>
   );
 }
