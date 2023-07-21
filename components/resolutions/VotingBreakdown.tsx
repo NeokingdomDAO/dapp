@@ -19,12 +19,14 @@ export default function VotingBreakdown({ resolution }: { resolution: Resolution
         <Alert severity={resolution.hasQuorum ? "success" : "error"} sx={{ mt: 3, mb: 3 }}>
           {resolution.hasQuorum ? (
             <span>
-              THE RESOLUTION OF SHAREHOLDERS <b>HAS BEEN</b> ADOPTED on {resolution.resolutionTypeInfo.votingEndsAt}.
-              Shareholders did not submit dissenting opinions
+              THE RESOLUTION OF SHAREHOLDERS{" "}
+              <b>{resolution.isNegative ? "HAS NOT BEEN REJECTED" : "HAS BEEN ADOPTED"}</b> on{" "}
+              {resolution.resolutionTypeInfo.votingEndsAt}. Shareholders did not submit dissenting opinions
             </span>
           ) : (
             <span>
-              THE RESOLUTION OF SHAREHOLDERS <b>HAS NOT BEEN</b> ADOPTED. Voting ended on{" "}
+              THE RESOLUTION OF SHAREHOLDERS{" "}
+              <b>{resolution.isNegative ? "HAS BEEN REJECTED" : "HAS NOT BEEN ADOPTED"}</b>. Voting ended on{" "}
               {resolution.resolutionTypeInfo.votingEndsAt}. Shareholders did not submit dissenting opinions
             </span>
           )}

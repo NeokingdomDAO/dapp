@@ -107,11 +107,14 @@ export default function ResolutionCard({
             <Alert severity={resolution.hasQuorum ? "success" : "error"}>
               {resolution.hasQuorum ? (
                 <span>
-                  THE RESOLUTION OF SHAREHOLDERS <b>HAS BEEN</b> ADOPTED on {resolution.resolutionTypeInfo.votingEndsAt}
+                  THE RESOLUTION OF SHAREHOLDERS{" "}
+                  <b>{resolution.isNegative ? "HAS NOT BEEN REJECTED" : "HAS BEEN ADOPTED"}</b> on{" "}
+                  {resolution.resolutionTypeInfo.votingEndsAt}
                 </span>
               ) : (
                 <span>
-                  THE RESOLUTION OF SHAREHOLDERS <b>HAS NOT BEEN</b> ADOPTED. Voting ended on{" "}
+                  THE RESOLUTION OF SHAREHOLDERS{" "}
+                  <b>{resolution.isNegative ? "HAS BEEN REJECTED" : "HAS NOT BEEN ADOPTED"}</b>. Voting ended on{" "}
                   {resolution.resolutionTypeInfo.votingEndsAt}
                 </span>
               )}
