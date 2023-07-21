@@ -154,7 +154,6 @@ export default function ResolutionForm({
             )}
           </FormControl>
         </Grid>
-        {/* TODO - if isEditing make this readonly (and get addressedContributor from graph) */}
         {isEditing && addressedContributor && !/^0x0+$/.test(addressedContributor) && (
           <Grid item xs={12} sx={{ mt: 4 }}>
             <Alert sx={{ mt: 4 }} severity="info">
