@@ -5,18 +5,21 @@ const INITIAL_STATE = {
   title: "",
   content: "",
   typeId: "",
+  exclusionAddress: "",
 };
 
 export interface ResolutionFormBase {
   title: string;
   content: string;
   typeId: string;
+  exclusionAddress: string;
 }
 
 interface ResolutionForm extends ResolutionFormBase {
   onUpdateTitle: (evt: any) => void;
   onUpdateContent: (content: string) => void;
   onUpdateType: (evt: any) => void;
+  onUpdateExclusionAddress: (address: string) => void;
   reset: (state?: ResolutionFormBase) => void;
 }
 
@@ -35,6 +38,7 @@ export const createResolutionFormStore = (initProps?: Partial<ResolutionFormBase
             onUpdateTitle: (evt: any) => set({ title: evt.target.value }),
             onUpdateContent: (content: string) => set({ content }),
             onUpdateType: (evt: any) => set({ typeId: String(evt.target.value) }),
+            onUpdateExclusionAddress: (exclusionAddress: string) => set({ exclusionAddress }),
             reset: (state: ResolutionFormBase = INITIAL_STATE) => set({ ...state }),
           }),
           { name: "resolution-form" },
@@ -46,6 +50,7 @@ export const createResolutionFormStore = (initProps?: Partial<ResolutionFormBase
         onUpdateTitle: (evt: any) => set({ title: evt.target.value }),
         onUpdateContent: (content: string) => set({ content }),
         onUpdateType: (evt: any) => set({ typeId: String(evt.target.value) }),
+        onUpdateExclusionAddress: (exclusionAddress: string) => set({ exclusionAddress }),
         reset: (state: ResolutionFormBase = INITIAL_STATE) => set({ ...state }),
       }));
 };

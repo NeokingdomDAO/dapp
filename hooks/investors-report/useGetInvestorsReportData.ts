@@ -23,7 +23,7 @@ export default function useGetInvestorsReportData(): {
 } {
   const { data, isLoading } = useSWR<any>(getTokenMintings, fetcher, { refreshInterval: REFETCH_AFTER_MS });
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return { data, isLoading, dataAccumulated: [] };
   }
 

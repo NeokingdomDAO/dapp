@@ -24,6 +24,17 @@ export default function useResolutionCreate() {
     onSubmit: async ({ vetoTypeId, currentResolution, executionTo = [], executionData = [] }: SubmitParams) => {
       const ipfsId = await addToIpfs(currentResolution);
       const resolutionTypeId = Number(vetoTypeId || currentResolution.typeId);
+      if ((currentResolution.exclusionAddress || "").trim() !== "") {
+        return executeTx<
+          ResolutionManager["createResolutionWithExclusion"],
+          Parameters<ResolutionManager["createResolutionWithExclusion"]>
+        >({
+          contractMethod: resolutionManagerContract?.createResolutionWithExclusion,
+          params: [ipfsId, resolutionTypeId, executionTo, executionData, currentResolution.exclusionAddress],
+          onSuccessMessage: "Preliminary draft resolution successfully created",
+          onErrorMessage: "Error while creating preliminary draft resolution",
+        });
+      }
       return executeTx<ResolutionManager["createResolution"], Parameters<ResolutionManager["createResolution"]>>({
         contractMethod: resolutionManagerContract?.createResolution,
         params: [ipfsId, resolutionTypeId, !!vetoTypeId, executionTo, executionData],

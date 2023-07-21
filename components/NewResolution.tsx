@@ -59,6 +59,7 @@ export default function NewResolution({
         typeId: formProps.typeId,
         title: formProps.title,
         content: formProps.content,
+        exclusionAddress: formProps.exclusionAddress,
       },
       executionData: executionPayload?.map((user) => user.executionData as string) || [],
       executionTo: executionPayload?.map(() => governanceTokenContractAddress as string) || [],

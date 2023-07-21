@@ -12,7 +12,7 @@ import useBlockchainTransaction from "./useBlockchainTransaction";
 type SubmitParams = {
   vetoTypeId: string | null;
   resolutionId: string;
-  currentResolution: ResolutionFormBase;
+  currentResolution: Omit<ResolutionFormBase, "exclusionAddress">;
 };
 
 export default function useResolutionUpdate() {
