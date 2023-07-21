@@ -67,8 +67,12 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
     return <Alert severity="warning">You should connect your wallet in order to vote</Alert>;
   }
 
-  if (!acl?.canVote(resolution.voters) || isSameAddress(address as string, resolution.addressedContributor)) {
+  if (!acl?.canVote(resolution.voters)) {
     return <Alert severity="warning">You&apos;re not entitled to vote for this resolution</Alert>;
+  }
+
+  if (isSameAddress(address as string, resolution.addressedContributor)) {
+    return <Alert severity="warning">You&apos;re excluded from voting for this resolution</Alert>;
   }
 
   if (resolution.isLegacy) {
