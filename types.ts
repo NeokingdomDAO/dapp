@@ -53,6 +53,7 @@ export type ResolutionEntity = {
   updateTimestamp: string;
   approveTimestamp: string;
   rejectTimestamp: string;
+  addressedContributor: string;
   createBy: string;
   updateBy: string;
   approveBy: string;

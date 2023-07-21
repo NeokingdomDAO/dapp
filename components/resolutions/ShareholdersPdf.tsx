@@ -1,6 +1,8 @@
 import { Text, View } from "@react-pdf/renderer";
 import { ResolutionEntityEnhanced, ResolutionVoter } from "types";
 
+import { isSameAddress } from "@lib/utils";
+
 import { Bold, Br } from "./Pdf";
 import { sortByVotingPower } from "./VotingUsers";
 
@@ -42,15 +44,19 @@ export default function ShareholdersPdf({
               <Bold>{getUserName(voter.address)}</Bold> <Text style={{ fontSize: "10px" }}>{voter.address}</Text>
             </Text>
             <Br />
-            <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-              {voter.hasVoted ? <Text>Voted: {voter.hasVotedYes ? "Yes" : "No"}</Text> : <Text>Voted: Abstain</Text>}
-              <Text>&nbsp;- </Text>
-              <Text>Tokens (# Votes): {voter.votingPowerInt.toLocaleString()}</Text>
-              <Text>&nbsp;- </Text>
-              <Text>% of all votes: {Number(percOfAll)}%</Text>
-              <Text>&nbsp;- </Text>
-              <Text>PoA was used: {getPOAText(voter, getUserName)}</Text>
-            </View>
+            {isSameAddress(resolution.addressedContributor, voter.address) ? (
+              <Text>This contributor is excluded from voting</Text>
+            ) : (
+              <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+                {voter.hasVoted ? <Text>Voted: {voter.hasVotedYes ? "Yes" : "No"}</Text> : <Text>Voted: Abstain</Text>}
+                <Text>&nbsp;- </Text>
+                <Text>Tokens (# Votes): {voter.votingPowerInt.toLocaleString()}</Text>
+                <Text>&nbsp;- </Text>
+                <Text>% of all votes: {Number(percOfAll)}%</Text>
+                <Text>&nbsp;- </Text>
+                <Text>PoA was used: {getPOAText(voter, getUserName)}</Text>
+              </View>
+            )}
           </View>
         );
       })}

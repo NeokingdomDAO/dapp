@@ -134,7 +134,12 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
       <Typography variant="h3">
         {formProps.title.trim() ? `Preliminary Draft: ${formProps.title}` : "Preliminary Draft Resolution"}
       </Typography>
-      <ResolutionForm {...formProps} isMonthlyRewards={(resolution.executionData || []).length > 0} isEditing />
+      <ResolutionForm
+        {...formProps}
+        isMonthlyRewards={(resolution.executionData || []).length > 0}
+        isEditing
+        addressedContributor={resolution?.addressedContributor}
+      />
       <Box sx={{ pb: 4, pt: 4 }}>
         {toUpdate ? (
           <LoadingButton

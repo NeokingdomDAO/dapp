@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   Alert,
+  AlertTitle,
   Box,
   CircularProgress,
   FormControl,
@@ -22,6 +23,7 @@ import { getPreviousMonth } from "@lib/resolutions/common";
 import useResolutionTypes from "@hooks/useResolutionTypes";
 
 import { RESOLUTION_TYPES_TEXTS } from "../i18n/resolution";
+import User from "./User";
 import UsersAutocomplete from "./UsersAutocomplete";
 
 interface FormProps {
@@ -35,6 +37,7 @@ interface FormProps {
   onUpdateContent: (content: string) => void;
   onUpdateExclusionAddress: (address: string) => void;
   isEditing?: boolean;
+  addressedContributor?: string;
 }
 
 export default function ResolutionForm({
@@ -48,6 +51,7 @@ export default function ResolutionForm({
   onUpdateContent,
   onUpdateExclusionAddress,
   isEditing = false,
+  addressedContributor,
 }: FormProps) {
   const { types, isLoading: isLoadingTypes } = useResolutionTypes();
   const editorRef = useRef(null);
@@ -151,26 +155,36 @@ export default function ResolutionForm({
           </FormControl>
         </Grid>
         {/* TODO - if isEditing make this readonly (and get addressedContributor from graph) */}
-        <Grid item xs={12} sx={{ mt: 4 }}>
-          <Paper sx={{ p: 4 }}>
-            <FormControlLabel
-              control={<Switch checked={withExclusion} onChange={() => setWithExclusion((old) => !old)} />}
-              label="Resolution with exclusion"
-            />
-            {withExclusion && (
-              <Box sx={{ mt: 4 }}>
-                <UsersAutocomplete
-                  exclusionAddress={exclusionAddress}
-                  onChange={(address) => onUpdateExclusionAddress(address)}
-                />
-              </Box>
-            )}
-            <Alert severity="info" sx={{ mt: 4 }}>
-              You can decide to exclude one contributor from the resolution. This contributor will not be able to vote
-              on such resolution and their vote will not count.
+        {isEditing && addressedContributor && !/^0x0+$/.test(addressedContributor) && (
+          <Grid item xs={12} sx={{ mt: 4 }}>
+            <Alert sx={{ mt: 4 }} severity="info">
+              <AlertTitle>This contributor is excluded from voting</AlertTitle>
+              <User address={addressedContributor} sx={{ pl: 1, mt: 1 }} />
             </Alert>
-          </Paper>
-        </Grid>
+          </Grid>
+        )}
+        {!isEditing && (
+          <Grid item xs={12} sx={{ mt: 4 }}>
+            <Paper sx={{ p: 4 }}>
+              <FormControlLabel
+                control={<Switch checked={withExclusion} onChange={() => setWithExclusion((old) => !old)} />}
+                label="Resolution with exclusion"
+              />
+              {withExclusion && (
+                <Box sx={{ mt: 4 }}>
+                  <UsersAutocomplete
+                    exclusionAddress={exclusionAddress}
+                    onChange={(address) => onUpdateExclusionAddress(address)}
+                  />
+                </Box>
+              )}
+              <Alert severity="info" sx={{ mt: 4 }}>
+                You can decide to exclude one contributor from the resolution. This contributor will not be able to vote
+                on such resolution and their vote will not count.
+              </Alert>
+            </Paper>
+          </Grid>
+        )}
       </Grid>
     </div>
   );

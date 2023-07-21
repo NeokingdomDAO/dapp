@@ -5,12 +5,13 @@ import showdown from "showdown";
 
 import { useMemo } from "react";
 
-import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, CircularProgress, Typography } from "@mui/material";
 
 import { RESOLUTION_STATES, getEnhancedResolutionMapper } from "@lib/resolutions/common";
 import { getPdfSigner } from "@lib/utils";
 
 import Section from "@components/Section";
+import User from "@components/User";
 import ExecutionPayload from "@components/resolutions/ExecutionPayload";
 import Header from "@components/resolutions/Header";
 import LegalInfo from "@components/resolutions/LegalInfo";
@@ -18,6 +19,7 @@ import MainInfo from "@components/resolutions/MainInfo";
 import VotingBreakdown from "@components/resolutions/VotingBreakdown";
 import VotingSection from "@components/resolutions/VotingSection";
 import VotingUsers from "@components/resolutions/VotingUsers";
+import UserCard from "@components/shareholders/UserCard";
 
 import useGetResolution from "@hooks/useGetResolution";
 import useTimestamp from "@hooks/useTimestamp";
@@ -109,6 +111,12 @@ export default function ResolutionView() {
             <span>
               <b>{resolution.resolutionType.quorum}% of votes</b> are needed to approve the motion
             </span>
+            {!/^0x0+$/.test(resolution.addressedContributor) && (
+              <Alert sx={{ mt: 4 }} severity="info">
+                <AlertTitle>This contributor is excluded from voting</AlertTitle>
+                <User address={resolution.addressedContributor} sx={{ pl: 1, mt: 1 }} />
+              </Alert>
+            )}
           </>
         </Section>
       )}
@@ -122,7 +130,7 @@ export default function ResolutionView() {
               <Typography variant="h5" sx={{ mb: 2 }}>
                 List of shareholders and their positions:
               </Typography>
-              <VotingUsers voters={resolution.voters} />
+              <VotingUsers voters={resolution.voters} addressedContributor={resolution.addressedContributor} />
             </>
           </Section>
         </>

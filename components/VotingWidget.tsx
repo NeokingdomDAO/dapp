@@ -63,7 +63,11 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
     <CircularProgress />;
   }
 
-  if (!acl?.canVote(resolution.voters)) {
+  if (!isConnected) {
+    return <Alert severity="warning">You should connect your wallet in order to vote</Alert>;
+  }
+
+  if (!acl?.canVote(resolution.voters) || isSameAddress(address as string, resolution.addressedContributor)) {
     return <Alert severity="warning">You&apos;re not entitled to vote for this resolution</Alert>;
   }
 

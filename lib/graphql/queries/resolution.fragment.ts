@@ -24,6 +24,7 @@ export const resolutionFragment = gql`
     hasQuorum
     executionTo
     executionData
+    addressedContributor
     voters {
       address
       votingPower
