@@ -1,6 +1,5 @@
-import { Signer } from "ethers";
 import { SUPPORTED_CHAINS } from "pages/_app";
-import { useAccount, useDisconnect, useNetwork, useSigner } from "wagmi";
+import { WalletClient, useAccount, useDisconnect, useNetwork, useWalletClient } from "wagmi";
 
 import { useEffect, useState } from "react";
 
@@ -27,37 +26,37 @@ import networksTeledisko from "../networks/teledisko.json";
 const networks: Record<string, any> =
   process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom" ? networksNeoKingdom : networksTeledisko;
 
-const getResolutionManagerContract = (chainId: string, signer: Signer): ResolutionManager => {
+const getResolutionManagerContract = (chainId: string, walletClient: WalletClient): ResolutionManager => {
   const address = networks[chainId]["ResolutionManager"]?.address;
-  return ResolutionManager__factory.connect(address, signer);
+  return ResolutionManager__factory.connect(address, walletClient);
 };
 
-const getNeokingdomTokenContract = (chainId: string, signer: Signer): NeokingdomToken => {
+const getNeokingdomTokenContract = (chainId: string, walletClient: WalletClient): NeokingdomToken => {
   const address = networks[chainId]["NeokingdomToken"]?.address;
-  return NeokingdomToken__factory.connect(address, signer);
+  return NeokingdomToken__factory.connect(address, walletClient);
 };
 
 export const getNeokingdomTokenContractAddress = (chainId: string): string => {
   return networks[chainId]["NeokingdomToken"]?.address;
 };
 
-const getVotingContract = (chainId: string, signer: Signer): Voting => {
+const getVotingContract = (chainId: string, walletClient: WalletClient): Voting => {
   const address = networks[chainId]["Voting"]?.address;
-  return Voting__factory.connect(address, signer);
+  return Voting__factory.connect(address, walletClient);
 };
 
-const getInternalMarketContract = (chainId: string, signer: Signer): InternalMarket => {
+const getInternalMarketContract = (chainId: string, walletClient: WalletClient): InternalMarket => {
   const address = networks[chainId]["InternalMarket"]?.address;
-  return InternalMarket__factory.connect(address, signer);
+  return InternalMarket__factory.connect(address, walletClient);
 };
 
 const getInternalMarketContractAddress = (chainId: string): string => {
   return networks[chainId]["InternalMarket"]?.address;
 };
 
-const getGovernanceTokenContract = (chainId: string, signer: Signer): GovernanceToken => {
+const getGovernanceTokenContract = (chainId: string, walletClient: WalletClient): GovernanceToken => {
   const address = networks[chainId]["GovernanceToken"]?.address;
-  return GovernanceToken__factory.connect(address, signer);
+  return GovernanceToken__factory.connect(address, walletClient);
 };
 
 const getGovernanceTokenContractAddress = (chainId: string): string => {
@@ -65,22 +64,22 @@ const getGovernanceTokenContractAddress = (chainId: string): string => {
 };
 
 // todo use ERC20?
-const getUsdcContract = (chainId: string, signer: Signer): TokenMock => {
+const getUsdcContract = (chainId: string, walletClient: WalletClient): TokenMock => {
   const address = networks[chainId]["TokenMock"]?.address;
-  return TokenMock__factory.connect(address, signer);
+  return TokenMock__factory.connect(address, walletClient);
 };
 
 export function useContracts() {
   const { address } = useAccount();
   const { chain } = useNetwork();
-  const { data: signer } = useSigner();
+  const { data: walletClient } = useWalletClient();
   const { disconnect } = useDisconnect();
   const { enqueueSnackbar } = useSnackbar();
 
   const [contracts, setContracts] = useState<ContractsContextType>({});
 
   useEffect(() => {
-    if (address && signer) {
+    if (address && walletClient) {
       try {
         const chainId = String(chain?.id);
 
@@ -89,14 +88,14 @@ export function useContracts() {
         }
 
         setContracts({
-          resolutionManagerContract: getResolutionManagerContract(chainId, signer),
-          neokingdomTokenContract: getNeokingdomTokenContract(chainId, signer),
-          votingContract: getVotingContract(chainId, signer),
-          internalMarketContract: getInternalMarketContract(chainId, signer),
+          resolutionManagerContract: getResolutionManagerContract(chainId, walletClient),
+          neokingdomTokenContract: getNeokingdomTokenContract(chainId, walletClient),
+          votingContract: getVotingContract(chainId, walletClient),
+          internalMarketContract: getInternalMarketContract(chainId, walletClient),
           internalMarketContractAddress: getInternalMarketContractAddress(chainId),
-          governanceTokenContract: getGovernanceTokenContract(chainId, signer),
+          governanceTokenContract: getGovernanceTokenContract(chainId, walletClient),
           governanceTokenContractAddress: getGovernanceTokenContractAddress(chainId),
-          usdcContract: getUsdcContract(chainId, signer),
+          usdcContract: getUsdcContract(chainId, walletClient),
         });
       } catch (error) {
         console.error(error);
@@ -107,7 +106,7 @@ export function useContracts() {
         disconnect();
       }
     }
-  }, [address, signer, chain?.id]);
+  }, [address, walletClient, chain?.id]);
 
   return contracts;
 }

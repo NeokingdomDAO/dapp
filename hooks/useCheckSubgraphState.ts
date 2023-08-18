@@ -7,6 +7,7 @@ import { fetcher } from "@graphql/client";
 import { getSubgraphState } from "@graphql/queries/get-subgraph-state";
 
 import { useSnackbar } from "./useSnackbar";
+import { bigIntToNum } from "./useUserBalanceAndOffers";
 
 const NOTIFY_MISMATCH_AFTER_MS = 10000;
 const REFETCH_AFTER_MS = 3000;
@@ -61,6 +62,6 @@ export function useCheckSubgraphState() {
 
   return {
     shouldNotifyMismatch,
-    difference: Math.abs((blockNumber || 0) - graphBlockNumber),
+    difference: Math.abs(bigIntToNum(blockNumber || BigInt(0)) - bigIntToNum(graphBlockNumber)),
   };
 }

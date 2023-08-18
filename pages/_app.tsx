@@ -10,7 +10,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
-import { WagmiConfig, configureChains, createClient } from "wagmi";
+import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { evmos, evmosTestnet } from "wagmi/chains";
 
 import * as React from "react";
@@ -33,22 +33,16 @@ import { META } from "./_document";
 export const SUPPORTED_CHAINS = [process.env.NEXT_PUBLIC_ENV === "staging" ? evmosTestnet : evmos];
 
 // Wagmi client
-const { provider } = configureChains(SUPPORTED_CHAINS, [
-  w3mProvider({ projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID }),
-]);
-
-const wagmiClient = createClient({
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+const { publicClient } = configureChains(SUPPORTED_CHAINS, [w3mProvider({ projectId })]);
+const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: w3mConnectors({
-    projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
-    version: 1,
-    chains: SUPPORTED_CHAINS,
-  }),
-  provider,
+  connectors: w3mConnectors({ projectId, chains: SUPPORTED_CHAINS }),
+  publicClient,
 });
 
 // Web3Modal Ethereum Client
-const ethereumClient = new EthereumClient(wagmiClient, SUPPORTED_CHAINS);
+const ethereumClient = new EthereumClient(wagmiConfig, SUPPORTED_CHAINS);
 
 interface DappProps extends AppProps {
   Component: NextPage & {
@@ -89,7 +83,7 @@ export default function App({ Component, pageProps }: DappProps) {
   const appElement = (
     <CssVarsProvider theme={newTheme} defaultMode="system">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <WagmiConfig client={wagmiClient}>
+        <WagmiConfig config={wagmiConfig}>
           <ChainProvider
             chains={supportedChains}
             assetLists={supportedAssets}
@@ -147,7 +141,7 @@ export default function App({ Component, pageProps }: DappProps) {
       </Head>
       {appElement}
       <Web3Modal
-        projectId={process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID}
+        projectId={projectId}
         ethereumClient={ethereumClient}
         themeVariables={{
           "--w3m-z-index": "2000",
