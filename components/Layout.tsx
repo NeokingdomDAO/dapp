@@ -9,6 +9,8 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 
+import { useCheckSubgraphState } from "@hooks/useCheckSubgraphState";
+import useGetActiveResolutions from "@hooks/useGetActiveResolutions";
 import useUser from "@hooks/useUser";
 
 import useDelegationStatus from "../hooks/useDelegationStatus";
@@ -32,9 +34,12 @@ export default function Layout({
 }) {
   const { user } = useUser();
   const router = useRouter();
+  const { shouldNotifyMismatch } = useCheckSubgraphState();
   const trigger = useScrollTrigger();
   const isActive = useMemo(() => initActiveStyle(router.asPath), [router.asPath]);
   const { data, isLoading } = useDelegationStatus();
+  const { votingResolutions } = useGetActiveResolutions();
+  const votingResolutionsNum = votingResolutions?.length || 0;
 
   const delegationActive = data.signerDelegatedBy.length > 0 || data.signerDelegationStatus?.isDelegating;
 
@@ -136,13 +141,31 @@ export default function Layout({
                 />
               )}
 
-              <Chip
-                label="Resolutions"
-                component={Link}
-                href="/resolutions"
-                variant={isActive("/resolutions") ? "filled" : "outlined"}
-                clickable
-              />
+              <Badge
+                color="success"
+                sx={{
+                  "& .MuiBadge-badge": {
+                    top: 10,
+                    right: 3,
+                    border: "2px solid #FFF",
+                    ['[data-mui-color-scheme="dark"] &']: {
+                      border: "2px solid #121212",
+                    },
+                    padding: "0 4px",
+                  },
+                }}
+                badgeContent={votingResolutionsNum}
+                invisible={votingResolutionsNum === 0}
+                variant="standard"
+              >
+                <Chip
+                  label="Resolutions"
+                  component={Link}
+                  href="/resolutions"
+                  variant={isActive("/resolutions") ? "filled" : "outlined"}
+                  clickable
+                />
+              </Badge>
 
               {user?.isLoggedIn && (
                 <Chip
@@ -200,7 +223,16 @@ export default function Layout({
           </Toolbar>
         </AppBar>
       </Box>
-      <Box component="main" sx={{ p: { md: fullWidth ? 0 : 3 }, pt: { xs: fullWidth ? 15 : 18, md: 18 } }}>
+      <Box
+        component="main"
+        sx={{
+          p: { md: fullWidth ? 0 : 3 },
+          ...(shouldNotifyMismatch && {
+            pb: { xs: 12, md: 12 },
+          }),
+          pt: { xs: fullWidth ? 15 : 18, md: 18 },
+        }}
+      >
         {fullWidth ? children : <Container maxWidth="lg">{children}</Container>}
       </Box>
     </>

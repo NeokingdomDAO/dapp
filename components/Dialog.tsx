@@ -24,6 +24,9 @@ type DialogProps = {
   descriptionId: string;
   title?: string;
   children: ReactElement;
+  confirmLabel?: string;
+  discardLabel?: string;
+  disabledConfirm?: boolean;
 };
 
 export default function Dialog({
@@ -32,7 +35,10 @@ export default function Dialog({
   handleClose,
   descriptionId,
   title = "Are you sure?",
+  confirmLabel,
+  discardLabel,
   children,
+  disabledConfirm = false,
 }: DialogProps) {
   const theme = useTheme();
 
@@ -58,10 +64,10 @@ export default function Dialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} variant="text">
-          Discard
+          {discardLabel || "Discard"}
         </Button>
-        <Button onClick={handleApprove} variant="contained">
-          Confirm
+        <Button onClick={handleApprove} variant="contained" disabled={disabledConfirm}>
+          {confirmLabel || "Confirm"}
         </Button>
       </DialogActions>
     </MUIDialog>
