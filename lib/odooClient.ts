@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid";
 
-export const ODOO_ENDPOINT = "https://odoo.neokingdom.org/jsonrpc";
-export const ODOO_AUTH_ENDPOINT = "https://odoo.neokingdom.org/web/session/authenticate";
-export const ODOO_DB_NAME = "neokingdomdao";
+export const ODOO_ENDPOINT = `${process.env.NEXT_PUBLIC_ODOO_ENDPOINT}/jsonrpc`;
+export const ODOO_AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_ODOO_ENDPOINT}/web/session/authenticate`;
+export const ODOO_DB_NAME = process.env.NEXT_PUBLIC_PROJECT_KEY === "teledisko" ? "odoo" : "neokingdomdao";
 
 async function jsonRpc(url: string, method: string, params: any) {
   const response = await fetch(url, {
@@ -22,7 +22,7 @@ async function jsonRpc(url: string, method: string, params: any) {
   if (response.ok && resBody.result) {
     return resBody.result;
   } else {
-    console.error(response, resBody);
+    console.log("🐞 > Odoo Error:", resBody);
     const message = resBody.error?.data?.message || "Unknown error";
     throw new Error(message);
   }

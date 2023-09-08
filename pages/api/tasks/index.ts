@@ -39,7 +39,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
         projectIds,
         userId,
       });
-      res.status(200).json(data.ProjectProject);
+      res.status(200).json(data?.ProjectProject || []);
     } catch (err: any) {
       res.status(500).json({ message: err.message });
     }

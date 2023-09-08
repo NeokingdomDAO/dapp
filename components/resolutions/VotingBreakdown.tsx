@@ -54,6 +54,8 @@ export default function VotingBreakdown({ resolution }: { resolution: Resolution
             ]}
             activeIndex={activePieChartIndex}
             setActiveIndex={setActivePieChartIndex}
+            abstained={voting.totalAbstained}
+            isNegative={resolution.isNegative}
           />
         </Box>
       </Box>
@@ -72,26 +74,18 @@ export default function VotingBreakdown({ resolution }: { resolution: Resolution
           <Typography variant="body1">Total</Typography>
           <Typography variant="caption">{voting.maxVotingPower.toLocaleString()} / 100%</Typography>
         </Box>
-        <Box
-          onClick={() => setActivePieChartIndex(0)}
-          onMouseEnter={() => setActivePieChartIndex(0)}
-          sx={{ cursor: "pointer" }}
-        >
-          <Typography variant="body1">In favour</Typography>
+        <Box>
+          <Typography variant="body1">Voted Yes</Typography>
           <Typography variant="caption">
             {voting.totalVotedYes.toLocaleString()} /{" "}
             {Number(((100 * voting.totalVotedYes) / voting.maxVotingPower).toFixed(2))}%
           </Typography>
         </Box>
-        <Box
-          onClick={() => setActivePieChartIndex(1)}
-          onMouseEnter={() => setActivePieChartIndex(1)}
-          sx={{ cursor: "pointer" }}
-        >
-          <Typography variant="body1">Against</Typography>
+        <Box>
+          <Typography variant="body1">Voted No</Typography>
           <Typography variant="caption">
-            {voting.totalVotedNo.toLocaleString()} /{" "}
-            {Number(((100 * voting.totalVotedNo) / voting.maxVotingPower).toFixed(2))}%
+            {(voting.totalVotedNo - voting.totalAbstained).toLocaleString()} /{" "}
+            {Number(((100 * (voting.totalVotedNo - voting.totalAbstained)) / voting.maxVotingPower).toFixed(2))}%
           </Typography>
         </Box>
       </Stack>
@@ -105,14 +99,17 @@ export default function VotingBreakdown({ resolution }: { resolution: Resolution
         sx={{ textAlign: "center", "& > div": { width: "30%" } }}
       >
         <Box>
-          <Typography variant="body1">Abstain</Typography>
+          <Typography variant="body1">Against</Typography>
           <Typography variant="caption">
-            {voting.totalAbstained.toLocaleString()} /{" "}
-            {Number(((100 * voting.totalAbstained) / voting.maxVotingPower).toFixed(2))}%
+            {voting.totalVotedNo.toLocaleString()} /{" "}
+            {Number(((100 * voting.totalVotedNo) / voting.maxVotingPower).toFixed(2))}% <br />
+            <Typography variant="caption">Of which {voting.totalAbstained.toLocaleString()} abstained</Typography>
           </Typography>
         </Box>
         <Box>
-          <Typography variant="body1">Votes needed to approve</Typography>
+          <Typography variant="body1">
+            {resolution.isNegative ? "Against votes" : "Yes votes"} needed to approve
+          </Typography>
           <Typography variant="caption">
             {Math.round((voting.maxVotingPower * Number(voting.quorum)) / 100).toLocaleString()} / {voting.quorum}%
           </Typography>

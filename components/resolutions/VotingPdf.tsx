@@ -33,7 +33,7 @@ export default function VotingPdf({ resolution }: { resolution: ResolutionEntity
           {Number(((100 * voting.totalAbstained) / voting.maxVotingPower).toFixed(2))}%
         </Text>
         <Br />
-        <Bold>Votes needed to approve:</Bold>{" "}
+        <Bold>{resolution.isNegative ? "Against votes" : "Yes votes"} needed to approve:</Bold>{" "}
         <Text>
           {Math.round((voting.maxVotingPower * Number(voting.quorum)) / 100).toLocaleString()} / {voting.quorum}%
         </Text>

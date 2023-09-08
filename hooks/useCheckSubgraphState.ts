@@ -10,6 +10,7 @@ import { useSnackbar } from "./useSnackbar";
 
 const NOTIFY_MISMATCH_AFTER_MS = 10000;
 const REFETCH_AFTER_MS = 3000;
+const DIFFERENCE_TO_NOTIFY = 2;
 
 export function useCheckSubgraphState() {
   const { data, isLoading } = useSWR<any>(getSubgraphState, fetcher, { refreshInterval: REFETCH_AFTER_MS });
@@ -35,7 +36,8 @@ export function useCheckSubgraphState() {
 
   useEffect(() => {
     if (!isLoading && !isLoadingBlockNumber && !isRefetching) {
-      setMismatch(graphBlockNumber !== blockNumber);
+      const diff = Math.abs(blockNumber - graphBlockNumber);
+      setMismatch(diff > DIFFERENCE_TO_NOTIFY);
     }
   }, [isLoading, isLoadingBlockNumber, isRefetching, blockNumber, graphBlockNumber]);
 
@@ -57,7 +59,14 @@ export function useCheckSubgraphState() {
     // so, when it actually became true we need to notify when it becomes false again (when it's synced)
     if (shouldNotifyMismatch) {
       return () => {
-        enqueueSnackbar("Synchronization complete", { variant: "success", autoHideDuration: 3000 });
+        enqueueSnackbar("Synchronization complete", {
+          variant: "success",
+          autoHideDuration: 3000,
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
       };
     }
   }, [shouldNotifyMismatch]);

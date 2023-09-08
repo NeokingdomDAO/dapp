@@ -79,7 +79,7 @@ export default function ResolutionView() {
   }
 
   return (
-    <Box sx={{ pb: resolution.state === RESOLUTION_STATES.VOTING ? 32 : 4 }}>
+    <Box sx={{ pb: resolution.state === RESOLUTION_STATES.VOTING ? 58 : 4 }}>
       <Header resolution={resolution} executionPayload={executionPayload} />
       {resolution.state === RESOLUTION_STATES.VOTING && <VotingSection resolution={resolution} />}
       <Section>

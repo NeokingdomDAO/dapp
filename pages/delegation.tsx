@@ -21,6 +21,7 @@ import {
   Grid,
   Link,
   Switch,
+  Typography,
 } from "@mui/material";
 
 import { fetcher } from "@graphql/client";
@@ -31,8 +32,10 @@ import { isSameAddress } from "@lib/utils";
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
 import useLoginModalStore from "@store/loginModal";
 
+import Dialog from "@components/Dialog";
 import User from "@components/User";
 
+import useGetActiveResolutions from "@hooks/useGetActiveResolutions";
 import useUser from "@hooks/useUser";
 
 import UserCard from "../components/shareholders/UserCard";
@@ -53,6 +56,8 @@ export default function Delegation() {
   const [onlyManagingBoard, setOnlyManagingBoard] = React.useState(false);
   const { isLoading: isLoadingTransaction } = useBlockchainTransactionStore();
   const { onSubmit } = useDelegate();
+  const { activeResolutionsWarning, votingResolutions, noticeResolutions } = useGetActiveResolutions();
+  const [activeDelegatingAddress, setActiveDelegatingAddress] = React.useState<string | null>(null);
 
   const { handleOpenLoginModalFromLink } = useLoginModalStore(
     (state) => ({
@@ -100,19 +105,78 @@ export default function Delegation() {
   const handleDelegate = async (delegatingAddress: string, successElement: ReactElement, errorElement: ReactElement) =>
     onSubmit({ delegatingAddress, successElement, errorElement });
 
+  const getResolutionsNumbers = () =>
+    [
+      votingResolutions?.length
+        ? `${votingResolutions?.length} voting resolution${votingResolutions?.length > 1 ? "s" : ""}`
+        : null,
+      noticeResolutions?.length
+        ? `${noticeResolutions?.length} notice resolution${noticeResolutions?.length > 1 ? "s" : ""}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" and ");
+
   if (isLoading || delegationLoading) {
     return <CircularProgress />;
   }
 
   return (
     <>
+      <Dialog
+        open={!!activeDelegatingAddress}
+        handleClose={() => setActiveDelegatingAddress(null)}
+        disabledConfirm={isLoadingTransaction}
+        handleApprove={async () => {
+          await handleDelegate(
+            activeDelegatingAddress as string,
+            <span>
+              Successfully removed <User address={activeDelegatingAddress as string} isInline />
+            </span>,
+            <span>
+              Error removing <User address={activeDelegatingAddress as string} isInline />
+            </span>,
+          );
+          setActiveDelegatingAddress(null);
+        }}
+        title="Heads up"
+        descriptionId="dialog-delegate"
+        confirmLabel="Yes, proceed"
+      >
+        <Typography variant="body1">
+          Delegation will work only for <b>newly created resolutions</b>. As there are currently active resolutions (
+          {getResolutionsNumbers()}), you will need to vote yourself for those!
+          <br />
+          <br />
+          Proceed delegating to <User address={activeDelegatingAddress as string} isInline />?
+        </Typography>
+      </Dialog>
       <Alert severity="info" sx={{ mb: 2 }}>
         <AlertTitle>Delegation Information</AlertTitle>
         Delegating your voting power to someone else means that they can vote on resolutions using your voting power.
-        This is useful if you want to be a passive DAO member. However, note that the person you delegate to can vote
-        however they choose, without needing your consent for each vote. If you decide to vote on a specific proposal,
-        your personal choice will override the delegated vote in the DAO system. You can also end the delegation any
-        time. Using delegations is optional.
+        <br />
+        This is a useful tool if you are going offline for some time (e.g. long holidays) or you want to become a
+        passive DAO member. <br />
+        <br />
+        However, you need to bear in mind the following features of delegations: <br />
+        a) delegation applies only to resolutions that are announced after you have delegated your voting power
+        (delegation does not apply to votings that have already be announced by that time);
+        <br />
+        b) the person you delegated to can vote however he/she chooses, without needing your consent for each vote;
+        <br />
+        c) if the person you have delegated to, is excluded from a specific voting, your delegation is neglected;
+        <br />
+        d) if the person you have delegated to looses its voting rights, your delegation is neglected;
+        <br />
+        e) you can always vote and your vote overrules any delegated voting on your behalf;
+        <br />
+        f) delegation applies to all the votings that are announced before the cancellation of the delegation
+        (delegation is in force with respect of votings announced before the cancellation of the delegation);
+        <br />
+        g) if you fail to vote in the adoption of at least 51% of the resolutions of the calendar year (resolutions
+        submitted in a negative manner shall not be taken into account), you be suspended from voting rights for an
+        indefinite term by a resolution of the shareholders.
+        <br />
       </Alert>
 
       {delegationData?.signerDelegationStatus?.isDelegating && (
@@ -198,7 +262,11 @@ export default function Delegation() {
                   size="small"
                   variant="contained"
                   color="primary"
-                  onClick={() =>
+                  onClick={() => {
+                    if (activeResolutionsWarning) {
+                      setActiveDelegatingAddress(userAddress);
+                      return;
+                    }
                     handleDelegate(
                       userAddress,
                       <span>
@@ -207,8 +275,8 @@ export default function Delegation() {
                       <span>
                         Error delegating <User address={userAddress as string} isInline />
                       </span>,
-                    )
-                  }
+                    );
+                  }}
                   disabled={isLoadingTransaction}
                 >
                   Delegate

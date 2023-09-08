@@ -1,12 +1,11 @@
 /* eslint-disable react/display-name */
-
 import { Pie, PieChart, ResponsiveContainer, Sector } from "recharts";
 
 import { Theme, useTheme } from "@mui/material";
 
-const renderActiveShape = (theme: Theme) => (props: any) => {
+const renderActiveShape = (theme: Theme, abstained: number, isNegative: boolean) => (props: any) => {
   const RADIAN = Math.PI / 180;
-  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, payload, percent, value } = props;
+  const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, payload, percent, value, name } = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -42,21 +41,20 @@ const renderActiveShape = (theme: Theme) => (props: any) => {
       />
       <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={payload.color} fill="none" />
       <circle cx={ex} cy={ey} r={2} fill={payload.color} stroke="none" />
-      <text
-        x={ex + (cos >= 0 ? 1 : -1) * 12}
-        y={ey}
-        textAnchor={textAnchor}
-        fill={theme.palette.text.primary}
-      >{`${value.toLocaleString()}`}</text>
-      <text
-        x={ex + (cos >= 0 ? 1 : -1) * 12}
-        y={ey}
-        dy={18}
-        textAnchor={textAnchor}
-        fill={theme.palette.text.secondary}
-      >
-        {`(${(percent * 100).toFixed(2)}%)`}
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill={theme.palette.text.primary}>
+        {`${value.toLocaleString()}`} {`(${(percent * 100).toFixed(2)}%)`}
       </text>
+      {payload.name === "Against" && (
+        <text
+          x={ex + (cos >= 0 ? 1 : -1) * 12}
+          y={ey}
+          dy={18}
+          textAnchor={textAnchor}
+          fill={theme.palette.text.secondary}
+        >
+          Of which {abstained.toLocaleString()} abstained
+        </text>
+      )}
     </g>
   );
 };
@@ -65,10 +63,14 @@ export default function PieChartComponent({
   data,
   activeIndex,
   setActiveIndex,
+  abstained,
+  isNegative,
 }: {
   data: Array<{ value: number; name: string; color: string }>;
   activeIndex: number;
   setActiveIndex: (index: number) => void;
+  abstained: number;
+  isNegative: boolean;
 }) {
   const theme = useTheme();
 
@@ -81,7 +83,7 @@ export default function PieChartComponent({
       <PieChart width={400} height={400}>
         <Pie
           activeIndex={activeIndex}
-          activeShape={renderActiveShape(theme)}
+          activeShape={renderActiveShape(theme, abstained, isNegative)}
           data={data}
           cx="50%"
           cy="50%"

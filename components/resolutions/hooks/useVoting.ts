@@ -23,8 +23,8 @@ export default function useVoting(resolution: ResolutionEntityEnhanced) {
       quorum: resolution.resolutionType.quorum,
       hasQuorum: resolution.hasQuorum,
       isNegative: resolution.isNegative,
-      totalVotedYes: totalVotedYes + (resolution.isNegative ? totalAbstained : 0),
-      totalVotedNo: totalVotedNo + (!resolution.isNegative ? totalAbstained : 0),
+      totalVotedYes: totalVotedYes,
+      totalVotedNo: totalVotedNo + totalAbstained,
       totalAbstained,
       totalVoted:
         resolution.votingStatus.votersHaveVoted.reduce((total, voter) => voter.votingPowerInt + total, 0) +
@@ -45,8 +45,8 @@ export default function useVoting(resolution: ResolutionEntityEnhanced) {
   }, [resolution]);
 
   const outcome = [
-    Number(voting.totalVotedYesPerc) > 0 && `${Number(voting.totalVotedYesPerc)}% Yes`,
-    Number(voting.totalVotedNoPerc) > 0 && `${Number(voting.totalVotedNoPerc)}% No`,
+    Number(voting.totalVotedYesPerc) > 0 && `${Number(voting.totalVotedYesPerc)}% In Favour`,
+    Number(voting.totalVotedNoPerc) > 0 && `${Number(voting.totalVotedNoPerc)}% Against`,
   ]
     .filter(Boolean)
     .join(" - ");
