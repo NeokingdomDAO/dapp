@@ -18,7 +18,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userNameLowerCased = username.toLowerCase();
     const cookie = await getOdooCookie(userNameLowerCased, password);
-    const data = await odooClient(cookie, getUserQuery, { email: userNameLowerCased });
+    const data = await odooClient.query(cookie, getUserQuery, { email: userNameLowerCased });
     const userData = data.ResUsers[0] as OdooUser;
     if (!userData || userData?.email?.toLowerCase() !== username.toLowerCase()) {
       throw new Error("We can't log you in at the moment, odoo email doesn't match");

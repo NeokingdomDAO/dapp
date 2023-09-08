@@ -1,30 +1,31 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { createMocks, createRequest, createResponse } from "node-mocks-http";
 
+import odooGraphQLClient from "@lib/graphql/odoo";
+
 import { getMonthlyReward } from "../../../pages/api/monthly_reward";
+import ApiMonthlyRewardResult from "../../fixtures/api_monthly_reward_result.json";
+import OdooMonthlyRewardQueryResult from "../../fixtures/odoo_monthly_reward_query_result.json";
 
 type ApiRequest = NextApiRequest & ReturnType<typeof createRequest>;
 type ApiResponse = NextApiResponse & ReturnType<typeof createResponse>;
 
 describe("/api/monthly_reward", () => {
-  test("returns a list of projects", async () => {
+  test("returns the monthly reward data", async () => {
     const { req, res } = createMocks<ApiRequest, ApiResponse>({
       method: "GET",
       session: {
-        cookie:
-          "session_id=eeb307e1213dd165e43cb5da6caeef0343ef689a; Expires=Wed, 29 Nov 2023 14:07:19 GMT; Max-Age=7776000; HttpOnly; Path=/",
-        user: { id: 17, name: "Gianluca Donato" },
+        cookie: "cookie",
+        user: { id: 17, name: "Barbara" },
       },
     });
 
+    odooGraphQLClient.query = jest.fn().mockReturnValue(OdooMonthlyRewardQueryResult);
+
     await getMonthlyReward(req, res);
-    const data = res._getData();
-    console.log("🐞 > data:", data);
+    const data = JSON.parse(res._getData());
 
     expect(res.statusCode).toBe(200);
-    // expect(data).toEqual([
-    //   { id: 1, name: "Alice" },
-    //   { id: 2, name: "Bob" },
-    // ]);
+    expect(data).toMatchObject(ApiMonthlyRewardResult);
   });
 });

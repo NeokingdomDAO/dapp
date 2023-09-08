@@ -12,6 +12,8 @@ export const getMonthlyRewardQuery = gql`
       user_id {
         id
         name
+        email
+        ethereum_address
       }
       task_id {
         id

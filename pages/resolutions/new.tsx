@@ -29,7 +29,7 @@ export default function NewResolutionPage() {
   const router = useRouter();
   const isMonthlyRewards = router.query?.template === MONTHLY_REWARDS_TEMPLATE;
   const { data: monthlyRewardsData, isLoading: isLoadingLastMonthRewards } = useSWR(
-    isMonthlyRewards ? process.env.NEXT_PUBLIC_LAST_MONTH_REWARDS_ENDPOINT : null,
+    isMonthlyRewards ? "/api/monthly_reward" : null,
     fetcher,
   );
   const { neokingdomTokenContract } = useContractsContext();
@@ -50,7 +50,7 @@ export default function NewResolutionPage() {
     return <Alert severity="warning">Please connect your wallet first</Alert>;
   }
 
-  if (isLoading || (isMonthlyRewards && !executionPayload)) {
+  if (isLoading || isLoadingLastMonthRewards || (isMonthlyRewards && !executionPayload)) {
     return <CircularProgress />;
   }
 

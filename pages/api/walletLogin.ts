@@ -35,7 +35,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     const pwdB64 = Buffer.from(password, "utf8").toString("base64");
     try {
       const cookie = await getOdooCookie(address.toLowerCase(), pwdB64);
-      const data = await odooClient(cookie, getUserByAddressQuery, { address: address.toLowerCase() });
+      const data = await odooClient.query(cookie, getUserByAddressQuery, { address: address.toLowerCase() });
       const userData = data.ResUsers[0] as OdooUser;
       const user = userFactory({ ...userData, username: address.toLowerCase(), password: pwdB64, isLoggedIn: true });
       req.session.cookie = cookie;

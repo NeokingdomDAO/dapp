@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
-import { OdooUser } from "types";
 
 import odooGraphQLClient from "@lib/graphql/odoo";
 import { getTiersQuery } from "@lib/graphql/queries/get-tiers.query";
@@ -14,7 +13,7 @@ const getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).end();
   }
 
-  const data = await odooGraphQLClient(cookie, getTiersQuery, { userId: user.id });
+  const data = await odooGraphQLClient.query(cookie, getTiersQuery, { userId: user.id });
   res.status(200).json(data.AccountAnalyticTier);
 };
 

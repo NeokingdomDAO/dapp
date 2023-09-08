@@ -43,8 +43,6 @@ export type Timesheet = {
   unit_amount: number;
   start: number;
   end?: number;
-  user_id?: { id: number; name: string };
-  token_amount?: number;
 };
 
 export type ActionResponse = {
