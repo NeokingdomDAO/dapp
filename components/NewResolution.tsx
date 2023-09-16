@@ -66,6 +66,7 @@ export default function NewResolution({
       ...(monthlyRewardsResolutionData && {
         metadata: {
           isMonthlyRewards: true,
+          month: getPreviousMonth().toLowerCase(),
         },
       }),
     });
