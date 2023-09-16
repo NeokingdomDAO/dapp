@@ -63,6 +63,11 @@ export default function NewResolution({
       },
       executionData: executionPayload?.map((user) => user.executionData as string) || [],
       executionTo: executionPayload?.map(() => governanceTokenContractAddress as string) || [],
+      ...(monthlyRewardsResolutionData && {
+        metadata: {
+          isMonthlyRewards: true,
+        },
+      }),
     });
 
     if (submittedSuccessfully) {

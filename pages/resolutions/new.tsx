@@ -28,7 +28,7 @@ export default function NewResolutionPage() {
   const { isConnected } = useAccount();
   const router = useRouter();
   const isMonthlyRewards = router.query?.template === MONTHLY_REWARDS_TEMPLATE;
-  const { data: monthlyRewardsData, isLoading: isLoadingLastMonthRewards } = useSWR(
+  const { data: monthlyRewardsData } = useSWR(
     isMonthlyRewards ? process.env.NEXT_PUBLIC_LAST_MONTH_REWARDS_ENDPOINT : null,
     fetcher,
   );
