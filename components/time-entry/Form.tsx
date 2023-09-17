@@ -26,6 +26,7 @@ import { fetcher } from "@lib/net";
 import useTimeEntryStore from "@store/timeEntry";
 
 import { useSnackbar } from "@hooks/useSnackbar";
+import useUserProjects from "@hooks/useUserProjects";
 
 import ElapsedTime from "./ElapsedTime";
 
@@ -38,6 +39,7 @@ type StateType = {
   isLoading: boolean;
 };
 
+const ONE_MINUTE_IN_SECONDS = 60;
 const TEN_HOURS_IN_SECONDS = 10 * 60 * 60;
 
 export default function TimeEntryForm() {
@@ -56,24 +58,7 @@ export default function TimeEntryForm() {
   const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
-  const { data: userProjects, isLoading } = useSWR<any>("/api/tasks", fetcher);
-
-  const userTasks = useMemo(() => {
-    if (!Array.isArray(userProjects) || userProjects.length === 0) {
-      return [];
-    }
-    return userProjects.reduce(
-      (acc: any[], project: any) => [
-        ...acc,
-        ...project.tasks.map((task: any) => ({
-          ...task,
-          projectName: project.name,
-          projectId: project.id,
-        })),
-      ],
-      [],
-    );
-  }, [userProjects]);
+  const { userTasks, isLoading, userProjects } = useUserProjects();
 
   const [formData, setFormData] = useState<StateType>(() => ({
     startTime: new Date(startAt as number),
@@ -158,7 +143,8 @@ export default function TimeEntryForm() {
   const isValidTime =
     formData.startTime && formData.endTime && formData.startTime.getTime() < formData.endTime.getTime();
 
-  const isValid = taskId && isValidTime;
+  const elapsedTime = Math.floor((formData.endTime.getTime() - formData.startTime.getTime()) / 1000);
+  const isValid = taskId && isValidTime && elapsedTime > ONE_MINUTE_IN_SECONDS;
   const options = userTasks.map((userTask: any) => ({
     label: userTask.name,
     id: userTask.id,
@@ -167,7 +153,6 @@ export default function TimeEntryForm() {
   }));
 
   const selectedOption = options.find((option) => option.id === taskId) || null;
-  const elapsedTime = Math.floor((formData.endTime.getTime() - formData.startTime.getTime()) / 1000);
 
   return (
     <Box>
@@ -234,6 +219,7 @@ export default function TimeEntryForm() {
           disabled={formData.disabledEditStart}
           size="small"
           maxDateTime={formData.endTime}
+          format="dd/MM/yyyy H:mm"
         />
         <Button variant="outlined" size="small" sx={{ ml: 2 }} onClick={toggleEditStart}>
           {formData.disabledEditStart ? "edit" : "discard"}
@@ -250,6 +236,7 @@ export default function TimeEntryForm() {
           disabled={formData.disabledEditEnd}
           size="small"
           minDateTime={formData.startTime}
+          format="dd/MM/yyyy H:mm"
         />
         <Button variant="outlined" size="small" sx={{ ml: 2 }} onClick={toggleEditEnd}>
           {formData.disabledEditEnd ? "edit" : "discard"}
@@ -261,7 +248,7 @@ export default function TimeEntryForm() {
       {isValidTime ? (
         <>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <ElapsedTime withLabels elapsedTime={elapsedTime} />
+            <ElapsedTime withLabels elapsedTime={elapsedTime} hideSeconds={elapsedTime >= ONE_MINUTE_IN_SECONDS} />
             <LoadingButton variant="contained" disabled={!isValid} loading={formData.isLoading} onClick={saveTimeEntry}>
               Save entry
             </LoadingButton>
@@ -270,6 +257,11 @@ export default function TimeEntryForm() {
             <Alert severity="warning" sx={{ mt: 1, mb: 1 }}>
               <b>Heads up:</b> this time entry is a bit suspicious. You&apos;re tracking a single task of more than 10
               hour.
+            </Alert>
+          )}
+          {elapsedTime < ONE_MINUTE_IN_SECONDS && (
+            <Alert severity="warning" sx={{ mt: 1, mb: 1 }}>
+              <b>Heads up:</b> this time entry is needs to be longer than 1 minute.
             </Alert>
           )}
         </>

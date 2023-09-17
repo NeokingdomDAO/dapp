@@ -3,7 +3,7 @@ import { Alert, LinearProgress, Slide, SlideProps, Snackbar, Typography } from "
 import { useCheckSubgraphState } from "@hooks/useCheckSubgraphState";
 
 function SlideTransition(props: SlideProps) {
-  return <Slide {...props} direction="left" />;
+  return <Slide {...props} direction="right" />;
 }
 
 export default function MismatchNotifier() {

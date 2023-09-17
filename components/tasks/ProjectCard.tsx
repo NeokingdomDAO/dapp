@@ -3,12 +3,13 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { Add, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, CardHeader } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, Divider, Stack, Typography } from "@mui/material";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 
 import { Project } from "@store/projectTaskStore";
 
+import Task from "./Task";
 import TaskCard from "./TaskCard";
 
 export default function ProjectCard({ project }: { project: Project }) {
@@ -29,6 +30,32 @@ export default function ProjectCard({ project }: { project: Project }) {
         .filter((task) => task !== null)
         .filter((task) => !task.parent_id && task.stage_id.id === STAGE_TO_ID_MAP["done"]),
     [project],
+  );
+
+  return (
+    <>
+      <Stack
+        direction="row"
+        alignItems="center"
+        divider={<Divider flexItem />}
+        spacing={4}
+        justifyContent="space-between"
+      >
+        <Typography variant="h6">{project.name}</Typography>
+        <Button
+          component={Link}
+          href={`/tasks/new?projectId=${project.id}`}
+          variant="outlined"
+          startIcon={<Add />}
+          size="small"
+        >
+          New Task
+        </Button>
+      </Stack>
+      {tasks.map((task) => (
+        <Task key={task.id} task={task} />
+      ))}
+    </>
   );
 
   return (

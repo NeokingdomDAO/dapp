@@ -8,6 +8,8 @@ import { Divider, IconButton, Paper, Stack, SxProps, Theme, Typography, keyframe
 
 import useTimeEntryStore from "@store/timeEntry";
 
+import useUserProjects from "@hooks/useUserProjects";
+
 import ElapsedTime from "./ElapsedTime";
 import StopModal from "./StopModal";
 
@@ -48,16 +50,20 @@ const activeSx: SxProps<Theme> = {
 };
 
 export default function TimeEntry() {
-  const { startAt, stopAt, start, stop, showStopModal } = useTimeEntryStore(
+  const { userTasks, isLoading } = useUserProjects();
+  const { startAt, stopAt, start, stop, showStopModal, taskId } = useTimeEntryStore(
     (state) => ({
       startAt: state.startAt,
       stopAt: state.stopAt,
       start: state.start,
       stop: state.stop,
+      taskId: state.taskId,
       showStopModal: state.showStopModal,
     }),
     shallow,
   );
+
+  const currentTask = !isLoading ? userTasks.find((ut) => ut.id === taskId) : null;
 
   const [elapsedTime, setElapsedTime] = useState(0);
 
@@ -93,6 +99,13 @@ export default function TimeEntry() {
           ...(isActive ? activeSx : {}),
         }}
       >
+        {taskId && startAt && !showStopModal && (
+          <>
+            <Typography sx={{ mb: 1 }} variant="body2">
+              {currentTask.name}
+            </Typography>
+          </>
+        )}
         {isActive ? (
           <Stack
             direction="row"

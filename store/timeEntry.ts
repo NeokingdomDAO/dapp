@@ -10,6 +10,7 @@ interface TimeEntry {
   reset: () => void;
   resume: () => void;
   setTaskId: (taskId: number | null) => void;
+  addNew: (props: Partial<TimeEntry>) => void;
   showStopModal: boolean;
 }
 
@@ -25,6 +26,7 @@ const useTimeEntryStore = create(
       reset: () => set({ startAt: null, stopAt: null, showStopModal: false }),
       resume: () => set({ stopAt: null, showStopModal: false }),
       setTaskId: (taskId: number | null) => set({ taskId }),
+      addNew: (props: Partial<TimeEntry>) => set(props),
     }),
     {
       name: "time-entry-storage",

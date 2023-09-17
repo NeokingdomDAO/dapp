@@ -4,14 +4,14 @@ import useSWR from "swr";
 import { useEffect, useMemo } from "react";
 
 import { Add } from "@mui/icons-material";
-import { Button, Grid, Skeleton } from "@mui/material";
+import { Box, Button, CircularProgress, Divider } from "@mui/material";
 
 import { fetcher } from "@lib/net";
 import { findActiveProjectTask } from "@lib/utils";
 
 import useProjectTaskStore, { Project, useProjectTaskActions } from "@store/projectTaskStore";
 
-import HeroSection from "@components/HeroSection";
+import Section from "@components/Section";
 import ProjectCard from "@components/tasks/ProjectCard";
 import TaskDialog from "@components/tasks/TaskDialog";
 
@@ -27,6 +27,8 @@ export default function Tasks() {
   const projectKey = useProjectTaskStore((state) => state.projectKey);
   const { setActiveTask } = useProjectTaskActions();
   const projectsWithTasks = useMemo(() => projects?.filter((project) => project.tasks.length) || [], [projects]);
+  console.log("projects: ", projects);
+  console.log("projectsWithTasks: ", projectsWithTasks);
 
   useEffect(() => {
     mutate(); // force revalidate
@@ -47,28 +49,28 @@ export default function Tasks() {
 
   return (
     <>
-      <Grid sx={{ pl: 0, pr: 0 }} container spacing={2} justifyContent="center">
-        {isLoading ? (
-          <Grid item xs={12} md={9}>
-            <Skeleton sx={{ minHeight: "500px", transform: "none" }} />
-          </Grid>
-        ) : !error && projectsWithTasks.length ? (
-          projectsWithTasks.map((project) => (
-            <Grid item xs={12} md={9} key={project.id}>
-              <ProjectCard project={project} />
-            </Grid>
-          ))
-        ) : (
-          <HeroSection
-            decorative="You have no tasks!"
-            subtitle={
-              <Button color="success" href="/tasks/new" variant="outlined" startIcon={<Add />} component={Link}>
-                Create a new task
-              </Button>
-            }
-          />
-        )}
-      </Grid>
+      <Section inverse sx={{ marginTop: "-24px" }}>
+        <Button href="/tasks/new" variant="outlined" startIcon={<Add />} component={Link}>
+          New task in different project
+        </Button>
+      </Section>
+      {isLoading && (
+        <Section>
+          <CircularProgress />
+        </Section>
+      )}
+      {!error && !isLoading && projectsWithTasks.length > 0 && (
+        <Section>
+          <>
+            {projectsWithTasks.map((project, idx) => (
+              <Box key={project.id}>
+                <ProjectCard project={project} />
+                {idx < projectsWithTasks.length - 1 && <Divider sx={{ mt: 2, mb: 2 }} />}
+              </Box>
+            ))}
+          </>
+        </Section>
+      )}
       <TaskDialog />
     </>
   );
