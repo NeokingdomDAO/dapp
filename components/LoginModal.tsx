@@ -5,7 +5,6 @@ import { Alert, Box, Button, Chip, Divider } from "@mui/material";
 
 import useLoginModalStore from "@store/loginModal";
 
-import useLogout from "@hooks/useLogout";
 import useWalletOdooLogin from "@hooks/useWalletOdooLogin";
 
 import LoginForm from "./LoginForm";
@@ -13,7 +12,6 @@ import Modal from "./Modal";
 
 export default function LoginModal() {
   const { handleWalletOdooLogin } = useWalletOdooLogin();
-  const { logout } = useLogout();
 
   const { modalOpen, handleModalClose, readyToSign, setIsReadyToSign } = useLoginModalStore(
     (state) => ({

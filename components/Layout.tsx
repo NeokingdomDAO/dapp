@@ -19,6 +19,7 @@ import AccountMenu from "./AccountMenu";
 import LoginModal from "./LoginModal";
 import MismatchNotifier from "./mismatch-notifier/MismatchNotifier";
 import NkdLogo from "./svg-logos/NkdLogo";
+import TimeEntry from "./time-entry/TimeEntry";
 
 const initActiveStyle = (currentPath: string) => (href: string) =>
   currentPath === href || (href !== "/" && currentPath.startsWith(href));

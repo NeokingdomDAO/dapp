@@ -12,6 +12,7 @@ import Header from "@components/dashboard/Header";
 import InvestorsReport from "@components/dashboard/InvestorsReport";
 import Tasks from "@components/dashboard/Tasks";
 import Tokens from "@components/dashboard/Tokens";
+import TimeEntry from "@components/time-entry/TimeEntry";
 
 import useGetResolutions from "@hooks/useGetResolutions";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
@@ -132,6 +133,7 @@ export default function Home() {
           <InvestorsReport />
         </>
       </Section>
+      <TimeEntry />
     </>
   );
 }

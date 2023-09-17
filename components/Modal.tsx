@@ -36,12 +36,14 @@ export default function Modal({
   children,
   title,
   size = "medium",
+  hasCloseButton = true,
 }: {
   open: boolean;
   onClose?: (event?: {}, reason?: string) => void;
   children: ReactElement;
   title?: string | ReactElement;
   size?: "small" | "medium" | "large";
+  hasCloseButton?: boolean;
 }) {
   const handleClose = (event?: {}, reason?: string) => {
     typeof onClose === "function" && onClose(event, reason);
@@ -69,15 +71,17 @@ export default function Modal({
     >
       <Fade in={open}>
         <Box sx={style(size)}>
-          <IconButton
-            color="primary"
-            aria-label="close"
-            size="small"
-            onClick={handleClose}
-            sx={{ position: "absolute", top: 6, right: 6 }}
-          >
-            <Close />
-          </IconButton>
+          {hasCloseButton && (
+            <IconButton
+              color="primary"
+              aria-label="close"
+              size="small"
+              onClick={handleClose}
+              sx={{ position: "absolute", top: 6, right: 6 }}
+            >
+              <Close />
+            </IconButton>
+          )}
           {title && (
             <Typography id="transition-modal-title" variant="h6" component="h2" sx={{ mb: 2 }}>
               {title}
