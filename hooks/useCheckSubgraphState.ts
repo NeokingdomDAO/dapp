@@ -64,7 +64,7 @@ export function useCheckSubgraphState() {
           autoHideDuration: 3000,
           anchorOrigin: {
             vertical: "bottom",
-            horizontal: "right",
+            horizontal: "left",
           },
         });
       };

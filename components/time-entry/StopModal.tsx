@@ -1,17 +1,16 @@
-import { format } from "date-fns";
 import { shallow } from "zustand/shallow";
 
-import { Alert, Box, Button, Divider, Stack } from "@mui/material";
+import { Box, Button, Divider, Stack } from "@mui/material";
 
 import useTimeEntryStore from "@store/timeEntry";
 
 import Modal from "@components/Modal";
 
+import TimeEntryForm from "./Form";
+
 export default function StopModal() {
-  const { startAt, stopAt, reset, showStopModal, resume } = useTimeEntryStore(
+  const { reset, showStopModal, resume } = useTimeEntryStore(
     (state) => ({
-      startAt: state.startAt,
-      stopAt: state.stopAt,
       reset: state.reset,
       resume: state.resume,
       showStopModal: state.showStopModal,
@@ -19,40 +18,31 @@ export default function StopModal() {
     shallow,
   );
 
-  const isLessThanOneMinuteElapsed = startAt && stopAt && stopAt.getTime() - startAt.getTime() < 60000;
-
   if (!showStopModal) return null;
 
   return (
-    <Modal onClose={reset} open={showStopModal} hasCloseButton={false}>
+    <Modal
+      open={showStopModal}
+      hasCloseButton={false}
+      sx={{ bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#FAFAFA") }}
+    >
       <>
-        {isLessThanOneMinuteElapsed ? (
-          <Alert severity="warning">You can&apos;t log less than one minute.</Alert>
-        ) : (
-          <Box p={2}>
-            {startAt && <p>Start time {format(startAt, "yyyy-MM-dd HH:mm:ss")}</p>}
-            {stopAt && <p>Start time {format(stopAt, "yyyy-MM-dd HH:mm:ss")}</p>}
-          </Box>
-        )}
-        <Box mt={3}>
+        <TimeEntryForm />
+        <Divider sx={{ mt: 3 }} />
+        <Box mt={2}>
           <Stack
             direction="row"
             divider={<Divider orientation="vertical" flexItem />}
             spacing={2}
-            justifyContent="flex-end"
+            justifyContent="center"
             alignItems="center"
           >
-            <Button variant="contained" onClick={resume}>
+            <Button variant="outlined" onClick={resume} size="small">
               Continue tracking
             </Button>
-            <Button variant="contained" onClick={reset}>
+            <Button variant="outlined" onClick={reset} size="small">
               Discard entry
             </Button>
-            {!isLessThanOneMinuteElapsed && (
-              <Button variant="contained" onClick={reset}>
-                Save entry
-              </Button>
-            )}
           </Stack>
         </Box>
       </>

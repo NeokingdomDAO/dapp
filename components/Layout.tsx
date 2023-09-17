@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -19,10 +20,11 @@ import AccountMenu from "./AccountMenu";
 import LoginModal from "./LoginModal";
 import MismatchNotifier from "./mismatch-notifier/MismatchNotifier";
 import NkdLogo from "./svg-logos/NkdLogo";
-import TimeEntry from "./time-entry/TimeEntry";
 
 const initActiveStyle = (currentPath: string) => (href: string) =>
   currentPath === href || (href !== "/" && currentPath.startsWith(href));
+
+const TimeEntryWidget = dynamic(() => import("./time-entry/TimeEntry"), { ssr: false });
 
 export default function Layout({
   children,
@@ -48,6 +50,7 @@ export default function Layout({
     <>
       {checkMismatch && <MismatchNotifier />}
       <LoginModal />
+      <TimeEntryWidget />
       <Box
         sx={{
           backgroundColor: "rgba(255, 255, 255, 0.9)",

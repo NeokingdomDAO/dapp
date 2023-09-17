@@ -2,7 +2,7 @@ import * as React from "react";
 import { ReactElement } from "react";
 
 import { Close } from "@mui/icons-material";
-import { IconButton, useTheme } from "@mui/material";
+import { IconButton, SxProps, Theme, useTheme } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
@@ -15,7 +15,7 @@ const sizeToWidth: Record<string, number> = {
   large: 800,
 };
 
-const style = (size: string) => ({
+const style = (size: string, sx: SxProps<Theme> = {}) => ({
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
@@ -28,6 +28,7 @@ const style = (size: string) => ({
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  ...sx,
 });
 
 export default function Modal({
@@ -37,6 +38,7 @@ export default function Modal({
   title,
   size = "medium",
   hasCloseButton = true,
+  sx = {},
 }: {
   open: boolean;
   onClose?: (event?: {}, reason?: string) => void;
@@ -44,6 +46,7 @@ export default function Modal({
   title?: string | ReactElement;
   size?: "small" | "medium" | "large";
   hasCloseButton?: boolean;
+  sx?: SxProps<Theme>;
 }) {
   const handleClose = (event?: {}, reason?: string) => {
     typeof onClose === "function" && onClose(event, reason);
@@ -70,7 +73,7 @@ export default function Modal({
       }}
     >
       <Fade in={open}>
-        <Box sx={style(size)}>
+        <Box sx={style(size, sx)}>
           {hasCloseButton && (
             <IconButton
               color="primary"

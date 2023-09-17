@@ -4,18 +4,7 @@ import { useEffect, useState } from "react";
 
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
-import {
-  Box,
-  Divider,
-  IconButton,
-  LinearProgress,
-  Paper,
-  Stack,
-  SxProps,
-  Theme,
-  Typography,
-  keyframes,
-} from "@mui/material";
+import { Divider, IconButton, Paper, Stack, SxProps, Theme, Typography, keyframes } from "@mui/material";
 
 import useTimeEntryStore from "@store/timeEntry";
 
@@ -58,18 +47,6 @@ const activeSx: SxProps<Theme> = {
   },
 };
 
-function getElapsedDetails(seconds: number) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds - hours * 3600) / 60);
-  const remainingSeconds = seconds - hours * 3600 - minutes * 60;
-
-  return {
-    hours,
-    minutes,
-    seconds: remainingSeconds,
-  };
-}
-
 export default function TimeEntry() {
   const { startAt, stopAt, start, stop, showStopModal } = useTimeEntryStore(
     (state) => ({
@@ -88,7 +65,7 @@ export default function TimeEntry() {
     if (startAt && !showStopModal) {
       const intervalCallback = () => {
         const now = Date.now();
-        const timeDiff = Math.round((now - +startAt) / 1000);
+        const timeDiff = Math.round((now - startAt) / 1000);
         setElapsedTime(timeDiff);
       };
       const interval = setInterval(intervalCallback, 1000);
@@ -100,7 +77,6 @@ export default function TimeEntry() {
     }
   }, [startAt, showStopModal, setElapsedTime]);
 
-  const elapsedDetails = getElapsedDetails(elapsedTime);
   const isActive = startAt && !stopAt;
 
   return (
@@ -110,6 +86,7 @@ export default function TimeEntry() {
         sx={{
           p: 2,
           position: "fixed",
+          zIndex: 1000,
           bottom: 16,
           right: 16,
           bgcolor: (t) => (t.palette.mode === "dark" ? "#222" : "#FAFAFA"),
@@ -124,7 +101,7 @@ export default function TimeEntry() {
             justifyContent="center"
             alignItems="center"
           >
-            <ElapsedTime {...elapsedDetails} />
+            <ElapsedTime elapsedTime={elapsedTime} />
             <IconButton
               aria-label="stop"
               color="primary"

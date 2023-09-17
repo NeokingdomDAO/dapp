@@ -1,4 +1,4 @@
-import { Alert, Slide, SlideProps, Snackbar } from "@mui/material";
+import { Alert, LinearProgress, Slide, SlideProps, Snackbar, Typography } from "@mui/material";
 
 import { useCheckSubgraphState } from "@hooks/useCheckSubgraphState";
 
@@ -11,12 +11,13 @@ export default function MismatchNotifier() {
   return (
     <Snackbar
       open={shouldNotifyMismatch}
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       TransitionComponent={SlideTransition}
     >
       <Alert severity="warning" sx={{ width: "100%" }}>
-        Dapp data has a mismatch of {difference} blocks with the blockchain. Synchronization in progress, please wait.
-        If this persists please contact the engineers via discord.
+        <LinearProgress sx={{ mb: 1 }} />
+        <Typography variant="body2">Blockchain sync in progress</Typography>
+        <Typography variant="caption">{difference} blocks mismatch</Typography>
       </Alert>
     </Snackbar>
   );

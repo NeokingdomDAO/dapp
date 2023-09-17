@@ -133,7 +133,6 @@ export default function Home() {
           <InvestorsReport />
         </>
       </Section>
-      <TimeEntry />
     </>
   );
 }

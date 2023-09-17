@@ -46,6 +46,7 @@ export default function TimeEntryList({ task, showNewTimeEntry }: { task: Projec
                 position: "relative",
               }}
             >
+              {task.id}
               <TimeEntryForm
                 onConfirm={(data) => {
                   createTimeEntry(data, task);
