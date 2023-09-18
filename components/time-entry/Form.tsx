@@ -261,7 +261,8 @@ export default function TimeEntryForm() {
           )}
           {elapsedTime < ONE_MINUTE_IN_SECONDS && (
             <Alert severity="warning" sx={{ mt: 1, mb: 1 }}>
-              <b>Heads up:</b> this time entry is needs to be longer than 1 minute.
+              <b>Heads up:</b> this time entry needs to be longer than 1 minute. Please manually update it, or continue
+              tracking
             </Alert>
           )}
         </>
