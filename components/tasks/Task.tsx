@@ -47,7 +47,7 @@ export default function Task({ task }: { task: ProjectTask }) {
     addNew({
       taskId: task.id,
       startAt: now,
-      stopAt: now + 60000,
+      stopAt: now + 120000,
       showStopModal: true,
     });
   };
