@@ -25,10 +25,7 @@ export default function Tasks() {
   const { mutateUser } = useUser();
   const { data: projects, error, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
   const projectKey = useProjectTaskStore((state) => state.projectKey);
-  const { setActiveTask } = useProjectTaskActions();
   const projectsWithTasks = useMemo(() => projects?.filter((project) => project.tasks.length) || [], [projects]);
-  console.log("projects: ", projects);
-  console.log("projectsWithTasks: ", projectsWithTasks);
 
   useEffect(() => {
     mutate(); // force revalidate
@@ -39,13 +36,6 @@ export default function Tasks() {
       mutateUser();
     }
   }, [error, mutateUser]);
-
-  useEffect(() => {
-    if (projectsWithTasks) {
-      const activeTask = findActiveProjectTask(projectsWithTasks);
-      setActiveTask(activeTask);
-    }
-  }, [projectsWithTasks, setActiveTask]);
 
   return (
     <>

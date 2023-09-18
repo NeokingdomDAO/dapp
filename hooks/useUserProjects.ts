@@ -4,25 +4,33 @@ import { useMemo } from "react";
 
 import { fetcher } from "@lib/net";
 
+import { Project, ProjectTask } from "@store/projectTaskStore";
+
 export default function useUserProjects() {
-  const { data: userProjects, isLoading } = useSWR<any>("/api/tasks", fetcher);
+  const { data: userProjects, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
+  const projectsWithTasks = useMemo(
+    () => userProjects?.filter((project) => project.tasks.length) || [],
+    [userProjects],
+  );
 
   const userTasks = useMemo(() => {
-    if (!Array.isArray(userProjects) || userProjects.length === 0) {
+    if (!Array.isArray(projectsWithTasks) || projectsWithTasks.length === 0) {
       return [];
     }
-    return userProjects.reduce(
+    return projectsWithTasks.reduce(
       (acc: any[], project: any) => [
         ...acc,
-        ...project.tasks.map((task: any) => ({
-          ...task,
-          projectName: project.name,
-          projectId: project.id,
-        })),
+        ...project.tasks
+          .filter((task: ProjectTask) => task.child_ids.length === 0)
+          .map((task: ProjectTask) => ({
+            ...task,
+            projectName: project.name,
+            projectId: project.id,
+          })),
       ],
       [],
     );
-  }, [userProjects]);
+  }, [projectsWithTasks]);
 
   return {
     userTasks,

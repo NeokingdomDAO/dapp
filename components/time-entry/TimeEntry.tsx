@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { shallow } from "zustand/shallow";
 
 import { useEffect, useState } from "react";
@@ -51,6 +52,7 @@ const activeSx: SxProps<Theme> = {
 
 export default function TimeEntry() {
   const { userTasks, isLoading } = useUserProjects();
+  const router = useRouter();
   const { startAt, stopAt, start, stop, showStopModal, taskId } = useTimeEntryStore(
     (state) => ({
       startAt: state.startAt,
@@ -84,6 +86,11 @@ export default function TimeEntry() {
   }, [startAt, showStopModal, setElapsedTime]);
 
   const isActive = startAt && !stopAt;
+  const shouldNotDisplayStart = !isActive && router.asPath === "/tasks" && !showStopModal;
+
+  if (shouldNotDisplayStart) {
+    return null;
+  }
 
   return (
     <>

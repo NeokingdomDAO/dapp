@@ -55,6 +55,7 @@ export interface ProjectTaskStore {
   trackedTask: ProjectTask | null;
   isLoading: boolean;
   actions: {
+    setProjectKey: () => void;
     setActiveTask: (trackedTask: ProjectTask | null) => void;
     startTrackingTask: (task: ProjectTask) => Promise<ActionResponse | undefined>;
     stopTrackingTask: (task: ProjectTask) => Promise<ActionResponse>;
@@ -75,6 +76,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
   trackedTask: null,
   isLoading: false,
   actions: {
+    setProjectKey: () => set({ projectKey: uuid() }),
     setActiveTask: (trackedTask: ProjectTask | null) => set({ trackedTask }),
     startTrackingTask: async (task: ProjectTask) => {
       set({ isLoading: true, trackedTask: task });

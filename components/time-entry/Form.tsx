@@ -23,6 +23,7 @@ import { DateTimeField } from "@mui/x-date-pickers";
 import { ODOO_DATE_FORMAT } from "@lib/constants";
 import { fetcher } from "@lib/net";
 
+import useProjectTaskStore from "@store/projectTaskStore";
 import useTimeEntryStore from "@store/timeEntry";
 
 import { useSnackbar } from "@hooks/useSnackbar";
@@ -56,6 +57,7 @@ export default function TimeEntryForm() {
   );
 
   const { enqueueSnackbar } = useSnackbar();
+  const setProjectKey = useProjectTaskStore((state) => state.actions.setProjectKey);
 
   const router = useRouter();
   const { userTasks, isLoading, userProjects } = useUserProjects();
@@ -133,6 +135,7 @@ export default function TimeEntryForm() {
     if (response.ok) {
       setFormData((prev) => ({ ...prev, isLoading: false }));
       enqueueSnackbar("Time entry correctly saved", { variant: "success" });
+      setProjectKey();
       reset();
     } else {
       setFormData((prev) => ({ ...prev, isLoading: false }));
