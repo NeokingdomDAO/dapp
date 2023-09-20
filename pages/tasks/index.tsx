@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { useEffect, useMemo } from "react";
 
 import { Add } from "@mui/icons-material";
-import { Box, Button, CircularProgress, Divider } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, Stack } from "@mui/material";
 
 import { fetcher } from "@lib/net";
 import { findActiveProjectTask } from "@lib/utils";
@@ -14,6 +14,7 @@ import useProjectTaskStore, { Project, useProjectTaskActions } from "@store/proj
 import Section from "@components/Section";
 import ProjectCard from "@components/tasks/ProjectCard";
 import TaskDialog from "@components/tasks/TaskDialog";
+import ElapsedTime from "@components/time-entry/ElapsedTime";
 
 import useUser from "@hooks/useUser";
 
@@ -37,12 +38,23 @@ export default function Tasks() {
     }
   }, [error, mutateUser]);
 
+  const totalTime = useMemo(() => {
+    return (
+      projectsWithTasks.reduce((total, project) => {
+        return total + project.tasks.reduce((sub, task) => sub + task.effective_hours, 0);
+      }, 0) * 3600
+    );
+  }, [projectsWithTasks]);
+
   return (
     <>
       <Section inverse sx={{ marginTop: "-24px" }}>
-        <Button href="/tasks/new" variant="outlined" startIcon={<Add />} component={Link}>
-          New task in different project
-        </Button>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+          <ElapsedTime elapsedTime={totalTime} hideSeconds withLabels label="Total unapproved time" withBorders />
+          <Button href="/tasks/new" variant="outlined" startIcon={<Add />} component={Link}>
+            New task in different project
+          </Button>
+        </Stack>
       </Section>
       {isLoading && (
         <Section>

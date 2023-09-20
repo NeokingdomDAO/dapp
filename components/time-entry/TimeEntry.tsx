@@ -65,7 +65,7 @@ export default function TimeEntry() {
     shallow,
   );
 
-  const currentTask = !isLoading ? userTasks.find((ut) => ut.id === taskId) : null;
+  const currentTask = !isLoading ? userTasks?.find((ut) => ut.id === taskId) : null;
 
   const [elapsedTime, setElapsedTime] = useState(0);
 
@@ -106,7 +106,7 @@ export default function TimeEntry() {
           ...(isActive ? activeSx : {}),
         }}
       >
-        {taskId && startAt && !showStopModal && (
+        {taskId && startAt && !showStopModal && currentTask && (
           <>
             <Typography sx={{ mb: 1 }} variant="body2">
               {currentTask.name}

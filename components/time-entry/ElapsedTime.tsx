@@ -17,11 +17,17 @@ export default function ElapsedTime({
   withLabels = false,
   hideSeconds = false,
   size = "medium",
+  minified = false,
+  label,
+  withBorders = false,
 }: {
+  label?: string;
   elapsedTime: number;
   withLabels?: boolean;
   hideSeconds?: boolean;
   size?: "small" | "medium";
+  minified?: boolean;
+  withBorders?: boolean;
 }) {
   const { hours, minutes, seconds } = getElapsedDetails(elapsedTime);
 
@@ -29,63 +35,84 @@ export default function ElapsedTime({
   const minutesToDisplay = minutes < 10 ? `0${minutes}` : minutes;
   const secondsToDisplay = seconds < 10 ? `0${seconds}` : seconds;
 
+  if (minified) {
+    return (
+      <Box sx={{ fontWeight: "bold" }} component="span">
+        {[hoursToDisplay, minutesToDisplay].join(":")}h
+      </Box>
+    );
+  }
+
   return (
-    <Stack direction="row" alignItems="center">
-      <Box
-        sx={{
-          p: 1,
-          bgcolor: "background.paper",
-          borderRadius: 2,
-          width: withLabels ? "auto" : 50,
-          textAlign: "center",
-        }}
-      >
-        <Typography variant={size === "medium" ? "h5" : "body1"}>
-          {hoursToDisplay}
-          {withLabels ? "h" : ""}
+    <Box>
+      {label && (
+        <Typography variant={size === "medium" ? "h5" : "body1"} sx={{ fontWeight: "bold", mb: 1 }}>
+          {label}
         </Typography>
-      </Box>
-      <Typography variant={size === "medium" ? "h5" : "body1"} sx={{ position: "relative", top: -2, margin: "0 4px" }}>
-        :
-      </Typography>
-      <Box
-        sx={{
-          p: 1,
-          bgcolor: "background.paper",
-          borderRadius: 2,
-          width: withLabels ? "auto" : 50,
-          textAlign: "center",
-        }}
-      >
-        <Typography variant={size === "medium" ? "h5" : "body1"}>
-          {minutesToDisplay}
-          {withLabels ? "m" : ""}
-        </Typography>
-      </Box>
-      {!hideSeconds && (
-        <>
-          <Typography
-            variant={size === "medium" ? "h5" : "body1"}
-            sx={{ position: "relative", top: -2, margin: "0 4px" }}
-          >
-            :
-          </Typography>
-          <Box
-            sx={{
-              p: 1,
-              bgcolor: "background.paper",
-              borderRadius: 2,
-              width: withLabels ? "auto" : 50,
-              textAlign: "center",
-            }}
-          >
-            <Typography variant={size === "medium" ? "h5" : "body1"}>
-              {secondsToDisplay}
-              {withLabels ? "s" : ""}
-            </Typography>
-          </Box>
-        </>
       )}
-    </Stack>
+      <Stack direction="row" alignItems="center">
+        <Box
+          sx={{
+            p: 1,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            width: withLabels ? "auto" : 50,
+            textAlign: "center",
+            ...(withBorders && { border: "1px solid", borderColor: "divider" }),
+          }}
+        >
+          <Typography variant={size === "medium" ? "h5" : "body1"}>
+            {hoursToDisplay}
+            {withLabels ? "h" : ""}
+          </Typography>
+        </Box>
+        <Typography
+          variant={size === "medium" ? "h5" : "body1"}
+          sx={{ position: "relative", top: -2, margin: "0 4px" }}
+        >
+          :
+        </Typography>
+        <Box
+          sx={{
+            p: 1,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            width: withLabels ? "auto" : 50,
+            textAlign: "center",
+            ...(withBorders && { border: "1px solid", borderColor: "divider" }),
+          }}
+        >
+          <Typography variant={size === "medium" ? "h5" : "body1"}>
+            {minutesToDisplay}
+            {withLabels ? "m" : ""}
+          </Typography>
+        </Box>
+        {!hideSeconds && (
+          <>
+            <Typography
+              variant={size === "medium" ? "h5" : "body1"}
+              sx={{ position: "relative", top: -2, margin: "0 4px" }}
+            >
+              :
+            </Typography>
+            <Box
+              sx={{
+                p: 1,
+                bgcolor: "background.paper",
+                borderRadius: 2,
+                width: withLabels ? "auto" : 50,
+                textAlign: "center",
+                ...(withBorders && { border: "1px solid", borderColor: "divider" }),
+              }}
+            >
+              <Typography variant={size === "medium" ? "h5" : "body1"}>
+                {secondsToDisplay}
+                {withLabels ? "s" : ""}
+              </Typography>
+            </Box>
+          </>
+        )}
+      </Stack>
+    </Box>
   );
 }

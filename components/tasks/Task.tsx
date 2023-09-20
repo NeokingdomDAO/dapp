@@ -2,17 +2,18 @@ import { shallow } from "zustand/shallow";
 
 import { useState } from "react";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ListIcon from "@mui/icons-material/List";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
-import { Box, Divider, IconButton, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import { Box, Collapse, Divider, IconButton, Menu, MenuItem, Stack, SxProps, Theme, Typography } from "@mui/material";
 
 import { ProjectTask } from "@store/projectTaskStore";
 import useTimeEntryStore from "@store/timeEntry";
 
 import ElapsedTime from "@components/time-entry/ElapsedTime";
 
-import TaskTimeEntry from "./TaskTimeEntry";
+import TimeEntries from "./TimeEntries";
 
 const DEFAULT_TASK_DURATION = 120000; // 2 mins
 
@@ -33,6 +34,11 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -95,9 +101,12 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
   // };
 
   const canTrackTime = (task.child_ids?.length || 0) === 0;
+  const sx: SxProps<Theme> = canTrackTime
+    ? { "&:hover": { bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#EEE") } }
+    : {};
 
   return (
-    <Box p={1} mt={1} sx={{ "&:hover": { bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#EEE") } }}>
+    <Box p={1} mt={1} sx={sx}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
           {(isSubtask || canTrackTime) && (
@@ -119,6 +128,17 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
           <IconButton aria-label="start" color="primary" size="small" onClick={handleClick}>
             <ListIcon />
           </IconButton>
+          {canTrackTime && (
+            <IconButton
+              aria-label="start"
+              color="primary"
+              size="small"
+              onClick={handleExpandClick}
+              sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s ease-in" }}
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          )}
         </Stack>
       </Stack>
       <Menu
@@ -142,18 +162,18 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
         <MenuItem onClick={handleDeleteTask}>{isSubtask ? "Delete subtask" : "Delete task"}</MenuItem>
         <MenuItem onClick={handleDeleteTask}>Mark as done</MenuItem>
       </Menu>
-      {!isSubtask && (
+      {!isSubtask && task.child_ids.length > 0 && (
         <ul>
           {task.child_ids.map((subTask) => (
             <Task task={subTask} isSubtask key={subTask.id} />
           ))}
         </ul>
       )}
-      <Box>
-        {task.timesheet_ids.map((timeEntry) => (
-          <TaskTimeEntry key={timeEntry.id} timeEntry={timeEntry} />
-        ))}
-      </Box>
+      {canTrackTime && (
+        <Collapse in={expanded} timeout="auto">
+          <TimeEntries entries={task.timesheet_ids} />
+        </Collapse>
+      )}
     </Box>
   );
 }
