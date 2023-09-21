@@ -87,6 +87,7 @@ export default function TimeEntries({
         handleClose={() => setDeletingId(null)}
         handleApprove={handleDeleteTimeEntry}
         descriptionId="dialog-delete-time-entry"
+        title="Delete Time Entry"
       >
         <Typography variant="body1">Are you sure you want to delete this time entry?</Typography>
       </Dialog>

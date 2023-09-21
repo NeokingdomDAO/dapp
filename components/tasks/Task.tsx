@@ -115,6 +115,8 @@ export default function Task({
   const elapsedTime = hoursToSeconds(task.effective_hours || 0);
 
   const canTrackTime = (task.child_ids?.length || 0) === 0;
+  const hasTimeEntries = (task.timesheet_ids?.length || 0) > 0;
+  console.log("task: ", task.name, hasTimeEntries);
 
   return (
     <Box sx={{ mt: 0.5, mb: 0.5, ...(isSubtask ? { ml: 2 } : getTick(canTrackTime)) }}>
@@ -182,7 +184,9 @@ export default function Task({
       >
         {canTrackTime && <MenuItem onClick={handleAddTimeEntry}>New time entry</MenuItem>}
         <MenuItem onClick={handleNewSubTask}>{isSubtask ? "Update subtask" : "Update task"}</MenuItem>
-        {!isSubtask && !canTrackTime && <MenuItem onClick={handleUpdateTask}>New SubTask</MenuItem>}
+        {!isSubtask && (!canTrackTime || !hasTimeEntries) && (
+          <MenuItem onClick={handleUpdateTask}>New SubTask</MenuItem>
+        )}
         <MenuItem onClick={handleDeleteTask}>{isSubtask ? "Delete subtask" : "Delete task"}</MenuItem>
         <MenuItem onClick={handleDeleteTask}>Mark as done</MenuItem>
       </Menu>
