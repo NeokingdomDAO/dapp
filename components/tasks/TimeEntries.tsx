@@ -1,9 +1,7 @@
-import { format } from "date-fns";
-
 import * as React from "react";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Box, Tooltip } from "@mui/material";
+import { Box, CircularProgress, Tooltip, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 
@@ -11,6 +9,7 @@ import { toPrettyRange } from "@lib/utils";
 
 import { Timesheet } from "@store/projectTaskStore";
 
+import Dialog from "@components/Dialog";
 import ElapsedTime from "@components/time-entry/ElapsedTime";
 
 const TRUNCATE_AT = 20;
@@ -36,17 +35,23 @@ const getTooltipTitle = (timeEntry: Timesheet) => {
   );
 };
 
-export default function TimeEntries({ entries }: { entries: Timesheet[] }) {
-  const handleDelete = () => {
-    console.info("You clicked the delete icon.");
-  };
-
+export default function TimeEntries({
+  entries,
+  onAddNew,
+  onDelete,
+}: {
+  entries: Timesheet[];
+  onAddNew: () => void;
+  onDelete: (timeEntryId: number) => void;
+}) {
+  const [deletingId, setDeletingId] = React.useState<null | number>(null);
   const handleUpdateTimeEntry = () => {
     console.info("You clicked the chip.");
   };
 
-  const handleAddTimeEntry = () => {
-    console.info("You clicked the chip.");
+  const handleDeleteTimeEntry = () => {
+    onDelete(deletingId as number);
+    setDeletingId(null);
   };
 
   return (
@@ -58,17 +63,43 @@ export default function TimeEntries({ entries }: { entries: Timesheet[] }) {
         p: 0.5,
         m: 0,
         mt: 1,
+        mb: 1,
+        position: "relative",
+        backgroundImage: "none",
+        "&:before": {
+          // triangle
+          content: '""',
+          position: "absolute",
+          width: 0,
+          height: 0,
+          borderLeft: "8px solid transparent",
+          borderRight: "8px solid transparent",
+          borderBottom: "8px solid",
+          borderBottomColor: "background.paper",
+          top: -8,
+          left: 68,
+        },
       }}
       component="ul"
     >
+      <Dialog
+        open={!!deletingId}
+        handleClose={() => setDeletingId(null)}
+        handleApprove={handleDeleteTimeEntry}
+        descriptionId="dialog-delete-time-entry"
+      >
+        <Typography variant="body1">Are you sure you want to delete this time entry?</Typography>
+      </Dialog>
       {entries.map((data) => {
+        const extraProps = data.id === deletingId ? { disabled: true, deleteIcon: <CircularProgress size={16} /> } : {};
         return (
           <Box component="li" key={data.id} m={0.5}>
             <Tooltip title={getTooltipTitle(data)} placement="top" arrow>
               <Chip
                 label={getLabel(data.name, data.unit_amount)}
-                onDelete={handleDelete}
+                onDelete={() => setDeletingId(data.id)}
                 onClick={handleUpdateTimeEntry}
+                {...extraProps}
               />
             </Tooltip>
           </Box>
@@ -79,7 +110,7 @@ export default function TimeEntries({ entries }: { entries: Timesheet[] }) {
           variant="outlined"
           label="new time entry"
           icon={<AddCircleOutlineIcon />}
-          onClick={handleAddTimeEntry}
+          onClick={onAddNew}
           color="primary"
         />
       </Box>

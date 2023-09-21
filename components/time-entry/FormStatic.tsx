@@ -1,10 +1,8 @@
 import { formatInTimeZone } from "date-fns-tz";
 import { useRouter } from "next/router";
-import { shallow } from "zustand/shallow";
 
 import { useEffect, useState } from "react";
 
-import AddIcon from "@mui/icons-material/Add";
 import { LoadingButton } from "@mui/lab";
 import { Alert, Autocomplete, Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 import { DateTimeField } from "@mui/x-date-pickers";
@@ -12,7 +10,6 @@ import { DateTimeField } from "@mui/x-date-pickers";
 import { ODOO_DATE_FORMAT } from "@lib/constants";
 
 import useProjectTaskStore from "@store/projectTaskStore";
-import useTimeEntryStore from "@store/timeEntry";
 
 import { useSnackbar } from "@hooks/useSnackbar";
 import useUserProjects from "@hooks/useUserProjects";
@@ -26,24 +23,14 @@ type StateType = {
   disabledEditStart: boolean;
   disabledEditEnd: boolean;
   isLoading: boolean;
+  taskId: number | null;
 };
 
 const ONE_MINUTE_IN_SECONDS = 60;
 const TEN_HOURS_IN_SECONDS = 10 * 60 * 60;
+const DEFAULT_TASK_DURATION = 120000; // 2 mins
 
-export default function TimeEntryForm() {
-  const { startAt, stopAt, resume, reset, taskId, setTaskId } = useTimeEntryStore(
-    (state) => ({
-      startAt: state.startAt,
-      stopAt: state.stopAt,
-      taskId: state.taskId,
-      resume: state.resume,
-      reset: state.reset,
-      setTaskId: state.setTaskId,
-    }),
-    shallow,
-  );
-
+export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: number; onSaved: () => void }) {
   const { enqueueSnackbar } = useSnackbar();
   const setProjectKey = useProjectTaskStore((state) => state.actions.setProjectKey);
 
@@ -51,22 +38,23 @@ export default function TimeEntryForm() {
   const { userTasks, isLoading, userProjects } = useUserProjects();
 
   const [formData, setFormData] = useState<StateType>(() => ({
-    startTime: new Date(startAt as number),
-    endTime: new Date(stopAt as number),
+    startTime: new Date(),
+    endTime: new Date(Date.now() + DEFAULT_TASK_DURATION),
     disabledEditStart: true,
     disabledEditEnd: true,
     description: "",
     isLoading: false,
+    taskId,
   }));
 
   useEffect(() => {
-    if (!Array.isArray(userTasks) || userTasks.length === 0 || taskId === null) {
+    if (!Array.isArray(userTasks) || userTasks.length === 0 || formData.taskId === null) {
       return;
     }
-    if (!userTasks.find((t: any) => t.id === taskId)) {
-      setTaskId(null);
+    if (!userTasks.find((t: any) => t.id === formData.taskId)) {
+      setFormData((prev) => ({ ...prev, taskId: null }));
     }
-  }, [userTasks, taskId]);
+  }, [userTasks, formData.taskId]);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -92,7 +80,7 @@ export default function TimeEntryForm() {
       return {
         ...prev,
         disabledEditStart,
-        startTime: disabledEditStart ? new Date(startAt as number) : prev.startTime,
+        startTime: disabledEditStart ? new Date() : prev.startTime,
       };
     });
   };
@@ -100,12 +88,15 @@ export default function TimeEntryForm() {
   const toggleEditEnd = () => {
     setFormData((prev) => {
       const disabledEditEnd = !prev.disabledEditEnd;
-      return { ...prev, disabledEditEnd, endTime: disabledEditEnd ? new Date(stopAt as number) : prev.endTime };
+      return {
+        ...prev,
+        disabledEditEnd,
+        endTime: disabledEditEnd ? new Date(Date.now() + DEFAULT_TASK_DURATION) : prev.endTime,
+      };
     });
   };
 
   const goToNewTask = (path?: string) => {
-    resume();
     router.push(path || "/tasks/new");
   };
 
@@ -114,7 +105,7 @@ export default function TimeEntryForm() {
     const response = await fetch(`/api/time_entries`, {
       method: "POST",
       body: JSON.stringify({
-        task_id: taskId,
+        task_id: formData.taskId,
         start: formatInTimeZone(formData.startTime, "UTC", ODOO_DATE_FORMAT),
         end: formatInTimeZone(formData.endTime, "UTC", ODOO_DATE_FORMAT),
         name: formData.description.trim() !== "" ? formData.description : "/",
@@ -124,7 +115,7 @@ export default function TimeEntryForm() {
       setFormData((prev) => ({ ...prev, isLoading: false }));
       enqueueSnackbar("Time entry correctly saved", { variant: "success" });
       setProjectKey();
-      reset();
+      onSaved();
     } else {
       setFormData((prev) => ({ ...prev, isLoading: false }));
       enqueueSnackbar("Error while saving time entry", { variant: "error" });
@@ -135,7 +126,7 @@ export default function TimeEntryForm() {
     formData.startTime && formData.endTime && formData.startTime.getTime() < formData.endTime.getTime();
 
   const elapsedTime = Math.floor((formData.endTime.getTime() - formData.startTime.getTime()) / 1000);
-  const isValid = taskId && isValidTime && elapsedTime > ONE_MINUTE_IN_SECONDS;
+  const isValid = formData.taskId && isValidTime && elapsedTime > ONE_MINUTE_IN_SECONDS;
   const options = userTasks.map((userTask: any) => ({
     label: userTask.name,
     id: userTask.id,
@@ -143,7 +134,7 @@ export default function TimeEntryForm() {
     projectId: userTask.projectId,
   }));
 
-  const selectedOption = options.find((option) => option.id === taskId) || null;
+  const selectedOption = options.find((option) => option.id === formData.taskId) || null;
 
   return (
     <Box>
@@ -165,13 +156,6 @@ export default function TimeEntryForm() {
               <div>
                 <Box sx={{ p: 1, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <Typography variant="caption">{project?.name}</Typography>
-                  <Button
-                    startIcon={<AddIcon />}
-                    size="small"
-                    onClick={() => goToNewTask(`/tasks/new?projectId=${params.group}`)}
-                  >
-                    New task
-                  </Button>
                 </Box>
                 {params.children}
               </div>
@@ -179,10 +163,7 @@ export default function TimeEntryForm() {
           }}
           groupBy={(option) => option.projectId}
           onChange={(_, newValue) => {
-            if (newValue?.id === -1) {
-              return goToNewTask();
-            }
-            setTaskId(newValue?.id);
+            setFormData((prev) => ({ ...prev, taskId: newValue?.id }));
           }}
         />
       ) : (

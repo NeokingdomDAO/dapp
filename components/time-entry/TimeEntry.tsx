@@ -88,8 +88,8 @@ export default function TimeEntry() {
   const isActive = startAt && !stopAt;
   const shouldNotDisplayStart = !isActive && router.asPath === "/tasks" && !showStopModal;
 
-  if (shouldNotDisplayStart) {
-    return null;
+  if (shouldNotDisplayStart || (router.asPath === "/tasks" && !isActive)) {
+    return <StopModal />;
   }
 
   return (
@@ -105,6 +105,7 @@ export default function TimeEntry() {
           bgcolor: (t) => (t.palette.mode === "dark" ? "#222" : "#FAFAFA"),
           ...(isActive ? activeSx : {}),
         }}
+        elevation={12}
       >
         {taskId && startAt && !showStopModal && currentTask && (
           <>

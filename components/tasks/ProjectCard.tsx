@@ -7,13 +7,17 @@ import { Box, Button, Card, CardContent, CardHeader, Divider, Stack, Typography 
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 
-import { Project } from "@store/projectTaskStore";
+import { Project, ProjectTask } from "@store/projectTaskStore";
+
+import Modal from "@components/Modal";
+import TimeEntryFormStatic from "@components/time-entry/FormStatic";
 
 import Task from "./Task";
 import TaskCard from "./TaskCard";
 
 export default function ProjectCard({ project }: { project: Project }) {
   const [hideCompleted, setHideCompleted] = useState(true);
+  const [currentTaskId, setCurrentTaskId] = useState<null | number>(null);
   const tasks = useMemo(
     () =>
       project.tasks
@@ -32,8 +36,38 @@ export default function ProjectCard({ project }: { project: Project }) {
     [project],
   );
 
+  const handleAddNewEntry = (taskId: number) => {
+    setCurrentTaskId(taskId);
+  };
+
+  const handleDeleteTimeEntry = async (timeEntryId: number, task: ProjectTask) => {
+    if (task.timesheet_ids.length === 1) {
+      await fetch(`/api/tasks/${task.id}`, {
+        method: "PUT",
+        body: JSON.stringify({ stage_id: STAGE_TO_ID_MAP["created"] }),
+      });
+    }
+    const response = await fetch(`/api/time_entries/${timeEntryId}`, { method: "DELETE" });
+    if (response.ok) {
+      // set({ projectKey: uuid(), isLoading: false });
+      // return { alert: { message: "Time Entry successfully deleted!", variant: "success" } };
+    } else {
+      // set({ isLoading: false });
+      // return { error: await buildError(response) };
+    }
+  };
+
   return (
-    <>
+    <Box sx={{ borderLeft: "2px solid", borderColor: "divider", pl: 2 }}>
+      {currentTaskId && (
+        <Modal
+          open
+          sx={{ bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#FAFAFA") }}
+          onClose={() => setCurrentTaskId(null)}
+        >
+          <TimeEntryFormStatic taskId={currentTaskId} onSaved={() => setCurrentTaskId(null)} />
+        </Modal>
+      )}
       <Stack
         direction="row"
         alignItems="center"
@@ -53,9 +87,9 @@ export default function ProjectCard({ project }: { project: Project }) {
         </Button>
       </Stack>
       {tasks.map((task) => (
-        <Task key={task.id} task={task} />
+        <Task key={task.id} task={task} onAddNewEntry={handleAddNewEntry} onDeleteTimeEntry={handleDeleteTimeEntry} />
       ))}
-    </>
+    </Box>
   );
 
   return (

@@ -27,7 +27,7 @@ export default function Resolutions() {
   const { resolutions, isLoading } = useGetResolutions();
 
   const enhancedResolutions: ResolutionEntityEnhanced[] = useMemo(() => {
-    if (isLoading || isLoadingAcl) {
+    if ((isLoading || isLoadingAcl) && resolutions.length === 0) {
       return [];
     }
     return getEnhancedResolutions(resolutions, +currentTimestamp, acl);
@@ -61,7 +61,7 @@ export default function Resolutions() {
           />
         )}
       </Box>
-      {(isLoading || isLoadingAcl) && <CircularProgress />}
+      {(isLoading || isLoadingAcl) && resolutions?.length === 0 && <CircularProgress />}
       <Grid container spacing={3}>
         {filteredResolutions.map((resolution) => (
           <Grid item xs={12} md={6} lg={4} key={resolution.id}>

@@ -50,7 +50,7 @@ export default function Layout({
     <>
       {checkMismatch && <MismatchNotifier />}
       <LoginModal />
-      <TimeEntryWidget />
+      {user?.isLoggedIn && <TimeEntryWidget />}
       <Box
         sx={{
           backgroundColor: "rgba(255, 255, 255, 0.9)",

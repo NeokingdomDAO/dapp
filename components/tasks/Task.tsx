@@ -6,7 +6,19 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ListIcon from "@mui/icons-material/List";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
-import { Box, Collapse, Divider, IconButton, Menu, MenuItem, Stack, SxProps, Theme, Typography } from "@mui/material";
+import {
+  Box,
+  Collapse,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  SxProps,
+  Theme,
+  Typography,
+} from "@mui/material";
 
 import { ProjectTask } from "@store/projectTaskStore";
 import useTimeEntryStore from "@store/timeEntry";
@@ -15,11 +27,36 @@ import ElapsedTime from "@components/time-entry/ElapsedTime";
 
 import TimeEntries from "./TimeEntries";
 
-const DEFAULT_TASK_DURATION = 120000; // 2 mins
-
 const hoursToSeconds = (hours: number) => hours * 3600;
 
-export default function Task({ task, isSubtask = false }: { task: ProjectTask; isSubtask?: boolean }) {
+const getTick = (hasPlayButton: boolean): SxProps<Theme> => ({
+  position: "relative",
+  "&:before": {
+    content: `""`,
+    position: "absolute",
+    width: 10,
+    height: "2px",
+    transform: "rotate(180deg)",
+    bgcolor: "divider",
+    top: hasPlayButton ? 19 : 16,
+    left: -16,
+  },
+  "&:hover:before": {
+    bgcolor: "primary.main",
+  },
+});
+
+export default function Task({
+  task,
+  isSubtask = false,
+  onAddNewEntry,
+  onDeleteTimeEntry,
+}: {
+  task: ProjectTask;
+  isSubtask?: boolean;
+  onAddNewEntry: (taskId: number) => void;
+  onDeleteTimeEntry: (timeEntryId: number, task: ProjectTask) => void;
+}) {
   const { start, stop, startAt, setTaskId, taskId, addNew } = useTimeEntryStore(
     (state) => ({
       start: state.start,
@@ -53,17 +90,6 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
     start();
   };
 
-  const handleNewTimeEntry = () => {
-    handleClose();
-    const startAt = Date.now() - DEFAULT_TASK_DURATION;
-    addNew({
-      taskId: task.id,
-      startAt,
-      stopAt: startAt + DEFAULT_TASK_DURATION,
-      showStopModal: true,
-    });
-  };
-
   const handleNewSubTask = () => {
     handleClose();
   };
@@ -76,37 +102,22 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
     handleClose();
   };
 
+  const handleAddTimeEntry = () => {
+    handleClose();
+    onAddNewEntry(task.id);
+  };
+
+  const handleDeleteTimeEntry = (timeEntryId: number) => {
+    handleClose();
+    onDeleteTimeEntry(timeEntryId, task);
+  };
+
   const elapsedTime = hoursToSeconds(task.effective_hours || 0);
 
-  // const createNewSubTask = () => {
-  //   openDialog({
-  //     open: true,
-  //     title: (
-  //       <Box sx={{ display: "flex" }}>
-  //         <Box sx={{ fontWeight: "200" }}>New sub-task for</Box>
-  //         <Box sx={{ ml: "4px" }}>{task.name}</Box>
-  //       </Box>
-  //     ),
-  //     message: (
-  //       <TaskForm
-  //         parentTask={task}
-  //         onCancel={() => closeDialog()}
-  //         onConfirm={(data) => {
-  //           createTask({ ...data, parent_id: task.id });
-  //           closeDialog();
-  //         }}
-  //       />
-  //     ),
-  //   });
-  // };
-
   const canTrackTime = (task.child_ids?.length || 0) === 0;
-  const sx: SxProps<Theme> = canTrackTime
-    ? { "&:hover": { bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#EEE") } }
-    : {};
 
   return (
-    <Box p={1} mt={1} sx={sx}>
+    <Box sx={{ mt: 0.5, mb: 0.5, ...(isSubtask ? { ml: 2 } : getTick(canTrackTime)) }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
           {(isSubtask || canTrackTime) && (
@@ -121,10 +132,23 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
               {startAt && taskId === task.id ? <StopCircleIcon /> : <PlayArrowIcon />}
             </IconButton>
           )}
-          <Typography variant="body1">{task.name}</Typography>
+          {canTrackTime ? (
+            <Typography
+              variant="body1"
+              component="div"
+              role="button"
+              aria-label="open-time-entries"
+              onClick={handleExpandClick}
+              sx={{ cursor: "pointer" }}
+            >
+              {task.name}
+            </Typography>
+          ) : (
+            <Typography variant="body1">{task.name}</Typography>
+          )}
         </Stack>
         <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
-          <ElapsedTime elapsedTime={elapsedTime} hideSeconds withLabels size="small" />
+          {canTrackTime && <ElapsedTime elapsedTime={elapsedTime} hideSeconds withLabels size="small" />}
           <IconButton aria-label="start" color="primary" size="small" onClick={handleClick}>
             <ListIcon />
           </IconButton>
@@ -156,22 +180,32 @@ export default function Task({ task, isSubtask = false }: { task: ProjectTask; i
           horizontal: "left",
         }}
       >
-        {canTrackTime && <MenuItem onClick={handleNewTimeEntry}>New time entry</MenuItem>}
+        {canTrackTime && <MenuItem onClick={handleAddTimeEntry}>New time entry</MenuItem>}
         <MenuItem onClick={handleNewSubTask}>{isSubtask ? "Update subtask" : "Update task"}</MenuItem>
         {!isSubtask && !canTrackTime && <MenuItem onClick={handleUpdateTask}>New SubTask</MenuItem>}
         <MenuItem onClick={handleDeleteTask}>{isSubtask ? "Delete subtask" : "Delete task"}</MenuItem>
         <MenuItem onClick={handleDeleteTask}>Mark as done</MenuItem>
       </Menu>
       {!isSubtask && task.child_ids.length > 0 && (
-        <ul>
+        <Box>
           {task.child_ids.map((subTask) => (
-            <Task task={subTask} isSubtask key={subTask.id} />
+            <Task
+              task={subTask}
+              isSubtask
+              key={subTask.id}
+              onAddNewEntry={onAddNewEntry}
+              onDeleteTimeEntry={onDeleteTimeEntry}
+            />
           ))}
-        </ul>
+        </Box>
       )}
       {canTrackTime && (
         <Collapse in={expanded} timeout="auto">
-          <TimeEntries entries={task.timesheet_ids} />
+          <TimeEntries
+            entries={task.timesheet_ids}
+            onAddNew={() => onAddNewEntry(task.id)}
+            onDelete={handleDeleteTimeEntry}
+          />
         </Collapse>
       )}
     </Box>
