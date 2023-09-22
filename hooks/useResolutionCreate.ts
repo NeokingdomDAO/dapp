@@ -14,6 +14,7 @@ type SubmitParams = {
   currentResolution: ResolutionFormBase;
   executionTo?: string[];
   executionData?: string[];
+  metadata?: {};
 };
 
 export default function useResolutionCreate() {
@@ -21,8 +22,14 @@ export default function useResolutionCreate() {
   const { executeTx } = useBlockchainTransaction();
 
   return {
-    onSubmit: async ({ vetoTypeId, currentResolution, executionTo = [], executionData = [] }: SubmitParams) => {
-      const ipfsId = await addToIpfs(currentResolution);
+    onSubmit: async ({
+      vetoTypeId,
+      currentResolution,
+      executionTo = [],
+      executionData = [],
+      metadata = {},
+    }: SubmitParams) => {
+      const ipfsId = await addToIpfs({ ...currentResolution, metadata });
       const resolutionTypeId = Number(vetoTypeId || currentResolution.typeId);
       if ((currentResolution.exclusionAddress || "").trim() !== "") {
         return executeTx<
