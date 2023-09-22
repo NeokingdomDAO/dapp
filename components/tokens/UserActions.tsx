@@ -34,6 +34,8 @@ export default function UserActions() {
   }
 
   const isInvestor = daoManagerData?.daoManager?.investorsAddresses?.includes(address?.toLowerCase());
+  const canOffer = daoManagerData?.daoManager?.contributorsAddresses?.includes(address?.toLowerCase());
+
   const withdrawableBalance = isInvestor
     ? (data?.balance.governanceTokens || 0) - (data?.balance.vestingTokens || 0)
     : data?.balance.unlockedTokens;
@@ -41,7 +43,7 @@ export default function UserActions() {
   return (
     <>
       <Grid container spacing={2}>
-        {!isInvestor && (
+        {canOffer && (
           <Grid item xs={12} md={6} lg={4}>
             <Paper sx={paperSx}>
               <div>
