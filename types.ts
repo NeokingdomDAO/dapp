@@ -21,6 +21,7 @@ export type ResolutionsAcl = {
   isShareholder: boolean;
   isManagingBoard: boolean;
   isContributor: boolean;
+  isExtraneous: boolean;
 };
 
 export type ResolutionTypeEntity = {

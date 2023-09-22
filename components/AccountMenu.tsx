@@ -144,7 +144,7 @@ export default function AccountMenu() {
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
-              Logout
+              Log out
             </MenuItem>
           ) : (
             <MenuItem onClick={() => logout()} key="logout">

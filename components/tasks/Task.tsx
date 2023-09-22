@@ -25,6 +25,8 @@ import useTimeEntryStore from "@store/timeEntry";
 
 import ElapsedTime from "@components/time-entry/ElapsedTime";
 
+import useUserSettings from "@hooks/useUserSettings";
+
 import TimeEntries from "./TimeEntries";
 
 const hoursToSeconds = (hours: number) => hours * 3600;
@@ -69,12 +71,18 @@ export default function Task({
     shallow,
   );
 
+  const { openTasks, setOpenTasks } = useUserSettings();
+  const expanded = openTasks.includes(task.id);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [expanded, setExpanded] = useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleToggle = () => {
+    const newOpenTasks = openTasks.includes(task.id)
+      ? openTasks.filter((id) => id !== task.id)
+      : [...openTasks, task.id];
+
+    setOpenTasks(newOpenTasks);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -116,7 +124,6 @@ export default function Task({
 
   const canTrackTime = (task.child_ids?.length || 0) === 0;
   const hasTimeEntries = (task.timesheet_ids?.length || 0) > 0;
-  console.log("task: ", task.name, hasTimeEntries);
 
   return (
     <Box sx={{ mt: 0.8, mb: 0.8, ...(isSubtask ? { ml: 2 } : getTick(canTrackTime)) }}>
@@ -134,20 +141,16 @@ export default function Task({
               {startAt && taskId === task.id ? <StopCircleIcon /> : <PlayArrowIcon />}
             </IconButton>
           )}
-          {canTrackTime ? (
-            <Typography
-              variant="body1"
-              component="div"
-              role="button"
-              aria-label="open-time-entries"
-              onClick={handleExpandClick}
-              sx={{ cursor: "pointer" }}
-            >
-              {task.name}
-            </Typography>
-          ) : (
-            <Typography variant="body1">{task.name}</Typography>
-          )}
+          <Typography
+            variant="body1"
+            component="div"
+            role="button"
+            aria-label="open-time-entries"
+            onClick={handleToggle}
+            sx={{ cursor: "pointer" }}
+          >
+            {task.name}
+          </Typography>
         </Stack>
         <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
           {canTrackTime && elapsedTime > 0 && (
@@ -156,17 +159,15 @@ export default function Task({
           <IconButton aria-label="start" color="primary" size="small" onClick={handleClick}>
             <ListIcon />
           </IconButton>
-          {canTrackTime && (
-            <IconButton
-              aria-label="start"
-              color="primary"
-              size="small"
-              onClick={handleExpandClick}
-              sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s ease-in" }}
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          )}
+          <IconButton
+            aria-label="toggle"
+            color="primary"
+            size="small"
+            onClick={handleToggle}
+            sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s ease-in" }}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
         </Stack>
       </Stack>
       <Menu
@@ -193,17 +194,19 @@ export default function Task({
         <MenuItem onClick={handleDeleteTask}>Mark as done</MenuItem>
       </Menu>
       {!isSubtask && task.child_ids.length > 0 && (
-        <Box>
-          {task.child_ids.map((subTask) => (
-            <Task
-              task={subTask}
-              isSubtask
-              key={subTask.id}
-              onAddNewEntry={onAddNewEntry}
-              onDeleteTimeEntry={onDeleteTimeEntry}
-            />
-          ))}
-        </Box>
+        <Collapse in={expanded} timeout="auto">
+          <Box>
+            {task.child_ids.map((subTask) => (
+              <Task
+                task={subTask}
+                isSubtask
+                key={subTask.id}
+                onAddNewEntry={onAddNewEntry}
+                onDeleteTimeEntry={onDeleteTimeEntry}
+              />
+            ))}
+          </Box>
+        </Collapse>
       )}
       {canTrackTime && (
         <Collapse in={expanded} timeout="auto">

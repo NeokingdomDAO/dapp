@@ -7,6 +7,7 @@ import { Web3Modal } from "@web3modal/react";
 import { assets, chains } from "chain-registry";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
@@ -29,6 +30,8 @@ import useUser from "@hooks/useUser";
 import ContractsProvider from "../components/ContractsProvider";
 import { newTheme } from "../styles/theme";
 import { META } from "./_document";
+
+const ExtraneousWarning = dynamic(() => import("../components/ExtraneousWarning"), { ssr: false });
 
 export const SUPPORTED_CHAINS = [process.env.NEXT_PUBLIC_ENV === "staging" ? evmosTestnet : evmos];
 
@@ -105,9 +108,13 @@ export default function App({ Component, pageProps }: DappProps) {
             >
               <CssBaseline />
               {Component.noLayout ? (
-                <Component {...pageProps} />
+                <>
+                  <ExtraneousWarning />
+                  <Component {...pageProps} />
+                </>
               ) : (
                 <Layout fullWidth={!!Component.fullWidth} checkMismatch={!!Component.checkMismatch}>
+                  <ExtraneousWarning />
                   {(isLoading || !mounted) && (
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
                       <CircularProgress />

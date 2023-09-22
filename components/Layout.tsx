@@ -2,10 +2,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 
 import React, { useMemo } from "react";
 
-import { Badge, Chip, Container, Divider, Slide, Stack, useScrollTrigger } from "@mui/material";
+import { Alert, Badge, Button, Chip, Container, Divider, Slide, Stack, useScrollTrigger } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";

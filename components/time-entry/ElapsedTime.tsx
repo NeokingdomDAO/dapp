@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 
 function getElapsedDetails(seconds: number) {
   const hours = Math.floor(seconds / 3600);
@@ -20,6 +20,7 @@ export default function ElapsedTime({
   minified = false,
   label,
   withBorders = false,
+  isLoading = false,
 }: {
   label?: string;
   elapsedTime: number;
@@ -28,6 +29,7 @@ export default function ElapsedTime({
   size?: "small" | "medium";
   minified?: boolean;
   withBorders?: boolean;
+  isLoading?: boolean;
 }) {
   const { hours, minutes, seconds } = getElapsedDetails(elapsedTime);
 
@@ -50,69 +52,73 @@ export default function ElapsedTime({
           {label}
         </Typography>
       )}
-      <Stack direction="row" alignItems="center">
-        <Box
-          sx={{
-            p: size === "small" ? 0.6 : 1,
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            width: withLabels ? "auto" : 50,
-            textAlign: "center",
-            ...(withBorders && { border: "1px solid", borderColor: "divider" }),
-          }}
-        >
-          <Typography variant={size === "medium" ? "h5" : "body1"}>
-            {hoursToDisplay}
-            {withLabels ? "h" : ""}
-          </Typography>
-        </Box>
-        <Typography
-          variant={size === "medium" ? "h5" : "body1"}
-          sx={{ position: "relative", top: -2, margin: "0 4px" }}
-        >
-          :
-        </Typography>
-        <Box
-          sx={{
-            p: size === "small" ? 0.6 : 1,
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            width: withLabels ? "auto" : 50,
-            textAlign: "center",
-            ...(withBorders && { border: "1px solid", borderColor: "divider" }),
-          }}
-        >
-          <Typography variant={size === "medium" ? "h5" : "body1"}>
-            {minutesToDisplay}
-            {withLabels ? "m" : ""}
-          </Typography>
-        </Box>
-        {!hideSeconds && (
-          <>
-            <Typography
-              variant={size === "medium" ? "h5" : "body1"}
-              sx={{ position: "relative", top: -2, margin: "0 4px" }}
-            >
-              :
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <Stack direction="row" alignItems="center">
+          <Box
+            sx={{
+              p: size === "small" ? 0.6 : 1,
+              bgcolor: "background.paper",
+              borderRadius: 2,
+              width: withLabels ? "auto" : 50,
+              textAlign: "center",
+              ...(withBorders && { border: "1px solid", borderColor: "divider" }),
+            }}
+          >
+            <Typography variant={size === "medium" ? "h5" : "body1"}>
+              {hoursToDisplay}
+              {withLabels ? "h" : ""}
             </Typography>
-            <Box
-              sx={{
-                p: 1,
-                bgcolor: "background.paper",
-                borderRadius: 2,
-                width: withLabels ? "auto" : 50,
-                textAlign: "center",
-                ...(withBorders && { border: "1px solid", borderColor: "divider" }),
-              }}
-            >
-              <Typography variant={size === "medium" ? "h5" : "body1"}>
-                {secondsToDisplay}
-                {withLabels ? "s" : ""}
+          </Box>
+          <Typography
+            variant={size === "medium" ? "h5" : "body1"}
+            sx={{ position: "relative", top: -2, margin: "0 4px" }}
+          >
+            :
+          </Typography>
+          <Box
+            sx={{
+              p: size === "small" ? 0.6 : 1,
+              bgcolor: "background.paper",
+              borderRadius: 2,
+              width: withLabels ? "auto" : 50,
+              textAlign: "center",
+              ...(withBorders && { border: "1px solid", borderColor: "divider" }),
+            }}
+          >
+            <Typography variant={size === "medium" ? "h5" : "body1"}>
+              {minutesToDisplay}
+              {withLabels ? "m" : ""}
+            </Typography>
+          </Box>
+          {!hideSeconds && (
+            <>
+              <Typography
+                variant={size === "medium" ? "h5" : "body1"}
+                sx={{ position: "relative", top: -2, margin: "0 4px" }}
+              >
+                :
               </Typography>
-            </Box>
-          </>
-        )}
-      </Stack>
+              <Box
+                sx={{
+                  p: 1,
+                  bgcolor: "background.paper",
+                  borderRadius: 2,
+                  width: withLabels ? "auto" : 50,
+                  textAlign: "center",
+                  ...(withBorders && { border: "1px solid", borderColor: "divider" }),
+                }}
+              >
+                <Typography variant={size === "medium" ? "h5" : "body1"}>
+                  {secondsToDisplay}
+                  {withLabels ? "s" : ""}
+                </Typography>
+              </Box>
+            </>
+          )}
+        </Stack>
+      )}
     </Box>
   );
 }

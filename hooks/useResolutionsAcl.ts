@@ -5,6 +5,8 @@ import { useAccount } from "wagmi";
 import { fetcher } from "@graphql/client";
 import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
 
+import useShareholderStatus from "./useShareholderStatus";
+
 const DEFAULT_ACL = {
   canCreate: false,
   canUpdate: false,
@@ -13,18 +15,23 @@ const DEFAULT_ACL = {
   isShareholder: false,
   isManagingBoard: false,
   isContributor: false,
+  isExtraneous: true,
 };
 
 export default function useResolutionsAcl(): { acl: ResolutionsAcl; error?: boolean; isLoading?: boolean } {
   const { address } = useAccount();
   const { data, error, isLoading } = useSWR<any>(address ? getDaoManagerQuery : null, fetcher);
+  const { daoUsers, isLoading: isLoadingShareholderStatus } = useShareholderStatus();
 
-  if (!data || error || !address || isLoading) {
-    return { acl: DEFAULT_ACL, error, isLoading };
+  if (!data || error || !address || isLoading || isLoadingShareholderStatus) {
+    return { acl: DEFAULT_ACL, error, isLoading: isLoading || isLoadingShareholderStatus };
   }
 
   const isContributor = data.daoManager.contributorsAddresses.includes(address.toLowerCase());
   const isManagingBoard = data.daoManager.managingBoardAddresses.includes(address.toLowerCase());
+
+  const isExtraneous = daoUsers ? !Object.keys(daoUsers).includes(address.toLowerCase()) : true;
+
   const acl = {
     canCreate: isContributor,
     canUpdate: isManagingBoard,
@@ -34,6 +41,7 @@ export default function useResolutionsAcl(): { acl: ResolutionsAcl; error?: bool
     isShareholder: data.daoManager.shareholdersAddresses.includes(address.toLowerCase()),
     isManagingBoard,
     isContributor,
+    isExtraneous,
   };
 
   return { acl, error, isLoading };

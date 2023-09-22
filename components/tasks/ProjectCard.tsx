@@ -1,9 +1,21 @@
 import Link from "next/link";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Add, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, CardHeader, Divider, Stack, Typography } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Collapse,
+  Divider,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 
@@ -12,12 +24,18 @@ import { Project, ProjectTask } from "@store/projectTaskStore";
 import Modal from "@components/Modal";
 import TimeEntryFormStatic from "@components/time-entry/FormStatic";
 
+import useUserSettings from "@hooks/useUserSettings";
+
 import Task from "./Task";
 import TaskCard from "./TaskCard";
 
 export default function ProjectCard({ project }: { project: Project }) {
   const [hideCompleted, setHideCompleted] = useState(true);
   const [currentTaskId, setCurrentTaskId] = useState<null | number>(null);
+
+  const { openProjects, setOpenProjects } = useUserSettings();
+  const expanded = openProjects.includes(project.id);
+
   const tasks = useMemo(
     () =>
       project.tasks
@@ -38,6 +56,14 @@ export default function ProjectCard({ project }: { project: Project }) {
 
   const handleAddNewEntry = (taskId: number) => {
     setCurrentTaskId(taskId);
+  };
+
+  const handleToggle = () => {
+    const newOpenProjects = openProjects.includes(project.id)
+      ? openProjects.filter((id) => id !== project.id)
+      : [...openProjects, project.id];
+
+    setOpenProjects(newOpenProjects);
   };
 
   const handleDeleteTimeEntry = async (timeEntryId: number, task: ProjectTask) => {
@@ -75,20 +101,42 @@ export default function ProjectCard({ project }: { project: Project }) {
         spacing={4}
         justifyContent="space-between"
       >
-        <Typography variant="h6">{project.name}</Typography>
-        <Button
-          component={Link}
-          href={`/tasks/new?projectId=${project.id}`}
-          variant="outlined"
-          startIcon={<Add />}
-          size="small"
+        <Typography
+          variant="h6"
+          component="div"
+          role="button"
+          aria-label="open-time-entries"
+          onClick={handleToggle}
+          sx={{ cursor: "pointer" }}
         >
-          New Task
-        </Button>
+          {project.name}
+        </Typography>
+        <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
+          <Button
+            component={Link}
+            href={`/tasks/new?projectId=${project.id}`}
+            variant="outlined"
+            startIcon={<Add />}
+            size="small"
+          >
+            New Task
+          </Button>
+          <IconButton
+            aria-label="togggle"
+            color="primary"
+            size="small"
+            onClick={handleToggle}
+            sx={{ transform: expanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s ease-in" }}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Stack>
       </Stack>
-      {tasks.map((task) => (
-        <Task key={task.id} task={task} onAddNewEntry={handleAddNewEntry} onDeleteTimeEntry={handleDeleteTimeEntry} />
-      ))}
+      <Collapse in={expanded} timeout="auto">
+        {tasks.map((task) => (
+          <Task key={task.id} task={task} onAddNewEntry={handleAddNewEntry} onDeleteTimeEntry={handleDeleteTimeEntry} />
+        ))}
+      </Collapse>
     </Box>
   );
 

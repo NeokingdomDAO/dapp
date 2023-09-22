@@ -50,7 +50,14 @@ export default function Tasks() {
     <>
       <Section inverse sx={{ marginTop: "-24px" }}>
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
-          <ElapsedTime elapsedTime={totalTime} hideSeconds withLabels label="Total unapproved time" withBorders />
+          <ElapsedTime
+            elapsedTime={totalTime}
+            hideSeconds
+            withLabels
+            label="Total unapproved time"
+            withBorders
+            isLoading={isLoading}
+          />
           <Button href="/tasks/new" variant="outlined" startIcon={<Add />} component={Link}>
             New task in different project
           </Button>
