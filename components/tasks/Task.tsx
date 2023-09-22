@@ -212,6 +212,7 @@ export default function Task({
       {canTrackTime && (
         <Collapse in={expanded} timeout="auto">
           <TimeEntries
+            taskId={task.id}
             entries={task.timesheet_ids}
             onAddNew={() => onAddNewEntry(task.id)}
             onDelete={handleDeleteTimeEntry}

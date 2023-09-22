@@ -10,7 +10,9 @@ import { toPrettyRange } from "@lib/utils";
 import { Timesheet } from "@store/projectTaskStore";
 
 import Dialog from "@components/Dialog";
+import Modal from "@components/Modal";
 import ElapsedTime from "@components/time-entry/ElapsedTime";
+import TimeEntryFormStatic from "@components/time-entry/FormStatic";
 
 const getLabel = (label: string, time: number) => (
   <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -43,19 +45,28 @@ export default function TimeEntries({
   entries,
   onAddNew,
   onDelete,
+  taskId,
 }: {
   entries: Timesheet[];
   onAddNew: () => void;
   onDelete: (timeEntryId: number) => void;
+  taskId: number;
 }) {
   const [deletingId, setDeletingId] = React.useState<null | number>(null);
-  const handleUpdateTimeEntry = () => {
-    console.info("You clicked the chip.");
+  const [editingTimeSheet, setEditingTimeSheet] = React.useState<null | Timesheet>(null);
+
+  const handleUpdateTimeEntry = (ts: Timesheet) => {
+    setEditingTimeSheet(ts);
   };
 
   const handleDeleteTimeEntry = () => {
     onDelete(deletingId as number);
     setDeletingId(null);
+  };
+
+  const handleDeleteFromUpdate = () => {
+    setDeletingId(editingTimeSheet?.id as number);
+    setEditingTimeSheet(null);
   };
 
   return (
@@ -85,6 +96,24 @@ export default function TimeEntries({
         },
       }}
     >
+      {!!editingTimeSheet && (
+        <Modal
+          open
+          sx={{ bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#FAFAFA") }}
+          onClose={() => setEditingTimeSheet(null)}
+        >
+          <TimeEntryFormStatic
+            onSaved={() => setEditingTimeSheet(null)}
+            savedFormData={{
+              startTime: new Date(editingTimeSheet.start * 1000),
+              endTime: new Date((editingTimeSheet.end as number) * 1000),
+              description: editingTimeSheet.name,
+            }}
+            onDeleteTimeEntry={handleDeleteFromUpdate}
+            taskId={taskId}
+          />
+        </Modal>
+      )}
       <Dialog
         open={!!deletingId}
         handleClose={() => setDeletingId(null)}
@@ -116,7 +145,7 @@ export default function TimeEntries({
                 <Chip
                   label={getLabel(data.name, data.unit_amount)}
                   onDelete={() => setDeletingId(data.id)}
-                  onClick={handleUpdateTimeEntry}
+                  onClick={() => handleUpdateTimeEntry(data)}
                   sx={{ width: "100%" }}
                   {...extraProps}
                 />
@@ -130,7 +159,7 @@ export default function TimeEntries({
             label="new time entry"
             icon={<AddCircleOutlineIcon />}
             onClick={onAddNew}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", maxWidth: "180px" }}
             color="primary"
           />
         </Box>

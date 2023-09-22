@@ -4,7 +4,17 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
-import { Alert, Autocomplete, Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DateTimeField } from "@mui/x-date-pickers";
 
 import { ODOO_DATE_FORMAT } from "@lib/constants";
@@ -30,7 +40,17 @@ const ONE_MINUTE_IN_SECONDS = 60;
 const TEN_HOURS_IN_SECONDS = 10 * 60 * 60;
 const DEFAULT_TASK_DURATION = 120000; // 2 mins
 
-export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: number; onSaved: () => void }) {
+export default function TimeEntryFormStatic({
+  taskId,
+  onSaved,
+  savedFormData,
+  onDeleteTimeEntry,
+}: {
+  taskId: number;
+  onSaved: () => void;
+  savedFormData?: Partial<StateType>;
+  onDeleteTimeEntry?: () => void;
+}) {
   const { enqueueSnackbar } = useSnackbar();
   const setProjectKey = useProjectTaskStore((state) => state.actions.setProjectKey);
 
@@ -38,11 +58,11 @@ export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: numbe
   const { userTasks, isLoading, userProjects } = useUserProjects();
 
   const [formData, setFormData] = useState<StateType>(() => ({
-    startTime: new Date(),
-    endTime: new Date(Date.now() + DEFAULT_TASK_DURATION),
+    startTime: savedFormData?.startTime || new Date(),
+    endTime: savedFormData?.endTime || new Date(Date.now() + DEFAULT_TASK_DURATION),
     disabledEditStart: true,
     disabledEditEnd: true,
-    description: "",
+    description: savedFormData?.description || "",
     isLoading: false,
     taskId,
   }));
@@ -80,7 +100,7 @@ export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: numbe
       return {
         ...prev,
         disabledEditStart,
-        startTime: disabledEditStart ? new Date() : prev.startTime,
+        startTime: disabledEditStart ? formData?.startTime || new Date() : prev.startTime,
       };
     });
   };
@@ -91,7 +111,7 @@ export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: numbe
       return {
         ...prev,
         disabledEditEnd,
-        endTime: disabledEditEnd ? new Date(Date.now() + DEFAULT_TASK_DURATION) : prev.endTime,
+        endTime: disabledEditEnd ? formData?.endTime || new Date(Date.now() + DEFAULT_TASK_DURATION) : prev.endTime,
       };
     });
   };
@@ -101,6 +121,7 @@ export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: numbe
   };
 
   const saveTimeEntry = async () => {
+    // todo if savedFormData is defined, update the time entry otherwise create a new one (via hooks)
     setFormData((prev) => ({ ...prev, isLoading: true }));
     const response = await fetch(`/api/time_entries`, {
       method: "POST",
@@ -139,7 +160,7 @@ export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: numbe
   return (
     <Box>
       <Typography variant="h5" sx={{ mb: 3 }}>
-        Save time entry
+        {!!savedFormData ? "Update" : "New"} time entry
       </Typography>
       {options.length > 0 ? (
         <Autocomplete
@@ -222,7 +243,7 @@ export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: numbe
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <ElapsedTime withLabels elapsedTime={elapsedTime} hideSeconds={elapsedTime >= ONE_MINUTE_IN_SECONDS} />
             <LoadingButton variant="contained" disabled={!isValid} loading={formData.isLoading} onClick={saveTimeEntry}>
-              Save entry
+              {!!savedFormData ? "Update" : "Save entry"}
             </LoadingButton>
           </Stack>
           {elapsedTime > TEN_HOURS_IN_SECONDS && (
@@ -236,6 +257,16 @@ export default function TimeEntryFormStatic({ taskId, onSaved }: { taskId: numbe
               <b>Heads up:</b> this time entry needs to be longer than 1 minute. Please manually update it, or continue
               tracking
             </Alert>
+          )}
+          {!!savedFormData && (
+            <>
+              <Divider sx={{ mb: 2, mt: 2 }} />
+              <Box sx={{ textAlign: "center" }}>
+                <LoadingButton variant="outlined" onClick={onDeleteTimeEntry} color="error" size="small">
+                  Delete entry
+                </LoadingButton>
+              </Box>
+            </>
           )}
         </>
       ) : (
