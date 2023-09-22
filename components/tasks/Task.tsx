@@ -119,7 +119,7 @@ export default function Task({
   console.log("task: ", task.name, hasTimeEntries);
 
   return (
-    <Box sx={{ mt: 0.5, mb: 0.5, ...(isSubtask ? { ml: 2 } : getTick(canTrackTime)) }}>
+    <Box sx={{ mt: 0.8, mb: 0.8, ...(isSubtask ? { ml: 2 } : getTick(canTrackTime)) }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
           {(isSubtask || canTrackTime) && (
@@ -150,7 +150,9 @@ export default function Task({
           )}
         </Stack>
         <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
-          {canTrackTime && <ElapsedTime elapsedTime={elapsedTime} hideSeconds withLabels size="small" />}
+          {canTrackTime && elapsedTime > 0 && (
+            <ElapsedTime elapsedTime={elapsedTime} hideSeconds withLabels size="small" />
+          )}
           <IconButton aria-label="start" color="primary" size="small" onClick={handleClick}>
             <ListIcon />
           </IconButton>

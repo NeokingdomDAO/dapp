@@ -53,7 +53,7 @@ export default function ElapsedTime({
       <Stack direction="row" alignItems="center">
         <Box
           sx={{
-            p: 1,
+            p: size === "small" ? 0.6 : 1,
             bgcolor: "background.paper",
             borderRadius: 2,
             width: withLabels ? "auto" : 50,
@@ -74,7 +74,7 @@ export default function ElapsedTime({
         </Typography>
         <Box
           sx={{
-            p: 1,
+            p: size === "small" ? 0.6 : 1,
             bgcolor: "background.paper",
             borderRadius: 2,
             width: withLabels ? "auto" : 50,
