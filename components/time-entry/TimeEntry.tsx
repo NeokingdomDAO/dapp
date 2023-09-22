@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
-import { Divider, IconButton, Paper, Stack, SxProps, Theme, Typography, keyframes } from "@mui/material";
+import { Divider, IconButton, Paper, Stack, SxProps, Theme, Typography, keyframes, useMediaQuery } from "@mui/material";
 
 import useTimeEntryStore from "@store/timeEntry";
 
@@ -52,7 +52,6 @@ const activeSx: SxProps<Theme> = {
 
 export default function TimeEntry() {
   const { userTasks, isLoading } = useUserProjects();
-  const router = useRouter();
   const { startAt, stopAt, start, stop, showStopModal, taskId } = useTimeEntryStore(
     (state) => ({
       startAt: state.startAt,
@@ -86,9 +85,9 @@ export default function TimeEntry() {
   }, [startAt, showStopModal, setElapsedTime]);
 
   const isActive = startAt && !stopAt;
-  const shouldNotDisplayStart = !isActive && router.asPath === "/tasks" && !showStopModal;
+  const shouldNotDisplayStart = !isActive && showStopModal;
 
-  if (shouldNotDisplayStart || (router.asPath === "/tasks" && !isActive)) {
+  if (shouldNotDisplayStart) {
     return <StopModal />;
   }
 
@@ -97,9 +96,11 @@ export default function TimeEntry() {
       <StopModal />
       <Paper
         sx={{
-          p: 2,
+          p: 0.8,
+          pl: 1.5,
+          pr: 1.5,
           position: "fixed",
-          zIndex: 1000,
+          zIndex: 1001,
           bottom: 16,
           right: 16,
           bgcolor: (t) => (t.palette.mode === "dark" ? "#222" : "#FAFAFA"),
@@ -122,12 +123,12 @@ export default function TimeEntry() {
             justifyContent="center"
             alignItems="center"
           >
-            <ElapsedTime elapsedTime={elapsedTime} />
+            <ElapsedTime elapsedTime={elapsedTime} size="small" />
             <IconButton
               aria-label="stop"
               color="primary"
               sx={{ position: "relative", zIndex: 2, border: "1px solid", borderColor: "divider" }}
-              size="large"
+              size="small"
               onClick={stop}
             >
               <StopCircleIcon />
@@ -141,13 +142,13 @@ export default function TimeEntry() {
             justifyContent="center"
             alignItems="center"
           >
-            <Typography variant="h6">Start tracking</Typography>
+            <Typography variant="body1">Start tracking</Typography>
             <IconButton
               aria-label="start"
               color="primary"
               onClick={start}
               sx={{ border: "1px solid", borderColor: "divider" }}
-              size="large"
+              size="small"
             >
               <PlayArrowIcon />
             </IconButton>

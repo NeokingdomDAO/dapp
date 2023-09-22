@@ -12,28 +12,32 @@ import { Timesheet } from "@store/projectTaskStore";
 import Dialog from "@components/Dialog";
 import ElapsedTime from "@components/time-entry/ElapsedTime";
 
-const TRUNCATE_AT = 20;
+const getLabel = (label: string, time: number) => (
+  <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Box
+      sx={{
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+        maxWidth: "150px",
+        display: "inline-block",
+      }}
+      component="span"
+    >
+      {label}
+    </Box>
+    &nbsp;
+    <ElapsedTime minified elapsedTime={time * 3600} hideSeconds withLabels size="small" />
+  </Box>
+);
 
-const getLabel = (str: string, time: number) => {
-  const label = str.length > TRUNCATE_AT ? str.substring(0, TRUNCATE_AT - 1) + "..." : str;
-
-  return (
-    <>
-      <span>{label}</span>&nbsp;
-      <ElapsedTime minified elapsedTime={time * 3600} hideSeconds withLabels size="small" />
-    </>
-  );
-};
-
-const getTooltipTitle = (timeEntry: Timesheet) => {
-  return (
-    <>
-      <b>{toPrettyRange(timeEntry.start, timeEntry.end)}</b>
-      <br />
-      <span>{timeEntry.name}</span>
-    </>
-  );
-};
+const getTooltipTitle = (timeEntry: Timesheet) => (
+  <>
+    <b>{toPrettyRange(timeEntry.start, timeEntry.end)}</b>
+    <br />
+    <span>{timeEntry.name}</span>
+  </>
+);
 
 export default function TimeEntries({
   entries,
@@ -80,7 +84,6 @@ export default function TimeEntries({
           left: 68,
         },
       }}
-      component="ul"
     >
       <Dialog
         open={!!deletingId}
@@ -91,29 +94,46 @@ export default function TimeEntries({
       >
         <Typography variant="body1">Are you sure you want to delete this time entry?</Typography>
       </Dialog>
-      {entries.map((data) => {
-        const extraProps = data.id === deletingId ? { disabled: true, deleteIcon: <CircularProgress size={16} /> } : {};
-        return (
-          <Box component="li" key={data.id} m={0.5}>
-            <Tooltip title={getTooltipTitle(data)} placement="top" arrow>
-              <Chip
-                label={getLabel(data.name, data.unit_amount)}
-                onDelete={() => setDeletingId(data.id)}
-                onClick={handleUpdateTimeEntry}
-                {...extraProps}
-              />
-            </Tooltip>
-          </Box>
-        );
-      })}
-      <Box component="li" m={0.5}>
-        <Chip
-          variant="outlined"
-          label="new time entry"
-          icon={<AddCircleOutlineIcon />}
-          onClick={onAddNew}
-          color="primary"
-        />
+      <Box
+        component="ul"
+        sx={{
+          maxHeight: 200,
+          overflow: "auto",
+          listStyle: "none",
+          m: 0,
+          p: 0,
+          width: "100%",
+          display: "flex",
+          flexWrap: "wrap",
+        }}
+      >
+        {entries.map((data) => {
+          const extraProps =
+            data.id === deletingId ? { disabled: true, deleteIcon: <CircularProgress size={16} /> } : {};
+          return (
+            <Box component="li" key={data.id} m={0.5} sx={{ flex: 1 }}>
+              <Tooltip title={getTooltipTitle(data)} placement="top" arrow>
+                <Chip
+                  label={getLabel(data.name, data.unit_amount)}
+                  onDelete={() => setDeletingId(data.id)}
+                  onClick={handleUpdateTimeEntry}
+                  sx={{ width: "100%" }}
+                  {...extraProps}
+                />
+              </Tooltip>
+            </Box>
+          );
+        })}
+        <Box component="li" m={0.5} sx={{ flex: 1 }}>
+          <Chip
+            variant="outlined"
+            label="new time entry"
+            icon={<AddCircleOutlineIcon />}
+            onClick={onAddNew}
+            sx={{ width: "100%" }}
+            color="primary"
+          />
+        </Box>
       </Box>
     </Paper>
   );

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, SxProps, Theme, Typography } from "@mui/material";
 
 function getElapsedDetails(seconds: number) {
   const hours = Math.floor(seconds / 3600);
@@ -21,6 +21,7 @@ export default function ElapsedTime({
   label,
   withBorders = false,
   isLoading = false,
+  sx = {},
 }: {
   label?: string;
   elapsedTime: number;
@@ -30,6 +31,7 @@ export default function ElapsedTime({
   minified?: boolean;
   withBorders?: boolean;
   isLoading?: boolean;
+  sx?: SxProps<Theme>;
 }) {
   const { hours, minutes, seconds } = getElapsedDetails(elapsedTime);
 
@@ -46,7 +48,7 @@ export default function ElapsedTime({
   }
 
   return (
-    <Box>
+    <Box sx={sx}>
       {label && (
         <Typography variant={size === "medium" ? "h5" : "body1"} sx={{ fontWeight: "bold", mb: 1 }}>
           {label}
@@ -55,7 +57,7 @@ export default function ElapsedTime({
       {isLoading ? (
         <CircularProgress />
       ) : (
-        <Stack direction="row" alignItems="center">
+        <Stack direction="row" alignItems="center" justifyContent={{ xs: "center", md: "flex-start" }}>
           <Box
             sx={{
               p: size === "small" ? 0.6 : 1,

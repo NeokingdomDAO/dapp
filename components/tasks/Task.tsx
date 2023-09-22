@@ -42,6 +42,7 @@ const getTick = (hasPlayButton: boolean): SxProps<Theme> => ({
     bgcolor: "divider",
     top: hasPlayButton ? 19 : 16,
     left: -16,
+    transition: "all .2s ease-out",
   },
   "&:hover:before": {
     bgcolor: "primary.main",

@@ -26,4 +26,6 @@ export default function ExtraneousWarning() {
       </Container>
     );
   }
+
+  return null;
 }

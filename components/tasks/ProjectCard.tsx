@@ -84,7 +84,12 @@ export default function ProjectCard({ project }: { project: Project }) {
   };
 
   return (
-    <Box sx={{ borderLeft: "2px solid", borderColor: "divider", pl: 2 }}>
+    <Box
+      sx={{
+        transition: "all .2s ease-in-out",
+        ...(expanded ? { borderLeft: "2px solid", borderColor: "divider", pl: 2 } : {}),
+      }}
+    >
       {currentTaskId && (
         <Modal
           open
@@ -107,7 +112,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           role="button"
           aria-label="open-time-entries"
           onClick={handleToggle}
-          sx={{ cursor: "pointer" }}
+          sx={{ cursor: "pointer", lineHeight: 1.3 }}
         >
           {project.name}
         </Typography>
@@ -118,6 +123,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             variant="outlined"
             startIcon={<Add />}
             size="small"
+            sx={{ whiteSpace: "nowrap", ml: 1 }}
           >
             New Task
           </Button>
