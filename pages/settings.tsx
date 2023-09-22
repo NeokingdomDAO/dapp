@@ -117,7 +117,7 @@ export default function Settings() {
             <Button
               variant="outlined"
               size="small"
-              href="https://odoo.neokingdom.org/web#id=16&cids=1&menu_id=77&action=231&model=res.users&view_type=form"
+              href={`${process.env.NEXT_PUBLIC_ODOO_ENDPOINT}/web#id=16&cids=1&menu_id=77&action=231&model=res.users&view_type=form`}
               sx={{ mr: 2 }}
               target="_blank"
             >

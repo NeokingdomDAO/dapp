@@ -35,7 +35,7 @@ const getResolutionPdf = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(404).send("resolution not found");
     }
 
-    const usersData = await odooClient(cookie, getUsersQuery);
+    const usersData = await odooClient.query(cookie, getUsersQuery);
     const odooUsersData = (usersData.ResUsers as OdooUser[]).map((user) => ({
       ethereumAddress: user.ethereum_address,
       name: user.display_name,

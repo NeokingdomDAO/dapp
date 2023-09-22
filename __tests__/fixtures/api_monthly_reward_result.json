@@ -1,0 +1,104 @@
+{
+  "rewards": {
+    "interval": {
+      "start": "2023-08-01T00:00:00.000Z",
+      "end": "2023-08-31T00:00:00.000Z"
+    },
+    "token_allocations": [
+      {
+        "user": {
+          "id": 8,
+          "name": "Marko Talur",
+          "email": "marko@neokingdom.org",
+          "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+        },
+        "hours_amount": 29.499999999999996,
+        "token_amount": 2950
+      },
+      {
+        "user": {
+          "id": 9,
+          "name": "Benjamin von Uphues",
+          "email": "benjamin@neokingdom.org",
+          "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+        },
+        "hours_amount": 22.95,
+        "token_amount": 2295
+      },
+      {
+        "user": {
+          "id": 10,
+          "name": "Nicola Miotto",
+          "email": "nicola@neokingdom.org",
+          "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+        },
+        "hours_amount": 53,
+        "token_amount": 5300
+      },
+      {
+        "user": {
+          "id": 11,
+          "name": "Peter Schwarz",
+          "email": "peter@neokingdom.org",
+          "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+        },
+        "hours_amount": 8.216666666666667,
+        "token_amount": 821.6666666666666
+      },
+      {
+        "user": {
+          "id": 12,
+          "name": "Alberto Granzotto",
+          "email": "alberto@neokingdom.org",
+          "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+        },
+        "hours_amount": 67.41666666666667,
+        "token_amount": 6512.499999999999
+      },
+      {
+        "user": {
+          "id": 16,
+          "name": "Stefano Ceschi Berrini",
+          "email": "stefano.ceschib@gmail.com",
+          "ethereum_address": "0xbded7c8a2efa4cf2ee6c953e6447a246f3ac4e12"
+        },
+        "hours_amount": 13.783333333333333,
+        "token_amount": 1378.3333333333333
+      },
+      {
+        "user": {
+          "id": 21,
+          "name": "Tassilo Nils Boßmann",
+          "email": "tn.bossmann@gmail.com",
+          "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+        },
+        "hours_amount": 66.86666666666666,
+        "token_amount": 4965
+      },
+      {
+        "user": {
+          "id": 23,
+          "name": "Ragnar Reindoff",
+          "email": "ragnar@reindoff.ee",
+          "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+        },
+        "hours_amount": 31.91666666666666,
+        "token_amount": 2393.75
+      },
+      {
+        "user": {
+          "id": 25,
+          "name": "Ayesha Hana Yoosuf",
+          "email": "hanayoosuf@gmail.com",
+          "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+        },
+        "hours_amount": 107.31666666666669,
+        "token_amount": 7448.75
+      }
+    ]
+  },
+  "resolution": {
+    "title": "Rewarding Contributors for August 2023",
+    "content": "1. Object the confirmation of the contributed time by Contributors to the DAO from 01.08.2023 to 31.08.2023 or the minting of the corresponding number of tokens to them in the following manner:\n1. Marko Talur, 29.50 hours, 2950.00 tokens;\n2. Benjamin von Uphues, 22.95 hours, 2295.00 tokens;\n3. Nicola Miotto, 53.00 hours, 5300.00 tokens;\n4. Peter Schwarz, 8.22 hours, 821.67 tokens;\n5. Alberto Granzotto, 67.42 hours, 6512.50 tokens;\n6. Stefano Ceschi Berrini, 13.78 hours, 1378.33 tokens;\n7. Tassilo Nils Boßmann, 66.87 hours, 4965.00 tokens;\n8. Ragnar Reindoff, 31.92 hours, 2393.75 tokens;\n9. Ayesha Hana Yoosuf, 107.32 hours, 7448.75 tokens;\n"
+  }
+}

@@ -13,7 +13,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
-  const data = await odooGraphQLClient(cookie, getCurrentTasks, { userId: user.id });
+  const data = await odooGraphQLClient.query(cookie, getCurrentTasks, { userId: user.id });
   res.status(200).json(data.ProjectTask);
 }
 

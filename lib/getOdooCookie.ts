@@ -4,7 +4,7 @@ export async function getOdooCookie(username: string, password: string) {
   // Get CSRF Token and Cookie
   const csrfResponse = await fetch(process.env.ODOO_WEB_LOGIN_ENDPOINT, {
     credentials: "omit",
-    referrer: "https://odoo.neokingdom.org/web",
+    referrer: `${process.env.NEXT_PUBLIC_ODOO_ENDPOINT}/web`,
   });
 
   const csrfCookie = csrfResponse.headers.get("Set-Cookie");

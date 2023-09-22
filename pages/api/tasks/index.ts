@@ -26,7 +26,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const getUserProjectIds = async (userId: number) => {
-    const userTasks = await odooGraphQLClient(cookie, getUserTasksQuery, { user_id: userId });
+    const userTasks = await odooGraphQLClient.query(cookie, getUserTasksQuery, { user_id: userId });
     return [...new Set(userTasks.ProjectTask.map((t: ProjectTask) => t.project_id.id))];
   };
 
@@ -35,7 +35,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     try {
       const userId = user.id;
       const projectIds = await getUserProjectIds(userId);
-      const data = await odooGraphQLClient(cookie, getProjectsTasksQuery, {
+      const data = await odooGraphQLClient.query(cookie, getProjectsTasksQuery, {
         projectIds,
         userId,
       });

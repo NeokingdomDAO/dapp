@@ -1,0 +1,6312 @@
+{
+  "AccountAnalyticLine": [
+    {
+      "id": 4115,
+      "approval_date": 1693440000,
+      "start": 1693496400,
+      "end": 1693502940,
+      "name": "timetracking and scheduling and cal invites",
+      "unit_amount": 1.8166666666666667,
+      "token_amount": 136.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1019,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4094,
+      "approval_date": 1693440000,
+      "start": 1693483200,
+      "end": 1693485300,
+      "name": "screening call with odoo candidate mehedi ashan",
+      "unit_amount": 0.5833333333333334,
+      "token_amount": 43.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4064,
+      "approval_date": 1693440000,
+      "start": 1693475040,
+      "end": 1693477740,
+      "name": "/alberto call",
+      "unit_amount": 0.75,
+      "token_amount": 56.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4062,
+      "approval_date": 1693440000,
+      "start": 1693471200,
+      "end": 1693473660,
+      "name": "/admin tasks",
+      "unit_amount": 0.6833333333333333,
+      "token_amount": 51.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4060,
+      "approval_date": 1693440000,
+      "start": 1693469700,
+      "end": 1693471080,
+      "name": "/end of month approvals",
+      "unit_amount": 0.38333333333333336,
+      "token_amount": 28.750000000000004,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4093,
+      "approval_date": 1693440000,
+      "start": 1693388400,
+      "end": 1693393200,
+      "name": "w tassilo on weekly sync and w Alberto & Nicola and tassilo on prodcut/dev sync",
+      "unit_amount": 1.3333333333333333,
+      "token_amount": 100,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4058,
+      "approval_date": 1693440000,
+      "start": 1693393200,
+      "end": 1693400400,
+      "name": "weekly sync + with Marko after on onboarding process e-residency etc",
+      "unit_amount": 2,
+      "token_amount": 150,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1020,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4054,
+      "approval_date": 1693440000,
+      "start": 1693381980,
+      "end": 1693385280,
+      "name": "discord",
+      "unit_amount": 0.9166666666666666,
+      "token_amount": 68.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4038,
+      "approval_date": 1693440000,
+      "start": 1693393200,
+      "end": 1693396800,
+      "name": "- core meeting",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1076,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4037,
+      "approval_date": 1693440000,
+      "start": 1693384200,
+      "end": 1693387800,
+      "name": "- peter improvement plan\n- NEOK vs Governance Token issues with Marko",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1076,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4024,
+      "approval_date": 1693440000,
+      "start": 1693391400,
+      "end": 1693398600,
+      "name": "- sync with communication\n- weekly sync",
+      "unit_amount": 2,
+      "token_amount": 200,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4023,
+      "approval_date": 1693440000,
+      "start": 1693386000,
+      "end": 1693387800,
+      "name": "Improvement plan discussion",
+      "unit_amount": 0.5,
+      "token_amount": 50,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4021,
+      "approval_date": 1693440000,
+      "start": 1693412280,
+      "end": 1693413480,
+      "name": "admin end of month",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1006,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4019,
+      "approval_date": 1693440000,
+      "start": 1693411020,
+      "end": 1693412220,
+      "name": "Cosmoverse resolution",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1057,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4018,
+      "approval_date": 1693440000,
+      "start": 1693409760,
+      "end": 1693418040,
+      "name": "Creating templates for onboarding",
+      "unit_amount": 2.3,
+      "token_amount": 229.99999999999997,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1015,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4017,
+      "approval_date": 1693440000,
+      "start": 1693409100,
+      "end": 1693409700,
+      "name": "/zoho + notion ",
+      "unit_amount": 0.16666666666666666,
+      "token_amount": 12.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4016,
+      "approval_date": 1693440000,
+      "start": 1693404000,
+      "end": 1693410960,
+      "name": "w Flo on Logo, Designer, Infographic and new Website structure",
+      "unit_amount": 1.9333333333333333,
+      "token_amount": 145,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4012,
+      "approval_date": 1693440000,
+      "start": 1693398600,
+      "end": 1693401420,
+      "name": "End of month work",
+      "unit_amount": 0.7833333333333333,
+      "token_amount": 78.33333333333333,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4011,
+      "approval_date": 1693440000,
+      "start": 1693393200,
+      "end": 1693400460,
+      "name": "weekly + follow up w Marko",
+      "unit_amount": 2.0166666666666666,
+      "token_amount": 151.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1000,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4010,
+      "approval_date": 1693440000,
+      "start": 1693393320,
+      "end": 1693398600,
+      "name": "call",
+      "unit_amount": 1.4666666666666666,
+      "token_amount": 146.66666666666666,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 992,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4009,
+      "approval_date": 1693440000,
+      "start": 1693393260,
+      "end": 1693400460,
+      "name": "Weekly call",
+      "unit_amount": 2,
+      "token_amount": 200,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1016,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4008,
+      "approval_date": 1693440000,
+      "start": 1693393200,
+      "end": 1693400100,
+      "name": "/updates",
+      "unit_amount": 1.9166666666666667,
+      "token_amount": 143.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1009,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4007,
+      "approval_date": 1693440000,
+      "start": 1693391340,
+      "end": 1693393140,
+      "name": "/office + bank account",
+      "unit_amount": 0.5,
+      "token_amount": 37.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4006,
+      "approval_date": 1693440000,
+      "start": 1693388400,
+      "end": 1693393200,
+      "name": "w Hana on weekly sync and w Alberto & Nicola sync",
+      "unit_amount": 1.3333333333333333,
+      "token_amount": 100,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4005,
+      "approval_date": 1693440000,
+      "start": 1693385700,
+      "end": 1693388340,
+      "name": "follow up - Improvement Plan",
+      "unit_amount": 0.7333333333333333,
+      "token_amount": 54.99999999999999,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4004,
+      "approval_date": 1693440000,
+      "start": 1693385160,
+      "end": 1693393260,
+      "name": "Creating templates for onboarding",
+      "unit_amount": 2.25,
+      "token_amount": 225,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1015,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4003,
+      "approval_date": 1693440000,
+      "start": 1693380600,
+      "end": 1693383180,
+      "name": "/review",
+      "unit_amount": 0.7166666666666667,
+      "token_amount": 53.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4092,
+      "approval_date": 1693440000,
+      "start": 1693299600,
+      "end": 1693305780,
+      "name": "w tassilo on drafting gitbook content",
+      "unit_amount": 1.7166666666666666,
+      "token_amount": 128.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4053,
+      "approval_date": 1693440000,
+      "start": 1693295280,
+      "end": 1693297620,
+      "name": "discord",
+      "unit_amount": 0.65,
+      "token_amount": 48.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4036,
+      "approval_date": 1693440000,
+      "start": 1693315800,
+      "end": 1693319400,
+      "name": "- peter improvement plan",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1076,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4035,
+      "approval_date": 1693440000,
+      "start": 1693301400,
+      "end": 1693315800,
+      "name": "- review audit issues and fix them",
+      "unit_amount": 4,
+      "token_amount": 400,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1053,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4034,
+      "approval_date": 1693440000,
+      "start": 1693290600,
+      "end": 1693301400,
+      "name": "- fix pr issues for osmosis listing\n- update doc",
+      "unit_amount": 3,
+      "token_amount": 300,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4029,
+      "approval_date": 1693440000,
+      "start": 1693305000,
+      "end": 1693318500,
+      "name": "- mintscan bug\n- leap wallet issue\n- general maintenance ",
+      "unit_amount": 3.75,
+      "token_amount": 375,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1051,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4026,
+      "approval_date": 1693440000,
+      "start": 1693318500,
+      "end": 1693323000,
+      "name": "Improvement plan meeting w/Peter",
+      "unit_amount": 1.25,
+      "token_amount": 125,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4002,
+      "approval_date": 1693440000,
+      "start": 1693326900,
+      "end": 1693329480,
+      "name": "end of day catchup",
+      "unit_amount": 0.7166666666666667,
+      "token_amount": 71.66666666666667,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4001,
+      "approval_date": 1693440000,
+      "start": 1693318500,
+      "end": 1693325400,
+      "name": "Improvement Plan w Peter, Nicola, Alberto + prep for follow up",
+      "unit_amount": 1.9166666666666667,
+      "token_amount": 143.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4000,
+      "approval_date": 1693440000,
+      "start": 1693311240,
+      "end": 1693316280,
+      "name": "yes",
+      "unit_amount": 1.4,
+      "token_amount": 140,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1017,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3999,
+      "approval_date": 1693440000,
+      "start": 1693308000,
+      "end": 1693308900,
+      "name": "Voting issue",
+      "unit_amount": 0.25,
+      "token_amount": 25,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3998,
+      "approval_date": 1693440000,
+      "start": 1693299600,
+      "end": 1693305780,
+      "name": "w Hana on gitbook",
+      "unit_amount": 1.7166666666666666,
+      "token_amount": 128.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3997,
+      "approval_date": 1693440000,
+      "start": 1693297680,
+      "end": 1693299600,
+      "name": "Improvement Plan w Peter, Nicola and Alberto prep",
+      "unit_amount": 0.5333333333333333,
+      "token_amount": 40,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1002,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3996,
+      "approval_date": 1693440000,
+      "start": 1693295100,
+      "end": 1693297680,
+      "name": "Video take and troubleshooting again",
+      "unit_amount": 0.7166666666666667,
+      "token_amount": 53.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1002,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4114,
+      "approval_date": 1693440000,
+      "start": 1693237140,
+      "end": 1693238460,
+      "name": "offramping",
+      "unit_amount": 0.36666666666666664,
+      "token_amount": 27.499999999999996,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1019,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4091,
+      "approval_date": 1693440000,
+      "start": 1693222200,
+      "end": 1693229220,
+      "name": "w tassilo triaging (hiring, conferences, task mgmt)",
+      "unit_amount": 1.95,
+      "token_amount": 146.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4052,
+      "approval_date": 1693440000,
+      "start": 1693208700,
+      "end": 1693211460,
+      "name": "discord",
+      "unit_amount": 0.7666666666666667,
+      "token_amount": 57.50000000000001,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4033,
+      "approval_date": 1693440000,
+      "start": 1693207800,
+      "end": 1693229400,
+      "name": "- create pools\n- fix svg\n- make pr",
+      "unit_amount": 6,
+      "token_amount": 600,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3995,
+      "approval_date": 1693440000,
+      "start": 1693232400,
+      "end": 1693238640,
+      "name": "re-estimating the budget with team event + planning, research, hotels, airbnbs etc,",
+      "unit_amount": 1.7333333333333334,
+      "token_amount": 130,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1057,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3994,
+      "approval_date": 1693440000,
+      "start": 1693229400,
+      "end": 1693231200,
+      "name": "Prepare brief to fix logo",
+      "unit_amount": 0.5,
+      "token_amount": 50,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3993,
+      "approval_date": 1693440000,
+      "start": 1693218600,
+      "end": 1693229400,
+      "name": "- follow up with the Evmos team\n- many things mintscan related, no specific output",
+      "unit_amount": 3,
+      "token_amount": 300,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1051,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3992,
+      "approval_date": 1693440000,
+      "start": 1693229700,
+      "end": 1693231020,
+      "name": "video offramping, troubleshooting \"EVMOS\" conversion from ERC to IBC",
+      "unit_amount": 0.36666666666666664,
+      "token_amount": 27.499999999999996,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1002,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3991,
+      "approval_date": 1693440000,
+      "start": 1693220400,
+      "end": 1693222200,
+      "name": "video offramping preparation",
+      "unit_amount": 0.5,
+      "token_amount": 37.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1002,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3990,
+      "approval_date": 1693440000,
+      "start": 1693222200,
+      "end": 1693229220,
+      "name": "w Hana on all topics",
+      "unit_amount": 1.95,
+      "token_amount": 146.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3989,
+      "approval_date": 1693440000,
+      "start": 1693213080,
+      "end": 1693216020,
+      "name": "more token listing",
+      "unit_amount": 0.8166666666666667,
+      "token_amount": 81.66666666666667,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3988,
+      "approval_date": 1693440000,
+      "start": 1693211100,
+      "end": 1693212420,
+      "name": "token listing",
+      "unit_amount": 0.36666666666666664,
+      "token_amount": 36.666666666666664,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3987,
+      "approval_date": 1693440000,
+      "start": 1693211100,
+      "end": 1693214340,
+      "name": "Discord Digest #4 and contributing to discussions",
+      "unit_amount": 0.9,
+      "token_amount": 67.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1001,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3986,
+      "approval_date": 1693440000,
+      "start": 1693209900,
+      "end": 1693211100,
+      "name": "reypling discord, sending invite for \"improvement plan\" meeting w Peter and Nicola",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3985,
+      "approval_date": 1693440000,
+      "start": 1693132380,
+      "end": 1693137900,
+      "name": "Creating templates for onboarding",
+      "unit_amount": 1.5333333333333334,
+      "token_amount": 153.33333333333334,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1015,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3984,
+      "approval_date": 1693440000,
+      "start": 1693119600,
+      "end": 1693123560,
+      "name": "replying discord, creating missing svg files for logos, uploading all logos",
+      "unit_amount": 1.1,
+      "token_amount": 82.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4051,
+      "approval_date": 1693440000,
+      "start": 1692948960,
+      "end": 1692949800,
+      "name": "discord",
+      "unit_amount": 0.23333333333333334,
+      "token_amount": 17.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4032,
+      "approval_date": 1693440000,
+      "start": 1692948600,
+      "end": 1692952200,
+      "name": "- sync",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1076,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4031,
+      "approval_date": 1693440000,
+      "start": 1692952200,
+      "end": 1692977400,
+      "name": "- prepare some of the PR for osmosis listing\n- understanding pools",
+      "unit_amount": 7,
+      "token_amount": 700,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3983,
+      "approval_date": 1693440000,
+      "start": 1692966060,
+      "end": 1692992700,
+      "name": "Creating templates for onboarding",
+      "unit_amount": 7.4,
+      "token_amount": 740,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1015,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3982,
+      "approval_date": 1693440000,
+      "start": 1692964620,
+      "end": 1692965100,
+      "name": "/review",
+      "unit_amount": 0.13333333333333333,
+      "token_amount": 10,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3980,
+      "approval_date": 1693440000,
+      "start": 1692953220,
+      "end": 1692953700,
+      "name": "/review\n",
+      "unit_amount": 0.13333333333333333,
+      "token_amount": 10,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4090,
+      "approval_date": 1693440000,
+      "start": 1692875700,
+      "end": 1692882300,
+      "name": "work session w tassilo on misc tasks",
+      "unit_amount": 1.8333333333333333,
+      "token_amount": 137.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4050,
+      "approval_date": 1693440000,
+      "start": 1692862440,
+      "end": 1692863880,
+      "name": "discord",
+      "unit_amount": 0.4,
+      "token_amount": 30,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3978,
+      "approval_date": 1693440000,
+      "start": 1692893940,
+      "end": 1692896040,
+      "name": "yes",
+      "unit_amount": 0.5833333333333334,
+      "token_amount": 58.333333333333336,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1017,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3977,
+      "approval_date": 1693440000,
+      "start": 1692883860,
+      "end": 1692884520,
+      "name": "/review",
+      "unit_amount": 0.18333333333333332,
+      "token_amount": 13.749999999999998,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3976,
+      "approval_date": 1693440000,
+      "start": 1692875700,
+      "end": 1692882300,
+      "name": "work session w Hana on miscellaneous tasks",
+      "unit_amount": 1.8333333333333333,
+      "token_amount": 137.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4107,
+      "approval_date": 1693440000,
+      "start": 1692804480,
+      "end": 1692805380,
+      "name": "editing and posting designer job on LinkedIn jobs versus regular post",
+      "unit_amount": 0.25,
+      "token_amount": 18.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1100,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4089,
+      "approval_date": 1693440000,
+      "start": 1692795300,
+      "end": 1692800520,
+      "name": "w Tassilo on gitbook content (dapp and smart contracts templates)",
+      "unit_amount": 1.45,
+      "token_amount": 108.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4088,
+      "approval_date": 1693440000,
+      "start": 1692786900,
+      "end": 1692788400,
+      "name": "product/dev sync w albi nicola tassilo",
+      "unit_amount": 0.4166666666666667,
+      "token_amount": 31.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4055,
+      "approval_date": 1693440000,
+      "start": 1692788400,
+      "end": 1692794160,
+      "name": "weekly sync",
+      "unit_amount": 1.6,
+      "token_amount": 120,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1020,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4049,
+      "approval_date": 1693440000,
+      "start": 1692775860,
+      "end": 1692777060,
+      "name": "discord",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4030,
+      "approval_date": 1693440000,
+      "start": 1692775800,
+      "end": 1692797400,
+      "name": "- osmosis listing documentation\n- talk to support\n- investigate github repos",
+      "unit_amount": 6,
+      "token_amount": 600,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3979,
+      "approval_date": 1693440000,
+      "start": 1692788400,
+      "end": 1692792000,
+      "name": "Weekly call",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 16,
+        "name": "Stefano Ceschi Berrini",
+        "email": "stefano.ceschib@gmail.com",
+        "ethereum_address": "0xbded7c8a2efa4cf2ee6c953e6447a246f3ac4e12"
+      },
+      "task_id": {
+        "id": 1036,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3975,
+      "approval_date": 1693440000,
+      "start": 1692811680,
+      "end": 1692815880,
+      "name": "updating team on Market maker",
+      "unit_amount": 1.1666666666666667,
+      "token_amount": 116.66666666666667,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3974,
+      "approval_date": 1693440000,
+      "start": 1692808080,
+      "end": 1692811680,
+      "name": "Call with Injective market maker",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 994,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3973,
+      "approval_date": 1693440000,
+      "start": 1692795300,
+      "end": 1692800520,
+      "name": "working on gitbook content w Hana",
+      "unit_amount": 1.45,
+      "token_amount": 108.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3972,
+      "approval_date": 1693440000,
+      "start": 1692793860,
+      "end": 1692799500,
+      "name": "/Merike+Marko",
+      "unit_amount": 1.5666666666666667,
+      "token_amount": 117.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1007,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3971,
+      "approval_date": 1693440000,
+      "start": 1692793740,
+      "end": 1692799620,
+      "name": "Office circle",
+      "unit_amount": 1.6333333333333333,
+      "token_amount": 163.33333333333334,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1014,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3969,
+      "approval_date": 1693440000,
+      "start": 1692788520,
+      "end": 1692793740,
+      "name": "/updates",
+      "unit_amount": 1.45,
+      "token_amount": 108.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1009,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3967,
+      "approval_date": 1693440000,
+      "start": 1692788400,
+      "end": 1692794220,
+      "name": "weekly",
+      "unit_amount": 1.6166666666666667,
+      "token_amount": 121.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1000,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3966,
+      "approval_date": 1693440000,
+      "start": 1692788460,
+      "end": 1692793200,
+      "name": "Call",
+      "unit_amount": 1.3166666666666667,
+      "token_amount": 131.66666666666666,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 992,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3965,
+      "approval_date": 1693440000,
+      "start": 1692788280,
+      "end": 1692793680,
+      "name": "Weekly call",
+      "unit_amount": 1.5,
+      "token_amount": 150,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1016,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3964,
+      "approval_date": 1693440000,
+      "start": 1692786900,
+      "end": 1692788400,
+      "name": "w Alberto, Nicola and Hana",
+      "unit_amount": 0.4166666666666667,
+      "token_amount": 31.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3963,
+      "approval_date": 1693440000,
+      "start": 1692775800,
+      "end": 1692781200,
+      "name": "Organize work with Nicola",
+      "unit_amount": 1.5,
+      "token_amount": 150,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3962,
+      "approval_date": 1693440000,
+      "start": 1692786720,
+      "end": 1692793980,
+      "name": "Call w/communication team + core call",
+      "unit_amount": 2.0166666666666666,
+      "token_amount": 201.66666666666666,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3961,
+      "approval_date": 1693440000,
+      "start": 1692785940,
+      "end": 1692788280,
+      "name": "yes",
+      "unit_amount": 0.65,
+      "token_amount": 65,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1017,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3960,
+      "approval_date": 1693440000,
+      "start": 1692778500,
+      "end": 1692780960,
+      "name": "Discord Digest #3",
+      "unit_amount": 0.6833333333333333,
+      "token_amount": 51.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1001,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3959,
+      "approval_date": 1693440000,
+      "start": 1692777300,
+      "end": 1692779520,
+      "name": "/review",
+      "unit_amount": 0.6166666666666667,
+      "token_amount": 46.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4113,
+      "approval_date": 1693440000,
+      "start": 1692732960,
+      "end": 1692743520,
+      "name": "set up and attempt at offramping (diff wallets, networks, tokens, ledger etc)",
+      "unit_amount": 2.933333333333333,
+      "token_amount": 219.99999999999997,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1019,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4112,
+      "approval_date": 1693440000,
+      "start": 1692725700,
+      "end": 1692726600,
+      "name": "scheduling",
+      "unit_amount": 0.25,
+      "token_amount": 18.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1019,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4087,
+      "approval_date": 1693440000,
+      "start": 1692720660,
+      "end": 1692722460,
+      "name": "w tassilo weekly sync and prep updates from outreach",
+      "unit_amount": 0.5,
+      "token_amount": 37.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4086,
+      "approval_date": 1693440000,
+      "start": 1692713100,
+      "end": 1692719100,
+      "name": "w tassilo on gitbook content",
+      "unit_amount": 1.6666666666666667,
+      "token_amount": 125,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4048,
+      "approval_date": 1693440000,
+      "start": 1692689220,
+      "end": 1692690480,
+      "name": "discord",
+      "unit_amount": 0.35,
+      "token_amount": 26.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4028,
+      "approval_date": 1693440000,
+      "start": 1692707400,
+      "end": 1692711000,
+      "name": "- planning",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1076,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4027,
+      "approval_date": 1693440000,
+      "start": 1692696600,
+      "end": 1692700200,
+      "name": "- process email",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1053,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4025,
+      "approval_date": 1693440000,
+      "start": 1692689400,
+      "end": 1692696600,
+      "name": "- research token listing",
+      "unit_amount": 2,
+      "token_amount": 200,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3958,
+      "approval_date": 1693440000,
+      "start": 1692730740,
+      "end": 1692735060,
+      "name": "Crowdpunk proposal",
+      "unit_amount": 1.2,
+      "token_amount": 120,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3957,
+      "approval_date": 1693440000,
+      "start": 1692728580,
+      "end": 1692729960,
+      "name": "Create Crowdpunk proposal",
+      "unit_amount": 0.38333333333333336,
+      "token_amount": 38.333333333333336,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3955,
+      "approval_date": 1693440000,
+      "start": 1692723600,
+      "end": 1692724680,
+      "name": "token listing",
+      "unit_amount": 0.3,
+      "token_amount": 30,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3954,
+      "approval_date": 1693440000,
+      "start": 1692720660,
+      "end": 1692722460,
+      "name": "Preparing weekly sync and updates from outreach circle",
+      "unit_amount": 0.5,
+      "token_amount": 37.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3953,
+      "approval_date": 1693440000,
+      "start": 1692719940,
+      "end": 1692725160,
+      "name": "yes",
+      "unit_amount": 1.45,
+      "token_amount": 145,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1017,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3952,
+      "approval_date": 1693440000,
+      "start": 1692719460,
+      "end": 1692721800,
+      "name": "Odoo DEV",
+      "unit_amount": 0.65,
+      "token_amount": 65,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3951,
+      "approval_date": 1693440000,
+      "start": 1692712800,
+      "end": 1692719100,
+      "name": "w Hana on Gitbook pieces",
+      "unit_amount": 1.75,
+      "token_amount": 131.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3949,
+      "approval_date": 1693440000,
+      "start": 1692702840,
+      "end": 1692705480,
+      "name": "discord",
+      "unit_amount": 0.7333333333333333,
+      "token_amount": 54.99999999999999,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3948,
+      "approval_date": 1693440000,
+      "start": 1692702480,
+      "end": 1692703200,
+      "name": "Odoo developer",
+      "unit_amount": 0.2,
+      "token_amount": 20,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3946,
+      "approval_date": 1693440000,
+      "start": 1692695040,
+      "end": 1692699900,
+      "name": "/office, teledisko account updates, discord",
+      "unit_amount": 1.35,
+      "token_amount": 101.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3945,
+      "approval_date": 1693440000,
+      "start": 1692693000,
+      "end": 1692697680,
+      "name": "aftermath of resolution 41",
+      "unit_amount": 1.3,
+      "token_amount": 130,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4106,
+      "approval_date": 1693440000,
+      "start": 1692617100,
+      "end": 1692619200,
+      "name": "reviewing designer jd and related admin",
+      "unit_amount": 0.5833333333333334,
+      "token_amount": 43.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1100,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4085,
+      "approval_date": 1693440000,
+      "start": 1692625620,
+      "end": 1692628500,
+      "name": "w albi ragnar and johannes on next cloud next steps",
+      "unit_amount": 0.8,
+      "token_amount": 60,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4084,
+      "approval_date": 1693440000,
+      "start": 1692621600,
+      "end": 1692625200,
+      "name": "w tassilo and alberto on offramping",
+      "unit_amount": 1,
+      "token_amount": 75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4083,
+      "approval_date": 1693440000,
+      "start": 1692614940,
+      "end": 1692617100,
+      "name": "w Tassilo on peter on reviewing odoo candidates and contacting shortlist",
+      "unit_amount": 0.6,
+      "token_amount": 45,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4047,
+      "approval_date": 1693440000,
+      "start": 1692602760,
+      "end": 1692603960,
+      "name": "discord",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3944,
+      "approval_date": 1693440000,
+      "start": 1692633600,
+      "end": 1692655020,
+      "name": "Various fixes in the dapp (wagmi on tokens/offers/ibc) and resolution pieChart + resolution cards",
+      "unit_amount": 5.95,
+      "token_amount": 595,
+      "user_id": {
+        "id": 16,
+        "name": "Stefano Ceschi Berrini",
+        "email": "stefano.ceschib@gmail.com",
+        "ethereum_address": "0xbded7c8a2efa4cf2ee6c953e6447a246f3ac4e12"
+      },
+      "task_id": {
+        "id": 1036,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3941,
+      "approval_date": 1693440000,
+      "start": 1692642900,
+      "end": 1692645360,
+      "name": "/Nextcloud transfer draft document",
+      "unit_amount": 0.6833333333333333,
+      "token_amount": 51.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3940,
+      "approval_date": 1693440000,
+      "start": 1692642240,
+      "end": 1692644760,
+      "name": "Work with Gian on the walletconnect/wagmi migration",
+      "unit_amount": 0.7,
+      "token_amount": 70,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3939,
+      "approval_date": 1693440000,
+      "start": 1692641700,
+      "end": 1692642840,
+      "name": "peter response",
+      "unit_amount": 0.31666666666666665,
+      "token_amount": 31.666666666666664,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3937,
+      "approval_date": 1693440000,
+      "start": 1692625620,
+      "end": 1692628500,
+      "name": "/johannes, hana, alberto; nextcloud topics",
+      "unit_amount": 0.8,
+      "token_amount": 60,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1007,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3936,
+      "approval_date": 1693440000,
+      "start": 1692621600,
+      "end": 1692625380,
+      "name": "w Hana on off-ramping  + Alberto",
+      "unit_amount": 1.05,
+      "token_amount": 78.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3935,
+      "approval_date": 1693440000,
+      "start": 1692617160,
+      "end": 1692620820,
+      "name": "/discord updates",
+      "unit_amount": 1.0166666666666666,
+      "token_amount": 76.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3934,
+      "approval_date": 1693440000,
+      "start": 1692606300,
+      "end": 1692609120,
+      "name": "/review",
+      "unit_amount": 0.7833333333333333,
+      "token_amount": 58.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3933,
+      "approval_date": 1693440000,
+      "start": 1692609300,
+      "end": 1692612360,
+      "name": "/Benjamin+Alberto+Nicola",
+      "unit_amount": 0.85,
+      "token_amount": 63.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1007,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3932,
+      "approval_date": 1693440000,
+      "start": 1692612000,
+      "end": 1692616860,
+      "name": "w. Peter interview with 2nd Odoo dev  + evaluating other applicants w Peter & Hana",
+      "unit_amount": 1.35,
+      "token_amount": 101.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3931,
+      "approval_date": 1693440000,
+      "start": 1692608400,
+      "end": 1692613860,
+      "name": "odoo crisis call",
+      "unit_amount": 1.5166666666666666,
+      "token_amount": 151.66666666666666,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 994,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3930,
+      "approval_date": 1693440000,
+      "start": 1692610920,
+      "end": 1692612060,
+      "name": "yes",
+      "unit_amount": 0.31666666666666665,
+      "token_amount": 31.666666666666664,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1017,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3928,
+      "approval_date": 1693440000,
+      "start": 1692608400,
+      "end": 1692609780,
+      "name": "discord",
+      "unit_amount": 0.38333333333333336,
+      "token_amount": 28.750000000000004,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3926,
+      "approval_date": 1693440000,
+      "start": 1692604800,
+      "end": 1692642180,
+      "name": "Reply to messages and emails after holiday",
+      "unit_amount": 10.383333333333333,
+      "token_amount": 1038.3333333333333,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4081,
+      "approval_date": 1693440000,
+      "start": 1692367920,
+      "end": 1692375900,
+      "name": "with tassilo on blog series: Humans of NEOKingdom",
+      "unit_amount": 2.216666666666667,
+      "token_amount": 166.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4046,
+      "approval_date": 1693440000,
+      "start": 1692344820,
+      "end": 1692345600,
+      "name": "discord",
+      "unit_amount": 0.21666666666666667,
+      "token_amount": 16.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3943,
+      "approval_date": 1693440000,
+      "start": 1692362400,
+      "end": 1692377100,
+      "name": "Various bugfixing in the dapp + helping preparing the 121s interviews",
+      "unit_amount": 4.083333333333333,
+      "token_amount": 408.3333333333333,
+      "user_id": {
+        "id": 16,
+        "name": "Stefano Ceschi Berrini",
+        "email": "stefano.ceschib@gmail.com",
+        "ethereum_address": "0xbded7c8a2efa4cf2ee6c953e6447a246f3ac4e12"
+      },
+      "task_id": {
+        "id": 1036,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3925,
+      "approval_date": 1693440000,
+      "start": 1692367380,
+      "end": 1692368100,
+      "name": "finish signing",
+      "unit_amount": 0.2,
+      "token_amount": 20,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3924,
+      "approval_date": 1693440000,
+      "start": 1692364740,
+      "end": 1692366000,
+      "name": "Sign investment agreement",
+      "unit_amount": 0.35,
+      "token_amount": 35,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3923,
+      "approval_date": 1693440000,
+      "start": 1692352800,
+      "end": 1692360840,
+      "name": "w Hana on blog series: Humans of NEOKingdom",
+      "unit_amount": 2.2333333333333334,
+      "token_amount": 167.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3921,
+      "approval_date": 1693440000,
+      "start": 1692349140,
+      "end": 1692350520,
+      "name": "Teledisko booths",
+      "unit_amount": 0.38333333333333336,
+      "token_amount": 38.333333333333336,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1014,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4045,
+      "approval_date": 1693440000,
+      "start": 1692258420,
+      "end": 1692260100,
+      "name": "discord",
+      "unit_amount": 0.4666666666666667,
+      "token_amount": 35,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3920,
+      "approval_date": 1693440000,
+      "start": 1692287640,
+      "end": 1692290940,
+      "name": "Governance forum, reading and replying",
+      "unit_amount": 0.9166666666666666,
+      "token_amount": 68.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3918,
+      "approval_date": 1693353600,
+      "start": 1692280800,
+      "end": 1692286800,
+      "name": "first draft 2-pager as bespoke with Ragnar & Marko",
+      "unit_amount": 1.6666666666666667,
+      "token_amount": 125,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1003,
+        "approval_date": 1693353600
+      }
+    },
+    {
+      "id": 3917,
+      "approval_date": 1693440000,
+      "start": 1692278760,
+      "end": 1692278940,
+      "name": "/review",
+      "unit_amount": 0.05,
+      "token_amount": 3.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3916,
+      "approval_date": 1693440000,
+      "start": 1692269220,
+      "end": 1692271260,
+      "name": "/review",
+      "unit_amount": 0.5666666666666667,
+      "token_amount": 42.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3915,
+      "approval_date": 1693440000,
+      "start": 1692259800,
+      "end": 1692260400,
+      "name": "/Resolution correction and update",
+      "unit_amount": 0.16666666666666666,
+      "token_amount": 12.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4109,
+      "approval_date": 1693440000,
+      "start": 1692200100,
+      "end": 1692201060,
+      "name": "voting troubleshooting",
+      "unit_amount": 0.26666666666666666,
+      "token_amount": 20,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1019,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4080,
+      "approval_date": 1693440000,
+      "start": 1692194940,
+      "end": 1692196200,
+      "name": "w stefano on dapp voting troubleshooting",
+      "unit_amount": 0.35,
+      "token_amount": 26.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4079,
+      "approval_date": 1693440000,
+      "start": 1692176880,
+      "end": 1692181560,
+      "name": "with tassilo and ragnar on next cloud next steps and w tassilo to screen odoo candidates",
+      "unit_amount": 1.3,
+      "token_amount": 97.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4056,
+      "approval_date": 1693440000,
+      "start": 1692183600,
+      "end": 1692188820,
+      "name": "weekly sync + w Ragnar and Tassilo on next cloud next steps",
+      "unit_amount": 1.45,
+      "token_amount": 108.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1020,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4044,
+      "approval_date": 1693440000,
+      "start": 1692171480,
+      "end": 1692172680,
+      "name": "discord",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3906,
+      "approval_date": 1693440000,
+      "start": 1692189000,
+      "end": 1692190800,
+      "name": "Help Hana investigating wallet issue",
+      "unit_amount": 0.5,
+      "token_amount": 50,
+      "user_id": {
+        "id": 16,
+        "name": "Stefano Ceschi Berrini",
+        "email": "stefano.ceschib@gmail.com",
+        "ethereum_address": "0xbded7c8a2efa4cf2ee6c953e6447a246f3ac4e12"
+      },
+      "task_id": {
+        "id": 1036,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3905,
+      "approval_date": 1693440000,
+      "start": 1692194700,
+      "end": 1692199560,
+      "name": "scanning and prioritizing Odoo applicants",
+      "unit_amount": 1.35,
+      "token_amount": 101.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3904,
+      "approval_date": 1693440000,
+      "start": 1692188820,
+      "end": 1692189780,
+      "name": "discord - update status on weekly discord digest #2",
+      "unit_amount": 0.26666666666666666,
+      "token_amount": 20,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3902,
+      "approval_date": 1693440000,
+      "start": 1692184020,
+      "end": 1692187740,
+      "name": "Weekly call",
+      "unit_amount": 1.0333333333333334,
+      "token_amount": 103.33333333333334,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1016,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3901,
+      "approval_date": 1693440000,
+      "start": 1692183600,
+      "end": 1692188820,
+      "name": "weekly and short talk with Ragnar and Hana about nextcloud and next steps",
+      "unit_amount": 1.45,
+      "token_amount": 108.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1000,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3900,
+      "approval_date": 1693440000,
+      "start": 1692183540,
+      "end": 1692188220,
+      "name": "/updates + nextcloud with hana & tassilo",
+      "unit_amount": 1.3,
+      "token_amount": 97.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1009,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3899,
+      "approval_date": 1693440000,
+      "start": 1692183420,
+      "end": 1692187320,
+      "name": "call",
+      "unit_amount": 1.0833333333333333,
+      "token_amount": 108.33333333333333,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 992,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3898,
+      "approval_date": 1693440000,
+      "start": 1692180060,
+      "end": 1692182940,
+      "name": "Banana dao",
+      "unit_amount": 0.8,
+      "token_amount": 80,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1014,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3896,
+      "approval_date": 1693440000,
+      "start": 1692182580,
+      "end": 1692183540,
+      "name": "/review",
+      "unit_amount": 0.26666666666666666,
+      "token_amount": 20,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4078,
+      "approval_date": 1693440000,
+      "start": 1692094020,
+      "end": 1692097620,
+      "name": "with tassilo sync inc setting up weekly updates doc, preliminary review of ooo dev candidates, hexes and injective update etc",
+      "unit_amount": 1,
+      "token_amount": 75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4043,
+      "approval_date": 1693440000,
+      "start": 1692085020,
+      "end": 1692086100,
+      "name": "discord",
+      "unit_amount": 0.3,
+      "token_amount": 22.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3895,
+      "approval_date": 1693440000,
+      "start": 1692125100,
+      "end": 1692128700,
+      "name": "Debug voting power set to zero w/ delegation",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 16,
+        "name": "Stefano Ceschi Berrini",
+        "email": "stefano.ceschib@gmail.com",
+        "ethereum_address": "0xbded7c8a2efa4cf2ee6c953e6447a246f3ac4e12"
+      },
+      "task_id": {
+        "id": 1036,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3894,
+      "approval_date": 1693440000,
+      "start": 1692113700,
+      "end": 1692114900,
+      "name": "catch up on things",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 33.33333333333333,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3893,
+      "approval_date": 1693440000,
+      "start": 1692108000,
+      "end": 1692115860,
+      "name": "w Flo on 2nd Designer Contributor Description, checking portfolio of Lea; defining next steps and meetings; Meeting with Hana on all sorts of things",
+      "unit_amount": 2.183333333333333,
+      "token_amount": 163.74999999999997,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4042,
+      "approval_date": 1693440000,
+      "start": 1691998560,
+      "end": 1692000900,
+      "name": "discord",
+      "unit_amount": 0.65,
+      "token_amount": 48.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3892,
+      "approval_date": 1693440000,
+      "start": 1692039600,
+      "end": 1692041400,
+      "name": "Fill feedback form for dapp",
+      "unit_amount": 0.5,
+      "token_amount": 50,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3891,
+      "approval_date": 1693440000,
+      "start": 1692007200,
+      "end": 1692009000,
+      "name": "Review Hexens finding, discuss how to reply",
+      "unit_amount": 0.5,
+      "token_amount": 50,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3889,
+      "approval_date": 1693440000,
+      "start": 1692024300,
+      "end": 1692027120,
+      "name": "gov-forum post about Participation and Budget Allocation for Cosmoverse",
+      "unit_amount": 0.7833333333333333,
+      "token_amount": 58.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1002,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3888,
+      "approval_date": 1693440000,
+      "start": 1692021840,
+      "end": 1692024240,
+      "name": "Discord Digest #2",
+      "unit_amount": 0.6666666666666666,
+      "token_amount": 50,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1001,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3887,
+      "approval_date": 1693440000,
+      "start": 1692007560,
+      "end": 1692009060,
+      "name": "/scammers, hexen",
+      "unit_amount": 0.4166666666666667,
+      "token_amount": 31.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1007,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3886,
+      "approval_date": 1693440000,
+      "start": 1692006240,
+      "end": 1692007560,
+      "name": "/review",
+      "unit_amount": 0.36666666666666664,
+      "token_amount": 27.499999999999996,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3885,
+      "approval_date": 1693440000,
+      "start": 1692003360,
+      "end": 1692004800,
+      "name": "discord",
+      "unit_amount": 0.4,
+      "token_amount": 30,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4041,
+      "approval_date": 1693440000,
+      "start": 1691912100,
+      "end": 1691912880,
+      "name": "discord",
+      "unit_amount": 0.21666666666666667,
+      "token_amount": 16.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4108,
+      "approval_date": 1693440000,
+      "start": 1691767920,
+      "end": 1691768700,
+      "name": "calendar invites for meetings / user testing",
+      "unit_amount": 0.21666666666666667,
+      "token_amount": 16.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1019,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4077,
+      "approval_date": 1693440000,
+      "start": 1691766300,
+      "end": 1691767320,
+      "name": "w alberto on next cloud",
+      "unit_amount": 0.2833333333333333,
+      "token_amount": 21.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4040,
+      "approval_date": 1693440000,
+      "start": 1691737200,
+      "end": 1691738400,
+      "name": "discord",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3890,
+      "approval_date": 1693440000,
+      "start": 1691776800,
+      "end": 1691780400,
+      "name": "Reply to Hexens",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3884,
+      "approval_date": 1693440000,
+      "start": 1691758800,
+      "end": 1691766900,
+      "name": "Finalize audit PRs with Nicola",
+      "unit_amount": 2.25,
+      "token_amount": 225,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1051,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3883,
+      "approval_date": 1693440000,
+      "start": 1691745840,
+      "end": 1691746560,
+      "name": "/review",
+      "unit_amount": 0.2,
+      "token_amount": 15,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3882,
+      "approval_date": 1693440000,
+      "start": 1691742120,
+      "end": 1691749140,
+      "name": "Review audit",
+      "unit_amount": 1.95,
+      "token_amount": 195,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1051,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3914,
+      "approval_date": 1693440000,
+      "start": 1691652300,
+      "end": 1691653620,
+      "name": "discord",
+      "unit_amount": 0.36666666666666664,
+      "token_amount": 27.499999999999996,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3880,
+      "approval_date": 1693440000,
+      "start": 1691668800,
+      "end": 1691683200,
+      "name": "Work on issues with Nicola, fix Teledisko DAO",
+      "unit_amount": 4,
+      "token_amount": 400,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1051,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3879,
+      "approval_date": 1693440000,
+      "start": 1691668800,
+      "end": 1691683200,
+      "name": "fix remaining issues",
+      "unit_amount": 4,
+      "token_amount": 400,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1053,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3876,
+      "approval_date": 1693440000,
+      "start": 1691664660,
+      "end": 1691666700,
+      "name": "/review",
+      "unit_amount": 0.5666666666666667,
+      "token_amount": 42.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3875,
+      "approval_date": 1693440000,
+      "start": 1691651700,
+      "end": 1691652600,
+      "name": "Check transfer from Evmos to Injective",
+      "unit_amount": 0.25,
+      "token_amount": 25,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1051,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4105,
+      "approval_date": 1693440000,
+      "start": 1691612460,
+      "end": 1691613780,
+      "name": "editing and publishing role description on linkedin",
+      "unit_amount": 0.36666666666666664,
+      "token_amount": 27.499999999999996,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1100,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4076,
+      "approval_date": 1693440000,
+      "start": 1691596200,
+      "end": 1691599800,
+      "name": "w tassilo on creating dapp user interview guide",
+      "unit_amount": 1,
+      "token_amount": 75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4057,
+      "approval_date": 1693440000,
+      "start": 1691578800,
+      "end": 1691585040,
+      "name": "weekly sync + 2+pager brief from marko and ragnar",
+      "unit_amount": 1.7333333333333334,
+      "token_amount": 130,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1020,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3913,
+      "approval_date": 1693440000,
+      "start": 1691565780,
+      "end": 1691566980,
+      "name": "discord",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3878,
+      "approval_date": 1693440000,
+      "start": 1691566200,
+      "end": 1691577000,
+      "name": "fix issues A and B",
+      "unit_amount": 3,
+      "token_amount": 300,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 1053,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3877,
+      "approval_date": 1693440000,
+      "start": 1691596800,
+      "end": 1691600400,
+      "name": "talk to Achilles from Injective",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3873,
+      "approval_date": 1693440000,
+      "start": 1691601900,
+      "end": 1691603700,
+      "name": "closing out discord, replying and scheduling",
+      "unit_amount": 0.5,
+      "token_amount": 37.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3872,
+      "approval_date": 1693440000,
+      "start": 1691596800,
+      "end": 1691600400,
+      "name": "Call with Injective",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3871,
+      "approval_date": 1693440000,
+      "start": 1691593200,
+      "end": 1691600400,
+      "name": "creating an interview guideline with Hana+ call with injective w Alberto & Nicola and Achilleas",
+      "unit_amount": 2,
+      "token_amount": 150,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3869,
+      "approval_date": 1693440000,
+      "start": 1691582400,
+      "end": 1691583600,
+      "name": "Update Evmos",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 33.33333333333333,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3868,
+      "approval_date": 1693440000,
+      "start": 1691578800,
+      "end": 1691582400,
+      "name": "Weekly core call",
+      "unit_amount": 1,
+      "token_amount": 100,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3867,
+      "approval_date": 1693440000,
+      "start": 1691568000,
+      "end": 1691576400,
+      "name": "Breakfast at full node. Talked to:\n\n- Jason from envio about indexing data\n- Lea from https://www.huit.studio/ about design and user testing\n- Other people",
+      "unit_amount": 2.3333333333333335,
+      "token_amount": 116.66666666666667,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1045,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3866,
+      "approval_date": 1693440000,
+      "start": 1691579280,
+      "end": 1691584560,
+      "name": "Weekly call",
+      "unit_amount": 1.4666666666666666,
+      "token_amount": 146.66666666666666,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1016,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3865,
+      "approval_date": 1693440000,
+      "start": 1691578800,
+      "end": 1691585100,
+      "name": "weekly + two pager with Marko and Ragnar",
+      "unit_amount": 1.75,
+      "token_amount": 131.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1000,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3864,
+      "approval_date": 1693440000,
+      "start": 1691578860,
+      "end": 1691582400,
+      "name": "call",
+      "unit_amount": 0.9833333333333333,
+      "token_amount": 98.33333333333333,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 992,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3863,
+      "approval_date": 1693440000,
+      "start": 1691578800,
+      "end": 1691584500,
+      "name": "/updates",
+      "unit_amount": 1.5833333333333333,
+      "token_amount": 118.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1009,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3862,
+      "approval_date": 1693440000,
+      "start": 1691573340,
+      "end": 1691574000,
+      "name": "get ready for weekly call",
+      "unit_amount": 0.18333333333333332,
+      "token_amount": 18.333333333333332,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3861,
+      "approval_date": 1693440000,
+      "start": 1691572800,
+      "end": 1691573220,
+      "name": "reporting tokens Deposit bug",
+      "unit_amount": 0.11666666666666667,
+      "token_amount": 11.666666666666666,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3860,
+      "approval_date": 1693440000,
+      "start": 1691570100,
+      "end": 1691571600,
+      "name": "catch up before festival",
+      "unit_amount": 0.4166666666666667,
+      "token_amount": 41.66666666666667,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3859,
+      "approval_date": 1693440000,
+      "start": 1691568120,
+      "end": 1691571120,
+      "name": "/review",
+      "unit_amount": 0.8333333333333334,
+      "token_amount": 62.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3858,
+      "approval_date": 1693440000,
+      "start": 1691565900,
+      "end": 1691567580,
+      "name": "replying on discord, coordinating with Florian",
+      "unit_amount": 0.4666666666666667,
+      "token_amount": 35,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4074,
+      "approval_date": 1693440000,
+      "start": 1691485380,
+      "end": 1691490180,
+      "name": "assilo on weekly updates, topics to bring DAO’s attention to, prioritising work, small urgent tasks",
+      "unit_amount": 1.3333333333333333,
+      "token_amount": 100,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3912,
+      "approval_date": 1693440000,
+      "start": 1691479320,
+      "end": 1691480040,
+      "name": "discord",
+      "unit_amount": 0.2,
+      "token_amount": 15,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3857,
+      "approval_date": 1693440000,
+      "start": 1691523000,
+      "end": 1691525160,
+      "name": "coordination with Injective and replying on discord",
+      "unit_amount": 0.6,
+      "token_amount": 45,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3855,
+      "approval_date": 1693440000,
+      "start": 1691513820,
+      "end": 1691519040,
+      "name": "check in after Garbisz festival",
+      "unit_amount": 1.45,
+      "token_amount": 145,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3854,
+      "approval_date": 1693440000,
+      "start": 1691499900,
+      "end": 1691505000,
+      "name": "Review delegation issue",
+      "unit_amount": 1.4166666666666667,
+      "token_amount": 141.66666666666669,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1051,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3852,
+      "approval_date": 1693440000,
+      "start": 1691485260,
+      "end": 1691490180,
+      "name": "prioritization of todos, setting up the new weekly sync doc, getting in touch with Injective about NEOK token listing",
+      "unit_amount": 1.3666666666666667,
+      "token_amount": 102.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3851,
+      "approval_date": 1693440000,
+      "start": 1691484000,
+      "end": 1691485260,
+      "name": "replying discord",
+      "unit_amount": 0.35,
+      "token_amount": 26.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4102,
+      "approval_date": 1693440000,
+      "start": 1691438400,
+      "end": 1691439420,
+      "name": "Twitter reposting and liking shares about DIA announcement",
+      "unit_amount": 0.2833333333333333,
+      "token_amount": 21.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1096,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4101,
+      "approval_date": 1693440000,
+      "start": 1691424960,
+      "end": 1691427660,
+      "name": "Odoo job description edits and posting",
+      "unit_amount": 0.75,
+      "token_amount": 56.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1100,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4059,
+      "approval_date": 1693440000,
+      "start": 1691375160,
+      "end": 1691381880,
+      "name": "prod/dev sync w Alb, Nicola, Tassilo",
+      "unit_amount": 1.8666666666666667,
+      "token_amount": 140,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3911,
+      "approval_date": 1693440000,
+      "start": 1691392860,
+      "end": 1691395020,
+      "name": "discord",
+      "unit_amount": 0.6,
+      "token_amount": 45,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3853,
+      "approval_date": 1693440000,
+      "start": 1691394000,
+      "end": 1691404200,
+      "name": "Sync with Nicola, call with Tassilo and Hana on communication and technical updates.",
+      "unit_amount": 2.8333333333333335,
+      "token_amount": 283.33333333333337,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3850,
+      "approval_date": 1693353600,
+      "start": 1691419500,
+      "end": 1691421660,
+      "name": "enabling Contributor offers on website and publishing Odoo dev + fixing a bug on the rabbithole page",
+      "unit_amount": 0.6,
+      "token_amount": 45,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1004,
+        "approval_date": 1693353600
+      }
+    },
+    {
+      "id": 3847,
+      "approval_date": 1693440000,
+      "start": 1691398980,
+      "end": 1691405700,
+      "name": "call with Alberto, Nicola and Hana on various topics",
+      "unit_amount": 1.8666666666666667,
+      "token_amount": 140,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3846,
+      "approval_date": 1693440000,
+      "start": 1691398680,
+      "end": 1691404800,
+      "name": "/office, planning and documents",
+      "unit_amount": 1.7,
+      "token_amount": 127.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3845,
+      "approval_date": 1693440000,
+      "start": 1691397060,
+      "end": 1691398920,
+      "name": "recreating discord digest and posting it",
+      "unit_amount": 0.5166666666666667,
+      "token_amount": 38.75000000000001,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1001,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3844,
+      "approval_date": 1693440000,
+      "start": 1691394060,
+      "end": 1691397060,
+      "name": "reading discord and replying, giving feedback to Alberto's Odoo proposal, checking Dia thread",
+      "unit_amount": 0.8333333333333334,
+      "token_amount": 62.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3910,
+      "approval_date": 1693440000,
+      "start": 1691307180,
+      "end": 1691307600,
+      "name": "discord",
+      "unit_amount": 0.11666666666666667,
+      "token_amount": 8.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3843,
+      "approval_date": 1693440000,
+      "start": 1691333940,
+      "end": 1691341380,
+      "name": "/accounting related tasks",
+      "unit_amount": 2.066666666666667,
+      "token_amount": 155.00000000000003,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3842,
+      "approval_date": 1693440000,
+      "start": 1691330700,
+      "end": 1691332560,
+      "name": "/updates, resolutions + renewal of resolution #37",
+      "unit_amount": 0.5166666666666667,
+      "token_amount": 38.75000000000001,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4100,
+      "approval_date": 1693440000,
+      "start": 1691155800,
+      "end": 1691160300,
+      "name": "reviewing and reworking resolution about odoo backup prepared by alberto and nicola",
+      "unit_amount": 1.25,
+      "token_amount": 93.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1100,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3909,
+      "approval_date": 1693440000,
+      "start": 1691134260,
+      "end": 1691135640,
+      "name": "discord",
+      "unit_amount": 0.38333333333333336,
+      "token_amount": 28.750000000000004,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3839,
+      "approval_date": 1693440000,
+      "start": 1691130600,
+      "end": 1691150700,
+      "name": "Review delegation issue, talk with Evmos, start discussion in the MetaMask forum https://community.metamask.io/t/add-evmos-to-the-list-of-available-networks/26560\n\nHow does it feel to work in blockchain: https://www.youtube.com/watch?v=AbSehcT19u0",
+      "unit_amount": 5.583333333333333,
+      "token_amount": 558.3333333333333,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4097,
+      "approval_date": 1693440000,
+      "start": 1691072100,
+      "end": 1691074800,
+      "name": "editing DIA press release w alberto and dia over discord and TG before publishing",
+      "unit_amount": 0.75,
+      "token_amount": 56.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1096,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3908,
+      "approval_date": 1693440000,
+      "start": 1691047740,
+      "end": 1691050200,
+      "name": "discord",
+      "unit_amount": 0.6833333333333333,
+      "token_amount": 51.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 680,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3838,
+      "approval_date": 1693440000,
+      "start": 1691073540,
+      "end": 1691089320,
+      "name": "Iterate on the DIA announcement, talk to Tassilo about offramping, communicate with some people from Evmos and Viktor (escan.live)",
+      "unit_amount": 4.383333333333334,
+      "token_amount": 438.33333333333337,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3837,
+      "approval_date": 1693440000,
+      "start": 1691054160,
+      "end": 1691056860,
+      "name": "w Alberto about Discord Digest, Discord structure, offboarding option with Monerium (EURe)",
+      "unit_amount": 0.75,
+      "token_amount": 56.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3836,
+      "approval_date": 1693440000,
+      "start": 1691051820,
+      "end": 1691054160,
+      "name": "Creating Discord Digest - Newsletter to be posted every week to highlight ongoing discussions and not letting them vanish",
+      "unit_amount": 0.65,
+      "token_amount": 48.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1001,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3835,
+      "approval_date": 1693440000,
+      "start": 1691049600,
+      "end": 1691058720,
+      "name": "Review DIA announcement\nTalk with Tassilo about offramping",
+      "unit_amount": 2.533333333333333,
+      "token_amount": 253.33333333333331,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3834,
+      "approval_date": 1693440000,
+      "start": 1691048700,
+      "end": 1691051820,
+      "name": "reading and replying discord; reading NEOCommonwealth by Ben",
+      "unit_amount": 0.8666666666666667,
+      "token_amount": 65,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 999,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 4096,
+      "approval_date": 1693440000,
+      "start": 1690988760,
+      "end": 1690990800,
+      "name": "editing DIA press release",
+      "unit_amount": 0.5666666666666667,
+      "token_amount": 42.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1096,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3840,
+      "approval_date": 1693440000,
+      "start": 1690991100,
+      "end": 1690999200,
+      "name": "Cosmos meetup at WeWork in Berlin. Talked to Evmos devs about our project, discussed about EVM extensions, and more.",
+      "unit_amount": 2.25,
+      "token_amount": 112.5,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 1045,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3833,
+      "approval_date": 1693440000,
+      "start": 1690991100,
+      "end": 1690998300,
+      "name": "Cosmos Networking Event Berlin",
+      "unit_amount": 2,
+      "token_amount": 100,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1043,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3824,
+      "approval_date": 1693440000,
+      "start": 1690996800,
+      "end": 1690998900,
+      "name": "discord",
+      "unit_amount": 0.5833333333333334,
+      "token_amount": 43.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1018,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3822,
+      "approval_date": 1693440000,
+      "start": 1690979400,
+      "end": 1690984320,
+      "name": "Office circle",
+      "unit_amount": 1.3666666666666667,
+      "token_amount": 136.66666666666666,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1014,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3821,
+      "approval_date": 1693440000,
+      "start": 1690974120,
+      "end": 1690979280,
+      "name": "Weekly call",
+      "unit_amount": 1.4333333333333333,
+      "token_amount": 143.33333333333334,
+      "user_id": {
+        "id": 8,
+        "name": "Marko Talur",
+        "email": "marko@neokingdom.org",
+        "ethereum_address": "0xace13f04231222a585573312ccf811e9e61ed958"
+      },
+      "task_id": {
+        "id": 1016,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3819,
+      "approval_date": 1693440000,
+      "start": 1690989300,
+      "end": 1690993800,
+      "name": "Fixed problem related w/ email casing when logging in, see https://discord.com/channels/1029303624930709534/1117410619952472095/1136332186249863268 for more info",
+      "unit_amount": 1.25,
+      "token_amount": 125,
+      "user_id": {
+        "id": 16,
+        "name": "Stefano Ceschi Berrini",
+        "email": "stefano.ceschib@gmail.com",
+        "ethereum_address": "0xbded7c8a2efa4cf2ee6c953e6447a246f3ac4e12"
+      },
+      "task_id": {
+        "id": 1036,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3818,
+      "approval_date": 1693440000,
+      "start": 1690979460,
+      "end": 1690984140,
+      "name": "/admin meeting",
+      "unit_amount": 1.3,
+      "token_amount": 97.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1007,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3817,
+      "approval_date": 1693440000,
+      "start": 1690973100,
+      "end": 1690981140,
+      "name": "Core meeting, review doc",
+      "unit_amount": 2.2333333333333334,
+      "token_amount": 223.33333333333334,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3816,
+      "approval_date": 1693440000,
+      "start": 1690974000,
+      "end": 1690979460,
+      "name": "weekly sync",
+      "unit_amount": 1.5166666666666666,
+      "token_amount": 113.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1020,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3815,
+      "approval_date": 1693440000,
+      "start": 1690974300,
+      "end": 1690977540,
+      "name": "Call",
+      "unit_amount": 0.9,
+      "token_amount": 90,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 992,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3814,
+      "approval_date": 1693440000,
+      "start": 1690974000,
+      "end": 1690979880,
+      "name": "weekly",
+      "unit_amount": 1.6333333333333333,
+      "token_amount": 122.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1000,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3813,
+      "approval_date": 1693440000,
+      "start": 1690974000,
+      "end": 1690979400,
+      "name": "/updates\n",
+      "unit_amount": 1.5,
+      "token_amount": 112.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1009,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3812,
+      "approval_date": 1693440000,
+      "start": 1690966800,
+      "end": 1690973460,
+      "name": "w/tassilo on DIA announcement review, discord discussion synthesis, weekly sync update, rabbit hole piece",
+      "unit_amount": 1.85,
+      "token_amount": 138.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3811,
+      "approval_date": 1693440000,
+      "start": 1690969800,
+      "end": 1690971000,
+      "name": "Logo question",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 33.33333333333333,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3810,
+      "approval_date": 1693440000,
+      "start": 1690966800,
+      "end": 1690973460,
+      "name": "dia announcements corrections w Hana; coordination about other tasks w Hana",
+      "unit_amount": 1.85,
+      "token_amount": 138.75,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3809,
+      "approval_date": 1693440000,
+      "start": 1690964760,
+      "end": 1690966380,
+      "name": "/review\n",
+      "unit_amount": 0.45,
+      "token_amount": 33.75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1008,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3808,
+      "approval_date": 1693440000,
+      "start": 1690957800,
+      "end": 1690963980,
+      "name": "Work on proposal",
+      "unit_amount": 1.7166666666666666,
+      "token_amount": 171.66666666666666,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3823,
+      "approval_date": 1693440000,
+      "start": 1690911840,
+      "end": 1690912980,
+      "name": "discord",
+      "unit_amount": 0.31666666666666665,
+      "token_amount": 23.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1018,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3804,
+      "approval_date": 1693440000,
+      "start": 1690899300,
+      "end": 1690905600,
+      "name": "blog series w/tassilo and open discussions on discord",
+      "unit_amount": 1.75,
+      "token_amount": 131.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3803,
+      "approval_date": 1693440000,
+      "start": 1690899300,
+      "end": 1690905600,
+      "name": "work meeting with Hana on Blog posts and discord discussions",
+      "unit_amount": 1.75,
+      "token_amount": 131.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3802,
+      "approval_date": 1693440000,
+      "start": 1690894860,
+      "end": 1690898460,
+      "name": "/updates, planning of tasks\n",
+      "unit_amount": 1,
+      "token_amount": 75,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3800,
+      "approval_date": 1693440000,
+      "start": 1690890540,
+      "end": 1690891020,
+      "name": "weekly update list",
+      "unit_amount": 0.13333333333333333,
+      "token_amount": 13.333333333333334,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3799,
+      "approval_date": 1693440000,
+      "start": 1690876800,
+      "end": 1690885800,
+      "name": "Fix wordpress with Tassilo\nMeeting with DIA",
+      "unit_amount": 2.5,
+      "token_amount": 250,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3798,
+      "approval_date": 1693440000,
+      "start": 1690880400,
+      "end": 1690883400,
+      "name": "call with DIA (+tassilo+albi) re announcement",
+      "unit_amount": 0.8333333333333334,
+      "token_amount": 62.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1023,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3797,
+      "approval_date": 1693440000,
+      "start": 1690880520,
+      "end": 1690884780,
+      "name": "call with ragnar and marko",
+      "unit_amount": 1.1833333333333333,
+      "token_amount": 118.33333333333333,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 994,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3796,
+      "approval_date": 1693440000,
+      "start": 1690880400,
+      "end": 1690886040,
+      "name": "/NEOKingdom DAO onboarding talks; Marko + Benjamin",
+      "unit_amount": 1.5666666666666667,
+      "token_amount": 117.5,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1007,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3795,
+      "approval_date": 1693440000,
+      "start": 1690877460,
+      "end": 1690880400,
+      "name": "/updates, feedback\n",
+      "unit_amount": 0.8166666666666667,
+      "token_amount": 61.25,
+      "user_id": {
+        "id": 23,
+        "name": "Ragnar Reindoff",
+        "email": "ragnar@reindoff.ee",
+        "ethereum_address": "0xa64d568f331f2774d5cff492f2299505abc0186a"
+      },
+      "task_id": {
+        "id": 1010,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3794,
+      "approval_date": 1693440000,
+      "start": 1690876800,
+      "end": 1690885800,
+      "name": "meeting w Alberto to solve critical error on wordpress website. + meeting with DIA about announcement of the oracle use + discord",
+      "unit_amount": 2.5,
+      "token_amount": 187.5,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3793,
+      "approval_date": 1693440000,
+      "start": 1690837440,
+      "end": 1690842420,
+      "name": "markos messages for onboarding crowdpunk",
+      "unit_amount": 1.3833333333333333,
+      "token_amount": 138.33333333333334,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3771,
+      "approval_date": 1690848000,
+      "start": 1690821600,
+      "end": 1690825800,
+      "name": "w/Tassilo continued",
+      "unit_amount": 1.1666666666666667,
+      "token_amount": 87.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1022,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3770,
+      "approval_date": 1690848000,
+      "start": 1690792200,
+      "end": 1690801200,
+      "name": "Update and coordination with tassilo, rearranging structure of weekly meeting and creating new template, discussing blog posts, partnerships (Dia) and scheduling meeting with them, review dApp survey and schedule meetings, call with Alberto on DIA announcement",
+      "unit_amount": 2.5,
+      "token_amount": 187.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1022,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3733,
+      "approval_date": 1693440000,
+      "start": 1690819680,
+      "end": 1690820880,
+      "name": "testing markdown to create tables in Discord and testing Tabler Bot",
+      "unit_amount": 0.3333333333333333,
+      "token_amount": 25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1001,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3732,
+      "approval_date": 1693440000,
+      "start": 1690818960,
+      "end": 1690819680,
+      "name": "dApp survey",
+      "unit_amount": 0.2,
+      "token_amount": 15,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1006,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3730,
+      "approval_date": 1693440000,
+      "start": 1690814100,
+      "end": 1690818960,
+      "name": "Coordination with Hana on inbound messages (leads), evmos buying guide, blog posts prioritization, gitbook pieces",
+      "unit_amount": 1.35,
+      "token_amount": 101.25,
+      "user_id": {
+        "id": 21,
+        "name": "Tassilo Nils Boßmann",
+        "email": "tn.bossmann@gmail.com",
+        "ethereum_address": "0xb3c44fea8b4044fee00ffe23fcfbc753864b97ef"
+      },
+      "task_id": {
+        "id": 1005,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3727,
+      "approval_date": 1690848000,
+      "start": 1690784820,
+      "end": 1690787220,
+      "name": "discord/linkedin",
+      "unit_amount": 0.6666666666666666,
+      "token_amount": 50,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3717,
+      "approval_date": 1693440000,
+      "start": 1690801200,
+      "end": 1690805700,
+      "name": "Meeting with Tassilo and Hana about DIA",
+      "unit_amount": 1.25,
+      "token_amount": 125,
+      "user_id": {
+        "id": 12,
+        "name": "Alberto Granzotto",
+        "email": "alberto@neokingdom.org",
+        "ethereum_address": "0x4eb46ed918ab2a037086f9073d068ef3e9496c21"
+      },
+      "task_id": {
+        "id": 975,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3713,
+      "approval_date": 1693440000,
+      "start": 1690795980,
+      "end": 1690796400,
+      "name": "End of month",
+      "unit_amount": 0.11666666666666667,
+      "token_amount": 11.666666666666666,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 993,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3743,
+      "approval_date": 1690848000,
+      "start": 1690740840,
+      "end": 1690742340,
+      "name": "admin/time tracking/end of month admin",
+      "unit_amount": 0.4166666666666667,
+      "token_amount": 31.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 889,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3726,
+      "approval_date": 1690848000,
+      "start": 1690752360,
+      "end": 1690756440,
+      "name": "discord/linkedin",
+      "unit_amount": 1.1333333333333333,
+      "token_amount": 85,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3678,
+      "approval_date": 1693440000,
+      "start": 1690709040,
+      "end": 1690709160,
+      "name": "End of month work",
+      "unit_amount": 0.03333333333333333,
+      "token_amount": 3.3333333333333335,
+      "user_id": {
+        "id": 9,
+        "name": "Benjamin von Uphues",
+        "email": "benjamin@neokingdom.org",
+        "ethereum_address": "0x0a0c93d0f0553ebf7b7bea31be6fc65e38cc9b6e"
+      },
+      "task_id": {
+        "id": 991,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3725,
+      "approval_date": 1690848000,
+      "start": 1690525560,
+      "end": 1690526820,
+      "name": "discord",
+      "unit_amount": 0.35,
+      "token_amount": 26.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3724,
+      "approval_date": 1690848000,
+      "start": 1690439100,
+      "end": 1690441800,
+      "name": "discord",
+      "unit_amount": 0.75,
+      "token_amount": 56.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3665,
+      "approval_date": 1693440000,
+      "start": 1690457400,
+      "end": 1690468200,
+      "name": "- did research to figure out how to best write proposal on injective\n- initiated discussion in injective forum\n- tried unsuccessfully to get them to understand what an ERC20 on evmos is",
+      "unit_amount": 3,
+      "token_amount": 300,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3739,
+      "approval_date": 1690848000,
+      "start": 1690369200,
+      "end": 1690372560,
+      "name": "weekly sync",
+      "unit_amount": 0.9333333333333333,
+      "token_amount": 70,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1021,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3723,
+      "approval_date": 1690848000,
+      "start": 1690352640,
+      "end": 1690353780,
+      "name": "discord",
+      "unit_amount": 0.31666666666666665,
+      "token_amount": 23.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3654,
+      "approval_date": 1692144000,
+      "start": 1690369200,
+      "end": 1690372620,
+      "name": "Weekly Sync",
+      "unit_amount": 0.95,
+      "token_amount": 95,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3722,
+      "approval_date": 1690848000,
+      "start": 1690266060,
+      "end": 1690267500,
+      "name": "discord",
+      "unit_amount": 0.4,
+      "token_amount": 30,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3742,
+      "approval_date": 1690848000,
+      "start": 1690222440,
+      "end": 1690223040,
+      "name": "time tracking",
+      "unit_amount": 0.16666666666666666,
+      "token_amount": 12.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 889,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3721,
+      "approval_date": 1690848000,
+      "start": 1690179600,
+      "end": 1690180920,
+      "name": "discord",
+      "unit_amount": 0.36666666666666664,
+      "token_amount": 27.499999999999996,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3720,
+      "approval_date": 1690848000,
+      "start": 1690093200,
+      "end": 1690093680,
+      "name": "discord",
+      "unit_amount": 0.13333333333333333,
+      "token_amount": 10,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3719,
+      "approval_date": 1690848000,
+      "start": 1689919860,
+      "end": 1689922440,
+      "name": "discord",
+      "unit_amount": 0.7166666666666667,
+      "token_amount": 53.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3635,
+      "approval_date": 1692144000,
+      "start": 1689925500,
+      "end": 1689926220,
+      "name": "Weekly Dev Sync",
+      "unit_amount": 0.2,
+      "token_amount": 20,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3718,
+      "approval_date": 1690848000,
+      "start": 1689833400,
+      "end": 1689834360,
+      "name": "discord",
+      "unit_amount": 0.26666666666666666,
+      "token_amount": 20,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3620,
+      "approval_date": 1693440000,
+      "start": 1689845400,
+      "end": 1689852600,
+      "name": "- fix PR to cosmostation\n- get into the details of the listing process",
+      "unit_amount": 2,
+      "token_amount": 200,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3617,
+      "approval_date": 1692144000,
+      "start": 1689838200,
+      "end": 1689840480,
+      "name": "Tassilo 1:1",
+      "unit_amount": 0.6333333333333333,
+      "token_amount": 63.33333333333333,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3738,
+      "approval_date": 1690848000,
+      "start": 1689764400,
+      "end": 1689767700,
+      "name": "weekly sync at new time and day",
+      "unit_amount": 0.9166666666666666,
+      "token_amount": 68.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1021,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3703,
+      "approval_date": 1690848000,
+      "start": 1689728160,
+      "end": 1689729240,
+      "name": "discord",
+      "unit_amount": 0.3,
+      "token_amount": 22.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3612,
+      "approval_date": 1692144000,
+      "start": 1689764400,
+      "end": 1689767700,
+      "name": "Weekly Sync",
+      "unit_amount": 0.9166666666666666,
+      "token_amount": 91.66666666666666,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3769,
+      "approval_date": 1690848000,
+      "start": 1689689640,
+      "end": 1689691500,
+      "name": "w/Marko on intro piece and rabbit hole content",
+      "unit_amount": 0.5166666666666667,
+      "token_amount": 38.75000000000001,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1022,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3752,
+      "approval_date": 1690848000,
+      "start": 1689678660,
+      "end": 1689685860,
+      "name": "w/tassilo on user research dapp, blog, website, team org",
+      "unit_amount": 2,
+      "token_amount": 150,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1022,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3702,
+      "approval_date": 1690848000,
+      "start": 1689641760,
+      "end": 1689642660,
+      "name": "discord",
+      "unit_amount": 0.25,
+      "token_amount": 18.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3602,
+      "approval_date": 1693440000,
+      "start": 1689665400,
+      "end": 1689679800,
+      "name": "documentation listing process, ibc transfer to injective",
+      "unit_amount": 4,
+      "token_amount": 400,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3751,
+      "approval_date": 1690848000,
+      "start": 1689592200,
+      "end": 1689600720,
+      "name": "Coordination w/tassilo, planning Blog series, collecting topics, planning out next steps",
+      "unit_amount": 2.3666666666666667,
+      "token_amount": 177.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1022,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3741,
+      "approval_date": 1690848000,
+      "start": 1689617580,
+      "end": 1689618180,
+      "name": "time tracking",
+      "unit_amount": 0.16666666666666666,
+      "token_amount": 12.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 889,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3701,
+      "approval_date": 1690848000,
+      "start": 1689555300,
+      "end": 1689557220,
+      "name": "discord",
+      "unit_amount": 0.5333333333333333,
+      "token_amount": 40,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3592,
+      "approval_date": 1693440000,
+      "start": 1689586200,
+      "end": 1689593400,
+      "name": "explore and understand how things work in the Injective ecosystem",
+      "unit_amount": 2,
+      "token_amount": 200,
+      "user_id": {
+        "id": 10,
+        "name": "Nicola Miotto",
+        "email": "nicola@neokingdom.org",
+        "ethereum_address": "0x2804e85a5d84532e8610264feb75230a68ac7310"
+      },
+      "task_id": {
+        "id": 974,
+        "approval_date": 1693440000
+      }
+    },
+    {
+      "id": 3582,
+      "approval_date": 1692144000,
+      "start": 1689577200,
+      "end": 1689582060,
+      "name": "Ragnar 1:1",
+      "unit_amount": 1.35,
+      "token_amount": 135,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3700,
+      "approval_date": 1690848000,
+      "start": 1689468900,
+      "end": 1689471600,
+      "name": "discord",
+      "unit_amount": 0.75,
+      "token_amount": 56.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3699,
+      "approval_date": 1690848000,
+      "start": 1689295920,
+      "end": 1689297540,
+      "name": "discord",
+      "unit_amount": 0.45,
+      "token_amount": 33.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3750,
+      "approval_date": 1690848000,
+      "start": 1689246480,
+      "end": 1689255000,
+      "name": "Call w. Stefano about user feedback of the dApp & w. Hana on Gitbook and Website content",
+      "unit_amount": 2.3666666666666667,
+      "token_amount": 177.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1022,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3698,
+      "approval_date": 1690848000,
+      "start": 1689209280,
+      "end": 1689210300,
+      "name": "discord",
+      "unit_amount": 0.2833333333333333,
+      "token_amount": 21.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3749,
+      "approval_date": 1690848000,
+      "start": 1689159960,
+      "end": 1689164640,
+      "name": "tassilo on sync, website and gitbook structure",
+      "unit_amount": 1.3,
+      "token_amount": 97.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1022,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3697,
+      "approval_date": 1690848000,
+      "start": 1689122760,
+      "end": 1689124200,
+      "name": "discord",
+      "unit_amount": 0.4,
+      "token_amount": 30,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3696,
+      "approval_date": 1690848000,
+      "start": 1689036300,
+      "end": 1689039000,
+      "name": "discord",
+      "unit_amount": 0.75,
+      "token_amount": 56.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3772,
+      "approval_date": 1690848000,
+      "start": 1689020640,
+      "end": 1689022140,
+      "name": "doodle",
+      "unit_amount": 0.4166666666666667,
+      "token_amount": 31.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 889,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3740,
+      "approval_date": 1690848000,
+      "start": 1689012720,
+      "end": 1689013320,
+      "name": "time tracking",
+      "unit_amount": 0.16666666666666666,
+      "token_amount": 12.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 889,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3737,
+      "approval_date": 1690848000,
+      "start": 1688974200,
+      "end": 1688978400,
+      "name": "weekly sync",
+      "unit_amount": 1.1666666666666667,
+      "token_amount": 87.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1021,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3695,
+      "approval_date": 1690848000,
+      "start": 1688949780,
+      "end": 1688951040,
+      "name": "discord",
+      "unit_amount": 0.35,
+      "token_amount": 26.25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3529,
+      "approval_date": 1692144000,
+      "start": 1688974200,
+      "end": 1688978400,
+      "name": "Weekly Update",
+      "unit_amount": 1.1666666666666667,
+      "token_amount": 116.66666666666667,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3694,
+      "approval_date": 1690848000,
+      "start": 1688690520,
+      "end": 1688693820,
+      "name": "discord",
+      "unit_amount": 0.9166666666666666,
+      "token_amount": 68.75,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 997,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3528,
+      "approval_date": 1692144000,
+      "start": 1688715000,
+      "end": 1688716800,
+      "name": "Weekly Dev Sync",
+      "unit_amount": 0.5,
+      "token_amount": 50,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3748,
+      "approval_date": 1690848000,
+      "start": 1688673120,
+      "end": 1688680320,
+      "name": "Q2 ceremony: review and planning",
+      "unit_amount": 2,
+      "token_amount": 100,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 890,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3744,
+      "approval_date": 1690848000,
+      "start": 1688642160,
+      "end": 1688654040,
+      "name": "Q2 pre-retro prep, retro and debrief/action items with tassilo",
+      "unit_amount": 3.3,
+      "token_amount": 165,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 890,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3693,
+      "approval_date": 1690848000,
+      "start": 1688602440,
+      "end": 1688604540,
+      "name": "discord",
+      "unit_amount": 0.5833333333333334,
+      "token_amount": 29.166666666666668,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 888,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3527,
+      "approval_date": 1692144000,
+      "start": 1688643000,
+      "end": 1688650200,
+      "name": "Q2 Ceremony",
+      "unit_amount": 2,
+      "token_amount": 200,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3526,
+      "approval_date": 1692144000,
+      "start": 1688630400,
+      "end": 1688632200,
+      "name": "Q2 Ceremony",
+      "unit_amount": 0.5,
+      "token_amount": 50,
+      "user_id": {
+        "id": 11,
+        "name": "Peter Schwarz",
+        "email": "peter@neokingdom.org",
+        "ethereum_address": "0x3685437a87d200950bf26846c154354442e3f7f7"
+      },
+      "task_id": {
+        "id": 961,
+        "approval_date": 1692144000
+      }
+    },
+    {
+      "id": 3792,
+      "approval_date": 1690848000,
+      "start": 1688529060,
+      "end": 1688533980,
+      "name": "q2 planning doc/template for team",
+      "unit_amount": 1.3666666666666667,
+      "token_amount": 68.33333333333333,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1027,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3745,
+      "approval_date": 1690848000,
+      "start": 1688558100,
+      "end": 1688570460,
+      "name": "Planning outreach circle, go through review and planning of all circles, create roadmap template and discuss timline of Outreach circle, talk through retro and review, refine timings, making changes to the miro board, setting permissions",
+      "unit_amount": 3.433333333333333,
+      "token_amount": 171.66666666666666,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 890,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3692,
+      "approval_date": 1690848000,
+      "start": 1688537100,
+      "end": 1688538720,
+      "name": "discord",
+      "unit_amount": 0.45,
+      "token_amount": 22.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 888,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3791,
+      "approval_date": 1690848000,
+      "start": 1688442660,
+      "end": 1688443740,
+      "name": "JD doc for new odoo dev",
+      "unit_amount": 0.3,
+      "token_amount": 15,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 1027,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3746,
+      "approval_date": 1690848000,
+      "start": 1688500260,
+      "end": 1688507460,
+      "name": "Coordination with tassilo",
+      "unit_amount": 2,
+      "token_amount": 100,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 890,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3736,
+      "approval_date": 1690848000,
+      "start": 1688492520,
+      "end": 1688495400,
+      "name": "reviewing changes and reworking",
+      "unit_amount": 0.8,
+      "token_amount": 40,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 976,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3484,
+      "approval_date": 1690848000,
+      "start": 1688456520,
+      "end": 1688461800,
+      "name": "discord",
+      "unit_amount": 1.4666666666666666,
+      "token_amount": 73.33333333333333,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 888,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3735,
+      "approval_date": 1690848000,
+      "start": 1688405640,
+      "end": 1688412840,
+      "name": "refining introduction piece",
+      "unit_amount": 2,
+      "token_amount": 100,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 976,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3473,
+      "approval_date": 1690848000,
+      "start": 1688373000,
+      "end": 1688377860,
+      "name": "q3 planning",
+      "unit_amount": 1.35,
+      "token_amount": 67.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 890,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3470,
+      "approval_date": 1690848000,
+      "start": 1688367600,
+      "end": 1688369400,
+      "name": "discord",
+      "unit_amount": 0.5,
+      "token_amount": 25,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 888,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3469,
+      "approval_date": 1690848000,
+      "start": 1688369400,
+      "end": 1688373000,
+      "name": "weekly sync",
+      "unit_amount": 1,
+      "token_amount": 50,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 904,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3734,
+      "approval_date": 1690848000,
+      "start": 1688232720,
+      "end": 1688242260,
+      "name": "drafting introduction piece",
+      "unit_amount": 2.65,
+      "token_amount": 132.5,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 976,
+        "approval_date": 1690848000
+      }
+    },
+    {
+      "id": 3453,
+      "approval_date": 1690848000,
+      "start": 1688221320,
+      "end": 1688224200,
+      "name": "discord inc drafting resolution over discord with tassilo",
+      "unit_amount": 0.8,
+      "token_amount": 40,
+      "user_id": {
+        "id": 25,
+        "name": "Ayesha Hana Yoosuf",
+        "email": "hanayoosuf@gmail.com",
+        "ethereum_address": "0x6fad70515affd92f668960270a90764e66ba74b7"
+      },
+      "task_id": {
+        "id": 888,
+        "approval_date": 1690848000
+      }
+    }
+  ]
+}

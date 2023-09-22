@@ -17,14 +17,14 @@ const getAllProjects = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const getUserProjectIds = async (userId: number) => {
-    const userTasks = await odooGraphQLClient(cookie, getUserTasksQuery, { user_id: userId });
+    const userTasks = await odooGraphQLClient.query(cookie, getUserTasksQuery, { user_id: userId });
     return [...new Set(userTasks.ProjectTask.map((t: ProjectTask) => t.project_id.id))];
   };
 
   const userId = user.id;
   try {
     const userProjectIds = await getUserProjectIds(userId);
-    const data = await odooGraphQLClient(cookie, getProjectsQuery, { userId: user.id });
+    const data = await odooGraphQLClient.query(cookie, getProjectsQuery, { userId: user.id });
     const projects = data?.ProjectProject.reduce(
       (acc: any, project: any) => {
         userProjectIds.includes(project.id) ? acc.user.push(project) : acc.other.push(project);

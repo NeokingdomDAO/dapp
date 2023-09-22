@@ -12,8 +12,8 @@ const getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!cookie) {
     return res.status(401).end();
   }
-  const data = await odooClient(cookie, getUsersQuery);
-  const users = data.ResUsers as OdooUser[];
+  const data = await odooClient.query(cookie, getUsersQuery);
+  const users = (data?.ResUsers as OdooUser[]) || [];
   return res.status(200).json(users.map((user) => ({ ...user, image: user.avatar_256 })));
 };
 
