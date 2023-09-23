@@ -11,7 +11,9 @@ import {
   Button,
   CircularProgress,
   Divider,
+  FormControlLabel,
   Stack,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -32,8 +34,8 @@ type StateType = {
   description: string;
   disabledEditStart: boolean;
   disabledEditEnd: boolean;
-  isLoading: boolean;
   taskId: number | null;
+  timeEntryId?: number | null;
 };
 
 const ONE_MINUTE_IN_SECONDS = 60;
@@ -52,7 +54,11 @@ export default function TimeEntryFormStatic({
   onDeleteTimeEntry?: () => void;
 }) {
   const { enqueueSnackbar } = useSnackbar();
-  const setProjectKey = useProjectTaskStore((state) => state.actions.setProjectKey);
+  const { createTimeEntry, updateTimeEntry, loadingTimeEntry } = useProjectTaskStore((state) => ({
+    createTimeEntry: state.actions.createTimeEntry,
+    updateTimeEntry: state.actions.updateTimeEntry,
+    loadingTimeEntry: state.loadingTimeEntry,
+  }));
 
   const router = useRouter();
   const { userTasks, isLoading, userProjects } = useUserProjects();
@@ -63,9 +69,10 @@ export default function TimeEntryFormStatic({
     disabledEditStart: true,
     disabledEditEnd: true,
     description: savedFormData?.description || "",
-    isLoading: false,
     taskId,
   }));
+
+  const [shouldConfirm, setShouldConfirm] = useState(false);
 
   useEffect(() => {
     if (!Array.isArray(userTasks) || userTasks.length === 0 || formData.taskId === null) {
@@ -100,7 +107,7 @@ export default function TimeEntryFormStatic({
       return {
         ...prev,
         disabledEditStart,
-        startTime: disabledEditStart ? formData?.startTime || new Date() : prev.startTime,
+        startTime: disabledEditStart ? savedFormData?.startTime || new Date() : prev.startTime,
       };
     });
   };
@@ -111,7 +118,9 @@ export default function TimeEntryFormStatic({
       return {
         ...prev,
         disabledEditEnd,
-        endTime: disabledEditEnd ? formData?.endTime || new Date(Date.now() + DEFAULT_TASK_DURATION) : prev.endTime,
+        endTime: disabledEditEnd
+          ? savedFormData?.endTime || new Date(Date.now() + DEFAULT_TASK_DURATION)
+          : prev.endTime,
       };
     });
   };
@@ -120,34 +129,51 @@ export default function TimeEntryFormStatic({
     router.push(path || "/tasks/new");
   };
 
-  const saveTimeEntry = async () => {
-    // todo if savedFormData is defined, update the time entry otherwise create a new one (via hooks)
-    setFormData((prev) => ({ ...prev, isLoading: true }));
-    const response = await fetch(`/api/time_entries`, {
-      method: "POST",
-      body: JSON.stringify({
-        task_id: formData.taskId,
-        start: formatInTimeZone(formData.startTime, "UTC", ODOO_DATE_FORMAT),
-        end: formatInTimeZone(formData.endTime, "UTC", ODOO_DATE_FORMAT),
-        name: formData.description.trim() !== "" ? formData.description : "/",
-      }),
-    });
-    if (response.ok) {
-      setFormData((prev) => ({ ...prev, isLoading: false }));
-      enqueueSnackbar("Time entry correctly saved", { variant: "success" });
-      setProjectKey();
-      onSaved();
-    } else {
-      setFormData((prev) => ({ ...prev, isLoading: false }));
-      enqueueSnackbar("Error while saving time entry", { variant: "error" });
+  const create = async () => {
+    const { error, alert } = await createTimeEntry(
+      {
+        id: -1,
+        start: formData.startTime.getTime(),
+        end: formData.endTime.getTime(),
+        name: formData.description,
+      },
+      taskId,
+    );
+
+    if (alert) {
+      enqueueSnackbar(alert);
+      return onSaved();
     }
+
+    enqueueSnackbar(error.message, { variant: "error" });
+  };
+
+  const update = async () => {
+    const { error, alert } = await updateTimeEntry({
+      start: formData.startTime.getTime(),
+      end: formData.endTime.getTime(),
+      name: formData.description,
+      id: savedFormData?.timeEntryId as number,
+    });
+
+    if (alert) {
+      enqueueSnackbar(alert);
+      return onSaved();
+    }
+
+    enqueueSnackbar(error.message, { variant: "error" });
   };
 
   const isValidTime =
     formData.startTime && formData.endTime && formData.startTime.getTime() < formData.endTime.getTime();
 
   const elapsedTime = Math.floor((formData.endTime.getTime() - formData.startTime.getTime()) / 1000);
-  const isValid = formData.taskId && isValidTime && elapsedTime > ONE_MINUTE_IN_SECONDS;
+  const isValid =
+    formData.taskId &&
+    isValidTime &&
+    elapsedTime > ONE_MINUTE_IN_SECONDS &&
+    (shouldConfirm || elapsedTime < TEN_HOURS_IN_SECONDS);
+
   const options = userTasks.map((userTask: any) => ({
     label: userTask.name,
     id: userTask.id,
@@ -242,7 +268,12 @@ export default function TimeEntryFormStatic({
         <>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <ElapsedTime withLabels elapsedTime={elapsedTime} hideSeconds={elapsedTime >= ONE_MINUTE_IN_SECONDS} />
-            <LoadingButton variant="contained" disabled={!isValid} loading={formData.isLoading} onClick={saveTimeEntry}>
+            <LoadingButton
+              variant="contained"
+              disabled={!isValid}
+              loading={loadingTimeEntry === -1 || loadingTimeEntry === savedFormData?.timeEntryId}
+              onClick={() => (!!savedFormData ? update() : create())}
+            >
               {!!savedFormData ? "Update" : "Save entry"}
             </LoadingButton>
           </Stack>
@@ -250,6 +281,13 @@ export default function TimeEntryFormStatic({
             <Alert severity="warning" sx={{ mt: 1, mb: 1 }}>
               <b>Heads up:</b> this time entry is a bit suspicious. You&apos;re tracking a single task of more than 10
               hour.
+              <FormControlLabel
+                sx={{ display: "block", p: 2 }}
+                control={<Switch defaultChecked />}
+                label={`I know what I'm doing, enable ${!!savedFormData ? "update" : "save"}`}
+                checked={shouldConfirm}
+                onChange={() => setShouldConfirm((prev) => !prev)}
+              />
             </Alert>
           )}
           {elapsedTime < ONE_MINUTE_IN_SECONDS && (

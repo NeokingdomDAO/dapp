@@ -6,7 +6,18 @@ import { useEffect, useState } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import { LoadingButton } from "@mui/lab";
-import { Alert, Autocomplete, Box, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  CircularProgress,
+  FormControlLabel,
+  Stack,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DateTimeField } from "@mui/x-date-pickers";
 
 import { ODOO_DATE_FORMAT } from "@lib/constants";
@@ -25,7 +36,6 @@ type StateType = {
   description: string;
   disabledEditStart: boolean;
   disabledEditEnd: boolean;
-  isLoading: boolean;
 };
 
 const ONE_MINUTE_IN_SECONDS = 60;
@@ -45,7 +55,13 @@ export default function TimeEntryForm() {
   );
 
   const { enqueueSnackbar } = useSnackbar();
-  const setProjectKey = useProjectTaskStore((state) => state.actions.setProjectKey);
+
+  const { createTimeEntry, loadingTimeEntry } = useProjectTaskStore((state) => ({
+    createTimeEntry: state.actions.createTimeEntry,
+    loadingTimeEntry: state.loadingTimeEntry,
+  }));
+
+  const [shouldConfirm, setShouldConfirm] = useState(false);
 
   const router = useRouter();
   const { userTasks, isLoading, userProjects } = useUserProjects();
@@ -56,7 +72,6 @@ export default function TimeEntryForm() {
     disabledEditStart: true,
     disabledEditEnd: true,
     description: "",
-    isLoading: false,
   }));
 
   useEffect(() => {
@@ -109,33 +124,34 @@ export default function TimeEntryForm() {
     router.push(path || "/tasks/new");
   };
 
-  const saveTimeEntry = async () => {
-    setFormData((prev) => ({ ...prev, isLoading: true }));
-    const response = await fetch(`/api/time_entries`, {
-      method: "POST",
-      body: JSON.stringify({
-        task_id: taskId,
-        start: formatInTimeZone(formData.startTime, "UTC", ODOO_DATE_FORMAT),
-        end: formatInTimeZone(formData.endTime, "UTC", ODOO_DATE_FORMAT),
-        name: formData.description.trim() !== "" ? formData.description : "/",
-      }),
-    });
-    if (response.ok) {
-      setFormData((prev) => ({ ...prev, isLoading: false }));
-      enqueueSnackbar("Time entry correctly saved", { variant: "success" });
-      setProjectKey();
-      reset();
-    } else {
-      setFormData((prev) => ({ ...prev, isLoading: false }));
-      enqueueSnackbar("Error while saving time entry", { variant: "error" });
+  const create = async () => {
+    const { error, alert } = await createTimeEntry(
+      {
+        id: -1,
+        start: formData.startTime.getTime(),
+        end: formData.endTime.getTime(),
+        name: formData.description,
+      },
+      taskId as number,
+    );
+
+    if (alert) {
+      enqueueSnackbar(alert);
+      return reset();
     }
+
+    enqueueSnackbar(error.message, { variant: "error" });
   };
 
   const isValidTime =
     formData.startTime && formData.endTime && formData.startTime.getTime() < formData.endTime.getTime();
 
   const elapsedTime = Math.floor((formData.endTime.getTime() - formData.startTime.getTime()) / 1000);
-  const isValid = taskId && isValidTime && elapsedTime > ONE_MINUTE_IN_SECONDS;
+  const isValid =
+    taskId &&
+    isValidTime &&
+    elapsedTime > ONE_MINUTE_IN_SECONDS &&
+    (shouldConfirm || elapsedTime < TEN_HOURS_IN_SECONDS);
   const options = userTasks.map((userTask: any) => ({
     label: userTask.name,
     id: userTask.id,
@@ -240,7 +256,7 @@ export default function TimeEntryForm() {
         <>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <ElapsedTime withLabels elapsedTime={elapsedTime} hideSeconds={elapsedTime >= ONE_MINUTE_IN_SECONDS} />
-            <LoadingButton variant="contained" disabled={!isValid} loading={formData.isLoading} onClick={saveTimeEntry}>
+            <LoadingButton variant="contained" disabled={!isValid} loading={loadingTimeEntry === -1} onClick={create}>
               Save entry
             </LoadingButton>
           </Stack>
@@ -248,6 +264,13 @@ export default function TimeEntryForm() {
             <Alert severity="warning" sx={{ mt: 1, mb: 1 }}>
               <b>Heads up:</b> this time entry is a bit suspicious. You&apos;re tracking a single task of more than 10
               hour.
+              <FormControlLabel
+                sx={{ display: "block", p: 2 }}
+                control={<Switch defaultChecked />}
+                label={`I know what I'm doing, enable save`}
+                checked={shouldConfirm}
+                onChange={() => setShouldConfirm((prev) => !prev)}
+              />
             </Alert>
           )}
           {elapsedTime < ONE_MINUTE_IN_SECONDS && (

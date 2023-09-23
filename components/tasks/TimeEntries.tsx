@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 
 import { toPrettyRange } from "@lib/utils";
 
-import { Timesheet } from "@store/projectTaskStore";
+import useProjectTaskStore, { Timesheet } from "@store/projectTaskStore";
 
 import Dialog from "@components/Dialog";
 import Modal from "@components/Modal";
@@ -49,10 +49,13 @@ export default function TimeEntries({
 }: {
   entries: Timesheet[];
   onAddNew: () => void;
-  onDelete: (timeEntryId: number) => void;
+  onDelete: (timeEntry: Timesheet) => void;
   taskId: number;
 }) {
-  const [deletingId, setDeletingId] = React.useState<null | number>(null);
+  const { loadingTimeEntry } = useProjectTaskStore((state) => ({
+    loadingTimeEntry: state.loadingTimeEntry,
+  }));
+  const [deletingEntry, setDeletingEntry] = React.useState<null | Timesheet>(null);
   const [editingTimeSheet, setEditingTimeSheet] = React.useState<null | Timesheet>(null);
 
   const handleUpdateTimeEntry = (ts: Timesheet) => {
@@ -60,12 +63,12 @@ export default function TimeEntries({
   };
 
   const handleDeleteTimeEntry = () => {
-    onDelete(deletingId as number);
-    setDeletingId(null);
+    onDelete(deletingEntry as Timesheet);
+    setDeletingEntry(null);
   };
 
   const handleDeleteFromUpdate = () => {
-    setDeletingId(editingTimeSheet?.id as number);
+    setDeletingEntry(editingTimeSheet as Timesheet);
     setEditingTimeSheet(null);
   };
 
@@ -108,6 +111,7 @@ export default function TimeEntries({
               startTime: new Date(editingTimeSheet.start * 1000),
               endTime: new Date((editingTimeSheet.end as number) * 1000),
               description: editingTimeSheet.name,
+              timeEntryId: editingTimeSheet.id,
             }}
             onDeleteTimeEntry={handleDeleteFromUpdate}
             taskId={taskId}
@@ -115,8 +119,8 @@ export default function TimeEntries({
         </Modal>
       )}
       <Dialog
-        open={!!deletingId}
-        handleClose={() => setDeletingId(null)}
+        open={!!deletingEntry}
+        handleClose={() => setDeletingEntry(null)}
         handleApprove={handleDeleteTimeEntry}
         descriptionId="dialog-delete-time-entry"
         title="Delete Time Entry"
@@ -137,14 +141,15 @@ export default function TimeEntries({
         }}
       >
         {entries.map((data) => {
-          const extraProps =
-            data.id === deletingId ? { disabled: true, deleteIcon: <CircularProgress size={16} /> } : {};
+          const extraProps = [loadingTimeEntry, deletingEntry?.id].includes(data.id)
+            ? { disabled: true, deleteIcon: <CircularProgress size={16} /> }
+            : {};
           return (
             <Box component="li" key={data.id} m={0.5} sx={{ flex: 1 }}>
               <Tooltip title={getTooltipTitle(data)} placement="top" arrow>
                 <Chip
                   label={getLabel(data.name, data.unit_amount)}
-                  onDelete={() => setDeletingId(data.id)}
+                  onDelete={() => setDeletingEntry(data)}
                   onClick={() => handleUpdateTimeEntry(data)}
                   sx={{ width: "100%" }}
                   {...extraProps}

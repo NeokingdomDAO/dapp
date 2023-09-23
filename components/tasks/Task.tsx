@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { ProjectTask } from "@store/projectTaskStore";
+import { ProjectTask, Timesheet } from "@store/projectTaskStore";
 import useTimeEntryStore from "@store/timeEntry";
 
 import ElapsedTime from "@components/time-entry/ElapsedTime";
@@ -58,7 +58,7 @@ export default function Task({
   task: ProjectTask;
   isSubtask?: boolean;
   onAddNewEntry: (taskId: number) => void;
-  onDeleteTimeEntry: (timeEntryId: number, task: ProjectTask) => void;
+  onDeleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
 }) {
   const { start, stop, startAt, setTaskId, taskId, addNew } = useTimeEntryStore(
     (state) => ({
@@ -116,9 +116,9 @@ export default function Task({
     onAddNewEntry(task.id);
   };
 
-  const handleDeleteTimeEntry = (timeEntryId: number) => {
+  const handleDeleteTimeEntry = (timeEntry: Timesheet) => {
     handleClose();
-    onDeleteTimeEntry(timeEntryId, task);
+    onDeleteTimeEntry(timeEntry, task);
   };
 
   const elapsedTime = hoursToSeconds(task.effective_hours || 0);

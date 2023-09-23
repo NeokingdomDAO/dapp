@@ -1,40 +1,32 @@
 import Link from "next/link";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { Add, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Collapse,
-  Divider,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Collapse, Divider, IconButton, Stack, Typography } from "@mui/material";
 
 import { STAGE_TO_ID_MAP } from "@lib/constants";
 
-import { Project, ProjectTask } from "@store/projectTaskStore";
+import useProjectTaskStore, { Project, ProjectTask, Timesheet } from "@store/projectTaskStore";
 
 import Modal from "@components/Modal";
 import TimeEntryFormStatic from "@components/time-entry/FormStatic";
 
+import { useSnackbar } from "@hooks/useSnackbar";
 import useUserSettings from "@hooks/useUserSettings";
 
 import Task from "./Task";
-import TaskCard from "./TaskCard";
 
 export default function ProjectCard({ project }: { project: Project }) {
-  const [hideCompleted, setHideCompleted] = useState(true);
   const [currentTaskId, setCurrentTaskId] = useState<null | number>(null);
 
   const { openProjects, setOpenProjects } = useUserSettings();
   const expanded = openProjects.includes(project.id);
+  const { deleteTimeEntry } = useProjectTaskStore((state) => ({
+    deleteTimeEntry: state.actions.deleteTimeEntry,
+  }));
+  const { enqueueSnackbar } = useSnackbar();
 
   const tasks = useMemo(
     () =>
@@ -46,13 +38,13 @@ export default function ProjectCard({ project }: { project: Project }) {
         ),
     [project],
   );
-  const completedTasks = useMemo(
-    () =>
-      project.tasks
-        .filter((task) => task !== null)
-        .filter((task) => !task.parent_id && task.stage_id.id === STAGE_TO_ID_MAP["done"]),
-    [project],
-  );
+  // const completedTasks = useMemo(
+  //   () =>
+  //     project.tasks
+  //       .filter((task) => task !== null)
+  //       .filter((task) => !task.parent_id && task.stage_id.id === STAGE_TO_ID_MAP["done"]),
+  //   [project],
+  // );
 
   const handleAddNewEntry = (taskId: number) => {
     setCurrentTaskId(taskId);
@@ -66,21 +58,9 @@ export default function ProjectCard({ project }: { project: Project }) {
     setOpenProjects(newOpenProjects);
   };
 
-  const handleDeleteTimeEntry = async (timeEntryId: number, task: ProjectTask) => {
-    if (task.timesheet_ids.length === 1) {
-      await fetch(`/api/tasks/${task.id}`, {
-        method: "PUT",
-        body: JSON.stringify({ stage_id: STAGE_TO_ID_MAP["created"] }),
-      });
-    }
-    const response = await fetch(`/api/time_entries/${timeEntryId}`, { method: "DELETE" });
-    if (response.ok) {
-      // set({ projectKey: uuid(), isLoading: false });
-      // return { alert: { message: "Time Entry successfully deleted!", variant: "success" } };
-    } else {
-      // set({ isLoading: false });
-      // return { error: await buildError(response) };
-    }
+  const handleDeleteTimeEntry = async (timeEntry: Timesheet, task: ProjectTask) => {
+    const snackbarInput = await deleteTimeEntry(timeEntry, task);
+    enqueueSnackbar(snackbarInput.alert || snackbarInput.error);
   };
 
   return (
@@ -144,47 +124,5 @@ export default function ProjectCard({ project }: { project: Project }) {
         ))}
       </Collapse>
     </Box>
-  );
-
-  return (
-    <Card
-      variant="outlined"
-      sx={{
-        height: "100%",
-        position: "relative",
-        pb: 0,
-      }}
-    >
-      <CardHeader title={project.name} sx={{ pb: 0 }} />
-      <Box sx={{ padding: "0 16px", mt: 1, display: "flex", justifyContent: "right" }}>
-        {Boolean(completedTasks.length) && (
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={hideCompleted ? <Visibility /> : <VisibilityOff />}
-            onClick={() => setHideCompleted(!hideCompleted)}
-          >
-            {hideCompleted ? "Show" : "Hide"} Completed ({completedTasks.length})
-          </Button>
-        )}
-        <Button
-          component={Link}
-          href={`/tasks/new?projectId=${project.id}`}
-          sx={{ ml: 1 }}
-          variant="outlined"
-          color="success"
-          startIcon={<Add />}
-          size="small"
-        >
-          New Task
-        </Button>
-      </Box>
-      <CardContent sx={{ pt: 0, pb: 0 }}>
-        {!hideCompleted && completedTasks.map((task) => <TaskCard key={task.id} task={task} />)}
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
-      </CardContent>
-    </Card>
   );
 }

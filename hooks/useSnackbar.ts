@@ -6,8 +6,8 @@ export function useSnackbar() {
   const { enqueueSnackbar, closeSnackbar, ...snackbar } = useNotistackSnackbar();
   const enhancedSnackbar: EnqueueSnackbar = useCallback((message: SnackbarMessage, options?: any) => {
     const key: SnackbarKey = enqueueSnackbar(message, {
-      ...options,
-      SnackbarProps: options.persist
+      ...(options || {}),
+      SnackbarProps: options?.persist
         ? {}
         : {
             onClick: () => closeSnackbar(key),
