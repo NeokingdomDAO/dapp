@@ -1,11 +1,12 @@
 import { formatInTimeZone } from "date-fns-tz";
 import { useRouter } from "next/router";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
 import {
   Alert,
+  AlertTitle,
   Autocomplete,
   Box,
   Button,
@@ -20,9 +21,11 @@ import {
 import { DateTimeField } from "@mui/x-date-pickers";
 
 import { ODOO_DATE_FORMAT } from "@lib/constants";
+import { toPrettyRange } from "@lib/utils";
 
-import useProjectTaskStore from "@store/projectTaskStore";
+import useProjectTaskStore, { Timesheet } from "@store/projectTaskStore";
 
+import useGetClashingTimeEntry from "@hooks/useGetClashingTimeEntry";
 import { useSnackbar } from "@hooks/useSnackbar";
 import useUserProjects from "@hooks/useUserProjects";
 
@@ -73,6 +76,12 @@ export default function TimeEntryFormStatic({
   }));
 
   const [shouldConfirm, setShouldConfirm] = useState(false);
+
+  const clashingEntry = useGetClashingTimeEntry({
+    timeEntryId: savedFormData?.timeEntryId,
+    startTime: formData.startTime,
+    endTime: formData.endTime,
+  });
 
   useEffect(() => {
     if (!Array.isArray(userTasks) || userTasks.length === 0 || formData.taskId === null) {
@@ -141,7 +150,7 @@ export default function TimeEntryFormStatic({
     );
 
     if (alert) {
-      enqueueSnackbar(alert);
+      enqueueSnackbar(alert.message, { variant: alert.variant });
       return onSaved();
     }
 
@@ -157,7 +166,7 @@ export default function TimeEntryFormStatic({
     });
 
     if (alert) {
-      enqueueSnackbar(alert);
+      enqueueSnackbar(alert.message, { variant: alert.variant });
       return onSaved();
     }
 
@@ -172,6 +181,7 @@ export default function TimeEntryFormStatic({
     formData.taskId &&
     isValidTime &&
     elapsedTime > ONE_MINUTE_IN_SECONDS &&
+    !clashingEntry &&
     (shouldConfirm || elapsedTime < TEN_HOURS_IN_SECONDS);
 
   const options = userTasks.map((userTask: any) => ({
@@ -264,7 +274,7 @@ export default function TimeEntryFormStatic({
       <Typography variant="h6" sx={{ mt: 2 }}>
         Total entry time
       </Typography>
-      {isValidTime ? (
+      {isValidTime && !clashingEntry && (
         <>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <ElapsedTime withLabels elapsedTime={elapsedTime} hideSeconds={elapsedTime >= ONE_MINUTE_IN_SECONDS} />
@@ -307,8 +317,17 @@ export default function TimeEntryFormStatic({
             </>
           )}
         </>
-      ) : (
+      )}
+      {!clashingEntry && !isValidTime && (
         <Alert severity="error">Please note the start date should be before the end date</Alert>
+      )}
+      {clashingEntry && (
+        <Alert severity="error" sx={{ mt: 1, mb: 1 }}>
+          <AlertTitle>This time entry is clashing with another entry</AlertTitle>
+          <Typography variant="body2">Interval: {toPrettyRange(clashingEntry.start, clashingEntry.end)}</Typography>
+          <Typography variant="body2">Description: {clashingEntry.name}</Typography>
+          <Typography variant="body2">Task: {clashingEntry.parent.name}</Typography>
+        </Alert>
       )}
     </Box>
   );

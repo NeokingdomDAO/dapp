@@ -59,8 +59,12 @@ export default function ProjectCard({ project }: { project: Project }) {
   };
 
   const handleDeleteTimeEntry = async (timeEntry: Timesheet, task: ProjectTask) => {
-    const snackbarInput = await deleteTimeEntry(timeEntry, task);
-    enqueueSnackbar(snackbarInput.alert || snackbarInput.error);
+    const { alert, error } = await deleteTimeEntry(timeEntry, task);
+    if (alert) {
+      return enqueueSnackbar(alert.message, { variant: alert.variant });
+    }
+
+    enqueueSnackbar(error.message, { variant: "error" });
   };
 
   return (
