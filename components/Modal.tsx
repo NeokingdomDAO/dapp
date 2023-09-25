@@ -24,6 +24,8 @@ const style = (size: string, sx: SxProps<Theme> = {}) => ({
     xs: "90%",
     sm: sizeToWidth[size],
   },
+  maxHeight: "100%",
+  overflowY: "auto",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,

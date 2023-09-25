@@ -1,11 +1,13 @@
+import { format } from "date-fns";
+
 import * as React from "react";
 
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Box, CircularProgress, Tooltip, Typography } from "@mui/material";
-import Chip from "@mui/material/Chip";
+import AddIcon from "@mui/icons-material/Add";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-import { toPrettyRange } from "@lib/utils";
+import { hexToRgba } from "@lib/utils";
 
 import useProjectTaskStore, { Timesheet } from "@store/projectTaskStore";
 
@@ -14,32 +16,7 @@ import Modal from "@components/Modal";
 import ElapsedTime from "@components/time-entry/ElapsedTime";
 import TimeEntryFormStatic from "@components/time-entry/FormStatic";
 
-const getLabel = (label: string, time: number) => (
-  <Box sx={{ display: "flex", alignItems: "center" }}>
-    <Box
-      sx={{
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
-        maxWidth: "150px",
-        display: "inline-block",
-      }}
-      component="span"
-    >
-      {label}
-    </Box>
-    &nbsp;
-    <ElapsedTime minified elapsedTime={time * 3600} hideSeconds withLabels size="small" />
-  </Box>
-);
-
-const getTooltipTitle = (timeEntry: Timesheet) => (
-  <>
-    <b>{toPrettyRange(timeEntry.start, timeEntry.end)}</b>
-    <br />
-    <span>{timeEntry.name}</span>
-  </>
-);
+const toElapsedTime = (num: number) => Number((Math.round(num * 100) / 100).toFixed(2)) * 3600;
 
 export default function TimeEntries({
   entries,
@@ -72,6 +49,31 @@ export default function TimeEntries({
     setEditingTimeSheet(null);
   };
 
+  const groupedPerDayEntries = React.useMemo(() => {
+    const grouped = entries.reduce((acc, curr) => {
+      const date = new Date(curr.start * 1000);
+      date.setHours(0, 0, 0, 0);
+      const timestamp = date.getTime();
+      if (!acc[timestamp]) {
+        acc[timestamp] = [];
+      }
+      acc[timestamp].push(curr);
+      return acc;
+    }, {} as Record<number, Timesheet[]>);
+
+    return Object.keys(grouped)
+      .sort()
+      .reverse()
+      .reduce((obj, key) => {
+        const date = new Date(Number(key));
+        obj[format(date, "E, dd LLL y")] = {
+          timeEntries: grouped[Number(key)],
+          dayTime: grouped[Number(key)].reduce((acc, curr) => acc + curr.unit_amount, 0),
+        };
+        return obj;
+      }, {} as Record<string, { timeEntries: Timesheet[]; dayTime: number }>);
+  }, [entries]);
+
   return (
     <Paper
       sx={{
@@ -97,8 +99,26 @@ export default function TimeEntries({
           top: -8,
           left: 68,
         },
+        ...(entries.length > 2 && {
+          "&:after": {
+            height: "60px",
+            content: `""`,
+            position: "absolute",
+            zIndex: 1,
+            bottom: 0,
+            width: "100%",
+            left: 0,
+            pointerEvents: "none",
+            backgroundImage: (t) => `linear-gradient(to top, ${hexToRgba(t.palette.background.paper, 1)}, transparent)`,
+          },
+        }),
       }}
     >
+      <Box component="li" m={0.5} sx={{ flex: 1 }}>
+        <Button size="small" variant="outlined" startIcon={<AddIcon />} onClick={onAddNew}>
+          New time entry
+        </Button>
+      </Box>
       {!!editingTimeSheet && (
         <Modal
           open
@@ -130,44 +150,131 @@ export default function TimeEntries({
       <Box
         component="ul"
         sx={{
-          maxHeight: 200,
+          maxHeight: 300,
           overflow: "auto",
           listStyle: "none",
           m: 0,
           p: 0,
+          pb: entries.length > 2 ? "22px" : 0,
           width: "100%",
-          display: "flex",
-          flexWrap: "wrap",
         }}
       >
-        {entries.map((data) => {
-          const extraProps = [loadingTimeEntry, deletingEntry?.id].includes(data.id)
-            ? { disabled: true, deleteIcon: <CircularProgress size={16} /> }
-            : {};
-          return (
-            <Box component="li" key={data.id} m={0.5} sx={{ flex: 1 }}>
-              <Tooltip title={getTooltipTitle(data)} placement="top" arrow>
-                <Chip
-                  label={getLabel(data.name, data.unit_amount)}
-                  onDelete={() => setDeletingEntry(data)}
-                  onClick={() => handleUpdateTimeEntry(data)}
-                  sx={{ width: "100%" }}
-                  {...extraProps}
+        {Object.entries(groupedPerDayEntries).map(([day, entriesObject]) => (
+          <Box
+            component="li"
+            key={day}
+            m={0.5}
+            sx={{
+              "&:hover svg": {
+                fill: (t) => t.palette.primary.main,
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                position: "sticky",
+                zIndex: 1,
+                top: 0,
+                backgroundImage: (t) =>
+                  `linear-gradient(to bottom, ${hexToRgba(t.palette.background.paper, 1)}, ${hexToRgba(
+                    t.palette.background.paper,
+                    0.6,
+                  )})`,
+                backdropFilter: "blur(4px)",
+                p: 1,
+                pl: 0.7,
+                "& svg": {
+                  fill: (t) => t.palette.grey[500],
+                },
+              }}
+            >
+              <DateRangeIcon />
+              <Typography variant="body1" sx={{ ml: 1 }}>
+                {day}
+                {" - "}
+                <ElapsedTime
+                  minified
+                  elapsedTime={toElapsedTime(entriesObject.dayTime)}
+                  hideSeconds
+                  withLabels
+                  size="small"
                 />
-              </Tooltip>
+              </Typography>
             </Box>
-          );
-        })}
-        <Box component="li" m={0.5} sx={{ flex: 1 }}>
-          <Chip
-            variant="outlined"
-            label="new time entry"
-            icon={<AddCircleOutlineIcon />}
-            onClick={onAddNew}
-            sx={{ width: "100%", maxWidth: "180px" }}
-            color="primary"
-          />
-        </Box>
+            <Box
+              component="ul"
+              sx={{
+                listStyle: "none",
+                m: 0,
+                p: 0,
+                pl: 2,
+                ml: 2,
+                borderLeft: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              {entriesObject.timeEntries.map((timeEntry) => (
+                <Box
+                  component="li"
+                  key={timeEntry.id}
+                  m={0.5}
+                  sx={{
+                    position: "relative",
+                    "&:before": {
+                      content: `""`,
+                      position: "absolute",
+                      width: 10,
+                      left: "-19px",
+                      height: "2px",
+                      top: "13px",
+                      bgcolor: "divider",
+                    },
+                    "&:hover:before": {
+                      bgcolor: "primary.main",
+                    },
+                  }}
+                >
+                  <Stack direction="row" justifyContent="space-between">
+                    <Box sx={{ wordWrap: "break-word", width: "calc(100% - 140px)" }}>
+                      <Typography sx={{ ml: 1 }} variant="caption">
+                        <b>
+                          {format(timeEntry.start * 1000, "H:mm")} - {format((timeEntry.end as number) * 1000, "H:mm")}
+                        </b>{" "}
+                        {timeEntry.name.trim().length <= 2 ? (
+                          <Box sx={{ opacity: 0.6 }} component="span">
+                            No description
+                          </Box>
+                        ) : (
+                          timeEntry.name
+                        )}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ mr: 1, whiteSpace: "nowrap" }}>
+                      <Button
+                        variant="text"
+                        size="small"
+                        onClick={() => handleUpdateTimeEntry(timeEntry)}
+                        disabled={[loadingTimeEntry, deletingEntry?.id].includes(timeEntry.id)}
+                      >
+                        edit
+                      </Button>
+                      <Button
+                        variant="text"
+                        size="small"
+                        onClick={() => setDeletingEntry(timeEntry)}
+                        disabled={[loadingTimeEntry, deletingEntry?.id].includes(timeEntry.id)}
+                      >
+                        delete
+                      </Button>
+                    </Box>
+                  </Stack>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        ))}
       </Box>
     </Paper>
   );

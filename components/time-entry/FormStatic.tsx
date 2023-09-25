@@ -318,10 +318,7 @@ export default function TimeEntryFormStatic({
           )}
         </>
       )}
-      {!clashingEntry && !isValidTime && (
-        <Alert severity="error">Please note the start date should be before the end date</Alert>
-      )}
-      {clashingEntry && (
+      {clashingEntry && isValidTime && (
         <Alert severity="error" sx={{ mt: 1, mb: 1 }}>
           <AlertTitle>This time entry is clashing with another entry</AlertTitle>
           <Typography variant="body2">Interval: {toPrettyRange(clashingEntry.start, clashingEntry.end)}</Typography>
@@ -329,6 +326,7 @@ export default function TimeEntryFormStatic({
           <Typography variant="body2">Task: {clashingEntry.parent.name}</Typography>
         </Alert>
       )}
+      {!isValidTime && <Alert severity="error">Please note the start date should be before the end date</Alert>}
     </Box>
   );
 }

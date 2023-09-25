@@ -203,3 +203,10 @@ export const moneyFormatter = new Intl.NumberFormat("de-DE", {
   //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
   //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
 });
+
+export const hexToRgba = (hex: string, opacity: number): string => {
+  const finalHex = hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex;
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(finalHex);
+  const rgb = result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null;
+  return `rgba(${rgb}, ${opacity})`;
+};
