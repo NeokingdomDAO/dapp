@@ -73,7 +73,6 @@ export default function StopwatchSlim({
   };
 
   const handleStartTask = async (event: React.SyntheticEvent) => {
-    console.log("here");
     event.preventDefault();
     event.stopPropagation();
     resetTime(0, false);
