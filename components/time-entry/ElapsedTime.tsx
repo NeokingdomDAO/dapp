@@ -1,8 +1,8 @@
 import { Box, CircularProgress, Stack, SxProps, Theme, Typography } from "@mui/material";
 
-function getElapsedDetails(seconds: number) {
+function getElapsedDetails(seconds: number, hideSeconds: boolean) {
   const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds - hours * 3600) / 60);
+  const minutes = hideSeconds ? Math.ceil((seconds - hours * 3600) / 60) : Math.floor((seconds - hours * 3600) / 60);
   const remainingSeconds = seconds - hours * 3600 - minutes * 60;
 
   return {
@@ -33,7 +33,7 @@ export default function ElapsedTime({
   isLoading?: boolean;
   sx?: SxProps<Theme>;
 }) {
-  const { hours, minutes, seconds } = getElapsedDetails(elapsedTime);
+  const { hours, minutes, seconds } = getElapsedDetails(elapsedTime, hideSeconds);
 
   const hoursToDisplay = hours < 10 ? `0${hours}` : hours;
   const minutesToDisplay = minutes < 10 ? `0${minutes}` : minutes;

@@ -23,8 +23,9 @@ export default function ProjectCard({ project }: { project: Project }) {
 
   const { openProjects, setOpenProjects } = useUserSettings();
   const expanded = openProjects.includes(project.id);
-  const { deleteTimeEntry } = useProjectTaskStore((state) => ({
+  const { deleteTimeEntry, setAddingTask } = useProjectTaskStore((state) => ({
     deleteTimeEntry: state.actions.deleteTimeEntry,
+    setAddingTask: state.actions.setAddingTask,
   }));
   const { enqueueSnackbar } = useSnackbar();
 
@@ -32,19 +33,9 @@ export default function ProjectCard({ project }: { project: Project }) {
     () =>
       project.tasks
         .filter((task) => task !== null)
-        .filter(
-          (task) =>
-            !task.parent_id && ![STAGE_TO_ID_MAP["approved"], STAGE_TO_ID_MAP["done"]].includes(task.stage_id.id),
-        ),
+        .filter((task) => !task.parent_id && task.stage_id.id !== STAGE_TO_ID_MAP["approved"]),
     [project],
   );
-  // const completedTasks = useMemo(
-  //   () =>
-  //     project.tasks
-  //       .filter((task) => task !== null)
-  //       .filter((task) => !task.parent_id && task.stage_id.id === STAGE_TO_ID_MAP["done"]),
-  //   [project],
-  // );
 
   const handleAddNewEntry = (taskId: number) => {
     setCurrentTaskId(taskId);
@@ -65,6 +56,11 @@ export default function ProjectCard({ project }: { project: Project }) {
     }
 
     enqueueSnackbar(error.message, { variant: "error" });
+  };
+
+  const handleCreateTask = (evt: React.MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    setAddingTask({ projectId: project.id });
   };
 
   return (
@@ -104,6 +100,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           <Button
             component={Link}
             href={`/tasks/new?projectId=${project.id}`}
+            onClick={handleCreateTask}
             variant="outlined"
             startIcon={<Add />}
             size="small"

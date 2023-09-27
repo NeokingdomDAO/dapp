@@ -2,29 +2,35 @@ import { shallow } from "zustand/shallow";
 
 import { useState } from "react";
 
+import AddIcon from "@mui/icons-material/Add";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ListIcon from "@mui/icons-material/List";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import {
   Box,
+  Button,
   Collapse,
   Divider,
   IconButton,
   Menu,
   MenuItem,
-  Paper,
   Stack,
   SxProps,
   Theme,
   Typography,
 } from "@mui/material";
 
-import { ProjectTask, Timesheet } from "@store/projectTaskStore";
+import { STAGE_TO_ID_MAP } from "@lib/constants";
+
+import useProjectTaskStore, { ProjectTask, Timesheet } from "@store/projectTaskStore";
 import useTimeEntryStore from "@store/timeEntry";
 
+import Dialog from "@components/Dialog";
 import ElapsedTime from "@components/time-entry/ElapsedTime";
 
+import { useSnackbar } from "@hooks/useSnackbar";
 import useUserSettings from "@hooks/useUserSettings";
 
 import TimeEntries from "./TimeEntries";
@@ -52,31 +58,44 @@ const getTick = (hasPlayButton: boolean): SxProps<Theme> => ({
 export default function Task({
   task,
   isSubtask = false,
+  parentTask,
   onAddNewEntry,
   onDeleteTimeEntry,
 }: {
   task: ProjectTask;
+  parentTask?: ProjectTask;
   isSubtask?: boolean;
   onAddNewEntry: (taskId: number) => void;
   onDeleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => void;
 }) {
-  const { start, stop, startAt, setTaskId, taskId, addNew } = useTimeEntryStore(
+  const { start, stop, startAt, setTaskId, taskId } = useTimeEntryStore(
     (state) => ({
       start: state.start,
       stop: state.stop,
       startAt: state.startAt,
       taskId: state.taskId,
       setTaskId: state.setTaskId,
-      addNew: state.addNew,
     }),
     shallow,
   );
 
+  const [deletingTask, setDeletingTask] = useState<null | ProjectTask>(null);
+  const [markAsDoneTask, setMarkAsDoneTask] = useState<null | ProjectTask>(null);
   const { openTasks, setOpenTasks } = useUserSettings();
   const expanded = openTasks.includes(task.id);
+  const { deleteTask, loadingTask, markTaskAsDone, setAddingTask, setUpdatingTask } = useProjectTaskStore((state) => ({
+    deleteTask: state.actions.deleteTask,
+    markTaskAsDone: state.actions.markTaskAsDone,
+    loadingTask: state.loadingTask,
+    setAddingTask: state.actions.setAddingTask,
+    setUpdatingTask: state.actions.setUpdatingTask,
+  }));
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const isDone = task.stage_id.id === STAGE_TO_ID_MAP["done"];
 
   const handleToggle = () => {
     const newOpenTasks = openTasks.includes(task.id)
@@ -99,16 +118,46 @@ export default function Task({
     start();
   };
 
-  const handleNewSubTask = () => {
-    handleClose();
-  };
-
   const handleUpdateTask = () => {
     handleClose();
+    setUpdatingTask(task);
   };
 
-  const handleDeleteTask = () => {
+  const handleBeforeDeleteTask = () => {
     handleClose();
+    setDeletingTask(task);
+  };
+
+  const handleDeleteTask = async () => {
+    const { alert, error } = await deleteTask(task);
+    setDeletingTask(null);
+    if (alert) {
+      return enqueueSnackbar(alert.message, { variant: alert.variant });
+    }
+
+    enqueueSnackbar(error.message, { variant: "error" });
+  };
+
+  const handleBeforeMarkAsDone = () => {
+    handleClose();
+    setMarkAsDoneTask(task);
+  };
+
+  const handleMarkAsDone = async () => {
+    const { alert, error } = await markTaskAsDone(task);
+    setMarkAsDoneTask(null);
+    if (alert) {
+      const newOpenTasks = openTasks.filter((id) => id !== task.id);
+      setOpenTasks(newOpenTasks);
+      return enqueueSnackbar(alert.message, { variant: alert.variant });
+    }
+
+    enqueueSnackbar(error.message, { variant: "error" });
+  };
+
+  const handleCreateSubtask = async () => {
+    handleClose();
+    setAddingTask({ parentTask: task, projectId: task.project_id.id });
   };
 
   const handleAddTimeEntry = () => {
@@ -127,10 +176,39 @@ export default function Task({
   const hasTimeEntries = (task.timesheet_ids?.length || 0) > 0;
 
   return (
-    <Box sx={{ mt: 0.8, mb: 0.8, ...(isSubtask ? { ml: 2 } : getTick(canTrackTime)) }}>
+    <Box
+      sx={{
+        mt: 0.8,
+        mb: 0.8,
+        ...(isSubtask ? { ml: 2 } : getTick(canTrackTime)),
+        ...(loadingTask === task.id && { opacity: 0.3, pointerEvents: "none" }),
+      }}
+    >
+      <Dialog
+        open={!!deletingTask}
+        handleClose={() => setDeletingTask(null)}
+        handleApprove={handleDeleteTask}
+        descriptionId="dialog-delete-task"
+        title={isSubtask ? "Delete Subtask" : "Delete Task"}
+      >
+        <Typography variant="body1">
+          Are you sure you want to delete the {isSubtask ? "subtask" : "task"} <b>{task.name}</b>?
+        </Typography>
+      </Dialog>
+      <Dialog
+        open={!!markAsDoneTask}
+        handleClose={() => setMarkAsDoneTask(null)}
+        handleApprove={handleMarkAsDone}
+        descriptionId="dialog-mark-task-as-done"
+        title={isSubtask ? "Mark subtask as done" : "Mark task as done"}
+      >
+        <Typography variant="body1">
+          Are you sure you want to mark {isSubtask ? "subtask" : "task"} <b>{task.name}</b> as done?
+        </Typography>
+      </Dialog>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={1} alignItems="center">
-          {(isSubtask || canTrackTime) && (
+          {(isSubtask || canTrackTime) && !isDone && (
             <IconButton
               aria-label="start"
               color="primary"
@@ -142,6 +220,7 @@ export default function Task({
               {startAt && taskId === task.id ? <StopCircleIcon /> : <PlayArrowIcon />}
             </IconButton>
           )}
+          {isDone && <CheckCircleIcon sx={{ fill: (t) => t.palette.success.main, ml: 0.1 }} fontSize="large" />}
           <Typography
             variant="body1"
             component="div"
@@ -157,9 +236,11 @@ export default function Task({
           {canTrackTime && elapsedTime > 0 && (
             <ElapsedTime elapsedTime={elapsedTime} hideSeconds withLabels size="small" />
           )}
-          <IconButton aria-label="start" color="primary" size="small" onClick={handleClick}>
-            <ListIcon />
-          </IconButton>
+          {(taskId !== task.id || !startAt) && (
+            <IconButton aria-label="start" color="primary" size="small" onClick={handleClick}>
+              <ListIcon />
+            </IconButton>
+          )}
           <IconButton
             aria-label="toggle"
             color="primary"
@@ -186,13 +267,30 @@ export default function Task({
           horizontal: "left",
         }}
       >
-        {canTrackTime && <MenuItem onClick={handleAddTimeEntry}>New time entry</MenuItem>}
-        <MenuItem onClick={handleNewSubTask}>{isSubtask ? "Update subtask" : "Update task"}</MenuItem>
-        {!isSubtask && (!canTrackTime || !hasTimeEntries) && (
-          <MenuItem onClick={handleUpdateTask}>New SubTask</MenuItem>
-        )}
-        <MenuItem onClick={handleDeleteTask}>{isSubtask ? "Delete subtask" : "Delete task"}</MenuItem>
-        <MenuItem onClick={handleDeleteTask}>Mark as done</MenuItem>
+        {canTrackTime &&
+          !isDone && [
+            <MenuItem onClick={handleAddTimeEntry} key="n-t-e">
+              New time entry
+            </MenuItem>,
+            <Divider key="divider" />,
+          ]}
+        {!isSubtask &&
+          !isDone &&
+          (!canTrackTime || !hasTimeEntries) && [
+            <MenuItem onClick={handleCreateSubtask} key="n-s">
+              New SubTask
+            </MenuItem>,
+            <Divider key="divider" />,
+          ]}
+        {!isDone && <MenuItem onClick={handleUpdateTask}>{isSubtask ? "Update subtask" : "Update task"}</MenuItem>}
+        <MenuItem onClick={handleBeforeDeleteTask}>{isSubtask ? "Delete subtask" : "Delete task"}</MenuItem>
+        {hasTimeEntries &&
+          !isDone && [
+            <Divider key="divider" />,
+            <MenuItem key="m-a-d" onClick={handleBeforeMarkAsDone}>
+              Mark as done
+            </MenuItem>,
+          ]}
       </Menu>
       {!isSubtask && task.child_ids.length > 0 && (
         <Collapse in={expanded} timeout="auto">
@@ -204,6 +302,7 @@ export default function Task({
                 key={subTask.id}
                 onAddNewEntry={onAddNewEntry}
                 onDeleteTimeEntry={onDeleteTimeEntry}
+                parentTask={task}
               />
             ))}
           </Box>
@@ -216,6 +315,22 @@ export default function Task({
             entries={task.timesheet_ids}
             onAddNew={() => onAddNewEntry(task.id)}
             onDelete={handleDeleteTimeEntry}
+            showNewEntryButton={(taskId !== task.id || !startAt) && !isDone}
+            otherCta={
+              !isSubtask &&
+              !isDone &&
+              (!canTrackTime || !hasTimeEntries) && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={handleCreateSubtask}
+                  startIcon={<AddIcon />}
+                  sx={{ ml: 1 }}
+                >
+                  New Subtask
+                </Button>
+              )
+            }
           />
         </Collapse>
       )}

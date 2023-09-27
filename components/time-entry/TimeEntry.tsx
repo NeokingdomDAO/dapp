@@ -96,11 +96,11 @@ export default function TimeEntry() {
       <StopModal />
       <Paper
         sx={{
-          p: 0.8,
+          p: 1,
           pl: 1.5,
           pr: 1.5,
           position: "fixed",
-          zIndex: 1001,
+          zIndex: 2001,
           bottom: 16,
           right: 16,
           bgcolor: (t) => (t.palette.mode === "dark" ? "#222" : "#FAFAFA"),

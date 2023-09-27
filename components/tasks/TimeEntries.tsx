@@ -23,11 +23,17 @@ export default function TimeEntries({
   onAddNew,
   onDelete,
   taskId,
+  showNewEntryButton,
+  readOnly = false,
+  otherCta = null,
 }: {
   entries: Timesheet[];
-  onAddNew: () => void;
-  onDelete: (timeEntry: Timesheet) => void;
+  onAddNew?: () => void;
+  onDelete?: (timeEntry: Timesheet) => void;
   taskId: number;
+  showNewEntryButton: boolean;
+  readOnly?: boolean;
+  otherCta?: React.ReactNode;
 }) {
   const { loadingTimeEntry } = useProjectTaskStore((state) => ({
     loadingTimeEntry: state.loadingTimeEntry,
@@ -40,7 +46,9 @@ export default function TimeEntries({
   };
 
   const handleDeleteTimeEntry = () => {
-    onDelete(deletingEntry as Timesheet);
+    if (typeof onDelete === "function") {
+      onDelete(deletingEntry as Timesheet);
+    }
     setDeletingEntry(null);
   };
 
@@ -114,11 +122,14 @@ export default function TimeEntries({
         }),
       }}
     >
-      <Box component="li" m={0.5} sx={{ flex: 1 }}>
-        <Button size="small" variant="outlined" startIcon={<AddIcon />} onClick={onAddNew}>
-          New time entry
-        </Button>
-      </Box>
+      {showNewEntryButton && (
+        <Box component="li" m={0.5} sx={{ flex: 1 }}>
+          <Button size="small" variant="outlined" startIcon={<AddIcon />} onClick={onAddNew}>
+            New time entry
+          </Button>
+          {otherCta}
+        </Box>
+      )}
       {!!editingTimeSheet && (
         <Modal
           open
@@ -234,12 +245,15 @@ export default function TimeEntries({
                     "&:hover:before": {
                       bgcolor: "primary.main",
                     },
+                    ...([loadingTimeEntry, deletingEntry?.id].includes(timeEntry.id)
+                      ? { opacity: 0.3, pointerEvents: "none" }
+                      : {}),
                   }}
                 >
                   <Stack direction="row" justifyContent="space-between">
                     <Box sx={{ wordWrap: "break-word", width: "calc(100% - 140px)" }}>
-                      <Typography sx={{ ml: 1 }} variant="caption">
-                        <b>
+                      <Typography variant="caption">
+                        <b style={{ marginRight: "4px" }}>
                           {format(timeEntry.start * 1000, "H:mm")} - {format((timeEntry.end as number) * 1000, "H:mm")}
                         </b>{" "}
                         {timeEntry.name.trim().length <= 2 ? (
@@ -251,24 +265,26 @@ export default function TimeEntries({
                         )}
                       </Typography>
                     </Box>
-                    <Box sx={{ mr: 1, whiteSpace: "nowrap" }}>
-                      <Button
-                        variant="text"
-                        size="small"
-                        onClick={() => handleUpdateTimeEntry(timeEntry)}
-                        disabled={[loadingTimeEntry, deletingEntry?.id].includes(timeEntry.id)}
-                      >
-                        edit
-                      </Button>
-                      <Button
-                        variant="text"
-                        size="small"
-                        onClick={() => setDeletingEntry(timeEntry)}
-                        disabled={[loadingTimeEntry, deletingEntry?.id].includes(timeEntry.id)}
-                      >
-                        delete
-                      </Button>
-                    </Box>
+                    {!readOnly && (
+                      <Box sx={{ mr: 1, whiteSpace: "nowrap" }}>
+                        <Button
+                          variant="text"
+                          size="small"
+                          onClick={() => handleUpdateTimeEntry(timeEntry)}
+                          disabled={[loadingTimeEntry, deletingEntry?.id].includes(timeEntry.id)}
+                        >
+                          edit
+                        </Button>
+                        <Button
+                          variant="text"
+                          size="small"
+                          onClick={() => setDeletingEntry(timeEntry)}
+                          disabled={[loadingTimeEntry, deletingEntry?.id].includes(timeEntry.id)}
+                        >
+                          delete
+                        </Button>
+                      </Box>
+                    )}
                   </Stack>
                 </Box>
               ))}
