@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import { hoursToTime } from "@lib/utils";
 
 import User from "@components/User";
+import ElapsedTime from "@components/time-entry/ElapsedTime";
 
 import useCurrentTasks from "@hooks/useCurrentTasks";
 import useShareholderStatus from "@hooks/useShareholderStatus";
@@ -74,7 +75,7 @@ export default function Header() {
           <>
             {totalTime > 0 ? (
               <>
-                <Typography variant="h4">{hoursToTime(totalTime)}</Typography>
+                <ElapsedTime elapsedTime={totalTime * 3600} withLabels hideSeconds />
                 <Typography variant="caption">not tokenised, yet</Typography>
               </>
             ) : (

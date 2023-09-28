@@ -58,9 +58,6 @@ export default function TasksList({
                     {task.parent_id ? ` - ${task.parent_id.name}` : ""}
                   </Typography>
                   <Chip sx={{ mr: 2 }} label={task.project_id.name} size="small" />
-                  <Typography variant="caption">
-                    Updated on: {format(getDateFromOdooTimestamp(task.write_date), "dd LLL yyyy, H:mm:ss")}
-                  </Typography>
                 </Box>
                 <ElapsedTime
                   elapsedTime={(task.subtask_effective_hours + task.effective_hours) * 3600}
@@ -69,6 +66,7 @@ export default function TasksList({
                   sx={{ ml: "auto" }}
                 />
               </Stack>
+              {/* @ts-ignore */}
               <TimeEntries entries={task.timesheet_ids} readOnly taskId={task.id} />
             </Paper>
           ))}

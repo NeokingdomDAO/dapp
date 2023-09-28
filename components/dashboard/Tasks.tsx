@@ -13,6 +13,7 @@ import { fetcher } from "@lib/net";
 import { hoursToTime } from "@lib/utils";
 
 import TasksList from "@components/dashboard/TasksList";
+import ElapsedTime from "@components/time-entry/ElapsedTime";
 
 import useIsInView from "@hooks/useIsInView";
 
@@ -119,11 +120,12 @@ export default function Tasks() {
             )}
           </Box>
           {hasPendingTasks && (
-            <Paper sx={{ ml: "auto", textAlign: "center", p: 2, width: 130 }} variant="outlined">
-              <Typography variant="h6">
-                {isLoadingMyTasks ? <Skeleton /> : hoursToTime(totalMyTasksWorkedTime)}
-              </Typography>
-            </Paper>
+            <ElapsedTime
+              elapsedTime={totalMyTasksWorkedTime * 3600}
+              isLoading={isLoadingMyTasks}
+              withLabels
+              hideSeconds
+            />
           )}
         </Box>
       </TabPanel>
@@ -134,9 +136,7 @@ export default function Tasks() {
               This list is in real time and it shows all the contributors unapproved tasks so far
             </Typography>
           </Box>
-          <Paper sx={{ ml: "auto", textAlign: "center", p: 2, width: 130 }} variant="outlined">
-            <Typography variant="h6">{isLoadingAudit ? <Skeleton /> : hoursToTime(totalWorkedTimeAudit)}</Typography>
-          </Paper>
+          <ElapsedTime elapsedTime={totalWorkedTimeAudit * 3600} isLoading={isLoadingAudit} withLabels hideSeconds />
         </Box>
       </TabPanel>
       <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
