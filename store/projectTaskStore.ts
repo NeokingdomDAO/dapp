@@ -170,7 +170,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         }),
       });
       if (response.ok) {
-        set({ projectKey: uuid() });
+        set({ projectKey: uuid(), loadingTimeEntry: null });
         return { alert: { message: "Time Entry successfully created!", variant: "success" } };
       } else {
         set({ loadingTimeEntry: null });
