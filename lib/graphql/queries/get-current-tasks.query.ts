@@ -24,6 +24,14 @@ export const getCurrentTasks = gql`
       parent_id {
         name
       }
+      timesheet_ids {
+        id
+        name
+        display_name
+        unit_amount
+        start
+        end
+      }
     }
   }
 `;

@@ -27,6 +27,14 @@ export const getTasksForAuditing = gql`
         name
         ethereum_address
       }
+      timesheet_ids {
+        id
+        name
+        display_name
+        unit_amount
+        start
+        end
+      }
     }
   }
 `;
