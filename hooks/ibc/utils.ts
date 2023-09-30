@@ -1,3 +1,5 @@
+import { JsonRpcProvider } from "@ethersproject/providers";
+import { evmosToEth } from "@evmos/address-converter";
 import { createTxRaw } from "@evmos/proto";
 import {
   AccountResponse,
@@ -5,9 +7,18 @@ import {
   generateEndpointBroadcast,
   generatePostBodyBroadcast,
 } from "@evmos/provider";
-import { Fee, IBCMsgTransferParams, Sender, TxContext, TxPayload, createTxIBCMsgTransfer } from "@evmos/transactions";
+import {
+  Fee,
+  IBCMsgTransferParams,
+  MsgSendParams,
+  Sender,
+  TxContext,
+  TxPayload,
+  createTxIBCMsgTransfer,
+} from "@evmos/transactions";
+import { EthSignType } from "@keplr-wallet/types";
 import { Long } from "cosmjs-types/helpers";
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 import { EnqueueSnackbar } from "notistack";
 import { SecretNetworkClient, stringToCoin } from "secretjs";
@@ -197,6 +208,90 @@ export const sendFromCrescent2 = async (senderAddress: string, receiverAddress: 
   const response = await broadcastPost.json();
 
   console.log("broadcasted", response);
+};
+
+export const sendFromEvmosToEvmos = async (
+  wallet: { account?: any; walletName?: string },
+  account: AccountResponse["account"],
+  receiverAddress: string,
+  amount: string,
+  enqueueSnackbar: EnqueueSnackbar,
+) => {
+  // Find an Ethereum JSON-RPC node url for either mainnet or testnet here:
+  // https://docs.evmos.org/develop/api/networks.
+
+  const nodeUrl = "https://eth.bd.evmos.org:8545";
+  const provider = new JsonRpcProvider(nodeUrl);
+  const chainId = "evmos_9001-2";
+  const senderAddress = account.base_account.address;
+  const senderAddressEth = evmosToEth(senderAddress);
+  const receiverAddressEth = evmosToEth(receiverAddress);
+
+  // Prepare the calldata
+  const abi = ["function transfer(address to, uint256 value) external returns (bool)"];
+  const contractInterface = new ethers.utils.Interface(abi);
+  const data = contractInterface.encodeFunctionData("transfer", [receiverAddressEth, amount]);
+
+  let rawTx = {
+    chainId: 9001,
+    to: receiverAddressEth,
+    value: 0,
+    data,
+    accessList: [],
+    type: 2,
+  };
+
+  // Calculate and set nonce
+  const nonce = await provider.getTransactionCount(senderAddressEth);
+  // @ts-ignore
+  rawTx["nonce"] = nonce;
+
+  // Calculate and set gas fees
+  const gasLimit = await provider.estimateGas(rawTx);
+  const gasFee = await provider.getFeeData();
+
+  // @ts-ignore
+  rawTx["gasLimit"] = gasLimit.toHexString();
+  if (!gasFee.maxPriorityFeePerGas || !gasFee.maxFeePerGas) {
+    // Handle error
+    return;
+  }
+
+  // @ts-ignore
+  rawTx["maxPriorityFeePerGas"] = gasFee.maxPriorityFeePerGas.toHexString();
+  // @ts-ignore
+  rawTx["maxFeePerGas"] = gasFee.maxFeePerGas.toHexString();
+
+  // @ts-ignore
+  const signedTx = await window.leap.signEthereum(
+    chainId,
+    senderAddress,
+    JSON.stringify(rawTx),
+    "transaction" as EthSignType,
+  );
+
+  const sig = "0x" + Buffer.from(signedTx).toString("hex");
+  const res = await provider.sendTransaction(sig);
+  console.log(res);
+
+  // Result:
+  // {
+  //   chainId: 1337,
+  //   confirmations: 0,
+  //   data: '0x',
+  //   from: '0x8577181F3D8A38a532Ef8F3D6Fd9a31baE73b1EA',
+  //   gasLimit: { BigNumber: "21000" },
+  //   gasPrice: { BigNumber: "1" },
+  //   hash: '0x200818a533113c00057ceccd3277249871c4a1ac09514214f03c3b96099b6c92',
+  //   nonce: 4,
+  //   r: '0x1727bd07080a5d3586422edad86805918e9772adda231d51c32870a1f1cabffb',
+  //   s: '0x7afc6be528befb79b9ed250356f6eacd63e853685091e9a3987a3d266c6cb26a',
+  //   to: '0x5555763613a12D8F3e73be831DFf8598089d3dCa',
+  //   type: null,
+  //   v: 2709,
+  //   value: { BigNumber: "3141590000000000000" },
+  //   wait: [Function]
+  // }
 };
 
 export const sendFromEvmos = async (

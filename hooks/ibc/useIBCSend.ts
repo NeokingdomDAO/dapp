@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useSnackbar } from "@hooks/useSnackbar";
 
-import { sendFromCrescent, sendFromEvmos } from "./utils";
+import { sendFromCrescent, sendFromEvmos, sendFromEvmosToEvmos } from "./utils";
 
 export default function useIBCSend(senderAddress: string) {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,9 +18,21 @@ export default function useIBCSend(senderAddress: string) {
   ) => {
     try {
       setIsLoading(true);
-      const res = senderAddress.startsWith("evmos")
-        ? await sendFromEvmos(wallet, account as AccountResponse["account"], receiverAddress, amount, enqueueSnackbar)
-        : await sendFromCrescent(wallet, senderAddress, receiverAddress, amount);
+      let res;
+
+      if (senderAddress.startsWith("evmos") && receiverAddress.startsWith("evmos")) {
+        res = await sendFromEvmosToEvmos(
+          wallet,
+          account as AccountResponse["account"],
+          receiverAddress,
+          amount,
+          enqueueSnackbar,
+        );
+      } else {
+        res = senderAddress.startsWith("evmos")
+          ? await sendFromEvmos(wallet, account as AccountResponse["account"], receiverAddress, amount, enqueueSnackbar)
+          : await sendFromCrescent(wallet, senderAddress, receiverAddress, amount);
+      }
       if (res?.snackbarId) {
         closeSnackbar(res?.snackbarId);
       }
