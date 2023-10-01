@@ -1,4 +1,5 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
+import { UnsignedTransaction, serialize } from "@ethersproject/transactions";
 import { evmosToEth } from "@evmos/address-converter";
 import { createTxRaw } from "@evmos/proto";
 import {
@@ -19,7 +20,7 @@ import {
 import { EthSignType } from "@keplr-wallet/types";
 import { Long } from "cosmjs-types/helpers";
 import { BigNumber, ethers } from "ethers";
-import { formatEther } from "ethers/lib/utils.js";
+import { formatEther, splitSignature } from "ethers/lib/utils.js";
 import { EnqueueSnackbar } from "notistack";
 import { SecretNetworkClient, stringToCoin } from "secretjs";
 
@@ -261,6 +262,7 @@ export const sendFromEvmosToEvmos = async (
   rawTx["maxPriorityFeePerGas"] = gasFee.maxPriorityFeePerGas.toHexString();
   // @ts-ignore
   rawTx["maxFeePerGas"] = gasFee.maxFeePerGas.toHexString();
+  console.log(rawTx);
 
   // @ts-ignore
   const signedTx = await window.leap.signEthereum(
@@ -271,7 +273,9 @@ export const sendFromEvmosToEvmos = async (
   );
 
   const sig = "0x" + Buffer.from(signedTx).toString("hex");
-  const res = await provider.sendTransaction(sig);
+  const sigTx = serialize(rawTx, splitSignature(sig));
+
+  const res = await provider.sendTransaction(sigTx);
   console.log(res);
 
   // Result:
