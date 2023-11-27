@@ -12,6 +12,7 @@ import { calculateSteps } from "@lib/utils";
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
 
 import Modal from "@components/Modal";
+import UsersAutocomplete from "@components/UsersAutocomplete";
 
 import useApproveToMatchOffer from "@hooks/useApproveToMatchOffer";
 import useCheckAllowance from "@hooks/useCheckAllowance";
@@ -23,6 +24,7 @@ import OfferCard from "./OfferCard";
 export default function OffersList({ offers, noOffersMessage }: { offers: Offer[]; noOffersMessage: string }) {
   const [matchingOfferOpen, setMatchingOfferOpen] = useState<Offer | null>(null);
   const [matchingTokens, setMatchingTokens] = useState(0);
+  const [selectedUserAddress, setSelectedUserAddress] = useState<string | null>(null);
 
   const { usdcContract, internalMarketContractAddress } = useContractsContext();
   const { allowance, refreshAllowanceFromContract } = useCheckAllowance(usdcContract, internalMarketContractAddress);
@@ -59,6 +61,8 @@ export default function OffersList({ offers, noOffersMessage }: { offers: Offer[
   const allowanceLessThanOfferAmount = allowance < currentOfferAmount;
 
   const maxToOffer = allowance > currentOfferAmount ? currentOfferAmount : allowance;
+
+  const usersAddresses = [...new Set(offers.map((offer) => offer.from))];
 
   return (
     <>
@@ -145,13 +149,27 @@ export default function OffersList({ offers, noOffersMessage }: { offers: Offer[
           {noOffersMessage}
         </Typography>
       ) : (
-        <Grid container spacing={2}>
-          {offers.map((offer) => (
-            <Grid key={offer.id} item xs={12} md={6} lg={4}>
-              <OfferCard offer={offer} onMatchClicked={handleOnMatch} />
-            </Grid>
-          ))}
-        </Grid>
+        <>
+          {usersAddresses.length > 1 && (
+            <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end" }}>
+              <UsersAutocomplete
+                filterList={usersAddresses}
+                selectedAddress={selectedUserAddress}
+                onChange={(address) => setSelectedUserAddress(address)}
+                label="Filter by contributor"
+              />
+            </Box>
+          )}
+          <Grid container spacing={2}>
+            {offers
+              .filter((offer) => !selectedUserAddress || offer.from === selectedUserAddress)
+              .map((offer) => (
+                <Grid key={offer.id} item xs={12} md={6} lg={4}>
+                  <OfferCard offer={offer} onMatchClicked={handleOnMatch} />
+                </Grid>
+              ))}
+          </Grid>
+        </>
       )}
     </>
   );

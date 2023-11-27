@@ -179,8 +179,9 @@ export default function ResolutionForm({
               {withExclusion && (
                 <Box sx={{ mt: 4 }}>
                   <UsersAutocomplete
-                    exclusionAddress={exclusionAddress}
+                    selectedAddress={exclusionAddress}
                     onChange={(address) => onUpdateExclusionAddress(address)}
+                    label="Choose a contributor to exclude"
                   />
                 </Box>
               )}

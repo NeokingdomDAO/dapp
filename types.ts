@@ -142,12 +142,21 @@ export type DelegationStatus = {
   usersList: Array<DelegationUser & { canBeDelegated: boolean }>;
 };
 
+export type OfferMatch = {
+  id: string;
+  matchedFrom: string;
+  amount: BigInt;
+  createTimestamp: string;
+};
+
 export type Offer = {
   id: string;
   from: string;
   amount: BigInt;
   expirationTimestamp: string;
+  createTimestamp: string;
   expiredOnTransfer: boolean;
+  matches: OfferMatch[];
 };
 
 export type DaoUser = {

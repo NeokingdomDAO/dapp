@@ -25,6 +25,13 @@ export const getTokensPageData = gql`
       amount
       expirationTimestamp
       expiredOnTransfer
+      createTimestamp
+      matches {
+        id
+        matchedFrom
+        amount
+        createTimestamp
+      }
     }
   }
 `;

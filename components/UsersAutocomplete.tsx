@@ -11,19 +11,25 @@ import useOdooUsers from "@hooks/useOdooUsers";
 
 export default function UsersAutocomplete({
   onChange,
-  exclusionAddress,
+  selectedAddress,
+  filterList,
+  label,
 }: {
   onChange: (address: string) => void;
-  exclusionAddress: string;
+  selectedAddress: string | null;
+  filterList?: string[];
+  label: string;
 }) {
   const { allOdooUsers, isLoading } = useOdooUsers();
 
   const options = useMemo(() => {
-    return allOdooUsers.map((user) => ({
-      name: user.display_name,
-      value: user.ethereum_address,
-      image: user.image,
-    }));
+    return allOdooUsers
+      .filter((user) => !filterList || filterList.includes(user.ethereum_address))
+      .map((user) => ({
+        name: user.display_name,
+        value: user.ethereum_address,
+        image: user.image,
+      }));
   }, [allOdooUsers]);
 
   if (isLoading) return <CircularProgress />;
@@ -34,7 +40,7 @@ export default function UsersAutocomplete({
       sx={{ width: 300 }}
       options={options}
       autoHighlight
-      value={options.find((opt) => opt.value === exclusionAddress)}
+      value={options.find((opt) => opt.value === selectedAddress)}
       onChange={(_, option) => {
         onChange(option?.value || "");
       }}
@@ -54,7 +60,7 @@ export default function UsersAutocomplete({
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Choose a contributor to exclude"
+          label={label}
           inputProps={{
             ...params.inputProps,
             autoComplete: "new-kek", // disable autocomplete and autofill
