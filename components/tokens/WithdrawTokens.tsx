@@ -15,10 +15,9 @@ import Modal from "@components/Modal";
 import useWithdrawTokens from "@hooks/useWithdrawTokens";
 
 export default function WithdrawTokens({ withdrawableBalance }: { withdrawableBalance: number }) {
-  const { address } = useAccount();
   const [modalOpen, setModalOpen] = useState(false);
   const [withdrawing, setWithdrawing] = useState(0);
-  const [withdrawalAddress, setWithdrawalAddress] = useState(String(address));
+  const [withdrawalAddress, setWithdrawalAddress] = useState("");
   const { isAwaitingConfirmation, isLoading } = useBlockchainTransactionStore();
 
   const { onSubmit } = useWithdrawTokens();
@@ -33,7 +32,7 @@ export default function WithdrawTokens({ withdrawableBalance }: { withdrawableBa
   const handleModalClose = () => {
     setModalOpen(false);
     setWithdrawing(0);
-    setWithdrawalAddress(String(address));
+    setWithdrawalAddress("");
   };
 
   const maxToWithdraw = withdrawableBalance;
@@ -78,11 +77,7 @@ export default function WithdrawTokens({ withdrawableBalance }: { withdrawableBa
               }}
             />
           </Box>
-          <ChangeableAddress
-            initialAddress={address}
-            newAddress={withdrawalAddress}
-            setAddress={setWithdrawalAddress}
-          />
+          <ChangeableAddress address={withdrawalAddress} setAddress={setWithdrawalAddress} />
           <Box sx={{ textAlign: "center", pt: 2 }}>
             <LoadingButton
               fullWidth
