@@ -156,7 +156,7 @@ const ResolutionPdf = ({
               {process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom" ? "16638166" : "16374990"}
             </Text>
             <Text>
-              <Bold>Registered office:</Bold> Laki 11/1, 12915 Tallinn, Estonia
+              <Bold>Registered office:</Bold> Sõle 14, Tallinn, 10611 , Estonia
             </Text>
           </View>
         </View>

@@ -37,7 +37,7 @@ export default function LegalInfo({ resolution }: { resolution: ResolutionEntity
             <b>Registry code:</b> {process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom" ? "16638166" : "16374990"}
           </Typography>
           <Typography variant="body2">
-            <b>Registered office</b>: Laki 11/1, 12915 Tallinn, Estonia
+            <b>Registered office</b>: Sõle 14, Tallinn, 10611 , Estonia
           </Typography>
         </Paper>
         {[RESOLUTION_STATES.REJECTED, RESOLUTION_STATES.PRE_DRAFT].includes(resolution.state) && (
