@@ -22,6 +22,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/s
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
+import CheckNeokBalance from "@components/CeckNeokBalance";
 import CheckConnected from "@components/CheckConnected";
 import Layout from "@components/Layout";
 
@@ -150,6 +151,7 @@ export default function App({ Component, pageProps }: DappProps) {
                   {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
                     <ContractsProvider>
                       <>
+                        <CheckNeokBalance />
                         <CheckConnected fullWidth={!!Component.fullWidth} />
                         <Component {...pageProps} />
                       </>

@@ -47,7 +47,7 @@ export default function Layout({
   const { shouldNotifyMismatch } = useCheckSubgraphState();
   const trigger = useScrollTrigger();
   const isActive = useMemo(() => initActiveStyle(router.asPath), [router.asPath]);
-  const { data, isLoading, error } = useDelegationStatus();
+  const { data } = useDelegationStatus();
   const { votingResolutions } = useGetActiveResolutions();
   const votingResolutionsNum = votingResolutions?.length || 0;
 

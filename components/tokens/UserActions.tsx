@@ -8,7 +8,6 @@ import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
 
 import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
-import DepositTokens from "./DepositTokens";
 import OfferTokens from "./OfferTokens";
 import WithdrawTokens from "./WithdrawTokens";
 
@@ -44,7 +43,7 @@ export default function UserActions() {
     <>
       <Grid container spacing={2}>
         {canOffer && (
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={12} md={6}>
             <Paper sx={paperSx}>
               <div>
                 <Typography variant="h5">Locked: {data?.balance.lockedTokens}</Typography>
@@ -56,23 +55,13 @@ export default function UserActions() {
             </Paper>
           </Grid>
         )}
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid item xs={12} md={6}>
           <Paper sx={paperSx}>
             <div>
               <Typography variant="h5" sx={{ mb: 2 }}>
                 Unlocked: {withdrawableBalance}
               </Typography>
               <WithdrawTokens withdrawableBalance={withdrawableBalance || 0} />
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Paper sx={paperSx}>
-            <div>
-              <Typography variant="h5" sx={{ mb: 2 }}>
-                NEOK Balance: {data?.balance.neokTokens}
-              </Typography>
-              <DepositTokens />
             </div>
           </Paper>
         </Grid>

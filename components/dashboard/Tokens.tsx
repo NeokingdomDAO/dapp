@@ -18,9 +18,6 @@ export default function Tokens() {
 
   return (
     <>
-      <Typography sx={{ mb: 4 }} variant="h4">
-        Your tokens
-      </Typography>
       <UserBalance />
       <Divider sx={{ mt: 2 }} />
       <Box sx={{ textAlign: "center", mt: 4 }}>

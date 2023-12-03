@@ -33,22 +33,13 @@ export default function UserBalance() {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <AddCircleIcon sx={{ position: "absolute", left: "50%", top: "50%", ml: -2, mt: -4 }} fontSize="large" />
       <Stack direction="row" justifyContent="center" spacing={1} sx={{ pb: 4 }}>
         <Paper sx={PAPER_SX}>
           <Typography variant="h4" sx={{ mb: 0.5 }}>
-            Governance Tokens
+            Your internal governance tokens
           </Typography>
           <Typography variant="h6" sx={ELLIPSIS_SX}>
             {data?.balance.governanceTokens}
-          </Typography>
-        </Paper>
-        <Paper sx={PAPER_SX}>
-          <Typography variant="h4" sx={{ mb: 0.5 }}>
-            NEOK Tokens
-          </Typography>
-          <Typography variant="h6" sx={ELLIPSIS_SX}>
-            {data?.balance.neokTokens}
           </Typography>
         </Paper>
       </Stack>

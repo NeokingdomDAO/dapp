@@ -15,23 +15,24 @@ const sizeToWidth: Record<string, number> = {
   large: 800,
 };
 
-const style = (size: string, sx: SxProps<Theme> = {}) => ({
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: {
-    xs: "90%",
-    sm: sizeToWidth[size],
-  },
-  maxHeight: "100%",
-  overflowY: "auto",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  ...sx,
-});
+const style = (size: string, sx: SxProps<Theme> = {}) =>
+  ({
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: {
+      xs: "90%",
+      sm: sizeToWidth[size],
+    },
+    maxHeight: "100%",
+    overflowY: "auto",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    ...sx,
+  } as SxProps<Theme>);
 
 export default function Modal({
   open,
