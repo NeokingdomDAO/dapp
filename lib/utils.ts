@@ -25,6 +25,10 @@ export const isSameAddress = (addressLeft: string, addressRight: string) =>
 
 // PROJECTS TASKS UTILS
 export function getTaskTotalHours(task: ProjectTask) {
+  if (!task) {
+    return 0;
+  }
+
   if (!task.parent_id && task.child_ids?.length) {
     // it's a task with subtasks
     return (

@@ -1,4 +1,3 @@
-import NextLink from "next/link";
 import { useAccount } from "wagmi";
 
 import { useState } from "react";
@@ -6,9 +5,8 @@ import SwipeableViews from "react-swipeable-views";
 
 import { Alert, Badge, Box, CircularProgress, Link, Tab, Tabs } from "@mui/material";
 
-import { TOKEN_SYMBOL } from "@lib/utils";
-
 import OffersList from "@components/tokens/OffersList";
+import Redemption from "@components/tokens/Redemption";
 import UserActions from "@components/tokens/UserActions";
 import UserBalance from "@components/tokens/UserBalance";
 
@@ -73,18 +71,6 @@ export default function Tokens() {
   return (
     <>
       <UserBalance />
-      <Alert severity="info" sx={{ mb: 2 }}>
-        <strong>Governance Tokens</strong> provide holders with voting and dividend rights, but must be offered to
-        contributors before becoming available for trading in the secondary market. <br />
-        <strong>{TOKEN_SYMBOL} Tokens</strong> do not possess these rights or limitations, allowing for unrestricted
-        trading on the secondary market at any time.
-        <br />
-        <br />
-        For IBC specific tools, please visit the{" "}
-        <Link component={NextLink} href="/ibc">
-          dedicated page
-        </Link>
-      </Alert>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} aria-label="tasks tabs">
           <Tab label="Tokens" {...a11yProps(0)} />
@@ -96,7 +82,8 @@ export default function Tokens() {
             }
             {...a11yProps(1)}
           />
-          <Tab label="Expired offers" {...a11yProps(1)} />
+          <Tab label="Expired offers" {...a11yProps(2)} />
+          <Tab label="Redemption" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
@@ -116,6 +103,9 @@ export default function Tokens() {
           ) : (
             <OffersList offers={data?.expiredOffers || []} noOffersMessage="No expired offers" />
           )}
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          {value === 3 ? <Redemption /> : null}
         </TabPanel>
       </SwipeableViews>
     </>
