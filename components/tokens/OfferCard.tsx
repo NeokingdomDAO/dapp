@@ -64,7 +64,7 @@ export default function OfferCard({ offer, onMatchClicked }: { offer: Offer; onM
             justifyContent: "flex-end",
           }}
         >
-          {amount === 0 ? (
+          {bigIntToNum(offer.amount) === 0 ? (
             <Alert sx={{ p: 0, pl: 1, pr: 1 }}>Offer fully matched</Alert>
           ) : (
             <Button size="small" variant="contained" onClick={() => onMatchClicked(offer)}>

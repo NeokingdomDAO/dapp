@@ -12,7 +12,7 @@ export const isNonExpired = (offer: Offer) => Number(offer.expirationTimestamp) 
 export const isExpired = (offer: Offer) => Number(offer.expirationTimestamp) * 1000 <= Date.now();
 
 export const bigIntToBigNum = (bigIntNum: BigInt) => BigNumber.from(bigIntNum);
-export const bigIntToNum = (bigIntNum: BigInt) => Number(formatEther(BigNumber.from(bigIntNum)));
+export const bigIntToNum = (bigIntNum: BigInt) => Math.ceil(Number(formatEther(BigNumber.from(bigIntNum))));
 
 export const computeBalances = (daoUser: DaoUser | null): ComputedBalances => {
   const governanceTokens = bigIntToBigNum(daoUser?.governanceVaultedBalance || BigInt(0)).add(
@@ -38,13 +38,13 @@ export const computeBalances = (daoUser: DaoUser | null): ComputedBalances => {
   const vestingTokens = bigIntToBigNum(daoUser?.governanceVestingBalance || BigInt(0));
 
   return {
-    governanceTokens: Number(formatEther(governanceTokens)),
-    neokTokens: Number(formatEther(neokTokens)),
-    lockedTokens: Number(formatEther(lockedTokens)),
-    offeredTokens: Number(formatEther(offeredTokens)),
-    unlockedTokens: Number(formatEther(unlockedTokens)),
-    vestingTokens: Number(formatEther(vestingTokens)),
-    votingPower: bigIntToNum(daoUser?.votingPower || BigInt(0)),
+    governanceTokens: Math.ceil(Number(formatEther(governanceTokens || BigInt(0)))),
+    neokTokens: Math.ceil(Number(formatEther(neokTokens || BigInt(0)))),
+    lockedTokens: Math.ceil(Number(formatEther(lockedTokens || BigInt(0)))),
+    offeredTokens: Math.ceil(Number(formatEther(offeredTokens || BigInt(0)))),
+    unlockedTokens: Math.ceil(Number(formatEther(unlockedTokens || BigInt(0)))),
+    vestingTokens: Math.ceil(Number(formatEther(vestingTokens || BigInt(0)))),
+    votingPower: Math.ceil(bigIntToNum(daoUser?.votingPower || BigInt(0))),
   };
 };
 

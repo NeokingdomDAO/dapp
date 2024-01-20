@@ -8,6 +8,7 @@ export const getUserRedemption = gql`
       createBy
       updateTimestamp
       endTimestamp
+      startTimestamp
       redemptionHistory {
         id
         amount
