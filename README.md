@@ -8,3 +8,7 @@ This is the code for the NeoKingdom DAO dapp
 pnpm i
 pnpm run dev
 ```
+
+## Get env variables locally
+
+vercel env pull --environment=production|staging .env.local

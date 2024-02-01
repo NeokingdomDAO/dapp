@@ -17,6 +17,7 @@ const GET_EURUSDT_ENDPOINT = "https://api.binance.com/api/v3/avgPrice?symbol=EUR
 
 export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: () => void; maxToRedeem: number }) {
   const [toRedeem, setToRedeem] = useState(0);
+  const [generatedPdf, setGeneratedPdf] = useState<Boolean>(false);
 
   const { onSubmit } = useRedeemTokens();
   const { data: eurUsdt, isLoading: isLoadingEurUsdt } = useSWR(GET_EURUSDT_ENDPOINT, fetcher);
@@ -26,10 +27,16 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
     return <CircularProgress />;
   }
 
+  const axlUSDT = Math.round((toRedeem * Number(eurUsdt.price) + Number.EPSILON) * 100) / 100;
+
   const handleRedeemTokens = async () => {
     const submitted = await onSubmit({ amount: toRedeem });
     if (submitted) {
       closeModal();
+      // we should call the `openModalToGenerateInvoice` function here
+      // and then we open that modal (can't be closed until the invoice is generated)
+      // and then we call the `generateInvoice` function
+      // that does a post request to the API
       setToRedeem(0);
     }
   };
@@ -71,21 +78,35 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
       </Box>
       {toRedeem > 0 && (
         <Alert severity="info" sx={{ mt: 3 }}>
-          You will receive {Math.round((toRedeem * Number(eurUsdt.price) + Number.EPSILON) * 100) / 100} axlUSDT
+          You will receive {axlUSDT} axlUSDT. In order for the redemption to be processed, you need to create an invoice
+          and send it to ...
         </Alert>
       )}
       <Box sx={{ textAlign: "center", pt: 2 }}>
-        <LoadingButton
-          fullWidth
-          loading={(isAwaitingConfirmation || isLoading) && type === BLOCKCHAIN_TRANSACTION_KEYS.REDEEM_TOKENS}
-          variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
-          disabled={toRedeem === 0}
-          onClick={handleRedeemTokens}
-        >
-          Redeem Tokens
-        </LoadingButton>
+        {toRedeem > 0 && !generatedPdf && (
+          <LoadingButton
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+            href={`/api/generate-invoice?amount=${toRedeem}&axlUSDT=${axlUSDT}`}
+            target="_blank"
+          >
+            Generate invoice pdf
+          </LoadingButton>
+        )}
+        {toRedeem > 0 && generatedPdf && (
+          <LoadingButton
+            fullWidth
+            loading={(isAwaitingConfirmation || isLoading) && type === BLOCKCHAIN_TRANSACTION_KEYS.REDEEM_TOKENS}
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+            onClick={handleRedeemTokens}
+          >
+            Redeem Tokens
+          </LoadingButton>
+        )}
       </Box>
     </>
   );

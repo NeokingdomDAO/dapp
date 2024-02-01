@@ -41,8 +41,8 @@ export default function Redemption() {
           finalAmount,
           (userBalanceData?.balance.governanceTokens || 0) + (userBalanceData?.balance.unlockedTokens || 0),
         );
-        const canBeRedeemed =
-          maxToRedeem > 0 &&
+        const canBeRedeemed = true;
+        maxToRedeem > 0 &&
           Number(redemption.startTimestamp) <= Date.now() / 1000 &&
           Number(redemption.endTimestamp) > Date.now() / 1000;
         return (
