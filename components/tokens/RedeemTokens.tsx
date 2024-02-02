@@ -3,7 +3,17 @@ import useSWR from "swr";
 import { useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
-import { Alert, Box, Button, CircularProgress, Slider, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  FormControlLabel,
+  Slider,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
 import { fetcher } from "@lib/net";
@@ -22,6 +32,7 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
   const { onSubmit } = useRedeemTokens();
   const { data: eurUsdt, isLoading: isLoadingEurUsdt } = useSWR(GET_EURUSDT_ENDPOINT, fetcher);
   const { isAwaitingConfirmation, isLoading, type } = useBlockchainTransactionStore();
+  const [shouldConfirm, setShouldConfirm] = useState(false);
 
   if (isLoadingEurUsdt) {
     return <CircularProgress />;

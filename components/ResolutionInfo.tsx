@@ -105,9 +105,7 @@ export default function ResolutionInfo({
         )}
         {votingUser && (isConnected || user?.isLoggedIn) && (
           <>
-            <Typography variant="body2" sx={{ mb: 1 }}>
-              Your Vote:{" "}
-            </Typography>
+            <Typography variant="body2">Your Vote: </Typography>
             <Chip
               sx={{ ml: 0.5, mr: hideState ? 0 : 2 }}
               size={chipSize}

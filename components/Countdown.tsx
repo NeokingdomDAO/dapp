@@ -10,6 +10,7 @@ type Props = {
   prefixLabel: string;
   inline?: boolean;
   disableCountdown?: boolean;
+  hideIfPast?: boolean;
 };
 
 export default function Countdown({
@@ -18,9 +19,11 @@ export default function Countdown({
   targetDate,
   inline = true,
   disableCountdown = false,
+  hideIfPast = false,
 }: Props) {
   const [display, setDisplay] = useState<string | null>(null);
   const [afterPrefix, setAfterPrefix] = useState<string>("");
+  const [shouldHide, setShouldHide] = useState<boolean>(false);
 
   useEffect(() => {
     let timeout: null | any = null;
@@ -28,6 +31,10 @@ export default function Countdown({
     const setToDisplay = () => {
       const now = Date.now();
       const difference = differenceInSeconds(targetDate, now);
+      if (difference < 0 && hideIfPast) {
+        setShouldHide(true);
+        return;
+      }
       if (difference <= startCounterThresholdSeconds && !disableCountdown) {
         const minutes = Math.floor(difference / 60);
         const seconds = difference % 60;
@@ -55,6 +62,10 @@ export default function Countdown({
       clearInterval(timeout);
     };
   }, [targetDate, startCounterThresholdSeconds, disableCountdown]);
+
+  if (shouldHide) {
+    return null;
+  }
 
   if (!display) {
     return <CircularProgress size={18} />;
