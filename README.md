@@ -11,4 +11,7 @@ pnpm run dev
 
 ## Get env variables locally
 
-vercel env pull --environment=production|staging .env.local
+- install [vercel CLI](https://vercel.com/docs/cli)
+- run `vercel link`
+- run `vercel env pull --environment=production|staging .env.local`
+- profit 💰
