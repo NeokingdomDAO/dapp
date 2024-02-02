@@ -1,4 +1,4 @@
-import { addDays, differenceInDays, differenceInSeconds, format } from "date-fns";
+import { addDays, differenceInSeconds, format } from "date-fns";
 
 import { useMemo, useState } from "react";
 
@@ -93,11 +93,12 @@ export default function Redemption() {
         </Alert>
       )}
       {data?.map((redemption) => {
-        const redemptionAmount =
+        const redeemableAmount =
           bigIntToNum(redemption.amount) -
           redemption.redemptionHistory.reduce((sum, history) => sum + bigIntToNum(history.amount), 0);
-        const maxToRedeem = Math.min(redemptionAmount, userBalanceTotal);
+        const maxToRedeem = Math.min(redeemableAmount, userBalanceTotal);
         const canBeRedeemed =
+          !hasRedeemedInLast30Days &&
           maxToRedeem > 0 &&
           Number(redemption.startTimestamp) <= Date.now() / 1000 &&
           Number(redemption.endTimestamp) > Date.now() / 1000;
@@ -105,13 +106,13 @@ export default function Redemption() {
           <Paper sx={{ display: "flex", justifyContent: "space-between", p: 2, mb: 1 }} key={redemption.id}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <Typography variant="h5">
-                {redemptionAmount} {TOKEN_SYMBOL}
+                {redeemableAmount} {TOKEN_SYMBOL}
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 Redeemable from <b>{getRelativeDateFromUnixTimestamp(redemption.startTimestamp, true)}</b> until{" "}
                 <b>{getRelativeDateFromUnixTimestamp(redemption.endTimestamp, true)}</b>
               </Typography>
-              {userBalanceTotal < redemptionAmount && (
+              {userBalanceTotal < redeemableAmount && (
                 <Alert severity="info" sx={{ mt: 2 }}>
                   As your balance is less than the redemption amount, the max you can redeem will be capped to your
                   available balance: {userBalanceTotal} {TOKEN_SYMBOL}
