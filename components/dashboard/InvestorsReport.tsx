@@ -1,3 +1,5 @@
+import useSWR from "swr";
+
 import { useState } from "react";
 
 import { InfoOutlined } from "@mui/icons-material";
@@ -10,6 +12,7 @@ import {
   FormControl,
   IconButton,
   InputLabel,
+  Link,
   MenuItem,
   Paper,
   Select,
@@ -20,6 +23,7 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { fetcher } from "@lib/net";
 import { TOKEN_SYMBOL, moneyFormatter } from "@lib/utils";
 
 import Modal from "@components/Modal";
@@ -31,6 +35,11 @@ import Chart from "./Chart";
 type ChartVizType = "default" | "accumulated";
 
 export default function InvestorsReport() {
+  const {
+    data: tokenPrice,
+    isLoading: isLoadingGetTokenPrice,
+    error: errorGettingTokenPrice,
+  } = useSWR<{ priceEur: number; priceUsd: number }>("/api/token-price/neokingdom-dao", fetcher);
   const { data, dataAccumulated, isLoading, error } = useGetInvestorsReportData();
   const [chartType, setChartType] = useState<ChartVizType>("accumulated");
   const theme = useTheme();
@@ -38,11 +47,16 @@ export default function InvestorsReport() {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  if (error) {
-    return null;
+  if (error || errorGettingTokenPrice) {
+    return (
+      <Alert severity="warning">
+        <AlertTitle>Error</AlertTitle>
+        An error occurred while fetching the investors report data. Please try again later.
+      </Alert>
+    );
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingGetTokenPrice) {
     return <CircularProgress />;
   }
 
@@ -80,7 +94,14 @@ export default function InvestorsReport() {
             <br />
             <br />
             External value = total {TOKEN_SYMBOL} supply x secondary market price of {TOKEN_SYMBOL} token. In
-            traditional terms the external value could also be described as the: <i>&quot;market cap&quot;</i>.
+            traditional terms the external value could also be described as the: <i>&quot;market cap&quot;</i>.<br />
+            <br />
+            The price of the token ({tokenPrice?.priceEur} EUR, or {tokenPrice?.priceUsd} USD) is taken{" "}
+            <Link href="https://coinmarketcap.com/currencies/neokingdom-dao/" rel="noopener" target="_blank">
+              {" "}
+              from coinmarketcap
+            </Link>
+            .
           </Typography>
         </Alert>
       </Modal>
@@ -119,9 +140,11 @@ export default function InvestorsReport() {
             <InfoOutlined />
           </IconButton>
           <Typography variant="h6">External Market Value</Typography>
-          <Typography variant="caption">1 {TOKEN_SYMBOL} = 1 Euro</Typography>
+          <Typography variant="caption">
+            1 {TOKEN_SYMBOL} = {tokenPrice?.priceEur} Euro
+          </Typography>
           <Typography variant="h4" sx={{ pt: 2 }}>
-            {moneyFormatter.format(totalSupply)}
+            {moneyFormatter.format(totalSupply * (tokenPrice?.priceEur || 1))}
           </Typography>
         </Paper>
       </Stack>
