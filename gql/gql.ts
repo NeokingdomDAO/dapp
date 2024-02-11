@@ -14,14 +14,14 @@ import * as types from "./graphql";
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+  "\n  query GetLegacyResolution($id: ID!) {\n    resolution(id: $id) {\n      ...legacyResolutionFragment\n    }\n  }\n":
+    types.GetLegacyResolutionDocument,
   "\n  query GetLegacyResolutions {\n    resolutions(orderBy: createTimestamp, orderDirection: desc) {\n      ...legacyResolutionFragment\n    }\n  }\n":
     types.GetLegacyResolutionsDocument,
   "\n  query GetResolution($id: ID!) {\n    resolution(id: $id) {\n      ...resolutionFragment\n    }\n  }\n":
     types.GetResolutionDocument,
   "\n  query GetResolutions {\n    resolutions(orderBy: createTimestamp, orderDirection: desc) {\n      ...resolutionFragment\n    }\n  }\n":
     types.GetResolutionsDocument,
-  "\n  query GetSubgraphState {\n    state: _meta {\n      hasIndexingErrors\n      block {\n        hash\n        timestamp\n        number\n      }\n    }\n  }\n":
-    types.GetSubgraphStateDocument,
   "\n  fragment resolutionFragment on Resolution {\n    id\n    title\n    content\n    isNegative\n    resolutionType {\n      ...resolutionTypeFragment\n    }\n    yesVotesTotal\n    createTimestamp\n    updateTimestamp\n    approveTimestamp\n    rejectTimestamp\n    executionTimestamp\n    createBy\n    updateBy\n    approveBy\n    rejectBy\n    hasQuorum\n    executionTo\n    executionData\n    addressedContributor\n    voters {\n      id\n      address\n      votingPower\n      hasVoted\n      hasVotedYes\n      delegated\n    }\n  }\n":
     types.ResolutionFragmentFragmentDoc,
   "\n  fragment legacyResolutionFragment on Resolution {\n    id\n    title\n    content\n    isNegative\n    resolutionType {\n      ...resolutionTypeFragment\n    }\n    yesVotesTotal\n    createTimestamp\n    updateTimestamp\n    approveTimestamp\n    rejectTimestamp\n    executionTimestamp\n    createBy\n    updateBy\n    approveBy\n    rejectBy\n    hasQuorum\n    executionTo\n    executionData\n    voters {\n      id\n      address\n      votingPower\n      hasVoted\n      hasVotedYes\n      delegated\n    }\n  }\n":
@@ -48,6 +48,12 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "\n  query GetLegacyResolution($id: ID!) {\n    resolution(id: $id) {\n      ...legacyResolutionFragment\n    }\n  }\n",
+): (typeof documents)["\n  query GetLegacyResolution($id: ID!) {\n    resolution(id: $id) {\n      ...legacyResolutionFragment\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "\n  query GetLegacyResolutions {\n    resolutions(orderBy: createTimestamp, orderDirection: desc) {\n      ...legacyResolutionFragment\n    }\n  }\n",
 ): (typeof documents)["\n  query GetLegacyResolutions {\n    resolutions(orderBy: createTimestamp, orderDirection: desc) {\n      ...legacyResolutionFragment\n    }\n  }\n"];
 /**
@@ -62,12 +68,6 @@ export function graphql(
 export function graphql(
   source: "\n  query GetResolutions {\n    resolutions(orderBy: createTimestamp, orderDirection: desc) {\n      ...resolutionFragment\n    }\n  }\n",
 ): (typeof documents)["\n  query GetResolutions {\n    resolutions(orderBy: createTimestamp, orderDirection: desc) {\n      ...resolutionFragment\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: "\n  query GetSubgraphState {\n    state: _meta {\n      hasIndexingErrors\n      block {\n        hash\n        timestamp\n        number\n      }\n    }\n  }\n",
-): (typeof documents)["\n  query GetSubgraphState {\n    state: _meta {\n      hasIndexingErrors\n      block {\n        hash\n        timestamp\n        number\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

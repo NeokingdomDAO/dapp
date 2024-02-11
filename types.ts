@@ -40,7 +40,7 @@ export type DaoManagerEntity = {
 };
 
 export type ResolutionEntity = GetResolutionsQuery["resolutions"]["0"] &
-  GetLegacyResolutionsQuery["resolutions"]["0"] & { isLegacy: true };
+  GetLegacyResolutionsQuery["resolutions"]["0"] & { isLegacy?: boolean };
 
 export type ResolutionAction = {
   label: string;

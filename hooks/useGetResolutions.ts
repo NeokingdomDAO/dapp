@@ -1,8 +1,6 @@
-import { getLegacyResolutionsQuery } from "@graphql/queries/subgraph/get-legacy-resolutions.query";
+import { getLegacyResolutionsQuery } from "@graphql/queries/subgraph/get-legacy-resolutions-query";
 import { getResolutionsQuery } from "@graphql/queries/subgraph/get-resolutions-query";
 import { useGraphQL, useLegacyGraphQL } from "@graphql/useGraphql";
-
-import { GetLegacyResolutionsQuery, GetResolutionsQuery, ResolutionFragmentFragmentDoc } from "../gql/graphql";
 
 const REFRESH_EVERY_MS = 3000;
 

@@ -1763,6 +1763,52 @@ export enum _SubgraphErrorPolicy_ {
   Deny = "deny",
 }
 
+export type GetLegacyResolutionQueryVariables = Exact<{
+  id: Scalars["ID"]["input"];
+}>;
+
+export type GetLegacyResolutionQuery = {
+  __typename?: "Query";
+  resolution?: {
+    __typename?: "Resolution";
+    id: string;
+    title: string;
+    content: string;
+    isNegative: boolean;
+    yesVotesTotal?: any | null;
+    createTimestamp: any;
+    updateTimestamp?: any | null;
+    approveTimestamp?: any | null;
+    rejectTimestamp?: any | null;
+    executionTimestamp?: any | null;
+    createBy: any;
+    updateBy?: any | null;
+    approveBy?: any | null;
+    rejectBy?: any | null;
+    hasQuorum?: boolean | null;
+    executionTo: Array<any>;
+    executionData: Array<any>;
+    resolutionType: {
+      __typename?: "ResolutionType";
+      id: string;
+      name: string;
+      quorum: any;
+      noticePeriod: any;
+      votingPeriod: any;
+      canBeNegative: boolean;
+    };
+    voters?: Array<{
+      __typename?: "ResolutionVoter";
+      id: string;
+      address: any;
+      votingPower: any;
+      hasVoted: boolean;
+      hasVotedYes: boolean;
+      delegated: any;
+    }> | null;
+  } | null;
+};
+
 export type GetLegacyResolutionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetLegacyResolutionsQuery = {
@@ -1897,17 +1943,6 @@ export type GetResolutionsQuery = {
       delegated: any;
     }> | null;
   }>;
-};
-
-export type GetSubgraphStateQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetSubgraphStateQuery = {
-  __typename?: "Query";
-  state?: {
-    __typename?: "_Meta_";
-    hasIndexingErrors: boolean;
-    block: { __typename?: "_Block_"; hash?: any | null; timestamp?: number | null; number: number };
-  } | null;
 };
 
 export type ResolutionFragmentFragment = {
@@ -2163,6 +2198,109 @@ export const LegacyResolutionFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<LegacyResolutionFragmentFragment, unknown>;
+export const GetLegacyResolutionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetLegacyResolution" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "resolution" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: { kind: "Variable", name: { kind: "Name", value: "id" } },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "legacyResolutionFragment" } }],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "resolutionTypeFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ResolutionType" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "quorum" } },
+          { kind: "Field", name: { kind: "Name", value: "noticePeriod" } },
+          { kind: "Field", name: { kind: "Name", value: "votingPeriod" } },
+          { kind: "Field", name: { kind: "Name", value: "canBeNegative" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "legacyResolutionFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Resolution" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "isNegative" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "resolutionType" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "resolutionTypeFragment" } }],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "yesVotesTotal" } },
+          { kind: "Field", name: { kind: "Name", value: "createTimestamp" } },
+          { kind: "Field", name: { kind: "Name", value: "updateTimestamp" } },
+          { kind: "Field", name: { kind: "Name", value: "approveTimestamp" } },
+          { kind: "Field", name: { kind: "Name", value: "rejectTimestamp" } },
+          { kind: "Field", name: { kind: "Name", value: "executionTimestamp" } },
+          { kind: "Field", name: { kind: "Name", value: "createBy" } },
+          { kind: "Field", name: { kind: "Name", value: "updateBy" } },
+          { kind: "Field", name: { kind: "Name", value: "approveBy" } },
+          { kind: "Field", name: { kind: "Name", value: "rejectBy" } },
+          { kind: "Field", name: { kind: "Name", value: "hasQuorum" } },
+          { kind: "Field", name: { kind: "Name", value: "executionTo" } },
+          { kind: "Field", name: { kind: "Name", value: "executionData" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "voters" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "address" } },
+                { kind: "Field", name: { kind: "Name", value: "votingPower" } },
+                { kind: "Field", name: { kind: "Name", value: "hasVoted" } },
+                { kind: "Field", name: { kind: "Name", value: "hasVotedYes" } },
+                { kind: "Field", name: { kind: "Name", value: "delegated" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetLegacyResolutionQuery, GetLegacyResolutionQueryVariables>;
 export const GetLegacyResolutionsDocument = {
   kind: "Document",
   definitions: [
@@ -2470,41 +2608,3 @@ export const GetResolutionsDocument = {
     },
   ],
 } as unknown as DocumentNode<GetResolutionsQuery, GetResolutionsQueryVariables>;
-export const GetSubgraphStateDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "GetSubgraphState" },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            alias: { kind: "Name", value: "state" },
-            name: { kind: "Name", value: "_meta" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "hasIndexingErrors" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "block" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hash" } },
-                      { kind: "Field", name: { kind: "Name", value: "timestamp" } },
-                      { kind: "Field", name: { kind: "Name", value: "number" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetSubgraphStateQuery, GetSubgraphStateQueryVariables>;
