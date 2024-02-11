@@ -22,7 +22,13 @@
       "@hooks/*": ["hooks/*"],
       "@contracts/*": ["contracts/*"],
       "@store/*": ["store/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "./gql/schema.graphql"
+      }
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "env.d.ts"],
   "exclude": ["node_modules", "public"]

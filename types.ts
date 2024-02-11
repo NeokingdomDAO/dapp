@@ -1,16 +1,12 @@
 import { Window as KeplrWindow } from "@keplr-wallet/types";
 
-export type ResolutionVoter = {
-  id: string;
-  votingPower: string;
+import { GetLegacyResolutionsQuery, GetResolutionsQuery, ResolutionVoter } from "./gql/graphql";
+
+export type ResolutionVoterEnhanced = NonNullable<ResolutionEntity["voters"]>["0"] & {
   votingPowerInt: number;
-  address: string;
-  hasVoted: boolean;
-  hasVotedYes: boolean;
-  delegated: string;
   usedPoa: boolean;
   beingDelegatedBy: ResolutionVoter[];
-  delegating: ResolutionVoter | null;
+  delegating: ResolutionVoter | undefined | null;
 };
 
 export type ResolutionsAcl = {
@@ -43,30 +39,8 @@ export type DaoManagerEntity = {
   totalVotingPower: BigInt;
 };
 
-export type ResolutionEntity = {
-  id: string;
-  title: string;
-  content: string;
-  isNegative: boolean;
-  resolutionType: ResolutionTypeEntity;
-  yesVotesTotal: string;
-  createTimestamp: string;
-  updateTimestamp: string;
-  approveTimestamp: string;
-  rejectTimestamp: string;
-  addressedContributor: string;
-  createBy: string;
-  updateBy: string;
-  approveBy: string;
-  rejectBy: string;
-  voters: ResolutionVoter[];
-  hasQuorum: boolean;
-  executionTimestamp?: string;
-  executionData?: string[];
-  executionTo?: string[];
-  totalVotingPower: BigInt;
-  isLegacy?: boolean;
-};
+export type ResolutionEntity = GetResolutionsQuery["resolutions"]["0"] &
+  GetLegacyResolutionsQuery["resolutions"]["0"] & { isLegacy: true };
 
 export type ResolutionAction = {
   label: string;
@@ -92,10 +66,10 @@ export type ResolutionEntityEnhanced = ResolutionEntity & {
   action: ResolutionAction;
   resolutionTypeInfo: ResolutionTypeInfo;
   votingStatus: {
-    votersHaveNotVoted: ResolutionVoter[];
-    votersHaveVoted: ResolutionVoter[];
-    votersHaveVotedYes: ResolutionVoter[];
-    votersHaveVotedNo: ResolutionVoter[];
+    votersHaveNotVoted?: ResolutionVoterEnhanced[];
+    votersHaveVoted?: ResolutionVoterEnhanced[];
+    votersHaveVotedYes?: ResolutionVoterEnhanced[];
+    votersHaveVotedNo?: ResolutionVoterEnhanced[];
   };
 };
 

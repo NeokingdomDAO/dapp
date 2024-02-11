@@ -2,10 +2,13 @@ import { Grid } from "@mui/material";
 
 import { isSameAddress } from "@lib/utils";
 
-import { ResolutionVoter } from "../../types";
+import { ResolutionVoterEnhanced } from "../../types";
 import UserCard from "./UserCard";
 
-export const sortByVotingPower = ({ votingPower: a }: ResolutionVoter, { votingPower: b }: ResolutionVoter) => {
+export const sortByVotingPower = (
+  { votingPower: a }: ResolutionVoterEnhanced,
+  { votingPower: b }: ResolutionVoterEnhanced,
+) => {
   if (Number(a) < Number(b)) {
     return 1;
   }
@@ -19,7 +22,7 @@ export default function VotingUsers({
   voters,
   addressedContributor,
 }: {
-  voters: ResolutionVoter[];
+  voters: ResolutionVoterEnhanced[];
   addressedContributor: string;
 }) {
   return (

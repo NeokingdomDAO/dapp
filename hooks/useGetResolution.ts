@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import { clientLegacyGraph, fetcherWithParams, legacyFetcherWithParams } from "@graphql/client";
+import { fetcherWithParams, isLegacyClientEnabled, legacyFetcherWithParams } from "@graphql/client";
 import { getLegacyResolutionQuery } from "@graphql/queries/get-legacy-resolution.query";
 import { getResolutionQuery } from "@graphql/queries/get-resolution.query";
 
@@ -17,7 +17,7 @@ export default function useGetResolution() {
   );
 
   const shouldFetchLegacy =
-    !isLoadingResolution && resolutionData && !resolutionData.resolution && router?.query?.id && clientLegacyGraph;
+    !isLoadingResolution && resolutionData && !resolutionData.resolution && router?.query?.id && isLegacyClientEnabled;
 
   const { data: legacyResolutionData, isLoading: isLoadingLegacyResolution } = useSWR<any>(
     shouldFetchLegacy ? [getLegacyResolutionQuery, { id: router.query.id }] : null,

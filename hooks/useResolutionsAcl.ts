@@ -1,10 +1,11 @@
 import useSWR from "swr";
-import { ResolutionVoter, ResolutionsAcl } from "types";
+import { ResolutionsAcl } from "types";
 import { useAccount } from "wagmi";
 
 import { fetcher } from "@graphql/client";
 import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
 
+import { ResolutionVoter } from "../gql/graphql";
 import useShareholderStatus from "./useShareholderStatus";
 
 const DEFAULT_ACL = {

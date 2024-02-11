@@ -1,17 +1,18 @@
-import useSWR from "swr";
-import { ResolutionEntity } from "types";
+import { getLegacyResolutionsQuery } from "@graphql/queries/subgraph/get-legacy-resolutions.query";
+import { getResolutionsQuery } from "@graphql/queries/subgraph/get-resolutions-query";
+import { useGraphQL, useLegacyGraphQL } from "@graphql/useGraphql";
 
-import { clientLegacyGraph, fetcher, legacyFetcher } from "@graphql/client";
-import { getLegacyResolutionsQuery } from "@graphql/queries/get-legacy-resolutions.query";
-import { getResolutionsQuery } from "@graphql/queries/get-resolutions.query";
+import { GetLegacyResolutionsQuery, GetResolutionsQuery, ResolutionFragmentFragmentDoc } from "../gql/graphql";
 
 const REFRESH_EVERY_MS = 3000;
 
 export default function useGetResolutions() {
-  const { data, isLoading, error } = useSWR<any>(getResolutionsQuery, fetcher, { refreshInterval: REFRESH_EVERY_MS });
-  const { data: legacyResolutionsData, isLoading: isLoadingLegacyFetcher } = useSWR<any>(
-    !!clientLegacyGraph ? getLegacyResolutionsQuery : null,
-    legacyFetcher,
+  const { data, isLoading, error } = useGraphQL(getResolutionsQuery, {
+    refreshInterval: REFRESH_EVERY_MS,
+  });
+
+  const { data: legacyResolutionsData, isLoading: isLoadingLegacyFetcher } = useLegacyGraphQL(
+    getLegacyResolutionsQuery,
     {
       refreshInterval: REFRESH_EVERY_MS,
     },
@@ -20,7 +21,7 @@ export default function useGetResolutions() {
   return {
     resolutions: [
       ...(data?.resolutions || []),
-      ...(legacyResolutionsData?.resolutions || []).map((res: ResolutionEntity) => ({ ...res, isLegacy: true })),
+      ...(legacyResolutionsData?.resolutions || []).map((res) => ({ ...res, isLegacy: true })),
     ],
     isLoading: isLoading || isLoadingLegacyFetcher,
     error,
