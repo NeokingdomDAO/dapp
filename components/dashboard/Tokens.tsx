@@ -2,8 +2,9 @@ import useSWR from "swr";
 
 import { Box, Divider, Typography } from "@mui/material";
 
-import { fetcher } from "@graphql/client";
-import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
+import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
+
+import { useGraphQL } from "@lib/graphql/useGraphql";
 
 import UserBalance from "@components/tokens/UserBalance";
 
@@ -11,7 +12,7 @@ import useUserBalanceAndOffers, { bigIntToNum } from "@hooks/useUserBalanceAndOf
 
 export default function Tokens() {
   const { data, error } = useUserBalanceAndOffers();
-  const { data: daoManagerData } = useSWR<any>(getDaoManagerQuery, fetcher);
+  const { data: daoManagerData } = useGraphQL(getDaoManagerQuery);
 
   const totalVotingPower = bigIntToNum(daoManagerData?.daoManager?.totalVotingPower || BigInt(0));
   const userVotingPower = ((100 * (data?.balance?.votingPower || 0)) / totalVotingPower).toFixed(2);

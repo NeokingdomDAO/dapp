@@ -1,11 +1,11 @@
-import useSWR from "swr";
+import { ResolutionVoter } from "gql/graphql";
 import { ResolutionsAcl } from "types";
 import { useAccount } from "wagmi";
 
-import { fetcher } from "@graphql/client";
-import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
+import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
 
-import { ResolutionVoter } from "../gql/graphql";
+import { useGraphQL } from "@lib/graphql/useGraphql";
+
 import useShareholderStatus from "./useShareholderStatus";
 
 const DEFAULT_ACL = {
@@ -21,7 +21,7 @@ const DEFAULT_ACL = {
 
 export default function useResolutionsAcl(): { acl: ResolutionsAcl; error?: boolean; isLoading?: boolean } {
   const { address } = useAccount();
-  const { data, error, isLoading } = useSWR<any>(address ? getDaoManagerQuery : null, fetcher);
+  const { data, error, isLoading } = useGraphQL(address ? getDaoManagerQuery : null);
   const { daoUsers, isLoading: isLoadingShareholderStatus, getShareholderStatus } = useShareholderStatus();
 
   if (!data || error || !address || isLoading || isLoadingShareholderStatus) {

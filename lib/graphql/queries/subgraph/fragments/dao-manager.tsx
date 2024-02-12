@@ -1,6 +1,6 @@
-import { gql } from "graphql-request";
+import { graphql } from "gql";
 
-export const daoManagerFragment = gql`
+export const daoManagerFragment = graphql(`
   fragment daoManagerFragment on DaoManager {
     id
     managingBoardAddresses
@@ -9,4 +9,4 @@ export const daoManagerFragment = gql`
     shareholdersAddresses
     totalVotingPower
   }
-`;
+`);

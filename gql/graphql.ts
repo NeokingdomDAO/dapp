@@ -1763,6 +1763,127 @@ export enum _SubgraphErrorPolicy_ {
   Deny = "deny",
 }
 
+export type DaoManagerFragmentFragment = {
+  __typename?: "DaoManager";
+  id: string;
+  managingBoardAddresses: Array<any>;
+  contributorsAddresses: Array<any>;
+  investorsAddresses: Array<any>;
+  shareholdersAddresses: Array<any>;
+  totalVotingPower: any;
+};
+
+export type ResolutionTypeFragmentFragment = {
+  __typename?: "ResolutionType";
+  id: string;
+  name: string;
+  quorum: any;
+  noticePeriod: any;
+  votingPeriod: any;
+  canBeNegative: boolean;
+};
+
+export type ResolutionFragmentFragment = {
+  __typename?: "Resolution";
+  id: string;
+  title: string;
+  content: string;
+  isNegative: boolean;
+  yesVotesTotal?: any | null;
+  createTimestamp: any;
+  updateTimestamp?: any | null;
+  approveTimestamp?: any | null;
+  rejectTimestamp?: any | null;
+  executionTimestamp?: any | null;
+  createBy: any;
+  updateBy?: any | null;
+  approveBy?: any | null;
+  rejectBy?: any | null;
+  hasQuorum?: boolean | null;
+  executionTo: Array<any>;
+  executionData: Array<any>;
+  addressedContributor?: any | null;
+  resolutionType: {
+    __typename?: "ResolutionType";
+    id: string;
+    name: string;
+    quorum: any;
+    noticePeriod: any;
+    votingPeriod: any;
+    canBeNegative: boolean;
+  };
+  voters?: Array<{
+    __typename?: "ResolutionVoter";
+    id: string;
+    address: any;
+    votingPower: any;
+    hasVoted: boolean;
+    hasVotedYes: boolean;
+    delegated: any;
+  }> | null;
+};
+
+export type LegacyResolutionFragmentFragment = {
+  __typename?: "Resolution";
+  id: string;
+  title: string;
+  content: string;
+  isNegative: boolean;
+  yesVotesTotal?: any | null;
+  createTimestamp: any;
+  updateTimestamp?: any | null;
+  approveTimestamp?: any | null;
+  rejectTimestamp?: any | null;
+  executionTimestamp?: any | null;
+  createBy: any;
+  updateBy?: any | null;
+  approveBy?: any | null;
+  rejectBy?: any | null;
+  hasQuorum?: boolean | null;
+  executionTo: Array<any>;
+  executionData: Array<any>;
+  resolutionType: {
+    __typename?: "ResolutionType";
+    id: string;
+    name: string;
+    quorum: any;
+    noticePeriod: any;
+    votingPeriod: any;
+    canBeNegative: boolean;
+  };
+  voters?: Array<{
+    __typename?: "ResolutionVoter";
+    id: string;
+    address: any;
+    votingPower: any;
+    hasVoted: boolean;
+    hasVotedYes: boolean;
+    delegated: any;
+  }> | null;
+};
+
+export type GetDaoManagerQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDaoManagerQuery = {
+  __typename?: "Query";
+  daoManager?: {
+    __typename?: "DaoManager";
+    id: string;
+    managingBoardAddresses: Array<any>;
+    contributorsAddresses: Array<any>;
+    investorsAddresses: Array<any>;
+    shareholdersAddresses: Array<any>;
+    totalVotingPower: any;
+  } | null;
+};
+
+export type GetDelegationUsersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetDelegationUsersQuery = {
+  __typename?: "Query";
+  delegationUsers: Array<{ __typename?: "DelegationUser"; id: string; address: any; delegated: any }>;
+};
+
 export type GetLegacyResolutionQueryVariables = Exact<{
   id: Scalars["ID"]["input"];
 }>;
@@ -1900,6 +2021,21 @@ export type GetResolutionQuery = {
   } | null;
 };
 
+export type GetResolutionTypesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetResolutionTypesQuery = {
+  __typename?: "Query";
+  resolutionTypes: Array<{
+    __typename?: "ResolutionType";
+    id: string;
+    name: string;
+    quorum: any;
+    noticePeriod: any;
+    votingPeriod: any;
+    canBeNegative: boolean;
+  }>;
+};
+
 export type GetResolutionsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetResolutionsQuery = {
@@ -1945,95 +2081,110 @@ export type GetResolutionsQuery = {
   }>;
 };
 
-export type ResolutionFragmentFragment = {
-  __typename?: "Resolution";
-  id: string;
-  title: string;
-  content: string;
-  isNegative: boolean;
-  yesVotesTotal?: any | null;
-  createTimestamp: any;
-  updateTimestamp?: any | null;
-  approveTimestamp?: any | null;
-  rejectTimestamp?: any | null;
-  executionTimestamp?: any | null;
-  createBy: any;
-  updateBy?: any | null;
-  approveBy?: any | null;
-  rejectBy?: any | null;
-  hasQuorum?: boolean | null;
-  executionTo: Array<any>;
-  executionData: Array<any>;
-  addressedContributor?: any | null;
-  resolutionType: {
-    __typename?: "ResolutionType";
+export type GetShareholdersInfoQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetShareholdersInfoQuery = {
+  __typename?: "Query";
+  daoManager?: {
+    __typename?: "DaoManager";
     id: string;
-    name: string;
-    quorum: any;
-    noticePeriod: any;
-    votingPeriod: any;
-    canBeNegative: boolean;
-  };
-  voters?: Array<{
-    __typename?: "ResolutionVoter";
-    id: string;
+    managingBoardAddresses: Array<any>;
+    contributorsAddresses: Array<any>;
+    investorsAddresses: Array<any>;
+    shareholdersAddresses: Array<any>;
+    totalVotingPower: any;
+  } | null;
+  daoUsers: Array<{
+    __typename?: "DaoUser";
     address: any;
+    governanceBalance: any;
+    governanceOfferedTempBalance: any;
+    governanceVestingBalance: any;
+    governanceVaultedBalance: any;
+    governanceWithdrawableTempBalance: any;
     votingPower: any;
-    hasVoted: boolean;
-    hasVotedYes: boolean;
-    delegated: any;
-  }> | null;
+    shareholderRegistryBalance: any;
+    neokigdomTokenBalance: any;
+  }>;
 };
 
-export type LegacyResolutionFragmentFragment = {
-  __typename?: "Resolution";
-  id: string;
-  title: string;
-  content: string;
-  isNegative: boolean;
-  yesVotesTotal?: any | null;
-  createTimestamp: any;
-  updateTimestamp?: any | null;
-  approveTimestamp?: any | null;
-  rejectTimestamp?: any | null;
-  executionTimestamp?: any | null;
-  createBy: any;
-  updateBy?: any | null;
-  approveBy?: any | null;
-  rejectBy?: any | null;
-  hasQuorum?: boolean | null;
-  executionTo: Array<any>;
-  executionData: Array<any>;
-  resolutionType: {
-    __typename?: "ResolutionType";
-    id: string;
-    name: string;
-    quorum: any;
-    noticePeriod: any;
-    votingPeriod: any;
-    canBeNegative: boolean;
-  };
-  voters?: Array<{
-    __typename?: "ResolutionVoter";
-    id: string;
+export type GetSubgraphStateQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetSubgraphStateQuery = {
+  __typename?: "Query";
+  state?: {
+    __typename?: "_Meta_";
+    hasIndexingErrors: boolean;
+    block: { __typename?: "_Block_"; hash?: any | null; timestamp?: number | null; number: number };
+  } | null;
+};
+
+export type GetTokenMintingsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTokenMintingsQuery = {
+  __typename?: "Query";
+  tokenMintings: Array<{ __typename?: "TokenMinting"; id: string; amounts: Array<any>; mintedTimestamp: any }>;
+};
+
+export type GetTokensPageDataQueryVariables = Exact<{
+  userId: Scalars["ID"]["input"];
+}>;
+
+export type GetTokensPageDataQuery = {
+  __typename?: "Query";
+  daoUser?: {
+    __typename?: "DaoUser";
     address: any;
+    id: string;
+    governanceBalance: any;
+    governanceOfferedTempBalance: any;
+    governanceVestingBalance: any;
+    governanceVaultedBalance: any;
+    governanceWithdrawableTempBalance: any;
     votingPower: any;
-    hasVoted: boolean;
-    hasVotedYes: boolean;
-    delegated: any;
-  }> | null;
+    shareholderRegistryBalance: any;
+    neokigdomTokenBalance: any;
+    activeOffers: Array<{
+      __typename?: "Offer";
+      id: string;
+      amount: any;
+      expiredOnTransfer: boolean;
+      expirationTimestamp: any;
+    }>;
+  } | null;
+  offers: Array<{
+    __typename?: "Offer";
+    id: string;
+    from: any;
+    amount: any;
+    expirationTimestamp: any;
+    expiredOnTransfer: boolean;
+    createTimestamp: any;
+    matches: Array<{ __typename?: "OfferMatch"; id: string; matchedFrom: any; amount: any; createTimestamp: any }>;
+  }>;
 };
 
-export type ResolutionTypeFragmentFragment = {
-  __typename?: "ResolutionType";
-  id: string;
-  name: string;
-  quorum: any;
-  noticePeriod: any;
-  votingPeriod: any;
-  canBeNegative: boolean;
-};
-
+export const DaoManagerFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "daoManagerFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "DaoManager" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "managingBoardAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "contributorsAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "investorsAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "shareholdersAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "totalVotingPower" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<DaoManagerFragmentFragment, unknown>;
 export const ResolutionTypeFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -2198,6 +2349,79 @@ export const LegacyResolutionFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<LegacyResolutionFragmentFragment, unknown>;
+export const GetDaoManagerDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetDaoManager" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "daoManager" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: { kind: "StringValue", value: "0", block: false },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "daoManagerFragment" } }],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "daoManagerFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "DaoManager" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "managingBoardAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "contributorsAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "investorsAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "shareholdersAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "totalVotingPower" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetDaoManagerQuery, GetDaoManagerQueryVariables>;
+export const GetDelegationUsersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetDelegationUsers" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "delegationUsers" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "address" } },
+                { kind: "Field", name: { kind: "Name", value: "delegated" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetDelegationUsersQuery, GetDelegationUsersQueryVariables>;
 export const GetLegacyResolutionDocument = {
   kind: "Document",
   definitions: [
@@ -2506,6 +2730,45 @@ export const GetResolutionDocument = {
     },
   ],
 } as unknown as DocumentNode<GetResolutionQuery, GetResolutionQueryVariables>;
+export const GetResolutionTypesDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetResolutionTypes" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "resolutionTypes" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "resolutionTypeFragment" } }],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "resolutionTypeFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "ResolutionType" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "quorum" } },
+          { kind: "Field", name: { kind: "Name", value: "noticePeriod" } },
+          { kind: "Field", name: { kind: "Name", value: "votingPeriod" } },
+          { kind: "Field", name: { kind: "Name", value: "canBeNegative" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetResolutionTypesQuery, GetResolutionTypesQueryVariables>;
 export const GetResolutionsDocument = {
   kind: "Document",
   definitions: [
@@ -2608,3 +2871,233 @@ export const GetResolutionsDocument = {
     },
   ],
 } as unknown as DocumentNode<GetResolutionsQuery, GetResolutionsQueryVariables>;
+export const GetShareholdersInfoDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetShareholdersInfo" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "daoManager" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: { kind: "StringValue", value: "0", block: false },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "daoManagerFragment" } }],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "daoUsers" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "address" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceOfferedTempBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceVestingBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceVaultedBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceWithdrawableTempBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "votingPower" } },
+                { kind: "Field", name: { kind: "Name", value: "shareholderRegistryBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "neokigdomTokenBalance" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "daoManagerFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "DaoManager" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "managingBoardAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "contributorsAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "investorsAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "shareholdersAddresses" } },
+          { kind: "Field", name: { kind: "Name", value: "totalVotingPower" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetShareholdersInfoQuery, GetShareholdersInfoQueryVariables>;
+export const GetSubgraphStateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetSubgraphState" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            alias: { kind: "Name", value: "state" },
+            name: { kind: "Name", value: "_meta" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "hasIndexingErrors" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "block" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "hash" } },
+                      { kind: "Field", name: { kind: "Name", value: "timestamp" } },
+                      { kind: "Field", name: { kind: "Name", value: "number" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetSubgraphStateQuery, GetSubgraphStateQueryVariables>;
+export const GetTokenMintingsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetTokenMintings" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "tokenMintings" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "amounts" } },
+                { kind: "Field", name: { kind: "Name", value: "mintedTimestamp" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetTokenMintingsQuery, GetTokenMintingsQueryVariables>;
+export const GetTokensPageDataDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetTokensPageData" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "ID" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "daoUser" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "address" } },
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceOfferedTempBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceVestingBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceVaultedBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "governanceWithdrawableTempBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "votingPower" } },
+                { kind: "Field", name: { kind: "Name", value: "shareholderRegistryBalance" } },
+                { kind: "Field", name: { kind: "Name", value: "neokigdomTokenBalance" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "activeOffers" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "amount" } },
+                      { kind: "Field", name: { kind: "Name", value: "expiredOnTransfer" } },
+                      { kind: "Field", name: { kind: "Name", value: "expirationTimestamp" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "offers" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: { kind: "EnumValue", value: "createTimestamp" },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: { kind: "EnumValue", value: "desc" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "from" } },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                { kind: "Field", name: { kind: "Name", value: "expirationTimestamp" } },
+                { kind: "Field", name: { kind: "Name", value: "expiredOnTransfer" } },
+                { kind: "Field", name: { kind: "Name", value: "createTimestamp" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "matches" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "matchedFrom" } },
+                      { kind: "Field", name: { kind: "Name", value: "amount" } },
+                      { kind: "Field", name: { kind: "Name", value: "createTimestamp" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetTokensPageDataQuery, GetTokensPageDataQueryVariables>;

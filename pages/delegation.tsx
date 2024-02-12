@@ -1,8 +1,7 @@
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { DaoUser } from "gql/graphql";
 import NextLink from "next/link";
-import useSWR from "swr";
-import { DaoUser } from "types";
 import { useAccount } from "wagmi";
 import { shallow } from "zustand/shallow";
 
@@ -24,9 +23,9 @@ import {
   Typography,
 } from "@mui/material";
 
-import { fetcher } from "@graphql/client";
-import { getShareholdersInfo } from "@graphql/queries/get-shareholders-info.query";
+import { getShareholdersInfo } from "@graphql/queries/subgraph/get-shareholders-info-query";
 
+import { useGraphQL } from "@lib/graphql/useGraphql";
 import { isSameAddress } from "@lib/utils";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
@@ -41,6 +40,7 @@ import useUser from "@hooks/useUser";
 import UserCard from "../components/shareholders/UserCard";
 import useDelegate from "../hooks/useDelegate";
 import useDelegationStatus from "../hooks/useDelegationStatus";
+import { ShareholderStatus } from "../types";
 
 const bigIntToNum = (bigIntNum: BigInt) => Number(formatEther(BigNumber.from(bigIntNum)));
 
@@ -51,7 +51,7 @@ Delegation.checkMismatch = true;
 export default function Delegation() {
   const { user } = useUser();
   const { address: walletAddress } = useAccount();
-  const { data, isLoading, error } = useSWR<any>(getShareholdersInfo, fetcher);
+  const { data, isLoading, error } = useGraphQL(getShareholdersInfo);
   const { data: delegationData, isLoading: delegationLoading } = useDelegationStatus();
   const [onlyManagingBoard, setOnlyManagingBoard] = React.useState(false);
   const { isLoading: isLoadingTransaction } = useBlockchainTransactionStore();
@@ -67,13 +67,13 @@ export default function Delegation() {
   );
 
   const getShareholderStatus = React.useCallback(
-    (address: string) => {
+    (address: string): ShareholderStatus[] => {
       return [
-        data.daoManager?.managingBoardAddresses.includes(address) && "ManagingBoard",
-        data.daoManager?.shareholdersAddresses.includes(address) && "Shareholder",
-        data.daoManager?.contributorsAddresses.includes(address) && "Contributor",
-        data.daoManager?.investorsAddresses.includes(address) && "Investor",
-      ].filter(Boolean);
+        data?.daoManager?.managingBoardAddresses.includes(address) && "ManagingBoard",
+        data?.daoManager?.shareholdersAddresses.includes(address) && "Shareholder",
+        data?.daoManager?.contributorsAddresses.includes(address) && "Contributor",
+        data?.daoManager?.investorsAddresses.includes(address) && "Investor",
+      ].filter(Boolean) as ShareholderStatus[];
     },
     [data],
   );
@@ -85,19 +85,22 @@ export default function Delegation() {
 
     const totalVotingPower = bigIntToNum(data?.daoManager?.totalVotingPower || BigInt(0));
 
-    const users = data?.daoUsers.reduce((computed: any, daoUser: DaoUser) => {
-      const userVotingPower = bigIntToNum(daoUser.votingPower);
-      computed[daoUser.address] = {
-        power: ((100 * userVotingPower) / totalVotingPower).toFixed(2),
-        canBeDelegated: delegationData.usersList.find((user) => isSameAddress(daoUser.address, user.address))
-          ?.canBeDelegated,
-      };
-      return computed;
-    }, {});
+    const users = data?.daoUsers.reduce(
+      (computed: { [id: string]: { power: string; canBeDelegated: boolean | undefined } }, daoUser) => {
+        const userVotingPower = bigIntToNum(daoUser.votingPower);
+        computed[daoUser.address] = {
+          power: ((100 * userVotingPower) / totalVotingPower).toFixed(2),
+          canBeDelegated: delegationData.usersList.find((user) => isSameAddress(daoUser.address, user.address))
+            ?.canBeDelegated,
+        };
+        return computed;
+      },
+      {},
+    );
 
     const addresses = Object.keys(users)
       .filter((address) => getShareholderStatus(address).length > 0)
-      .sort((userA, userB) => users[userB].power - users[userA].power);
+      .sort((userA, userB) => users[userB].power.localeCompare(users[userA].power));
 
     return [users, addresses];
   }, [data, delegationData, getShareholderStatus]);
@@ -252,9 +255,10 @@ export default function Delegation() {
             (userAddress) =>
               !isSameAddress(userAddress, walletAddress as string) &&
               (!onlyManagingBoard ||
-                (onlyManagingBoard && data.daoManager?.managingBoardAddresses.includes(userAddress))),
+                (onlyManagingBoard && data?.daoManager?.managingBoardAddresses.includes(userAddress))),
           )
           .map((userAddress) => {
+            if (!daoUsers) return;
             const { power, canBeDelegated } = daoUsers[userAddress];
             const isDelegatedByCurrentUser = delegationData?.signerDelegationStatus?.delegated === userAddress;
             const ctaCurrentUser = isDelegatedByCurrentUser ? (

@@ -1,6 +1,6 @@
-import { gql } from "graphql-request";
+import { graphql } from "gql";
 
-export const getTokenMintings = gql`
+export const getTokenMintings = graphql(`
   query GetTokenMintings {
     tokenMintings {
       id
@@ -8,4 +8,4 @@ export const getTokenMintings = gql`
       mintedTimestamp
     }
   }
-`;
+`);

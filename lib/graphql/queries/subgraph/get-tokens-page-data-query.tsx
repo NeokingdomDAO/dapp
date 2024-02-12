@@ -1,8 +1,9 @@
-import { gql } from "graphql-request";
+import { graphql } from "gql";
 
-export const getTokensPageData = gql`
-  query GetTokensPageData($userId: String!) {
+export const getTokensPageData = graphql(`
+  query GetTokensPageData($userId: ID!) {
     daoUser(id: $userId) {
+      address
       id
       governanceBalance
       governanceOfferedTempBalance
@@ -34,4 +35,4 @@ export const getTokensPageData = gql`
       }
     }
   }
-`;
+`);

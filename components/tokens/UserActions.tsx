@@ -3,8 +3,9 @@ import { useAccount } from "wagmi";
 
 import { CircularProgress, Divider, Grid, Paper, Typography } from "@mui/material";
 
-import { fetcher } from "@graphql/client";
-import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
+import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
+
+import { useGraphQL } from "@lib/graphql/useGraphql";
 
 import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 
@@ -23,7 +24,7 @@ const paperSx = {
 
 export default function UserActions() {
   const { data, isLoading } = useUserBalanceAndOffers();
-  const { data: daoManagerData, isLoading: isLoadingDaoManagerData } = useSWR<any>(getDaoManagerQuery, fetcher);
+  const { data: daoManagerData, isLoading: isLoadingDaoManagerData } = useGraphQL(getDaoManagerQuery);
   const { address } = useAccount();
 
   const loading = isLoading || isLoadingDaoManagerData;

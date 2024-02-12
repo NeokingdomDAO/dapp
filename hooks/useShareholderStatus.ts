@@ -1,22 +1,18 @@
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils";
-import useSWR from "swr";
-import { DaoUser } from "types";
 
 import { useCallback, useMemo } from "react";
 
-import { fetcher } from "@graphql/client";
-import { getShareholdersInfo } from "@graphql/queries/get-shareholders-info.query";
+import { getShareholdersInfo } from "@graphql/queries/subgraph/get-shareholders-info-query";
+
+import { useGraphQL } from "@lib/graphql/useGraphql";
+
+import { ShareholderStatus } from "../types";
 
 const bigIntToNum = (bigIntNum: BigInt) => Number(formatEther(BigNumber.from(bigIntNum)));
 
-type ShareholderStatus = "ManagingBoard" | "Investor" | "Contributor" | "Shareholder";
-
 export default function useShareholderStatus() {
-  const { data, isLoading, error }: { data: any; isLoading: boolean; error: any } = useSWR(
-    getShareholdersInfo,
-    fetcher,
-  );
+  const { data, isLoading, error } = useGraphQL(getShareholdersInfo);
 
   const getShareholderStatus: (address: string) => ShareholderStatus[] = useCallback(
     (address: string) => {
@@ -28,7 +24,7 @@ export default function useShareholderStatus() {
         data.daoManager?.shareholdersAddresses.includes(address.toLowerCase()) && "Shareholder",
         data.daoManager?.contributorsAddresses.includes(address.toLowerCase()) && "Contributor",
         data.daoManager?.investorsAddresses.includes(address.toLowerCase()) && "Investor",
-      ].filter(Boolean);
+      ].filter(Boolean) as ShareholderStatus[];
     },
     [data],
   );
@@ -40,7 +36,7 @@ export default function useShareholderStatus() {
 
     const totalVotingPower = bigIntToNum(data?.daoManager?.totalVotingPower || BigInt(0));
 
-    const users = data?.daoUsers.reduce((computed: any, daoUser: DaoUser) => {
+    const users = data?.daoUsers.reduce((computed: { [id: string]: { power: string } }, daoUser) => {
       const userVotingPower = bigIntToNum(daoUser.votingPower);
       computed[daoUser.address] = {
         power: ((100 * userVotingPower) / totalVotingPower).toFixed(2),
@@ -50,7 +46,8 @@ export default function useShareholderStatus() {
 
     const addresses = Object.keys(users)
       .filter((address) => getShareholderStatus(address).length > 0)
-      .sort((userA, userB) => users[userB].power - users[userA].power);
+      // TODO: Andrea check this is still in the correct order
+      .sort((userA, userB) => users[userB].power.localeCompare(users[userA].power));
 
     return [users, addresses];
   }, [data, getShareholderStatus]);

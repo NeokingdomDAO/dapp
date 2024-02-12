@@ -11,7 +11,8 @@ export const legacyFetcher = <T>(doc: TypedDocumentNode<T>): Promise<T> => clien
 export const fetcher = <T>(doc: TypedDocumentNode<T>): Promise<T> => client.request(doc);
 export const legacyFetcherWithParams = ([query, params]: [string, any]) =>
   clientLegacyGraph ? clientLegacyGraph.request(query, params) : null;
-export const fetcherWithParams = <T>([query, params]: [TypedDocumentNode<T>, any]) => client.request(query, params);
+export const fetcherWithParams = <T>([query, params]: [TypedDocumentNode<T>, any]): Promise<T> =>
+  client.request(query, params);
 
 export const fetcherGraphqlPublic = <T>([query, params]: [TypedDocumentNode<T>, any]): Promise<T> =>
   client.request(query, params);

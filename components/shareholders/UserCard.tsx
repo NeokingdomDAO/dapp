@@ -15,7 +15,7 @@ export default function UserCard({
   cta,
 }: {
   address: string;
-  power: number;
+  power: string;
   statuses: string[];
   cta?: ReactElement;
 }) {

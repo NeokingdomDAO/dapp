@@ -1,8 +1,6 @@
-import { gql } from "graphql-request";
+import { graphql } from "gql";
 
-import { daoManagerFragment } from "./dao-manager.fragment";
-
-export const getShareholdersInfo = gql`
+export const getShareholdersInfo = graphql(`
   query GetShareholdersInfo {
     daoManager(id: "0") {
       ...daoManagerFragment
@@ -20,6 +18,4 @@ export const getShareholdersInfo = gql`
       neokigdomTokenBalance
     }
   }
-
-  ${daoManagerFragment}
-`;
+`);

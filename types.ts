@@ -10,14 +10,14 @@ export type ResolutionVoterEnhanced = NonNullable<ResolutionEntity["voters"]>["0
 };
 
 export type ResolutionsAcl = {
-  canCreate: boolean;
-  canUpdate: boolean;
-  canApprove: boolean;
+  canCreate?: boolean;
+  canUpdate?: boolean;
+  canApprove?: boolean;
   canVote: (voters: ResolutionVoter[]) => boolean;
-  isShareholder: boolean;
-  isManagingBoard: boolean;
-  isContributor: boolean;
-  isExtraneous: boolean;
+  isShareholder?: boolean;
+  isManagingBoard?: boolean;
+  isContributor?: boolean;
+  isExtraneous?: boolean;
 };
 
 export type ResolutionTypeEntity = {
@@ -133,21 +133,7 @@ export type Offer = {
   matches: OfferMatch[];
 };
 
-export type DaoUser = {
-  id: string;
-  address: string;
-
-  governanceBalance: BigInt;
-  governanceOfferedTempBalance: BigInt;
-  governanceVestingBalance: BigInt;
-  governanceVaultedBalance: BigInt;
-  governanceWithdrawableTempBalance: BigInt;
-  votingPower: BigInt;
-  shareholderRegistryBalance: BigInt;
-  neokigdomTokenBalance: BigInt;
-
-  activeOffers: Offer[];
-};
+export type ShareholderStatus = "ManagingBoard" | "Investor" | "Contributor" | "Shareholder";
 
 export type ComputedBalances = {
   governanceTokens: number;

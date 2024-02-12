@@ -5,7 +5,7 @@ import { fetcherGraphqlPublic, isLegacyClientEnabled, legacyFetcher } from "./cl
 
 export function useGraphQL<TResult, TVariables>(
   document: TypedDocumentNode<TResult, TVariables> | null,
-  params: any,
+  params?: any,
   variables?: TVariables extends Record<string, never> ? [] : [TVariables],
 ): SWRResponse<TResult> {
   return useSWR<TResult>([document, ...(variables || [])], fetcherGraphqlPublic, params);

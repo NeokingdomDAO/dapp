@@ -19,7 +19,7 @@ EditResolutionPage.checkMismatch = true;
 
 export const getServerSideProps = async ({ params, res }: any) => {
   // TODO Andrea: fix fetcherWithParams typing
-  const data = await fetcherWithParams<GetResolutionQuery>([getResolutionQuery, params]);
+  const data = await fetcherWithParams<GetResolutionQuery>([getResolutionQuery, { id: params.id as string }]);
 
   if (!data.resolution) {
     res.statusCode = 404;

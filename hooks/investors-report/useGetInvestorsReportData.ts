@@ -1,10 +1,10 @@
 import { format, getMonth, getYear } from "date-fns";
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
-import useSWR from "swr";
 
-import { fetcher } from "@graphql/client";
-import { getTokenMintings } from "@graphql/queries/get-tokens-mintings.query";
+import { getTokenMintings } from "@graphql/queries/subgraph/get-tokens-mintings-query";
+
+import { useGraphQL } from "@lib/graphql/useGraphql";
 
 import { bigIntToBigNum } from "@hooks/useUserBalanceAndOffers";
 
@@ -48,10 +48,10 @@ export default function useGetInvestorsReportData(): {
   dataAccumulated: DATA_POINT[];
   error: any;
 } {
-  const { data, isLoading, error } = useSWR<any>(getTokenMintings, fetcher, { refreshInterval: REFETCH_AFTER_MS });
+  const { data, isLoading, error } = useGraphQL(getTokenMintings, { refreshInterval: REFETCH_AFTER_MS });
 
   if (isLoading || !data || error) {
-    return { data, isLoading, dataAccumulated: [], error };
+    return { data: [], isLoading, dataAccumulated: [], error };
   }
 
   const { tokenMintings } = data;
