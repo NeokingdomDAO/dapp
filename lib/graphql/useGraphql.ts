@@ -1,5 +1,5 @@
 import { type TypedDocumentNode } from "@graphql-typed-document-node/core";
-import useSWR, { SWRConfig, SWRResponse } from "swr";
+import useSWR, { SWRResponse } from "swr";
 
 import { fetcherGraphqlPublic, isLegacyClientEnabled, legacyFetcher } from "./client";
 

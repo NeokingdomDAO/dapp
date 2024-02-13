@@ -2,7 +2,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "https://api.thegraph.com/subgraphs/name/neokingdomdao/neokingdom-whitelabel-testnet/",
+  schema: "https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere",
   documents: "lib/graphql/queries/subgraph/**/*.tsx",
   generates: {
     "gql/": {
