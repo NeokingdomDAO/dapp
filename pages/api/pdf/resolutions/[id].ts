@@ -6,11 +6,17 @@ import { OdooUser, ResolutionEntity, ResolutionEntityEnhanced } from "types";
 
 import React from "react";
 
-import { fetcherWithParams, isLegacyClientEnabled, legacyFetcherWithParams } from "@graphql/client";
+import {
+  fetcherGraphqlPublic,
+  fetcherWithParams,
+  isLegacyClientEnabled,
+  legacyFetcherGraphqlPublic,
+  legacyFetcherWithParams,
+} from "@graphql/client";
 import odooClient from "@graphql/odoo";
-import { getLegacyResolutionQuery } from "@graphql/queries/get-legacy-resolution.query";
-import { getResolutionQuery } from "@graphql/queries/get-resolution.query";
 import { getUsersQuery } from "@graphql/queries/get-users.query";
+import { getLegacyResolutionQuery } from "@graphql/queries/subgraph/get-legacy-resolution-query";
+import { getResolutionQuery } from "@graphql/queries/subgraph/get-resolution-query";
 
 import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
 import { sessionOptions } from "@lib/session";
@@ -25,10 +31,10 @@ const getResolutionPdf = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const graphQlResolutionData: any = await fetcherWithParams([getResolutionQuery, { id }]);
+    const graphQlResolutionData: any = await fetcherGraphqlPublic([getResolutionQuery, { id: id as string }]);
     const legacyGraphQlResolutionData: any =
       graphQlResolutionData.resolution === null && isLegacyClientEnabled
-        ? await legacyFetcherWithParams([getLegacyResolutionQuery, { id }])
+        ? await legacyFetcherGraphqlPublic([getLegacyResolutionQuery, { id: id as string }])
         : null;
 
     if (graphQlResolutionData.resolution === null && legacyGraphQlResolutionData.resolution === null) {

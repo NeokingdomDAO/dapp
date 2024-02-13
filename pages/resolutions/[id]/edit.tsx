@@ -2,7 +2,7 @@ import { useAccount } from "wagmi";
 
 import { Alert, CircularProgress } from "@mui/material";
 
-import { fetcherWithParams } from "@graphql/client";
+import { fetcherGraphqlPublic } from "@graphql/client";
 import { getResolutionQuery } from "@graphql/queries/subgraph/get-resolution-query";
 
 import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
@@ -10,7 +10,6 @@ import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
 
 import EditResolution from "../../../components/EditResolution";
-import { GetResolutionQuery } from "../../../gql/graphql";
 import { ResolutionEntity, ResolutionEntityEnhanced } from "../../../types";
 
 EditResolutionPage.title = "Edit resolution";
@@ -18,8 +17,7 @@ EditResolutionPage.requireLogin = false;
 EditResolutionPage.checkMismatch = true;
 
 export const getServerSideProps = async ({ params, res }: any) => {
-  // TODO Andrea: fix fetcherWithParams typing
-  const data = await fetcherWithParams<GetResolutionQuery>([getResolutionQuery, { id: params.id as string }]);
+  const data = await fetcherGraphqlPublic([getResolutionQuery, { id: params.id as string }]);
 
   if (!data.resolution) {
     res.statusCode = 404;
