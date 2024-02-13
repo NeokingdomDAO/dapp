@@ -8,7 +8,8 @@ export function useGraphQL<TResult, TVariables>(
   params?: any,
   variables?: TVariables extends Record<string, never> ? [] : [TVariables],
 ): SWRResponse<TResult> {
-  return useSWR<TResult>([document, ...(variables || [])], fetcherGraphqlPublic, params);
+  const doc = document !== null ? [document, ...(variables || [])] : null;
+  return useSWR<TResult>(doc, fetcherGraphqlPublic, params);
 }
 
 export function useLegacyGraphQL<TResult, TVariables>(
@@ -16,6 +17,6 @@ export function useLegacyGraphQL<TResult, TVariables>(
   params: any,
   variables?: TVariables extends Record<string, never> ? [] : [TVariables],
 ): SWRResponse<TResult> {
-  const doc = !isLegacyClientEnabled ? document : null;
+  const doc = isLegacyClientEnabled && document !== null ? document : null;
   return useSWR<TResult>([doc, ...(variables || [])], legacyFetcher, params);
 }
