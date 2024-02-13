@@ -1,8 +1,8 @@
 import { useAccount } from "wagmi";
 
 import { getDelegationUsers } from "@graphql/queries/subgraph/get-delegation-users-query";
+import { useGraphQL } from "@graphql/useGraphql";
 
-import { useGraphQL } from "@lib/graphql/useGraphql";
 import { isSameAddress } from "@lib/utils";
 
 import { DelegationUser } from "../types";

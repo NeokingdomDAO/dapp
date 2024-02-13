@@ -3,8 +3,7 @@ import useSWR from "swr";
 import { Box, Divider, Typography } from "@mui/material";
 
 import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
-
-import { useGraphQL } from "@lib/graphql/useGraphql";
+import { useGraphQL } from "@graphql/useGraphql";
 
 import UserBalance from "@components/tokens/UserBalance";
 

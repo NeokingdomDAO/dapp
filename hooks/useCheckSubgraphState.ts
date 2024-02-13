@@ -3,8 +3,8 @@ import { useBlockNumber } from "wagmi";
 import { useEffect, useState } from "react";
 
 import { getSubgraphState } from "@graphql/queries/subgraph/get-subgraph-state-query";
+import { useGraphQL } from "@graphql/useGraphql";
 
-import { useGraphQL } from "../lib/graphql/useGraphql";
 import { useSnackbar } from "./useSnackbar";
 
 const NOTIFY_MISMATCH_AFTER_MS = 10000;

@@ -4,8 +4,7 @@ import { formatEther } from "ethers/lib/utils";
 import { useCallback, useMemo } from "react";
 
 import { getShareholdersInfo } from "@graphql/queries/subgraph/get-shareholders-info-query";
-
-import { useGraphQL } from "@lib/graphql/useGraphql";
+import { useGraphQL } from "@graphql/useGraphql";
 
 import { ShareholderStatus } from "../types";
 

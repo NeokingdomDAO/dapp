@@ -4,8 +4,7 @@ import { useAccount } from "wagmi";
 import { CircularProgress, Divider, Grid, Paper, Typography } from "@mui/material";
 
 import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
-
-import { useGraphQL } from "@lib/graphql/useGraphql";
+import { useGraphQL } from "@graphql/useGraphql";
 
 import useUserBalanceAndOffers from "@hooks/useUserBalanceAndOffers";
 

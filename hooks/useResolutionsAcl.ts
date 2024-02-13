@@ -3,8 +3,7 @@ import { ResolutionsAcl } from "types";
 import { useAccount } from "wagmi";
 
 import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
-
-import { useGraphQL } from "@lib/graphql/useGraphql";
+import { useGraphQL } from "@graphql/useGraphql";
 
 import useShareholderStatus from "./useShareholderStatus";
 

@@ -3,8 +3,7 @@ import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 
 import { getTokenMintings } from "@graphql/queries/subgraph/get-tokens-mintings-query";
-
-import { useGraphQL } from "@lib/graphql/useGraphql";
+import { useGraphQL } from "@graphql/useGraphql";
 
 import { bigIntToBigNum } from "@hooks/useUserBalanceAndOffers";
 

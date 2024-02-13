@@ -1,11 +1,11 @@
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 import { GetTokensPageDataQuery } from "gql/graphql";
-import { useGraphQL } from "lib/graphql/useGraphql";
 import { ComputedBalances, Offer } from "types";
 import { useAccount } from "wagmi";
 
 import { getTokensPageData } from "@graphql/queries/subgraph/get-tokens-page-data-query";
+import { useGraphQL } from "@graphql/useGraphql";
 
 type QueryDaoUser = GetTokensPageDataQuery["daoUser"];
 type QueryOffer = NonNullable<GetTokensPageDataQuery["daoUser"]>["activeOffers"]["0"];

@@ -24,8 +24,8 @@ import {
 } from "@mui/material";
 
 import { getShareholdersInfo } from "@graphql/queries/subgraph/get-shareholders-info-query";
+import { useGraphQL } from "@graphql/useGraphql";
 
-import { useGraphQL } from "@lib/graphql/useGraphql";
 import { isSameAddress } from "@lib/utils";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";

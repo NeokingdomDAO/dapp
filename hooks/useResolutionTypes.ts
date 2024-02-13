@@ -1,6 +1,5 @@
 import { getResolutionTypesQuery } from "@graphql/queries/subgraph/get-resolution-types-query";
-
-import { useGraphQL } from "@lib/graphql/useGraphql";
+import { useGraphQL } from "@graphql/useGraphql";
 
 import { RESOLUTION_TYPES_TEXTS } from "../i18n/resolution";
 import { ResolutionTypeEntity } from "../types";
