@@ -15,6 +15,7 @@ const config: CodegenConfig = {
       plugins: ["introspection"],
     },
   },
+  hooks: { afterAllFileWrite: ["git add ./gql/**; npx lint-staged --allow-empty"] },
 };
 
 export default config;
