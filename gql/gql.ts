@@ -44,6 +44,8 @@ const documents = {
     types.GetTokenMintingsDocument,
   "\n  query GetTokensPageData($userId: ID!) {\n    daoUser(id: $userId) {\n      address\n      id\n      governanceBalance\n      governanceOfferedTempBalance\n      governanceVestingBalance\n      governanceVaultedBalance\n      governanceWithdrawableTempBalance\n      votingPower\n      shareholderRegistryBalance\n      neokigdomTokenBalance\n      activeOffers {\n        id\n        amount\n        expiredOnTransfer\n        expirationTimestamp\n      }\n    }\n    offers(orderBy: createTimestamp, orderDirection: desc) {\n      id\n      from\n      amount\n      expirationTimestamp\n      expiredOnTransfer\n      createTimestamp\n      matches {\n        id\n        matchedFrom\n        amount\n        createTimestamp\n      }\n    }\n  }\n":
     types.GetTokensPageDataDocument,
+  "\n  query GetUserRedemption($userId: Bytes!) {\n    redemptions(where: { createBy: $userId }) {\n      id\n      amount\n      createBy\n      updateTimestamp\n      endTimestamp\n      startTimestamp\n      redemptionHistory {\n        id\n        amount\n        timestamp\n      }\n    }\n  }\n":
+    types.GetUserRedemptionDocument,
 };
 
 /**
@@ -150,6 +152,12 @@ export function graphql(
 export function graphql(
   source: "\n  query GetTokensPageData($userId: ID!) {\n    daoUser(id: $userId) {\n      address\n      id\n      governanceBalance\n      governanceOfferedTempBalance\n      governanceVestingBalance\n      governanceVaultedBalance\n      governanceWithdrawableTempBalance\n      votingPower\n      shareholderRegistryBalance\n      neokigdomTokenBalance\n      activeOffers {\n        id\n        amount\n        expiredOnTransfer\n        expirationTimestamp\n      }\n    }\n    offers(orderBy: createTimestamp, orderDirection: desc) {\n      id\n      from\n      amount\n      expirationTimestamp\n      expiredOnTransfer\n      createTimestamp\n      matches {\n        id\n        matchedFrom\n        amount\n        createTimestamp\n      }\n    }\n  }\n",
 ): (typeof documents)["\n  query GetTokensPageData($userId: ID!) {\n    daoUser(id: $userId) {\n      address\n      id\n      governanceBalance\n      governanceOfferedTempBalance\n      governanceVestingBalance\n      governanceVaultedBalance\n      governanceWithdrawableTempBalance\n      votingPower\n      shareholderRegistryBalance\n      neokigdomTokenBalance\n      activeOffers {\n        id\n        amount\n        expiredOnTransfer\n        expirationTimestamp\n      }\n    }\n    offers(orderBy: createTimestamp, orderDirection: desc) {\n      id\n      from\n      amount\n      expirationTimestamp\n      expiredOnTransfer\n      createTimestamp\n      matches {\n        id\n        matchedFrom\n        amount\n        createTimestamp\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query GetUserRedemption($userId: Bytes!) {\n    redemptions(where: { createBy: $userId }) {\n      id\n      amount\n      createBy\n      updateTimestamp\n      endTimestamp\n      startTimestamp\n      redemptionHistory {\n        id\n        amount\n        timestamp\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query GetUserRedemption($userId: Bytes!) {\n    redemptions(where: { createBy: $userId }) {\n      id\n      amount\n      createBy\n      updateTimestamp\n      endTimestamp\n      startTimestamp\n      redemptionHistory {\n        id\n        amount\n        timestamp\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

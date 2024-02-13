@@ -2068,6 +2068,24 @@ export type GetTokensPageDataQuery = {
   }>;
 };
 
+export type GetUserRedemptionQueryVariables = Exact<{
+  userId: Scalars["Bytes"]["input"];
+}>;
+
+export type GetUserRedemptionQuery = {
+  __typename?: "Query";
+  redemptions: Array<{
+    __typename?: "Redemption";
+    id: string;
+    amount: any;
+    createBy: any;
+    updateTimestamp: any;
+    endTimestamp: any;
+    startTimestamp: any;
+    redemptionHistory: Array<{ __typename?: "RedemptionHistory"; id: string; amount: any; timestamp: any }>;
+  }>;
+};
+
 export const DaoManagerFragmentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -3005,3 +3023,68 @@ export const GetTokensPageDataDocument = {
     },
   ],
 } as unknown as DocumentNode<GetTokensPageDataQuery, GetTokensPageDataQueryVariables>;
+export const GetUserRedemptionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetUserRedemption" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+          type: { kind: "NonNullType", type: { kind: "NamedType", name: { kind: "Name", value: "Bytes" } } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "redemptions" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "createBy" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                { kind: "Field", name: { kind: "Name", value: "createBy" } },
+                { kind: "Field", name: { kind: "Name", value: "updateTimestamp" } },
+                { kind: "Field", name: { kind: "Name", value: "endTimestamp" } },
+                { kind: "Field", name: { kind: "Name", value: "startTimestamp" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "redemptionHistory" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "amount" } },
+                      { kind: "Field", name: { kind: "Name", value: "timestamp" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetUserRedemptionQuery, GetUserRedemptionQueryVariables>;

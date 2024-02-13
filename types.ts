@@ -168,22 +168,22 @@ export type RewardsResponse = {
   };
 };
 
-export type RedemptionHistory = {
-  id: string;
-  amount: BigInt;
-  timestamp: string;
-};
+// export type RedemptionHistory = {
+//   id: string;
+//   amount: BigInt;
+//   timestamp: string;
+// };
 
-export type Redemption = {
-  id: string;
-  amount: BigInt;
-  redemptionHistory: RedemptionHistory[];
-  createTimestamp: string;
-  updateTimestamp: string;
-  createBy: string;
-  startTimestamp: string;
-  endTimestamp: string;
-};
+// export type Redemption = {
+//   id: string;
+//   amount: BigInt;
+//   redemptionHistory: RedemptionHistory[];
+//   createTimestamp: string;
+//   updateTimestamp: string;
+//   createBy: string;
+//   startTimestamp: string;
+//   endTimestamp: string;
+// };
 
 export type Task = {
   id: number;

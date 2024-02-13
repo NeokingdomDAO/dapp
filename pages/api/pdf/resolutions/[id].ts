@@ -6,13 +6,7 @@ import { OdooUser, ResolutionEntity, ResolutionEntityEnhanced } from "types";
 
 import React from "react";
 
-import {
-  fetcherGraphqlPublic,
-  fetcherWithParams,
-  isLegacyClientEnabled,
-  legacyFetcherGraphqlPublic,
-  legacyFetcherWithParams,
-} from "@graphql/client";
+import { fetcherGraphqlPublic, isLegacyClientEnabled, legacyFetcherGraphqlPublic } from "@graphql/client";
 import odooClient from "@graphql/odoo";
 import { getUsersQuery } from "@graphql/queries/get-users.query";
 import { getLegacyResolutionQuery } from "@graphql/queries/subgraph/get-legacy-resolution-query";

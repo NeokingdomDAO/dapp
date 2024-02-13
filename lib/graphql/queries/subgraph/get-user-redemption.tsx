@@ -1,7 +1,7 @@
-import { gql } from "graphql-request";
+import { graphql } from "gql";
 
-export const getUserRedemption = gql`
-  query GetUserRedemption($userId: String!) {
+export const getUserRedemption = graphql(`
+  query GetUserRedemption($userId: Bytes!) {
     redemptions(where: { createBy: $userId }) {
       id
       amount
@@ -16,4 +16,4 @@ export const getUserRedemption = gql`
       }
     }
   }
-`;
+`);
