@@ -21,6 +21,6 @@ Note: if you want to change from i.e. teledisko to neokingdom, just re-run `verc
 
 ## How to add a Subgraph query
 
-- Create a new file inside the `./lib/graphql/queries/subgraph/` folder
+- Create a new file inside the `./lib/graphql/subgraph/queries/` folder
 - Copy the way other queries are structured to be able to generate TS types
 - When the query is ready or after each update remember to run `pnpm codegen:subgraph`
