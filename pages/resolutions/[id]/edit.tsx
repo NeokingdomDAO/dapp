@@ -2,8 +2,8 @@ import { useAccount } from "wagmi";
 
 import { Alert, CircularProgress } from "@mui/material";
 
-import { getResolutionQuery } from "@graphql/queries/subgraph/get-resolution-query";
-import { fetcherGraphqlPublic } from "@graphql/subgraph";
+import { getResolutionQuery } from "@graphql/subgraph/queries/get-resolution-query";
+import { fetcherGraphqlPublic } from "@graphql/subgraph/subgraph-client";
 
 import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
 

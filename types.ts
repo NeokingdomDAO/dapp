@@ -1,6 +1,6 @@
 import { Window as KeplrWindow } from "@keplr-wallet/types";
 
-import { GetLegacyResolutionsQuery, GetResolutionsQuery, ResolutionVoter } from "./gql/graphql";
+import { GetLegacyResolutionsQuery, GetResolutionsQuery, ResolutionVoter } from "@graphql/subgraph/generated/graphql";
 
 export type ResolutionVoterEnhanced = NonNullable<ResolutionEntity["voters"]>["0"] & {
   votingPowerInt: number;

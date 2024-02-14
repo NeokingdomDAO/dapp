@@ -2,8 +2,8 @@ import useSWR from "swr";
 
 import { Box, Divider, Typography } from "@mui/material";
 
-import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { getDaoManagerQuery } from "@graphql/subgraph/queries/get-dao-manager-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import UserBalance from "@components/tokens/UserBalance";
 

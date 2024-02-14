@@ -2,8 +2,8 @@ import { format, getMonth, getYear } from "date-fns";
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 
-import { getTokenMintings } from "@graphql/queries/subgraph/get-tokens-mintings-query";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { getTokenMintings } from "@graphql/subgraph/queries/get-tokens-mintings-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import { bigIntToBigNum } from "@hooks/useUserBalanceAndOffers";
 

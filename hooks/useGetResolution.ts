@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 
-import { getLegacyResolutionQuery } from "@graphql/queries/subgraph/get-legacy-resolution-query";
-import { getResolutionQuery } from "@graphql/queries/subgraph/get-resolution-query";
-import { useLegacySubgraphGraphQL, useSubgraphGraphQL } from "@graphql/subgraph";
+import { getLegacyResolutionQuery } from "@graphql/subgraph/queries/get-legacy-resolution-query";
+import { getResolutionQuery } from "@graphql/subgraph/queries/get-resolution-query";
+import { useLegacySubgraphGraphQL, useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 const REFRESH_INTERVAL_MS = 5000;
 

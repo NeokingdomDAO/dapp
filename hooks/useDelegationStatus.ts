@@ -1,7 +1,7 @@
 import { useAccount } from "wagmi";
 
-import { getDelegationUsers } from "@graphql/queries/subgraph/get-delegation-users-query";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { getDelegationUsers } from "@graphql/subgraph/queries/get-delegation-users-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import { isSameAddress } from "@lib/utils";
 

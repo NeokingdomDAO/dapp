@@ -1,6 +1,5 @@
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils";
-import { DaoUser } from "gql/graphql";
 import NextLink from "next/link";
 import { useAccount } from "wagmi";
 import { shallow } from "zustand/shallow";
@@ -23,8 +22,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getShareholdersInfo } from "@graphql/queries/subgraph/get-shareholders-info-query";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { getShareholdersInfo } from "@graphql/subgraph/queries/get-shareholders-info-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import { isSameAddress } from "@lib/utils";
 

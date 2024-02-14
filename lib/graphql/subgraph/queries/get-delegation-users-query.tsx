@@ -1,4 +1,4 @@
-import { graphql } from "gql";
+import { graphql } from "../generated";
 
 export const getDelegationUsers = graphql(`
   query GetDelegationUsers {

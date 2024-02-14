@@ -2,8 +2,8 @@ import { useAccount } from "wagmi";
 
 import { Alert, Button, Container } from "@mui/material";
 
-import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { getDaoManagerQuery } from "@graphql/subgraph/queries/get-dao-manager-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import useLogout from "@hooks/useLogout";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";

@@ -10,7 +10,7 @@
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "postinstall": "husky install",
-    "codegen:subgraph": "graphql-codegen --config codegen.ts"
+    "codegen:subgraph": "graphql-codegen --config codegen-subgraph.ts"
   },
   "homepage": "https://github.com/NeokingdomDAO/dapp",
   "dependencies": {

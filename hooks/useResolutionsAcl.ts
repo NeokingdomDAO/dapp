@@ -1,9 +1,9 @@
-import { ResolutionVoter } from "gql/graphql";
 import { ResolutionsAcl } from "types";
 import { useAccount } from "wagmi";
 
-import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { ResolutionVoter } from "@graphql/subgraph/generated/graphql";
+import { getDaoManagerQuery } from "@graphql/subgraph/queries/get-dao-manager-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import useShareholderStatus from "./useShareholderStatus";
 

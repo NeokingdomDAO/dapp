@@ -1,10 +1,10 @@
-import { GetUserRedemptionQuery } from "gql/graphql";
 import { useAccount } from "wagmi";
 
 import { useMemo } from "react";
 
-import { getUserRedemption } from "@graphql/queries/subgraph/get-user-redemption";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { GetUserRedemptionQuery } from "@graphql/subgraph/generated/graphql";
+import { getUserRedemption } from "@graphql/subgraph/queries/get-user-redemption";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import { bigIntToBigNum } from "./useUserBalanceAndOffers";
 

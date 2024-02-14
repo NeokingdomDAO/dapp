@@ -2,8 +2,8 @@ import { useBlockNumber } from "wagmi";
 
 import { useEffect, useState } from "react";
 
-import { getSubgraphState } from "@graphql/queries/subgraph/get-subgraph-state-query";
-import { useSubgraphGraphQL } from "@graphql/subgraph";
+import { getSubgraphState } from "@graphql/subgraph/queries/get-subgraph-state-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import { useSnackbar } from "./useSnackbar";
 

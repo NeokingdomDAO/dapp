@@ -1,4 +1,4 @@
-import { graphql } from "gql";
+import { graphql } from "../generated";
 
 export const getUserRedemption = graphql(`
   query GetUserRedemption($userId: Bytes!) {
