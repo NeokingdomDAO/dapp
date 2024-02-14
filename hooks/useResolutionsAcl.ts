@@ -3,7 +3,7 @@ import { ResolutionsAcl } from "types";
 import { useAccount } from "wagmi";
 
 import { getDaoManagerQuery } from "@graphql/queries/subgraph/get-dao-manager-query";
-import { useGraphQL } from "@graphql/useGraphql";
+import { useSubgraphGraphQL } from "@graphql/subgraph";
 
 import useShareholderStatus from "./useShareholderStatus";
 
@@ -20,7 +20,7 @@ const DEFAULT_ACL = {
 
 export default function useResolutionsAcl(): { acl: ResolutionsAcl; error?: boolean; isLoading?: boolean } {
   const { address } = useAccount();
-  const { data, error, isLoading } = useGraphQL(address ? getDaoManagerQuery : null);
+  const { data, error, isLoading } = useSubgraphGraphQL(address ? getDaoManagerQuery : null);
   const { daoUsers, isLoading: isLoadingShareholderStatus, getShareholderStatus } = useShareholderStatus();
 
   if (!data || error || !address || isLoading || isLoadingShareholderStatus) {

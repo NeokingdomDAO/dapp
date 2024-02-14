@@ -4,14 +4,14 @@ import { formatEther } from "ethers/lib/utils";
 import { useCallback, useMemo } from "react";
 
 import { getShareholdersInfo } from "@graphql/queries/subgraph/get-shareholders-info-query";
-import { useGraphQL } from "@graphql/useGraphql";
+import { useSubgraphGraphQL } from "@graphql/subgraph";
 
 import { ShareholderStatus } from "../types";
 
 const bigIntToNum = (bigIntNum: BigInt) => Number(formatEther(BigNumber.from(bigIntNum)));
 
 export default function useShareholderStatus() {
-  const { data, isLoading, error } = useGraphQL(getShareholdersInfo);
+  const { data, isLoading, error } = useSubgraphGraphQL(getShareholdersInfo);
 
   const getShareholderStatus: (address: string) => ShareholderStatus[] = useCallback(
     (address: string) => {

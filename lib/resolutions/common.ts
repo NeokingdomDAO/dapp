@@ -164,8 +164,7 @@ export const getEnhancedResolutionMapper =
         state === RESOLUTION_STATES.PRE_DRAFT && $acl?.canUpdate
           ? `#/resolutions/${resolution.id}/edit`
           : `#/resolutions/${resolution.id}`,
-      // @ts-expect-error TODO Andrea: fix this type
-      action: RESOLUTION_ACTIONS[state]($acl, resolutionVoters),
+      action: RESOLUTION_ACTIONS[state]($acl!, resolutionVoters!),
       resolutionTypeInfo,
       votingStatus: {
         votersHaveNotVoted: resolutionVoters?.filter((v) => !v.hasVoted),

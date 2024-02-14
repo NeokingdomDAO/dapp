@@ -4,7 +4,7 @@ import { useAccount } from "wagmi";
 import { useMemo } from "react";
 
 import { getUserRedemption } from "@graphql/queries/subgraph/get-user-redemption";
-import { useGraphQL } from "@graphql/useGraphql";
+import { useSubgraphGraphQL } from "@graphql/subgraph";
 
 import { bigIntToBigNum } from "./useUserBalanceAndOffers";
 
@@ -18,7 +18,7 @@ export default function useUserRedemption(): {
   isLoading: boolean;
 } {
   const { address: userId } = useAccount();
-  const { data, error, isLoading } = useGraphQL(
+  const { data, error, isLoading } = useSubgraphGraphQL(
     userId ? getUserRedemption : null,
     {
       refreshInterval: REFRESH_EVERY_MS,

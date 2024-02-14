@@ -2,14 +2,14 @@ import { useRouter } from "next/router";
 
 import { getLegacyResolutionQuery } from "@graphql/queries/subgraph/get-legacy-resolution-query";
 import { getResolutionQuery } from "@graphql/queries/subgraph/get-resolution-query";
-import { useGraphQL, useLegacyGraphQL } from "@graphql/useGraphql";
+import { useLegacySubgraphGraphQL, useSubgraphGraphQL } from "@graphql/subgraph";
 
 const REFRESH_INTERVAL_MS = 5000;
 
 export default function useGetResolution() {
   const router = useRouter();
 
-  const { data: resolutionData, isLoading: isLoadingResolution } = useGraphQL(
+  const { data: resolutionData, isLoading: isLoadingResolution } = useSubgraphGraphQL(
     router?.query?.id ? getResolutionQuery : null,
     {
       refreshInterval: REFRESH_INTERVAL_MS,
@@ -17,7 +17,7 @@ export default function useGetResolution() {
     [{ id: router.query.id as string }],
   );
 
-  const { data: legacyResolutionData, isLoading: isLoadingLegacyResolution } = useLegacyGraphQL(
+  const { data: legacyResolutionData, isLoading: isLoadingLegacyResolution } = useLegacySubgraphGraphQL(
     router?.query?.id ? getLegacyResolutionQuery : null,
     {
       refreshInterval: REFRESH_INTERVAL_MS,

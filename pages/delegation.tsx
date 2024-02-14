@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 
 import { getShareholdersInfo } from "@graphql/queries/subgraph/get-shareholders-info-query";
-import { useGraphQL } from "@graphql/useGraphql";
+import { useSubgraphGraphQL } from "@graphql/subgraph";
 
 import { isSameAddress } from "@lib/utils";
 
@@ -51,7 +51,7 @@ Delegation.checkMismatch = true;
 export default function Delegation() {
   const { user } = useUser();
   const { address: walletAddress } = useAccount();
-  const { data, isLoading, error } = useGraphQL(getShareholdersInfo);
+  const { data, isLoading, error } = useSubgraphGraphQL(getShareholdersInfo);
   const { data: delegationData, isLoading: delegationLoading } = useDelegationStatus();
   const [onlyManagingBoard, setOnlyManagingBoard] = React.useState(false);
   const { isLoading: isLoadingTransaction } = useBlockchainTransactionStore();

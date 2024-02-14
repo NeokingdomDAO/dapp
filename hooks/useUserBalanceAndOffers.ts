@@ -5,7 +5,7 @@ import { ComputedBalances, Offer } from "types";
 import { useAccount } from "wagmi";
 
 import { getTokensPageData } from "@graphql/queries/subgraph/get-tokens-page-data-query";
-import { useGraphQL } from "@graphql/useGraphql";
+import { useSubgraphGraphQL } from "@graphql/subgraph";
 
 type QueryDaoUser = GetTokensPageDataQuery["daoUser"];
 type QueryOffer = NonNullable<GetTokensPageDataQuery["daoUser"]>["activeOffers"]["0"];
@@ -64,7 +64,7 @@ export default function useUserBalanceAndOffers(): {
   isLoading: boolean;
 } {
   const { address: userId } = useAccount();
-  const { data, error, isLoading } = useGraphQL(
+  const { data, error, isLoading } = useSubgraphGraphQL(
     userId ? getTokensPageData : null,
     {
       refreshInterval: REFRESH_EVERY_MS,

@@ -3,7 +3,7 @@ import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
 
 import { getTokenMintings } from "@graphql/queries/subgraph/get-tokens-mintings-query";
-import { useGraphQL } from "@graphql/useGraphql";
+import { useSubgraphGraphQL } from "@graphql/subgraph";
 
 import { bigIntToBigNum } from "@hooks/useUserBalanceAndOffers";
 
@@ -47,7 +47,7 @@ export default function useGetInvestorsReportData(): {
   dataAccumulated: DATA_POINT[];
   error: any;
 } {
-  const { data, isLoading, error } = useGraphQL(getTokenMintings, { refreshInterval: REFETCH_AFTER_MS });
+  const { data, isLoading, error } = useSubgraphGraphQL(getTokenMintings, { refreshInterval: REFETCH_AFTER_MS });
 
   if (isLoading || !data || error) {
     return { data: [], isLoading, dataAccumulated: [], error };

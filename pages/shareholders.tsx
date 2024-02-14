@@ -65,7 +65,7 @@ export default function Shareholders() {
             <Grid item xs={12} md={6} lg={4} key={userAddress}>
               <UserCard
                 address={userAddress}
-                power={daoUsers[userAddress].power}
+                power={daoUsers?.[userAddress].power || ""}
                 statuses={getShareholderStatus(userAddress)}
               />
             </Grid>

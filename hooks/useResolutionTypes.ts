@@ -1,11 +1,11 @@
 import { getResolutionTypesQuery } from "@graphql/queries/subgraph/get-resolution-types-query";
-import { useGraphQL } from "@graphql/useGraphql";
+import { useSubgraphGraphQL } from "@graphql/subgraph";
 
 import { RESOLUTION_TYPES_TEXTS } from "../i18n/resolution";
 import { ResolutionTypeEntity } from "../types";
 
 export default function useResolutionTypes(): { types: ResolutionTypeEntity[]; error?: boolean; isLoading?: boolean } {
-  const { data, error, isLoading } = useGraphQL(getResolutionTypesQuery);
+  const { data, error, isLoading } = useSubgraphGraphQL(getResolutionTypesQuery);
 
   if (!data || error || isLoading) {
     return { types: [], error, isLoading };
