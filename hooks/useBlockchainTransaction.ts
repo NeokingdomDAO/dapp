@@ -97,7 +97,7 @@ export default function useBlockchainTransaction() {
           },
         });
       } else {
-        enqueueSnackbar(`${onErrorMessage}. ${err.reason}`, {
+        enqueueSnackbar(`${onErrorMessage}. ${err.reason || err.message}`, {
           variant: "error",
         });
       }
