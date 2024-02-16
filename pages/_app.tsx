@@ -84,6 +84,7 @@ const wagmiConfig = defaultWagmiConfig({
   chains: SUPPORTED_CHAINS,
   projectId,
   metadata,
+  enableCoinbase: false,
 });
 
 createWeb3Modal({
