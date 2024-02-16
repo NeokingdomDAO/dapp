@@ -80,7 +80,7 @@ const metadata = {
 };
 
 const wagmiConfig = defaultWagmiConfig({
-  // @ts-ignore not sure how to make this work
+  // @ts-ignore not sure how to make ts happy here
   chains: SUPPORTED_CHAINS,
   projectId,
   metadata,

@@ -78,6 +78,9 @@ const getUsdcContract = (chainId: number, signer: Signer): TokenMock => {
 
 function walletClientToSigner(walletClient: WalletClient) {
   const { account, chain, transport } = walletClient;
+  if (!account || !chain) {
+    throw new Error("No account or chain found");
+  }
   const network = {
     chainId: chain?.id,
     name: chain?.name,
@@ -91,7 +94,6 @@ function walletClientToSigner(walletClient: WalletClient) {
 export function useContracts() {
   const { address } = useAccount();
   const chainId = useChainId();
-  console.log("chainId: ", chainId);
   const { data: walletClient } = useWalletClient();
   const { disconnect } = useDisconnect();
   const { enqueueSnackbar } = useSnackbar();
@@ -103,7 +105,7 @@ export function useContracts() {
       try {
         const signer = walletClientToSigner(walletClient);
 
-        if (!SUPPORTED_CHAINS.map((chain) => chain.id).includes(chainId)) {
+        if (!SUPPORTED_CHAINS.map((chain) => chain.id).includes(chainId as 9001 | 80001)) {
           throw new Error(`You're connected to an unsupported network, please connect to ${SUPPORTED_CHAINS[0].name}`);
         }
 
