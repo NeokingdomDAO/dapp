@@ -1,27 +1,23 @@
 import { Window as KeplrWindow } from "@keplr-wallet/types";
 
-export type ResolutionVoter = {
-  id: string;
-  votingPower: string;
+import { GetLegacyResolutionsQuery, GetResolutionsQuery, ResolutionVoter } from "@graphql/subgraph/generated/graphql";
+
+export type ResolutionVoterEnhanced = NonNullable<ResolutionEntity["voters"]>["0"] & {
   votingPowerInt: number;
-  address: string;
-  hasVoted: boolean;
-  hasVotedYes: boolean;
-  delegated: string;
   usedPoa: boolean;
   beingDelegatedBy: ResolutionVoter[];
-  delegating: ResolutionVoter | null;
+  delegating: ResolutionVoter | undefined | null;
 };
 
 export type ResolutionsAcl = {
-  canCreate: boolean;
-  canUpdate: boolean;
-  canApprove: boolean;
+  canCreate?: boolean;
+  canUpdate?: boolean;
+  canApprove?: boolean;
   canVote: (voters: ResolutionVoter[]) => boolean;
-  isShareholder: boolean;
-  isManagingBoard: boolean;
-  isContributor: boolean;
-  isExtraneous: boolean;
+  isShareholder?: boolean;
+  isManagingBoard?: boolean;
+  isContributor?: boolean;
+  isExtraneous?: boolean;
 };
 
 export type ResolutionTypeEntity = {
@@ -43,30 +39,8 @@ export type DaoManagerEntity = {
   totalVotingPower: BigInt;
 };
 
-export type ResolutionEntity = {
-  id: string;
-  title: string;
-  content: string;
-  isNegative: boolean;
-  resolutionType: ResolutionTypeEntity;
-  yesVotesTotal: string;
-  createTimestamp: string;
-  updateTimestamp: string;
-  approveTimestamp: string;
-  rejectTimestamp: string;
-  addressedContributor: string;
-  createBy: string;
-  updateBy: string;
-  approveBy: string;
-  rejectBy: string;
-  voters: ResolutionVoter[];
-  hasQuorum: boolean;
-  executionTimestamp?: string;
-  executionData?: string[];
-  executionTo?: string[];
-  totalVotingPower: BigInt;
-  isLegacy?: boolean;
-};
+export type ResolutionEntity = GetResolutionsQuery["resolutions"]["0"] &
+  GetLegacyResolutionsQuery["resolutions"]["0"] & { isLegacy?: boolean };
 
 export type ResolutionAction = {
   label: string;
@@ -92,10 +66,10 @@ export type ResolutionEntityEnhanced = ResolutionEntity & {
   action: ResolutionAction;
   resolutionTypeInfo: ResolutionTypeInfo;
   votingStatus: {
-    votersHaveNotVoted: ResolutionVoter[];
-    votersHaveVoted: ResolutionVoter[];
-    votersHaveVotedYes: ResolutionVoter[];
-    votersHaveVotedNo: ResolutionVoter[];
+    votersHaveNotVoted?: ResolutionVoterEnhanced[];
+    votersHaveVoted?: ResolutionVoterEnhanced[];
+    votersHaveVotedYes?: ResolutionVoterEnhanced[];
+    votersHaveVotedNo?: ResolutionVoterEnhanced[];
   };
 };
 
@@ -159,21 +133,7 @@ export type Offer = {
   matches: OfferMatch[];
 };
 
-export type DaoUser = {
-  id: string;
-  address: string;
-
-  governanceBalance: BigInt;
-  governanceOfferedTempBalance: BigInt;
-  governanceVestingBalance: BigInt;
-  governanceVaultedBalance: BigInt;
-  governanceWithdrawableTempBalance: BigInt;
-  votingPower: BigInt;
-  shareholderRegistryBalance: BigInt;
-  neokigdomTokenBalance: BigInt;
-
-  activeOffers: Offer[];
-};
+export type ShareholderStatus = "ManagingBoard" | "Investor" | "Contributor" | "Shareholder";
 
 export type ComputedBalances = {
   governanceTokens: number;
@@ -208,22 +168,22 @@ export type RewardsResponse = {
   };
 };
 
-export type RedemptionHistory = {
-  id: string;
-  amount: BigInt;
-  timestamp: string;
-};
+// export type RedemptionHistory = {
+//   id: string;
+//   amount: BigInt;
+//   timestamp: string;
+// };
 
-export type Redemption = {
-  id: string;
-  amount: BigInt;
-  redemptionHistory: RedemptionHistory[];
-  createTimestamp: string;
-  updateTimestamp: string;
-  createBy: string;
-  startTimestamp: string;
-  endTimestamp: string;
-};
+// export type Redemption = {
+//   id: string;
+//   amount: BigInt;
+//   redemptionHistory: RedemptionHistory[];
+//   createTimestamp: string;
+//   updateTimestamp: string;
+//   createBy: string;
+//   startTimestamp: string;
+//   endTimestamp: string;
+// };
 
 export type Task = {
   id: number;

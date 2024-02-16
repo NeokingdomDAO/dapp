@@ -2,8 +2,8 @@ import { useAccount } from "wagmi";
 
 import { Alert, CircularProgress } from "@mui/material";
 
-import { fetcherWithParams } from "@graphql/client";
-import { getResolutionQuery } from "@graphql/queries/get-resolution.query";
+import { getResolutionQuery } from "@graphql/subgraph/queries/get-resolution-query";
+import { fetcherGraphqlPublic } from "@graphql/subgraph/subgraph-client";
 
 import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
 
@@ -17,7 +17,7 @@ EditResolutionPage.requireLogin = false;
 EditResolutionPage.checkMismatch = true;
 
 export const getServerSideProps = async ({ params, res }: any) => {
-  const data = await fetcherWithParams([getResolutionQuery, params]);
+  const data = await fetcherGraphqlPublic([getResolutionQuery, { id: params.id as string }]);
 
   if (!data.resolution) {
     res.statusCode = 404;

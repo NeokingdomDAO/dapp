@@ -1,28 +1,28 @@
 import { useRouter } from "next/router";
-import useSWR from "swr";
 
-import { clientLegacyGraph, fetcherWithParams, legacyFetcherWithParams } from "@graphql/client";
-import { getLegacyResolutionQuery } from "@graphql/queries/get-legacy-resolution.query";
-import { getResolutionQuery } from "@graphql/queries/get-resolution.query";
+import { getLegacyResolutionQuery } from "@graphql/subgraph/queries/get-legacy-resolution-query";
+import { getResolutionQuery } from "@graphql/subgraph/queries/get-resolution-query";
+import { useLegacySubgraphGraphQL, useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 const REFRESH_INTERVAL_MS = 5000;
 
 export default function useGetResolution() {
   const router = useRouter();
 
-  const { data: resolutionData, isLoading: isLoadingResolution } = useSWR<any>(
-    router?.query?.id ? [getResolutionQuery, { id: router.query.id }] : null,
-    fetcherWithParams,
-    { refreshInterval: REFRESH_INTERVAL_MS },
+  const { data: resolutionData, isLoading: isLoadingResolution } = useSubgraphGraphQL(
+    router?.query?.id ? getResolutionQuery : null,
+    {
+      refreshInterval: REFRESH_INTERVAL_MS,
+    },
+    [{ id: router.query.id as string }],
   );
 
-  const shouldFetchLegacy =
-    !isLoadingResolution && resolutionData && !resolutionData.resolution && router?.query?.id && clientLegacyGraph;
-
-  const { data: legacyResolutionData, isLoading: isLoadingLegacyResolution } = useSWR<any>(
-    shouldFetchLegacy ? [getLegacyResolutionQuery, { id: router.query.id }] : null,
-    legacyFetcherWithParams,
-    { refreshInterval: REFRESH_INTERVAL_MS },
+  const { data: legacyResolutionData, isLoading: isLoadingLegacyResolution } = useLegacySubgraphGraphQL(
+    router?.query?.id ? getLegacyResolutionQuery : null,
+    {
+      refreshInterval: REFRESH_INTERVAL_MS,
+    },
+    [{ id: router.query.id as string }],
   );
 
   return {

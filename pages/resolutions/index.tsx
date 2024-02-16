@@ -17,8 +17,6 @@ import useResolutionsAcl from "@hooks/useResolutionsAcl";
 import useTimestamp from "@hooks/useTimestamp";
 import useUser from "@hooks/useUser";
 
-import { ResolutionEntityEnhanced } from "../../types";
-
 Resolutions.title = "Resolutions";
 Resolutions.checkMismatch = true;
 Resolutions.fullWidth = true;
@@ -31,7 +29,7 @@ export default function Resolutions() {
   const { user } = useUser();
   const { resolutions, isLoading, error } = useGetResolutions();
 
-  const enhancedResolutions: ResolutionEntityEnhanced[] = useMemo(() => {
+  const enhancedResolutions = useMemo(() => {
     if ((isLoading || isLoadingAcl) && resolutions.length === 0) {
       return [];
     }
@@ -45,13 +43,13 @@ export default function Resolutions() {
   const [activeResolutions, inactiveResolutions] = useMemo(() => {
     const active = filteredResolutions.filter((resolution) => {
       const votingUser = address
-        ? resolution.votingStatus.votersHaveVoted.find((voter) => isSameAddress(voter.address, address))
+        ? resolution.votingStatus.votersHaveVoted?.find((voter) => isSameAddress(voter.address, address))
         : null;
       return resolution.state === RESOLUTION_STATES.VOTING && !votingUser && user?.isLoggedIn;
     });
     const inactive = filteredResolutions.filter((resolution) => {
       const votingUser = address
-        ? resolution.votingStatus.votersHaveVoted.find((voter) => isSameAddress(voter.address, address))
+        ? resolution.votingStatus.votersHaveVoted?.find((voter) => isSameAddress(voter.address, address))
         : null;
       return resolution.state !== RESOLUTION_STATES.VOTING || !!votingUser || !user?.isLoggedIn;
     });

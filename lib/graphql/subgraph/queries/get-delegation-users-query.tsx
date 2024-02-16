@@ -1,6 +1,6 @@
-import { gql } from "graphql-request";
+import { graphql } from "../generated";
 
-export const getDelegationUsers = gql`
+export const getDelegationUsers = graphql(`
   query GetDelegationUsers {
     delegationUsers {
       id
@@ -8,4 +8,4 @@ export const getDelegationUsers = gql`
       delegated
     }
   }
-`;
+`);

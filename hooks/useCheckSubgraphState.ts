@@ -1,10 +1,9 @@
-import useSWR from "swr";
 import { useBlockNumber } from "wagmi";
 
 import { useEffect, useState } from "react";
 
-import { fetcher } from "@graphql/client";
-import { getSubgraphState } from "@graphql/queries/get-subgraph-state";
+import { getSubgraphState } from "@graphql/subgraph/queries/get-subgraph-state-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import { useSnackbar } from "./useSnackbar";
 
@@ -13,7 +12,7 @@ const REFETCH_AFTER_MS = 3000;
 const DIFFERENCE_TO_NOTIFY = 2;
 
 export function useCheckSubgraphState() {
-  const { data, isLoading } = useSWR<any>(getSubgraphState, fetcher, { refreshInterval: REFETCH_AFTER_MS });
+  const { data, isLoading } = useSubgraphGraphQL(getSubgraphState, { refreshInterval: REFETCH_AFTER_MS });
   const [mismatch, setMismatch] = useState(false);
   const [shouldNotifyMismatch, setShouldNotifyMismatch] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
