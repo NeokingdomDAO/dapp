@@ -1,9 +1,7 @@
 import { type TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { Page, Route, test as baseTest, expect } from "@playwright/test";
 
-// Registers a client-side interception to our BFF (presumes all `graphql`
-// requests are to us). Interceptions are per-operation, so multiple can be
-// registered for different operations without overwriting one-another.
+// original from https://www.jayfreestone.com/writing/stubbing-graphql-playwright/
 export async function interceptGQL<TResult, TVariables>(
   page: Page,
   document: TypedDocumentNode<TResult, TVariables>,
@@ -45,14 +43,19 @@ const test = baseTest.extend<{ interceptGQL: typeof interceptGQL }>({
     await use(interceptGQL);
   },
   page: async ({ page }, use) => {
-    // Block all BFF requests from making it through to the 'real'
-    // dependency. If we get this far it means we've forgotten to register a
-    // handler, and (at least locally) we're using a real dependency.
     await page.route(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT, function (route: Route) {
       const req = route.request().postDataJSON();
       console.warn(`No mock provided for public graphql request: ${req.operationName}`);
       route.continue();
     });
+
+    if (process.env.NEXT_PUBLIC_LEGACY_GRAPHQL_ENDPOINT) {
+      await page.route(process.env.NEXT_PUBLIC_LEGACY_GRAPHQL_ENDPOINT, function (route: Route) {
+        const req = route.request().postDataJSON();
+        console.warn(`No mock provided for public legacy graphql request: ${req.operationName}`);
+        route.continue();
+      });
+    }
 
     await use(page);
   },
