@@ -2,8 +2,9 @@ import { wallets as keplrWallets } from "@cosmos-kit/keplr";
 import { wallets as leapWallets } from "@cosmos-kit/leap";
 import { ChainProvider } from "@cosmos-kit/react";
 import "@interchain-ui/react/styles";
-import { EthereumClient, w3mConnectors, w3mProvider } from "@web3modal/ethereum";
-import { Web3Modal } from "@web3modal/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createWeb3Modal } from "@web3modal/wagmi/react";
+import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { assets, chains } from "chain-registry";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
@@ -11,8 +12,8 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
-import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { evmos, evmosTestnet, polygonMumbai } from "wagmi/chains";
+import { evmos, polygonMumbai } from "viem/chains";
+import { WagmiProvider } from "wagmi";
 
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -68,15 +69,32 @@ export const SUPPORTED_CHAINS = [process.env.NEXT_PUBLIC_ENV === "staging" ? pol
 
 // Wagmi client
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
-const { publicClient } = configureChains(SUPPORTED_CHAINS, [w3mProvider({ projectId })]);
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors: w3mConnectors({ projectId, chains: SUPPORTED_CHAINS }),
-  publicClient,
+
+const queryClient = new QueryClient();
+
+const metadata = {
+  name: "Web3Modal",
+  description: "Web3Modal Neokingdom DAO",
+  url: "https://web3modal.com",
+  icons: ["https://avatars.githubusercontent.com/u/37784886"],
+};
+
+const wagmiConfig = defaultWagmiConfig({
+  // @ts-ignore not sure how to make ts happy here
+  chains: SUPPORTED_CHAINS,
+  projectId,
+  metadata,
+  enableCoinbase: false,
+  ssr: true,
 });
 
-// Web3Modal Ethereum Client
-const ethereumClient = new EthereumClient(wagmiConfig, SUPPORTED_CHAINS);
+createWeb3Modal({
+  wagmiConfig,
+  projectId,
+  themeVariables: {
+    "--w3m-z-index": 2000,
+  },
+});
 
 interface DappProps extends AppProps {
   Component: NextPage & {
@@ -118,55 +136,57 @@ export default function App({ Component, pageProps }: DappProps) {
   const appElement = (
     <CssVarsProvider theme={newTheme} defaultMode="system">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <WagmiConfig config={wagmiConfig}>
-          <ChainProvider
-            chains={supportedChains}
-            assetLists={supportedAssets}
-            wallets={[...keplrWallets, ...leapWallets]}
-            logLevel={"DEBUG"}
-            walletConnectOptions={{
-              // Required if "wallets" contains mobile wallets
-              signClient: {
-                projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
-              },
-            }}
-          >
-            <StyledSnackbarProvider
-              maxSnack={3}
-              autoHideDuration={3000}
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              preventDuplicate
+        <WagmiProvider config={wagmiConfig}>
+          <QueryClientProvider client={queryClient}>
+            <ChainProvider
+              chains={supportedChains}
+              assetLists={supportedAssets}
+              wallets={[...keplrWallets, ...leapWallets]}
+              logLevel={"DEBUG"}
+              walletConnectOptions={{
+                // Required if "wallets" contains mobile wallets
+                signClient: {
+                  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
+                },
+              }}
             >
-              <CssBaseline />
-              {Component.noLayout ? (
-                <>
-                  <ExtraneousWarning>
-                    <Component {...pageProps} />
-                  </ExtraneousWarning>
-                </>
-              ) : (
-                <Layout fullWidth={!!Component.fullWidth} checkMismatch={!!Component.checkMismatch}>
-                  <ExtraneousWarning>
-                    {(isLoading || !mounted) && (
-                      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                        <CircularProgress />
-                      </Box>
-                    )}
-                    {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
-                      <ContractsProvider>
-                        <>
-                          <CheckNeokBalance />
-                          <CheckConnected fullWidth={!!Component.fullWidth} />
-                          <Component {...pageProps} />
-                        </>
-                      </ContractsProvider>
-                    )}
-                  </ExtraneousWarning>
-                </Layout>
-              )}
-            </StyledSnackbarProvider>
-          </ChainProvider>
-        </WagmiConfig>
+              <StyledSnackbarProvider
+                maxSnack={3}
+                autoHideDuration={3000}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                preventDuplicate
+              >
+                <CssBaseline />
+                {Component.noLayout ? (
+                  <>
+                    <ExtraneousWarning>
+                      <Component {...pageProps} />
+                    </ExtraneousWarning>
+                  </>
+                ) : (
+                  <Layout fullWidth={!!Component.fullWidth} checkMismatch={!!Component.checkMismatch}>
+                    <ExtraneousWarning>
+                      {(isLoading || !mounted) && (
+                        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                          <CircularProgress />
+                        </Box>
+                      )}
+                      {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
+                        <ContractsProvider>
+                          <>
+                            <CheckNeokBalance />
+                            <CheckConnected fullWidth={!!Component.fullWidth} />
+                            <Component {...pageProps} />
+                          </>
+                        </ContractsProvider>
+                      )}
+                    </ExtraneousWarning>
+                  </Layout>
+                )}
+              </StyledSnackbarProvider>
+            </ChainProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
       </LocalizationProvider>
     </CssVarsProvider>
   );
@@ -182,13 +202,6 @@ export default function App({ Component, pageProps }: DappProps) {
         {Component.customCss && <style>{Component.customCss}</style>}
       </Head>
       {appElement}
-      <Web3Modal
-        projectId={projectId}
-        ethereumClient={ethereumClient}
-        themeVariables={{
-          "--w3m-z-index": "2000",
-        }}
-      />
     </>
   );
 }

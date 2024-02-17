@@ -1,6 +1,7 @@
 import { Signer, providers } from "ethers";
 import { SUPPORTED_CHAINS } from "pages/_app";
-import { WalletClient, useAccount, useDisconnect, useNetwork, useWalletClient } from "wagmi";
+import { WalletClient } from "viem";
+import { useAccount, useChainId, useDisconnect, useWalletClient } from "wagmi";
 
 import { useEffect, useState } from "react";
 
@@ -32,64 +33,67 @@ export const networks: Record<string, any> = {
   vanilla: networksNeoKingdom,
 }[process.env.NEXT_PUBLIC_PROJECT_KEY];
 
-const getResolutionManagerContract = (chainId: string, signer: Signer): ResolutionManager => {
+const getResolutionManagerContract = (chainId: number, signer: Signer): ResolutionManager => {
   const address = networks[chainId]["ResolutionManager"]?.address;
   return ResolutionManager__factory.connect(address, signer);
 };
 
-const getNeokingdomTokenContract = (chainId: string, signer: Signer): NeokingdomToken => {
+const getNeokingdomTokenContract = (chainId: number, signer: Signer): NeokingdomToken => {
   const address = networks[chainId]["NeokingdomToken"]?.address;
   return NeokingdomToken__factory.connect(address, signer);
 };
 
-export const getNeokingdomTokenContractAddress = (chainId: string): string => {
+export const getNeokingdomTokenContractAddress = (chainId: number): string => {
   return networks[chainId]["NeokingdomToken"]?.address;
 };
 
-const getVotingContract = (chainId: string, signer: Signer): Voting => {
+const getVotingContract = (chainId: number, signer: Signer): Voting => {
   const address = networks[chainId]["Voting"]?.address;
   return Voting__factory.connect(address, signer);
 };
 
-const getInternalMarketContract = (chainId: string, signer: Signer): InternalMarket => {
+const getInternalMarketContract = (chainId: number, signer: Signer): InternalMarket => {
   const address = networks[chainId]["InternalMarket"]?.address;
   return InternalMarket__factory.connect(address, signer);
 };
 
-const getInternalMarketContractAddress = (chainId: string): string => {
+const getInternalMarketContractAddress = (chainId: number): string => {
   return networks[chainId]["InternalMarket"]?.address;
 };
 
-const getGovernanceTokenContract = (chainId: string, signer: Signer): GovernanceToken => {
+const getGovernanceTokenContract = (chainId: number, signer: Signer): GovernanceToken => {
   const address = networks[chainId]["GovernanceToken"]?.address;
   return GovernanceToken__factory.connect(address, signer);
 };
 
-const getGovernanceTokenContractAddress = (chainId: string): string => {
+const getGovernanceTokenContractAddress = (chainId: number): string => {
   return networks[chainId]["GovernanceToken"]?.address;
 };
 
 // todo use ERC20?
-const getUsdcContract = (chainId: string, signer: Signer): TokenMock => {
+const getUsdcContract = (chainId: number, signer: Signer): TokenMock => {
   const address = networks[chainId]["TokenMock"]?.address;
   return TokenMock__factory.connect(address, signer);
 };
 
 function walletClientToSigner(walletClient: WalletClient) {
   const { account, chain, transport } = walletClient;
+  if (!account || !chain) {
+    throw new Error("No account or chain found");
+  }
   const network = {
-    chainId: chain.id,
-    name: chain.name,
-    ensAddress: chain.contracts?.ensRegistry?.address,
+    chainId: chain?.id,
+    name: chain?.name,
+    ensAddress: chain?.contracts?.ensRegistry?.address,
   };
   const provider = new providers.Web3Provider(transport, network);
-  const signer = provider.getSigner(account.address);
+  const signer = provider.getSigner(account?.address);
   return signer;
 }
 
 export function useContracts() {
   const { address } = useAccount();
-  const { chain } = useNetwork();
+  const chainId = useChainId();
   const { data: walletClient } = useWalletClient();
   const { disconnect } = useDisconnect();
   const { enqueueSnackbar } = useSnackbar();
@@ -99,10 +103,9 @@ export function useContracts() {
   useEffect(() => {
     if (address && walletClient) {
       try {
-        const chainId = String(chain?.id);
         const signer = walletClientToSigner(walletClient);
 
-        if (!SUPPORTED_CHAINS.map((chain) => String(chain.id)).includes(chainId)) {
+        if (!SUPPORTED_CHAINS.map((chain) => chain.id).includes(chainId as 9001 | 80001)) {
           throw new Error(`You're connected to an unsupported network, please connect to ${SUPPORTED_CHAINS[0].name}`);
         }
 
@@ -125,7 +128,7 @@ export function useContracts() {
         disconnect();
       }
     }
-  }, [address, walletClient, chain?.id]);
+  }, [address, walletClient, chainId]);
 
   return contracts;
 }

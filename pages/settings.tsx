@@ -1,18 +1,21 @@
-import { useWeb3Modal } from "@web3modal/react";
+import { useWeb3Modal, useWeb3ModalTheme } from "@web3modal/wagmi/react";
 import NextLink from "next/link";
-import { useAccount, useBalance, useDisconnect, useNetwork } from "wagmi";
+import { formatUnits } from "viem";
+import { useAccount, useBalance, useChainId, useDisconnect } from "wagmi";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Alert, AlertTitle, Avatar, Box, Button, Divider, Link, Paper, Stack, Typography } from "@mui/material";
 
-import { getLettersFromName } from "@lib/utils";
+import { getChain, getLettersFromName } from "@lib/utils";
 
 import Dialog from "@components/Dialog";
 
 import useLogout from "@hooks/useLogout";
 import useOdooUsers from "@hooks/useOdooUsers";
 import useUser from "@hooks/useUser";
+
+import { SUPPORTED_CHAINS } from "./_app";
 
 Settings.title = "Settings";
 Settings.requireLogin = false;
@@ -42,9 +45,10 @@ export default function Settings() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { logout } = useLogout();
   const { user } = useUser();
+  const chainId = useChainId();
+  const chain = useMemo(() => getChain(chainId), [chainId]);
   const { isConnected: isWalletConnected, address } = useAccount();
   const { currentOdooUser } = useOdooUsers();
-  const { chain } = useNetwork();
   const { data } = useBalance({
     address,
   });
@@ -142,8 +146,8 @@ export default function Settings() {
         </>
       ) : (
         <Box>
-          <Typography variant="body1">Connected network: {chain?.name}</Typography>
-          <Typography variant="body1">Balance: {data?.formatted}</Typography>
+          <Typography variant="body1">Connected network: {chain.name}</Typography>
+          <Typography variant="body1">Balance: {data ? formatUnits(data!.value, data!.decimals) : ""}</Typography>
           <Typography variant="body1">
             Address: <pre style={{ display: "inline" }}>{address}</pre>
           </Typography>

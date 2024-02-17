@@ -1,12 +1,13 @@
+import { useWeb3ModalTheme } from "@web3modal/wagmi/react";
 import dynamic from "next/dynamic";
 import { Stardos_Stencil } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
-import { Badge, Chip, Container, Divider, Slide, Stack, useScrollTrigger } from "@mui/material";
+import { Badge, Chip, Container, Divider, Slide, Stack, useColorScheme, useScrollTrigger } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -50,6 +51,14 @@ export default function Layout({
   const isActive = useMemo(() => initActiveStyle(router.asPath), [router.asPath]);
   const { data } = useDelegationStatus();
   const { votingResolutions } = useGetActiveResolutions();
+
+  const { setThemeMode } = useWeb3ModalTheme();
+  const { mode } = useColorScheme();
+
+  useEffect(() => {
+    setThemeMode(mode === "dark" ? "dark" : "light");
+  }, [mode]);
+
   const votingResolutionsNum = votingResolutions?.length || 0;
 
   const delegationActive = data.signerDelegatedBy.length > 0 || data.signerDelegationStatus?.isDelegating;
