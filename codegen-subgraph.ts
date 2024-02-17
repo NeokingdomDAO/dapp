@@ -2,7 +2,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere",
+  schema: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
   documents: "lib/graphql/subgraph/queries/**/*.tsx",
   generates: {
     "lib/graphql/subgraph/generated/": {

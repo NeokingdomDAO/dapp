@@ -1,9 +1,9 @@
-export const resolutionsMock = {
+export const legacyResolutionsMock = {
   resolutions: [
     {
-      id: "1",
-      title: "Title Resolution 1",
-      content: "Content Resolution 1",
+      id: "100",
+      title: "Title Legacy Resolution 1",
+      content: "Content Legacy Resolution 1",
       isNegative: false,
       resolutionType: {
         id: "8",
@@ -30,9 +30,9 @@ export const resolutionsMock = {
       voters: [],
     },
     {
-      id: "2",
-      title: "Title Resolution 2",
-      content: "Content Resolution 2",
+      id: "101",
+      title: "Title Legacy Resolution 2",
+      content: "Content Legacy Resolution 2",
       isNegative: false,
       resolutionType: {
         id: "6",

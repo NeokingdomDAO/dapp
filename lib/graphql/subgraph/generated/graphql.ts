@@ -18,6 +18,11 @@ export type Scalars = {
   BigDecimal: { input: any; output: any };
   BigInt: { input: any; output: any };
   Bytes: { input: any; output: any };
+  /**
+   * 8 bytes signed integer
+   *
+   */
+  Int8: { input: any; output: any };
 };
 
 export type BlockChangedFilter = {
@@ -52,6 +57,7 @@ export type DaoManagerResolutionTypesArgs = {
 export type DaoManager_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<DaoManager_Filter>>>;
   contributorsAddresses?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
   contributorsAddresses_contains?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
   contributorsAddresses_contains_nocase?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -78,6 +84,7 @@ export type DaoManager_Filter = {
   managingBoardAddresses_not?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
   managingBoardAddresses_not_contains?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
   managingBoardAddresses_not_contains_nocase?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<DaoManager_Filter>>>;
   resolutionTypes?: InputMaybe<Array<Scalars["String"]["input"]>>;
   resolutionTypes_?: InputMaybe<ResolutionType_Filter>;
   resolutionTypes_contains?: InputMaybe<Array<Scalars["String"]["input"]>>;
@@ -146,10 +153,15 @@ export type DaoUser_Filter = {
   activeOffers_not_contains_nocase?: InputMaybe<Array<Scalars["String"]["input"]>>;
   address?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  address_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<DaoUser_Filter>>>;
   governanceBalance?: InputMaybe<Scalars["BigInt"]["input"]>;
   governanceBalance_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   governanceBalance_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -206,6 +218,7 @@ export type DaoUser_Filter = {
   neokigdomTokenBalance_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   neokigdomTokenBalance_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   neokigdomTokenBalance_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<DaoUser_Filter>>>;
   shareholderRegistryBalance?: InputMaybe<Scalars["BigInt"]["input"]>;
   shareholderRegistryBalance_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   shareholderRegistryBalance_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -250,13 +263,22 @@ export type DelegationUser_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   address?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  address_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<DelegationUser_Filter>>>;
   delegated?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  delegated_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  delegated_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  delegated_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  delegated_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -268,6 +290,7 @@ export type DelegationUser_Filter = {
   id_lte?: InputMaybe<Scalars["ID"]["input"]>;
   id_not?: InputMaybe<Scalars["ID"]["input"]>;
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<DelegationUser_Filter>>>;
 };
 
 export enum DelegationUser_OrderBy {
@@ -298,6 +321,7 @@ export type Deposit_Filter = {
   amount_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<Deposit_Filter>>>;
   createTimestamp?: InputMaybe<Scalars["BigInt"]["input"]>;
   createTimestamp_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   createTimestamp_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -308,7 +332,11 @@ export type Deposit_Filter = {
   createTimestamp_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   from?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  from_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  from_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  from_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  from_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -320,6 +348,7 @@ export type Deposit_Filter = {
   id_lte?: InputMaybe<Scalars["ID"]["input"]>;
   id_not?: InputMaybe<Scalars["ID"]["input"]>;
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<Deposit_Filter>>>;
   settleTimestamp?: InputMaybe<Scalars["BigInt"]["input"]>;
   settleTimestamp_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   settleTimestamp_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -390,6 +419,7 @@ export type OfferMatch_Filter = {
   amount_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<OfferMatch_Filter>>>;
   createTimestamp?: InputMaybe<Scalars["BigInt"]["input"]>;
   createTimestamp_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   createTimestamp_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -408,10 +438,15 @@ export type OfferMatch_Filter = {
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
   matchedFrom?: InputMaybe<Scalars["Bytes"]["input"]>;
   matchedFrom_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  matchedFrom_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  matchedFrom_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   matchedFrom_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  matchedFrom_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  matchedFrom_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   matchedFrom_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   matchedFrom_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   matchedFrom_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<OfferMatch_Filter>>>;
 };
 
 export enum OfferMatch_OrderBy {
@@ -432,6 +467,7 @@ export type Offer_Filter = {
   amount_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<Offer_Filter>>>;
   createTimestamp?: InputMaybe<Scalars["BigInt"]["input"]>;
   createTimestamp_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   createTimestamp_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -454,7 +490,11 @@ export type Offer_Filter = {
   expiredOnTransfer_not_in?: InputMaybe<Array<Scalars["Boolean"]["input"]>>;
   from?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  from_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  from_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  from_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  from_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   from_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -473,6 +513,7 @@ export type Offer_Filter = {
   matches_not?: InputMaybe<Array<Scalars["String"]["input"]>>;
   matches_not_contains?: InputMaybe<Array<Scalars["String"]["input"]>>;
   matches_not_contains_nocase?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<Offer_Filter>>>;
 };
 
 export enum Offer_OrderBy {
@@ -766,6 +807,7 @@ export type RedemptionHistory_Filter = {
   amount_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<RedemptionHistory_Filter>>>;
   id?: InputMaybe<Scalars["ID"]["input"]>;
   id_gt?: InputMaybe<Scalars["ID"]["input"]>;
   id_gte?: InputMaybe<Scalars["ID"]["input"]>;
@@ -774,6 +816,7 @@ export type RedemptionHistory_Filter = {
   id_lte?: InputMaybe<Scalars["ID"]["input"]>;
   id_not?: InputMaybe<Scalars["ID"]["input"]>;
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<RedemptionHistory_Filter>>>;
   timestamp?: InputMaybe<Scalars["BigInt"]["input"]>;
   timestamp_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   timestamp_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -801,9 +844,14 @@ export type Redemption_Filter = {
   amount_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   amount_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<Redemption_Filter>>>;
   createBy?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  createBy_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  createBy_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  createBy_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  createBy_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -831,6 +879,7 @@ export type Redemption_Filter = {
   id_lte?: InputMaybe<Scalars["ID"]["input"]>;
   id_not?: InputMaybe<Scalars["ID"]["input"]>;
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<Redemption_Filter>>>;
   redemptionHistory?: InputMaybe<Array<Scalars["String"]["input"]>>;
   redemptionHistory_?: InputMaybe<RedemptionHistory_Filter>;
   redemptionHistory_contains?: InputMaybe<Array<Scalars["String"]["input"]>>;
@@ -913,6 +962,7 @@ export type ResolutionMetadata = {
 export type ResolutionMetadata_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ResolutionMetadata_Filter>>>;
   id?: InputMaybe<Scalars["ID"]["input"]>;
   id_gt?: InputMaybe<Scalars["ID"]["input"]>;
   id_gte?: InputMaybe<Scalars["ID"]["input"]>;
@@ -945,6 +995,7 @@ export type ResolutionMetadata_Filter = {
   month_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   month_starts_with?: InputMaybe<Scalars["String"]["input"]>;
   month_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  or?: InputMaybe<Array<InputMaybe<ResolutionMetadata_Filter>>>;
 };
 
 export enum ResolutionMetadata_OrderBy {
@@ -966,6 +1017,7 @@ export type ResolutionType = {
 export type ResolutionType_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ResolutionType_Filter>>>;
   canBeNegative?: InputMaybe<Scalars["Boolean"]["input"]>;
   canBeNegative_in?: InputMaybe<Array<Scalars["Boolean"]["input"]>>;
   canBeNegative_not?: InputMaybe<Scalars["Boolean"]["input"]>;
@@ -1006,6 +1058,7 @@ export type ResolutionType_Filter = {
   noticePeriod_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   noticePeriod_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   noticePeriod_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<ResolutionType_Filter>>>;
   quorum?: InputMaybe<Scalars["BigInt"]["input"]>;
   quorum_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   quorum_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -1048,13 +1101,22 @@ export type ResolutionVoter_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   address?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  address_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  address_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   address_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<ResolutionVoter_Filter>>>;
   delegated?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  delegated_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  delegated_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  delegated_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  delegated_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   delegated_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -1074,6 +1136,7 @@ export type ResolutionVoter_Filter = {
   id_lte?: InputMaybe<Scalars["ID"]["input"]>;
   id_not?: InputMaybe<Scalars["ID"]["input"]>;
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<ResolutionVoter_Filter>>>;
   votingPower?: InputMaybe<Scalars["BigInt"]["input"]>;
   votingPower_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   votingPower_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -1098,13 +1161,22 @@ export type Resolution_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   addressedContributor?: InputMaybe<Scalars["Bytes"]["input"]>;
   addressedContributor_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  addressedContributor_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  addressedContributor_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   addressedContributor_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  addressedContributor_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  addressedContributor_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   addressedContributor_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   addressedContributor_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   addressedContributor_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<Resolution_Filter>>>;
   approveBy?: InputMaybe<Scalars["Bytes"]["input"]>;
   approveBy_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  approveBy_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  approveBy_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   approveBy_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  approveBy_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  approveBy_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   approveBy_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   approveBy_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   approveBy_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -1138,7 +1210,11 @@ export type Resolution_Filter = {
   content_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   createBy?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  createBy_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  createBy_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  createBy_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  createBy_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   createBy_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -1227,9 +1303,14 @@ export type Resolution_Filter = {
   metadata_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   metadata_starts_with?: InputMaybe<Scalars["String"]["input"]>;
   metadata_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  or?: InputMaybe<Array<InputMaybe<Resolution_Filter>>>;
   rejectBy?: InputMaybe<Scalars["Bytes"]["input"]>;
   rejectBy_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  rejectBy_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  rejectBy_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   rejectBy_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  rejectBy_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  rejectBy_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   rejectBy_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   rejectBy_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   rejectBy_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -1300,7 +1381,11 @@ export type Resolution_Filter = {
   totalVotingPower_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   updateBy?: InputMaybe<Scalars["Bytes"]["input"]>;
   updateBy_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  updateBy_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  updateBy_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
   updateBy_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  updateBy_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  updateBy_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
   updateBy_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   updateBy_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   updateBy_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
@@ -1344,9 +1429,18 @@ export enum Resolution_OrderBy {
   IpfsDataUri = "ipfsDataURI",
   IsNegative = "isNegative",
   Metadata = "metadata",
+  MetadataId = "metadata__id",
+  MetadataIsMonthlyRewards = "metadata__isMonthlyRewards",
+  MetadataMonth = "metadata__month",
   RejectBy = "rejectBy",
   RejectTimestamp = "rejectTimestamp",
   ResolutionType = "resolutionType",
+  ResolutionTypeCanBeNegative = "resolutionType__canBeNegative",
+  ResolutionTypeId = "resolutionType__id",
+  ResolutionTypeName = "resolutionType__name",
+  ResolutionTypeNoticePeriod = "resolutionType__noticePeriod",
+  ResolutionTypeQuorum = "resolutionType__quorum",
+  ResolutionTypeVotingPeriod = "resolutionType__votingPeriod",
   SnapshotId = "snapshotId",
   Title = "title",
   TotalVotingPower = "totalVotingPower",
@@ -1609,6 +1703,7 @@ export type TokenMinting_Filter = {
   amounts_not?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   amounts_not_contains?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   amounts_not_contains_nocase?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<TokenMinting_Filter>>>;
   id?: InputMaybe<Scalars["ID"]["input"]>;
   id_gt?: InputMaybe<Scalars["ID"]["input"]>;
   id_gte?: InputMaybe<Scalars["ID"]["input"]>;
@@ -1625,6 +1720,7 @@ export type TokenMinting_Filter = {
   mintedTimestamp_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   mintedTimestamp_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   mintedTimestamp_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<TokenMinting_Filter>>>;
 };
 
 export enum TokenMinting_OrderBy {
@@ -3088,3 +3184,25 @@ export const GetUserRedemptionDocument = {
     },
   ],
 } as unknown as DocumentNode<GetUserRedemptionQuery, GetUserRedemptionQueryVariables>;
+export const namedOperations = {
+  Query: {
+    GetDaoManager: "GetDaoManager",
+    GetDelegationUsers: "GetDelegationUsers",
+    GetLegacyResolution: "GetLegacyResolution",
+    GetLegacyResolutions: "GetLegacyResolutions",
+    GetResolution: "GetResolution",
+    GetResolutionTypes: "GetResolutionTypes",
+    GetResolutions: "GetResolutions",
+    GetShareholdersInfo: "GetShareholdersInfo",
+    GetSubgraphState: "GetSubgraphState",
+    GetTokenMintings: "GetTokenMintings",
+    GetTokensPageData: "GetTokensPageData",
+    GetUserRedemption: "GetUserRedemption",
+  },
+  Fragment: {
+    daoManagerFragment: "daoManagerFragment",
+    resolutionTypeFragment: "resolutionTypeFragment",
+    resolutionFragment: "resolutionFragment",
+    legacyResolutionFragment: "legacyResolutionFragment",
+  },
+};
