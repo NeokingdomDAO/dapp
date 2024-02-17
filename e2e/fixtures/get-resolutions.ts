@@ -1,4 +1,6 @@
-export const resolutionsMock = {
+import { GetResolutionsQuery } from "@graphql/subgraph/generated/graphql";
+
+export const resolutionsMock: GetResolutionsQuery = {
   resolutions: [
     {
       id: "1",

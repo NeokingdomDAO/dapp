@@ -1,4 +1,6 @@
-export const legacyResolutionsMock = {
+import { GetLegacyResolutionsQuery } from "@graphql/subgraph/generated/graphql";
+
+export const legacyResolutionsMock: GetLegacyResolutionsQuery = {
   resolutions: [
     {
       id: "100",
@@ -26,7 +28,6 @@ export const legacyResolutionsMock = {
       hasQuorum: null,
       executionTo: [],
       executionData: [],
-      addressedContributor: "0x0000000000000000000000000000000000000000",
       voters: [],
     },
     {
@@ -55,7 +56,6 @@ export const legacyResolutionsMock = {
       hasQuorum: null,
       executionTo: [],
       executionData: [],
-      addressedContributor: "0x0000000000000000000000000000000000000000",
       voters: [],
     },
   ],
