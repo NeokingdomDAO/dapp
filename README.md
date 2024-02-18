@@ -29,5 +29,7 @@ Note: if you want to change from i.e. teledisko to neokingdom, just re-run `verc
 
 You can run e2e tests with Playwright in two different ways. In both case remember to start the local server with `pnpm dev`.
 
+The first time you should run `pnpm e2e:init` before running e2e tests. After that you can use one of the following options:
+
 - With the CLI (faster): `pnpm e2e`
 - With the UI (easier to debug): `pnpm e2e:ui`
