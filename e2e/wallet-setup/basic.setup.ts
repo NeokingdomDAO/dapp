@@ -1,12 +1,13 @@
 import { MetaMask, defineWalletSetup } from "@synthetixio/synpress";
+import "dotenv/config";
 
-const SEED_PHRASE = "test test test test test test test test test test test junk";
+const DEFAULT_SEED_PHRASE = "test test test test test test test test test test test junk";
 const PASSWORD = "SynpressIsAwesomeNow!!!";
 
 export default defineWalletSetup(PASSWORD, async (context, walletPage) => {
   const metamask = new MetaMask(context, walletPage, PASSWORD);
 
-  await metamask.importWallet(SEED_PHRASE);
+  await metamask.importWallet(process.env.E2E_WALLET_ENDPOINT || DEFAULT_SEED_PHRASE);
 
   await metamask.addNetwork({
     name: "Mumbai",
