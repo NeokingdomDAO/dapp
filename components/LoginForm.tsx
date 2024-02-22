@@ -1,4 +1,4 @@
-import { useWeb3Modal } from "@web3modal/react";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import { shallow } from "zustand/shallow";

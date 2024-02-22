@@ -1,4 +1,4 @@
-import { useWeb3Modal } from "@web3modal/react";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useAccount } from "wagmi";
 import { shallow } from "zustand/shallow";
 
@@ -79,7 +79,7 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
     );
   }
 
-  if (!acl?.canVote(resolution.voters)) {
+  if (!acl.canVote(resolution.voters)) {
     return <Alert severity="warning">You&apos;re not entitled to vote for this resolution</Alert>;
   }
 
@@ -105,7 +105,7 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
       </Button>
     );
   }
-  if (!acl?.canVote(resolution.voters)) {
+  if (!acl.canVote(resolution.voters)) {
     return <Alert severity="warning">You don&apos;t have voting right for this resolution</Alert>;
   }
 
@@ -145,10 +145,10 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
       <Alert severity="info" sx={{ mt: 2 }}>
         <Countdown targetDate={resolution.resolutionTypeInfo.votingEnds as Date} prefixLabel="Voting ends" inline />
       </Alert>
-      {votingOnBehalfOf.length > 0 && (
+      {(votingOnBehalfOf?.length || 0) > 0 && (
         <Alert severity="info" sx={{ mt: 2 }}>
           Voting also on behalf of&nbsp;
-          {votingOnBehalfOf.map((user, index) => (
+          {votingOnBehalfOf?.map((user, index) => (
             <span key={user.address}>
               <User isInline address={user.address} />
               {index < votingOnBehalfOf.length - 2 && <span>, </span>}

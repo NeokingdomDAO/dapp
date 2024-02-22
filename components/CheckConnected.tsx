@@ -1,4 +1,4 @@
-import { useWeb3Modal } from "@web3modal/react";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useAccount } from "wagmi";
 
 import { Alert, AlertTitle, Box, Button } from "@mui/material";
@@ -11,7 +11,7 @@ import Section from "./Section";
 export default function CheckConnected({ fullWidth = false }: { fullWidth?: boolean }) {
   const { isConnected } = useAccount();
   const { user } = useUser();
-  const { open: openWeb3Modal, setDefaultChain } = useWeb3Modal();
+  const { open: openWeb3Modal } = useWeb3Modal();
 
   if (isConnected || !user?.isLoggedIn) {
     return null;
@@ -19,7 +19,7 @@ export default function CheckConnected({ fullWidth = false }: { fullWidth?: bool
 
   const Component = fullWidth ? Section : Box;
 
-  setDefaultChain(SUPPORTED_CHAINS[0]);
+  // setDefaultChain(SUPPORTED_CHAINS[0]);
 
   return (
     <Component sx={{ p: 0, mb: 2, mt: 0 }}>

@@ -1,6 +1,6 @@
-import { gql } from "graphql-request";
+import { graphql } from "../generated";
 
-export const resolutionTypeFragment = gql`
+export const resolutionTypeFragment = graphql(`
   fragment resolutionTypeFragment on ResolutionType {
     id
     name
@@ -9,4 +9,4 @@ export const resolutionTypeFragment = gql`
     votingPeriod
     canBeNegative
   }
-`;
+`);

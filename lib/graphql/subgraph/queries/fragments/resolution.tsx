@@ -1,8 +1,6 @@
-import { gql } from "graphql-request";
+import { graphql } from "../generated";
 
-import { resolutionTypeFragment } from "./resolution-type.fragment";
-
-export const resolutionFragment = gql`
+export const resolutionFragment = graphql(`
   fragment resolutionFragment on Resolution {
     id
     title
@@ -26,6 +24,7 @@ export const resolutionFragment = gql`
     executionData
     addressedContributor
     voters {
+      id
       address
       votingPower
       hasVoted
@@ -33,11 +32,9 @@ export const resolutionFragment = gql`
       delegated
     }
   }
+`);
 
-  ${resolutionTypeFragment}
-`;
-
-export const legacyResolutionFragment = gql`
+export const legacyResolutionFragment = graphql(`
   fragment legacyResolutionFragment on Resolution {
     id
     title
@@ -60,6 +57,7 @@ export const legacyResolutionFragment = gql`
     executionTo
     executionData
     voters {
+      id
       address
       votingPower
       hasVoted
@@ -67,6 +65,4 @@ export const legacyResolutionFragment = gql`
       delegated
     }
   }
-
-  ${resolutionTypeFragment}
-`;
+`);

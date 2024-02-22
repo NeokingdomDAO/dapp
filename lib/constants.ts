@@ -143,9 +143,61 @@ const PROJECT_TASK_TYPE_NEOKINGDOM = [
   },
 ];
 
+const PROJECT_TASK_TYPE_CROWDPUNK = [
+  {
+    id: 1,
+    name: "Created",
+  },
+  {
+    id: 9,
+    name: "Inbox",
+  },
+  {
+    id: 10,
+    name: "Today",
+  },
+  {
+    id: 37,
+    name: "In Progress",
+  },
+  {
+    id: 11,
+    name: "This Week",
+  },
+  {
+    id: 38,
+    name: "Done",
+  },
+  {
+    id: 12,
+    name: "This Month",
+  },
+  {
+    id: 39,
+    name: "Approved",
+  },
+  {
+    id: 13,
+    name: "Later",
+  },
+  {
+    id: 14,
+    name: "Done",
+  },
+  {
+    id: 15,
+    name: "Canceled",
+  },
+];
+
+const STAGE_IDS: Record<string, { id: number; name: string }[]> = {
+  crowdpunk: PROJECT_TASK_TYPE_CROWDPUNK,
+  teledisko: PROJECT_TASK_TYPE_TELEDISKO,
+  neokingdom: PROJECT_TASK_TYPE_NEOKINGDOM,
+};
+
 export const getStageId = (stageName: string) => {
-  const PROJECT_TASK_TYPE =
-    process.env.NEXT_PUBLIC_PROJECT_KEY === "teledisko" ? PROJECT_TASK_TYPE_TELEDISKO : PROJECT_TASK_TYPE_NEOKINGDOM;
-  const stage = PROJECT_TASK_TYPE.find((projectType) => projectType.name.toLowerCase() === stageName.toLowerCase());
+  const PROJECT_TASK_TYPE = STAGE_IDS[process.env.NEXT_PUBLIC_PROJECT_KEY];
+  const stage = PROJECT_TASK_TYPE?.find((projectType) => projectType.name.toLowerCase() === stageName.toLowerCase());
   return stage?.id;
 };

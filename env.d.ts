@@ -12,5 +12,8 @@ namespace NodeJS {
     NEXT_PUBLIC_ENV: "staging" | "production";
     COOKIE_NAME: string;
     COOKIE_PASSWORD: string;
+    E2E_WALLET_ENDPOINT: string;
+    E2E_ODOO_USERNAME: string;
+    E2E_ODOO_PASSWORD: string;
   }
 }

@@ -1,6 +1,6 @@
-import { gql } from "graphql-request";
+import { graphql } from "../generated";
 
-export const getSubgraphState = gql`
+export const getSubgraphState = graphql(`
   query GetSubgraphState {
     state: _meta {
       hasIndexingErrors
@@ -11,4 +11,4 @@ export const getSubgraphState = gql`
       }
     }
   }
-`;
+`);

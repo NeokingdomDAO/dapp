@@ -1,8 +1,7 @@
-import useSWR from "swr";
 import { useAccount } from "wagmi";
 
-import { fetcher } from "@graphql/client";
-import { getDelegationUsers } from "@graphql/queries/get-delegation-users.query";
+import { getDelegationUsers } from "@graphql/subgraph/queries/get-delegation-users-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import { isSameAddress } from "@lib/utils";
 
@@ -13,7 +12,7 @@ const REFRESH_INTERVAL_MS = 10000;
 export default function useDelegationStatus() {
   const { address } = useAccount();
 
-  const { data, error, isLoading } = useSWR<any>(address ? getDelegationUsers : null, fetcher, {
+  const { data, error, isLoading } = useSubgraphGraphQL(address ? getDelegationUsers : null, {
     refreshInterval: REFRESH_INTERVAL_MS,
   });
 

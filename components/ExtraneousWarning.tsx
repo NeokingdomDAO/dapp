@@ -1,10 +1,9 @@
-import useSWR from "swr";
 import { useAccount } from "wagmi";
 
 import { Alert, Button, Container } from "@mui/material";
 
-import { fetcher } from "@graphql/client";
-import { getDaoManagerQuery } from "@graphql/queries/get-dao-manager.query";
+import { getDaoManagerQuery } from "@graphql/subgraph/queries/get-dao-manager-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
 import useLogout from "@hooks/useLogout";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
@@ -12,7 +11,7 @@ import useResolutionsAcl from "@hooks/useResolutionsAcl";
 export default function ExtraneousWarning({ children }: { children: React.ReactNode }) {
   const { acl, isLoading } = useResolutionsAcl();
   const { isConnected, address, isConnecting } = useAccount();
-  const { data, isLoading: isLoadingGetDaoManager, error } = useSWR<any>(address ? getDaoManagerQuery : null, fetcher);
+  const { data, isLoading: isLoadingGetDaoManager, error } = useSubgraphGraphQL(address ? getDaoManagerQuery : null);
   const { logout } = useLogout();
 
   if ((!isLoadingGetDaoManager && data?.daoManager === null) || error) {

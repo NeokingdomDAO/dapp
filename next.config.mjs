@@ -1,13 +1,10 @@
-const pkg = require("./package.json");
+import { execSync } from "child_process";
+import withPWA from "next-pwa";
 
 // starts a command line process to get the git hash
-const commitHash = require("child_process").execSync('git log --pretty=format:"%h" -n1').toString().trim();
+const commitHash = execSync('git log --pretty=format:"%h" -n1').toString().trim();
 
 /** @type {import('next').NextConfig} */
-const withPWA = require("next-pwa")({
-  dest: "public",
-});
-
 const nextConfig = {
   reactStrictMode: false,
   compiler: {
@@ -22,8 +19,11 @@ const nextConfig = {
   },
   env: {
     LATEST_COMMIT_HASH: commitHash,
-    PACKAGE_VERSION: pkg.version,
+    PACKAGE_VERSION: process.env.npm_package_version,
   },
 };
 
-module.exports = process.env.NODE_ENV === "development" ? nextConfig : withPWA(nextConfig);
+export default process.env.NODE_ENV === "development" ? nextConfig : withPWA({
+  dest: "public",
+})(nextConfig);
+

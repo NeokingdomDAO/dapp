@@ -1,20 +1,23 @@
 import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
-import useSWR from "swr";
-import { ComputedBalances, DaoUser, Offer } from "types";
+import { ComputedBalances, Offer } from "types";
 import { useAccount } from "wagmi";
 
-import { fetcherWithParams } from "@graphql/client";
-import { getTokensPageData } from "@graphql/queries/get-tokens-page-data";
+import { GetTokensPageDataQuery } from "@graphql/subgraph/generated/graphql";
+import { getTokensPageData } from "@graphql/subgraph/queries/get-tokens-page-data-query";
+import { useSubgraphGraphQL } from "@graphql/subgraph/subgraph-client";
 
-export const isNonExpired = (offer: Offer) => Number(offer.expirationTimestamp) * 1000 > Date.now();
+type QueryDaoUser = GetTokensPageDataQuery["daoUser"];
+type QueryOffer = NonNullable<GetTokensPageDataQuery["daoUser"]>["activeOffers"]["0"];
 
-export const isExpired = (offer: Offer) => Number(offer.expirationTimestamp) * 1000 <= Date.now();
+export const isNonExpired = (offer: QueryOffer) => Number(offer?.expirationTimestamp) * 1000 > Date.now();
+
+export const isExpired = (offer: QueryOffer) => Number(offer.expirationTimestamp) * 1000 <= Date.now();
 
 export const bigIntToBigNum = (bigIntNum: BigInt) => BigNumber.from(bigIntNum);
 export const bigIntToNum = (bigIntNum: BigInt) => Math.ceil(Number(formatEther(BigNumber.from(bigIntNum))));
 
-export const computeBalances = (daoUser: DaoUser | null): ComputedBalances => {
+export const computeBalances = (daoUser: QueryDaoUser | null): ComputedBalances => {
   const governanceTokens = bigIntToBigNum(daoUser?.governanceVaultedBalance || BigInt(0)).add(
     bigIntToBigNum(daoUser?.governanceBalance || BigInt(0)),
   );
@@ -61,12 +64,12 @@ export default function useUserBalanceAndOffers(): {
   isLoading: boolean;
 } {
   const { address: userId } = useAccount();
-  const { data, error, isLoading } = useSWR<any>(
-    userId ? [getTokensPageData, { userId: userId.toLowerCase() }] : null,
-    fetcherWithParams,
+  const { data, error, isLoading } = useSubgraphGraphQL(
+    userId ? getTokensPageData : null,
     {
       refreshInterval: REFRESH_EVERY_MS,
     },
+    [{ userId: userId?.toLowerCase() || "" }],
   );
 
   if (data && !isLoading && !error) {
@@ -83,7 +86,7 @@ export default function useUserBalanceAndOffers(): {
   }
 
   return {
-    data,
+    data: null,
     isLoading,
     error,
   };

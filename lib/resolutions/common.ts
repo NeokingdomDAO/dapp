@@ -6,11 +6,10 @@ import { parseEther } from "ethers/lib/utils";
 import type {
   MonthlyRewardsUserData,
   ResolutionEntity,
-  ResolutionEntityEnhanced,
   ResolutionState,
   ResolutionStates,
   ResolutionTypeInfo,
-  ResolutionVoter,
+  ResolutionVoterEnhanced,
   ResolutionsAcl,
   RewardsResponse,
 } from "../../types";
@@ -43,7 +42,7 @@ export const RESOLUTION_ACTIONS = {
     disabled: true,
     icon: "eye",
   }),
-  [RESOLUTION_STATES.VOTING]: ($acl: ResolutionsAcl, resolutionVoters: ResolutionVoter[]) => ({
+  [RESOLUTION_STATES.VOTING]: ($acl: ResolutionsAcl, resolutionVoters: ResolutionVoterEnhanced[]) => ({
     label: $acl?.canVote(resolutionVoters) ? "View and vote" : "View",
     disabled: false,
     icon: $acl?.canVote(resolutionVoters) ? "eye" : "eye",
@@ -114,27 +113,30 @@ export const e18ToInt = (n: string) => {
   return BigNumber.from(n).div(BigNumber.from(10).pow(18)).toNumber();
 };
 
-export const getResolutionVoters = (resolution: ResolutionEntity) => {
-  return resolution.voters.map((voter) => {
-    const delegatingVoter = resolution.voters.find(({ address }) => voter.delegated === address) as ResolutionVoter;
-    const voterBeingDelegated = resolution.voters.filter(
+export const getResolutionVoters = (resolution: ResolutionEntity): ResolutionVoterEnhanced[] => {
+  const voters = resolution.voters;
+  if (!voters) return [];
+
+  return voters.map((voter: NonNullable<ResolutionEntity["voters"]>["0"]) => {
+    const delegatingVoter = voters.find(({ address }) => voter.delegated === address);
+    const voterBeingDelegated = voters.filter(
       ({ delegated, address }) => delegated === voter.address && address !== voter.address,
     );
     return {
       ...voter,
       votingPowerInt: e18ToInt(voter.votingPower),
-      hasVoted: delegatingVoter.hasVoted,
-      hasVotedYes: delegatingVoter.hasVotedYes,
+      hasVoted: delegatingVoter?.hasVoted || false,
+      hasVotedYes: delegatingVoter?.hasVotedYes || false,
       usedPoa: voter.delegated !== voter.address || voterBeingDelegated.length > 0,
       beingDelegatedBy: voterBeingDelegated,
-      delegating: delegatingVoter.address !== voter.address ? delegatingVoter : null,
+      delegating: delegatingVoter?.address !== voter.address ? delegatingVoter : null,
     };
   });
 };
 
 export const getEnhancedResolutionMapper =
   ($currentTimestamp: number, $acl?: ResolutionsAcl) =>
-  (resolution: ResolutionEntity, forceAbsolute = false): ResolutionEntityEnhanced => {
+  (resolution: ResolutionEntity, forceAbsolute = false) => {
     const resolutionTypeInfo = getResolutionTypeInfo(resolution);
     const state = getResolutionState(resolution, $currentTimestamp, resolutionTypeInfo);
     const resolutionVoters = getResolutionVoters(resolution);
@@ -163,7 +165,7 @@ export const getEnhancedResolutionMapper =
         state === RESOLUTION_STATES.PRE_DRAFT && $acl?.canUpdate
           ? `#/resolutions/${resolution.id}/edit`
           : `#/resolutions/${resolution.id}`,
-      action: RESOLUTION_ACTIONS[state]($acl as ResolutionsAcl, resolutionVoters),
+      action: RESOLUTION_ACTIONS[state]($acl!, resolutionVoters),
       resolutionTypeInfo,
       votingStatus: {
         votersHaveNotVoted: resolutionVoters.filter((v) => !v.hasVoted),
@@ -178,7 +180,7 @@ export const getEnhancedResolutions = (
   resolutions: ResolutionEntity[],
   $currentTimestamp: number,
   $acl: ResolutionsAcl,
-): ResolutionEntityEnhanced[] => {
+) => {
   const mapper = getEnhancedResolutionMapper($currentTimestamp, $acl);
   return resolutions?.map((resolution) => mapper(resolution, false)) || [];
 };
