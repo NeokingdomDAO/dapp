@@ -145,7 +145,7 @@ export default function Redemption() {
                 color="primary"
                 size="small"
                 onClick={() => setRedeemModalMax(maxToRedeem)}
-                disabled={!canBeRedeemed}
+                // disabled={!canBeRedeemed}
               >
                 Redeem
               </Button>

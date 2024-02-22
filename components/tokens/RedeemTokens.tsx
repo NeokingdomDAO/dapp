@@ -41,8 +41,6 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
     return <CircularProgress />;
   }
 
-  const axlUSDT = Math.round((toRedeem * Number(eurUsdt.price) + Number.EPSILON) * 100) / 100;
-
   const handleRedeemTokens = async () => {
     const submitted = true; // await onSubmit({ amount: toRedeem });
     if (submitted) {

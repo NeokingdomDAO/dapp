@@ -1,38 +1,35 @@
 import { renderToBuffer } from "@react-pdf/renderer";
 import { withIronSessionApiRoute } from "iron-session/next";
-import kebabCase from "lodash.kebabcase";
 import { NextApiRequest, NextApiResponse } from "next";
-import { OdooUser, ResolutionEntity, ResolutionEntityEnhanced } from "types";
 
 import React from "react";
 
-import { clientLegacyGraph, fetcherWithParams, legacyFetcherWithParams } from "@graphql/client";
-import odooClient from "@graphql/odoo";
-import { getLegacyResolutionQuery } from "@graphql/queries/get-legacy-resolution.query";
-import { getResolutionQuery } from "@graphql/queries/get-resolution.query";
-import { getUsersQuery } from "@graphql/queries/get-users.query";
-
-import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
 import { sessionOptions } from "@lib/session";
 
 import Invoice from "@components/redemption-pdf/Invoice";
-import ResolutionPdf from "@components/resolutions/Pdf";
 
 const getRedemptionInvoice = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { userInfo, total, invoiceNumber } = req.query as { userInfo: string; total: string; invoiceNumber: string };
+  console.log(req.body);
+
   const cookie = req.session.cookie;
 
   if (!cookie) {
     return res.status(401).end("Unauthorised");
   }
 
+  const invoiceNumber = req.body["invoice-number"];
+  const companyInfo = req.body["company-info"];
+  const vatNumber = req.body["vat-number"];
+  const total = req.body.neok;
+
   try {
     const pdf = await renderToBuffer(
       // @ts-ignore
       React.createElement(Invoice, {
-        userInfo,
+        companyInfo,
+        vatNumber,
         total,
-        invoiceNumber: Number(invoiceNumber),
+        invoiceNumber,
       }),
     );
 
