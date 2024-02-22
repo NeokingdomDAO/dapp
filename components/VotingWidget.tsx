@@ -35,18 +35,18 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
   );
 
   const votingUser = address
-    ? resolution.votingStatus.votersHaveVoted?.find((voter) => isSameAddress(voter.address, address))
+    ? resolution.votingStatus.votersHaveVoted.find((voter) => isSameAddress(voter.address, address))
     : null;
 
   const [votingOnBehalfOf, delegatedTo] = useMemo(() => {
     if (!address) {
       return [[], null];
     }
-    const votingOnBehalfOf = resolution.voters?.filter(
+    const votingOnBehalfOf = resolution.voters.filter(
       (user) => !isSameAddress(user.address, address) && isSameAddress(user.delegated, address),
     );
     const delegatedTo =
-      resolution.voters?.find(
+      resolution.voters.find(
         (user) => isSameAddress(user.address, address) && !isSameAddress(user.delegated, address),
       ) || null;
     return [votingOnBehalfOf, delegatedTo];
@@ -79,7 +79,7 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
     );
   }
 
-  if (!acl?.canVote(resolution.voters || [])) {
+  if (!acl.canVote(resolution.voters)) {
     return <Alert severity="warning">You&apos;re not entitled to vote for this resolution</Alert>;
   }
 
@@ -105,7 +105,7 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
       </Button>
     );
   }
-  if (!acl?.canVote(resolution.voters || [])) {
+  if (!acl.canVote(resolution.voters)) {
     return <Alert severity="warning">You don&apos;t have voting right for this resolution</Alert>;
   }
 

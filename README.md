@@ -24,3 +24,5 @@ Note: if you want to change from i.e. teledisko to neokingdom, just re-run `verc
 - Create a new file inside the `./lib/graphql/subgraph/queries/` folder
 - Copy the way other queries are structured to be able to generate TS types
 - When the query is ready or after each update remember to run `pnpm codegen:subgraph`
+
+If the schema on https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere is not working - as the server is down - try with https://api2.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere. You can find in `./codegen-subgraph.ts`

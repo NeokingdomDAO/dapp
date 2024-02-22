@@ -1,12 +1,12 @@
 import { Text, View } from "@react-pdf/renderer";
-import { ResolutionEntityEnhanced, ResolutionVoter } from "types";
+import { ResolutionEntityEnhanced, ResolutionVoterEnhanced } from "types";
 
 import { isSameAddress } from "@lib/utils";
 
 import { Bold, Br } from "./Pdf";
 import { sortByVotingPower } from "./VotingUsers";
 
-const getPOAText = (voter: ResolutionVoter, getUserName: (address: string) => string) => {
+const getPOAText = (voter: ResolutionVoterEnhanced, getUserName: (address: string) => string) => {
   if (!voter.usedPoa) return "No";
   if (voter.delegating) {
     return `Yes, Delegated to ${getUserName(voter.delegating.address)}`;

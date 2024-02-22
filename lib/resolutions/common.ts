@@ -113,10 +113,11 @@ export const e18ToInt = (n: string) => {
   return BigNumber.from(n).div(BigNumber.from(10).pow(18)).toNumber();
 };
 
-export const getResolutionVoters = (resolution: ResolutionEntity): ResolutionVoterEnhanced[] | undefined => {
+export const getResolutionVoters = (resolution: ResolutionEntity): ResolutionVoterEnhanced[] => {
   const voters = resolution.voters;
+  if (!voters) return [];
 
-  return voters?.map((voter: NonNullable<ResolutionEntity["voters"]>["0"]) => {
+  return voters.map((voter: NonNullable<ResolutionEntity["voters"]>["0"]) => {
     const delegatingVoter = voters.find(({ address }) => voter.delegated === address);
     const voterBeingDelegated = voters.filter(
       ({ delegated, address }) => delegated === voter.address && address !== voter.address,
@@ -164,13 +165,13 @@ export const getEnhancedResolutionMapper =
         state === RESOLUTION_STATES.PRE_DRAFT && $acl?.canUpdate
           ? `#/resolutions/${resolution.id}/edit`
           : `#/resolutions/${resolution.id}`,
-      action: RESOLUTION_ACTIONS[state]($acl!, resolutionVoters!),
+      action: RESOLUTION_ACTIONS[state]($acl!, resolutionVoters),
       resolutionTypeInfo,
       votingStatus: {
-        votersHaveNotVoted: resolutionVoters?.filter((v) => !v.hasVoted),
-        votersHaveVoted: resolutionVoters?.filter((v) => v.hasVoted),
-        votersHaveVotedYes: resolutionVoters?.filter((v) => v.hasVoted && v.hasVotedYes),
-        votersHaveVotedNo: resolutionVoters?.filter((v) => v.hasVoted && !v.hasVotedYes),
+        votersHaveNotVoted: resolutionVoters.filter((v) => !v.hasVoted),
+        votersHaveVoted: resolutionVoters.filter((v) => v.hasVoted),
+        votersHaveVotedYes: resolutionVoters.filter((v) => v.hasVoted && v.hasVotedYes),
+        votersHaveVotedNo: resolutionVoters.filter((v) => v.hasVoted && !v.hasVotedYes),
       },
     };
   };
