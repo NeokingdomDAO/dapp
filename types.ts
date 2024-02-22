@@ -13,7 +13,7 @@ export type ResolutionsAcl = {
   canCreate?: boolean;
   canUpdate?: boolean;
   canApprove?: boolean;
-  canVote: (voters: ResolutionVoter[]) => boolean;
+  canVote: (voters: ResolutionVoterEnhanced[]) => boolean;
   isShareholder?: boolean;
   isManagingBoard?: boolean;
   isContributor?: boolean;
@@ -55,7 +55,7 @@ export type ResolutionTypeInfo = {
   votingEndsAt: string | null;
 };
 
-export type ResolutionEntityEnhanced = ResolutionEntity & {
+export type ResolutionEntityEnhanced = Omit<ResolutionEntity, "voters"> & {
   state: ResolutionState;
   href: string;
   createdAt: string;
@@ -65,11 +65,12 @@ export type ResolutionEntityEnhanced = ResolutionEntity & {
   executedAt: string | null;
   action: ResolutionAction;
   resolutionTypeInfo: ResolutionTypeInfo;
+  voters: ResolutionVoterEnhanced[];
   votingStatus: {
-    votersHaveNotVoted?: ResolutionVoterEnhanced[];
-    votersHaveVoted?: ResolutionVoterEnhanced[];
-    votersHaveVotedYes?: ResolutionVoterEnhanced[];
-    votersHaveVotedNo?: ResolutionVoterEnhanced[];
+    votersHaveNotVoted: ResolutionVoterEnhanced[];
+    votersHaveVoted: ResolutionVoterEnhanced[];
+    votersHaveVotedYes: ResolutionVoterEnhanced[];
+    votersHaveVotedNo: ResolutionVoterEnhanced[];
   };
 };
 
@@ -167,23 +168,6 @@ export type RewardsResponse = {
     content: string;
   };
 };
-
-// export type RedemptionHistory = {
-//   id: string;
-//   amount: BigInt;
-//   timestamp: string;
-// };
-
-// export type Redemption = {
-//   id: string;
-//   amount: BigInt;
-//   redemptionHistory: RedemptionHistory[];
-//   createTimestamp: string;
-//   updateTimestamp: string;
-//   createBy: string;
-//   startTimestamp: string;
-//   endTimestamp: string;
-// };
 
 export type Task = {
   id: number;

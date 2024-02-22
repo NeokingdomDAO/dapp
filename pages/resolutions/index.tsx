@@ -43,13 +43,13 @@ export default function Resolutions() {
   const [activeResolutions, inactiveResolutions] = useMemo(() => {
     const active = filteredResolutions.filter((resolution) => {
       const votingUser = address
-        ? resolution.votingStatus.votersHaveVoted?.find((voter) => isSameAddress(voter.address, address))
+        ? resolution.votingStatus.votersHaveVoted.find((voter) => isSameAddress(voter.address, address))
         : null;
       return resolution.state === RESOLUTION_STATES.VOTING && !votingUser && user?.isLoggedIn;
     });
     const inactive = filteredResolutions.filter((resolution) => {
       const votingUser = address
-        ? resolution.votingStatus.votersHaveVoted?.find((voter) => isSameAddress(voter.address, address))
+        ? resolution.votingStatus.votersHaveVoted.find((voter) => isSameAddress(voter.address, address))
         : null;
       return resolution.state !== RESOLUTION_STATES.VOTING || !!votingUser || !user?.isLoggedIn;
     });

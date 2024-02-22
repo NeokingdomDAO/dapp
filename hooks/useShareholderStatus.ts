@@ -45,8 +45,7 @@ export default function useShareholderStatus() {
 
     const addresses = Object.keys(users)
       .filter((address) => getShareholderStatus(address).length > 0)
-      // TODO: Andrea check this is still in the correct order
-      .sort((userA, userB) => users[userB].power.localeCompare(users[userA].power));
+      .sort((userA, userB) => Number(users[userB].power) - Number(users[userA].power));
 
     return [users, addresses];
   }, [data, getShareholderStatus]);

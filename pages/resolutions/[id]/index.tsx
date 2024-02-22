@@ -130,7 +130,7 @@ export default function ResolutionView() {
               <Typography variant="h5" sx={{ mb: 2 }}>
                 List of shareholders and their positions:
               </Typography>
-              <VotingUsers voters={resolution.voters!} addressedContributor={resolution.addressedContributor} />
+              <VotingUsers voters={resolution.voters} addressedContributor={resolution.addressedContributor} />
             </>
           </Section>
         </>

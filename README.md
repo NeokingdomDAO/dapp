@@ -25,6 +25,8 @@ Note: if you want to change from i.e. teledisko to neokingdom, just re-run `verc
 - Copy the way other queries are structured to be able to generate TS types
 - When the query is ready or after each update remember to run `pnpm codegen:subgraph`
 
+If the schema on https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere is not working - as the server is down - try with https://api2.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere. You can find in `./codegen-subgraph.ts`
+
 ## How to run e2e tests
 
 You can run e2e tests with Playwright in two different ways. In both case remember to start the local server with `pnpm dev`.

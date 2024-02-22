@@ -1,4 +1,4 @@
-import { ResolutionsAcl } from "types";
+import { ResolutionVoterEnhanced, ResolutionsAcl } from "types";
 import { useAccount } from "wagmi";
 
 import { ResolutionVoter } from "@graphql/subgraph/generated/graphql";
@@ -11,7 +11,7 @@ const DEFAULT_ACL = {
   canCreate: false,
   canUpdate: false,
   canApprove: false,
-  canVote: (_: ResolutionVoter[]) => false,
+  canVote: (_: ResolutionVoterEnhanced[]) => false,
   isShareholder: false,
   isManagingBoard: false,
   isContributor: false,
@@ -36,7 +36,7 @@ export default function useResolutionsAcl(): { acl: ResolutionsAcl; error?: bool
     canCreate: isContributor,
     canUpdate: isManagingBoard,
     canApprove: isManagingBoard,
-    canVote: (resolutionVoters: ResolutionVoter[]) =>
+    canVote: (resolutionVoters: ResolutionVoterEnhanced[]) =>
       resolutionVoters.map((voter) => voter.address.toLowerCase()).includes(address.toLowerCase()),
     isShareholder: data.daoManager?.shareholdersAddresses.includes(address.toLowerCase()),
     isManagingBoard,
