@@ -21,7 +21,8 @@ test("login with just Odoo", async ({ page }) => {
   ).toBeVisible();
 });
 
-walletTest("login just with the wallet (account in DAO)", async ({ context, page, extensionId }) => {
+// see https://github.com/Synthetixio/synpress/issues/1103
+walletTest.fixme("login just with the wallet (account in DAO)", async ({ context, page, extensionId }) => {
   const metamask = new MetaMask(context, page, BasicSetup.walletPassword, extensionId);
 
   await page.goto("http://localhost:3000/");
@@ -33,7 +34,8 @@ walletTest("login just with the wallet (account in DAO)", async ({ context, page
   await walletExpect(page.getByRole("button", { name: "Log in with username and" })).toBeVisible();
 });
 
-walletTest("login with both the wallet and Odoo", async ({ context, page, extensionId }) => {
+// see https://github.com/Synthetixio/synpress/issues/1103
+walletTest.fixme("login with both the wallet and Odoo", async ({ context, page, extensionId }) => {
   const metamask = new MetaMask(context, page, BasicSetup.walletPassword, extensionId);
 
   await page.goto("http://localhost:3000/");

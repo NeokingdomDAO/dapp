@@ -38,7 +38,7 @@
     "@mui/material": "^5.11.11",
     "@mui/x-date-pickers": "^6.0.0",
     "@react-pdf/renderer": "^3.1.9",
-    "@synthetixio/synpress": "4.0.0-alpha.0",
+    "@synthetixio/synpress": "4.0.0-alpha.3",
     "@tanstack/react-query": "5.x",
     "@types/lodash.kebabcase": "^4.1.7",
     "@types/lodash.throttle": "^4.1.7",
@@ -105,7 +105,6 @@
     "lint-staged": "^13.1.2",
     "msw": "^2.2.0",
     "node-mocks-http": "^1.13.0",
-    "playwright-msw": "^3.0.1",
     "prettier": "^2.8.4",
     "typescript": "4.5.4"
   }
