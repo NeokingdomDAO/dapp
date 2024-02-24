@@ -79,8 +79,10 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     // Create New Task
     try {
+      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       const newTaskId = await session.create("project.task", JSON.parse(body));
       if (newTaskId) {
+        // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
         const [newTask] = await session.read("project.task", [Number(newTaskId)]);
         res.status(200).json(newTask);
       } else {

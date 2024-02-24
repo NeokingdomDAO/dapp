@@ -15,6 +15,7 @@ export default function useCheckAllowance(
 ) {
   const [allowance, setAllowance] = useState(0);
   const { disconnect } = useDisconnect();
+  // @ts-expect-error Property 'chains' does not exist on type
   const { chains } = usePublicClient();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 

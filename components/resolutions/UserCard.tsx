@@ -9,14 +9,14 @@ import { isSameAddress } from "@lib/utils";
 
 import User from "@components/User";
 
-import { ResolutionVoter } from "../../types";
+import { ResolutionVoterEnhanced } from "../../types";
 
 export default function UserCard({
   user,
   percentageOfAllVotes,
   isExcludedFromVoting,
 }: {
-  user: ResolutionVoter;
+  user: ResolutionVoterEnhanced;
   percentageOfAllVotes: string;
   isExcludedFromVoting: boolean;
 }) {

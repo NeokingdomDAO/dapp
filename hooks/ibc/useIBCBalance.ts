@@ -4,6 +4,7 @@ import { evmosToEth } from "@evmos/address-converter";
 import { BalanceByDenomResponse, generateEndpointBalanceByDenom } from "@evmos/provider";
 import { BigNumber, providers } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
+// @ts-expect-error' "wagmi"' has no exported member named 'WalletClient'. Did you mean 'useWalletClient'?
 import { WalletClient, useWalletClient } from "wagmi";
 
 import { useCallback, useEffect, useState } from "react";

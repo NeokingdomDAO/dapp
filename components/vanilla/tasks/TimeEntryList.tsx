@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { MoreTimeOutlined } from "@mui/icons-material";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 
+import { toPrettyDuration } from "@lib/utils";
+
 import { ProjectTask, useProjectTaskActions } from "@store/projectTaskStore";
 
-import useErrorHandler from "../../hooks/useErrorHandler";
-import { toPrettyDuration } from "../../lib/utils";
+import useErrorHandler from "@hooks/useErrorHandler";
+
 import ActionCardBtn from "./ActionBtn";
 import TimeEntry from "./TimeEntry";
 import TimeEntryForm from "./TimeEntryForm";

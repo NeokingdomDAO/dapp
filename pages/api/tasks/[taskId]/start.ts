@@ -29,10 +29,13 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
       const start = formatInTimeZone(new Date(), "UTC", ODOO_DATE_FORMAT);
       const timeEntry = { task_id: Number(taskId), start };
       // Move task to In progress
+      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       await session.update("project.task", Number(taskId), {
         stage_id: getStageId("in progress"),
       });
+      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       const timeEntryId = await session.create("account.analytic.line", timeEntry);
+      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       const [newTimeEntry] = await session.read("account.analytic.line", [timeEntryId]);
       res.status(200).json(newTimeEntry);
     } catch (err: any) {

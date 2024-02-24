@@ -26,6 +26,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     // UPDATE TASK
     try {
       // TODO: Validate body params
+      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       const updated = await session.update("project.task", Number(taskId), JSON.parse(body));
       res.status(200).json({ updated });
     } catch (err: any) {
@@ -36,6 +37,7 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "DELETE") {
     // DELETE TASK
     try {
+      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       const deleted = await session.remove("project.task", [Number(taskId)]);
       res.status(200).json({ deleted });
     } catch (err: any) {

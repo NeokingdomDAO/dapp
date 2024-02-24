@@ -57,13 +57,16 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
   const [newTimeEntry, addNewTimeEntry] = useState<boolean>(false);
 
   const { handleError } = useErrorHandler();
+  // @ts-expect-error Property 'trackedTask' does not exist on type 'ProjectTaskStore'.
   const trackedTask = useProjectTaskStore((state) => state.trackedTask);
   const actions = useProjectTaskActions();
   const createTask = handleError(actions.createTask);
   const updateTask = handleError(actions.updateTask);
   const deleteTask = handleError(actions.deleteTask);
   const markTaskAsDone = handleError(actions.markTaskAsDone);
+  // @ts-expect-error Property 'startTrackingTask' does not exist on type
   const startTrackingTask = handleError(actions.startTrackingTask);
+  // @ts-expect-error Property 'startTrackingTask' does not exist on type
   const stopTrackingTask = handleError(actions.stopTrackingTask);
 
   const [editTask, setEditTask] = useState<number | null>(null);

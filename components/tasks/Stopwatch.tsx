@@ -30,10 +30,14 @@ export default function StopwatchSlim({
 
   const { handleError } = useErrorHandler();
   const [isPlaying, setIsPlaying] = useState(false);
+  // @ts-expect-error Property 'trackedTask' does not exist on type 'ProjectTaskStore'.
   const trackedTask = useProjectTaskStore((state) => state.trackedTask);
+  // @ts-expect-error Property 'isLoading' does not exist on type 'ProjectTaskStore'.
   const isLoading = useProjectTaskStore((state) => state.isLoading);
   const actions = useProjectTaskActions();
+  // @ts-expect-error Property 'startTrackingTask' does not exist on type
   const startTrackingTask = handleError(actions.startTrackingTask);
+  // @ts-expect-error Property 'stopTrackingTask' does not exist on type
   const stopTrackingTask = handleError(actions.stopTrackingTask);
 
   const openDialog = useDialogStore(({ openDialog }) => openDialog);

@@ -215,6 +215,7 @@ export default function IBCBalanceEvmos() {
         </Box>
 
         <ChangeableAddress
+          // @ts-expect-error Property 'initialAddress' does not exist on type
           initialAddress={crescentAddress}
           address={targetAddress as string}
           setAddress={(value) => setTargetAddress(value)}

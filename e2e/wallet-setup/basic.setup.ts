@@ -5,6 +5,7 @@ const DEFAULT_SEED_PHRASE = "test test test test test test test test test test t
 const PASSWORD = "SynpressIsAwesomeNow!!!";
 
 export default defineWalletSetup(PASSWORD, async (context, walletPage) => {
+  // @ts-ignore Library still in alpha, types need to improve
   const metamask = new MetaMask(context, walletPage, PASSWORD);
 
   await metamask.importWallet(process.env.E2E_WALLET_ENDPOINT || DEFAULT_SEED_PHRASE);

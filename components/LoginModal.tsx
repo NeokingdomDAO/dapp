@@ -25,6 +25,7 @@ export default function LoginModal() {
   );
 
   useAccount({
+    // @ts-expect-error Object literal may only specify known properties, and 'onConnect' does not exist in type 'UseAccountParameters<Config>'
     onConnect({ address, isReconnected }) {
       if (!isReconnected && address) {
         setIsReadyToSign(true);

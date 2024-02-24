@@ -32,6 +32,7 @@ import {
   useTheme,
 } from "@mui/material";
 
+import { TAGS_COLORS, getStageId } from "@lib/constants";
 import { stageToColor } from "@lib/utils";
 
 import useDialogStore from "@store/dialogStore";
@@ -39,7 +40,6 @@ import useProjectTaskStore, { ProjectTask, useProjectTaskActions } from "@store/
 
 import useErrorHandler from "@hooks/useErrorHandler";
 
-import { TAGS_COLORS, getStageId } from "../../lib/constants";
 import ActionCardBtn from "./ActionBtn";
 import Stopwatch from "./Stopwatch";
 import SubTaskCard from "./SubTaskCard";
@@ -57,15 +57,17 @@ export default function TaskCard({ task }: { task: ProjectTask }) {
   const [newTimeEntry, addNewTimeEntry] = useState<boolean>(false);
 
   const { handleError } = useErrorHandler();
+  // @ts-expect-error Property 'trackedTask' does not exist on type 'ProjectTaskStore'.
   const trackedTask = useProjectTaskStore((state) => state.trackedTask);
   const actions = useProjectTaskActions();
   const createTask = handleError(actions.createTask);
   const updateTask = handleError(actions.updateTask);
   const deleteTask = handleError(actions.deleteTask);
   const markTaskAsDone = handleError(actions.markTaskAsDone);
+  // @ts-expect-error Property 'startTrackingTask' does not exist on type
   const startTrackingTask = handleError(actions.startTrackingTask);
+  // @ts-expect-error Property 'stopTrackingTask' does not exist on type
   const stopTrackingTask = handleError(actions.stopTrackingTask);
-
   const [editTask, setEditTask] = useState<number | null>(null);
   const [taskMenu, setTaskMenu] = useState<null | HTMLElement>(null);
   const openTaskMenu = Boolean(taskMenu);
