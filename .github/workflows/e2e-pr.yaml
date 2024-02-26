@@ -12,7 +12,7 @@ jobs:
         with:
           version: 8
       - name: Install dependencies
-        run: pnpm ci && npx playwright install --with-deps
+        run: pnpm i && npx playwright install --with-deps
       - name: Run tests
         run: pnpm e2e
         env:
