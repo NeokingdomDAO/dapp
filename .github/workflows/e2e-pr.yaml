@@ -8,9 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
       - name: Install dependencies
-        run: npm ci && npx playwright install --with-deps
+        run: pnpm ci && npx playwright install --with-deps
       - name: Run tests
-        run: npx playwright test
+        run: pnpm e2e
         env:
           BASE_URL: ${{ github.event.deployment_status.environment_url }}
