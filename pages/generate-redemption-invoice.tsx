@@ -17,6 +17,17 @@ export default function GenerateRedemptionInvoice() {
       <form action="/api/pdf/redemption-invoice" method="post">
         <Box sx={{ mt: 3 }}>
           <TextField
+            name="wallet-address"
+            label="Wallet address"
+            defaultValue={query.walletAddress}
+            InputProps={{
+              readOnly: true,
+            }}
+            fullWidth
+          />
+        </Box>
+        <Box sx={{ mt: 3 }}>
+          <TextField
             name="usdt"
             label="Usdt"
             defaultValue={query.usdt}

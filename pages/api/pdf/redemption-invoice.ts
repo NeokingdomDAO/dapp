@@ -9,8 +9,6 @@ import { sessionOptions } from "@lib/session";
 import Invoice from "@components/redemption-pdf/Invoice";
 
 const getRedemptionInvoice = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log(req.body);
-
   const cookie = req.session.cookie;
 
   if (!cookie) {
@@ -21,6 +19,8 @@ const getRedemptionInvoice = async (req: NextApiRequest, res: NextApiResponse) =
   const companyInfo = req.body["company-info"];
   const vatNumber = req.body["vat-number"];
   const total = req.body.neok;
+  const usdt = req.body.usdt;
+  const walletAddress = req.body["wallet-address"];
 
   try {
     const pdf = await renderToBuffer(
@@ -29,7 +29,9 @@ const getRedemptionInvoice = async (req: NextApiRequest, res: NextApiResponse) =
         companyInfo,
         vatNumber,
         total,
+        usdt,
         invoiceNumber,
+        walletAddress,
       }),
     );
 

@@ -1,16 +1,44 @@
 import { Document, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import Showdown from "showdown";
-import { ResolutionEntityEnhanced } from "types";
 
 import React from "react";
-import Html from "react-pdf-html";
 
-import { RESOLUTION_STATES, getDateFromUnixTimestamp } from "@lib/resolutions/common";
-import { getPdfSigner } from "@lib/utils";
+import { TOKEN_SYMBOL } from "@lib/utils";
 
 const converter = new Showdown.Converter();
 converter.setFlavor("github");
+
+const invoiceTo = {
+  neokingdom: {
+    name: "Neokingdom DAO OÜ",
+    address: "Sõle tn 14",
+    address2: "10611, Tallinn, Estonia",
+    registryCode: "16638166",
+    vatNumber: "EE102569025",
+  },
+  crowdpunk: {
+    name: "Crowdpunk OÜ",
+    address: "Sõle tn 14",
+    address2: "10611, Tallinn, Estonia",
+    registryCode: "16813917",
+    vatNumber: "EE102654736",
+  },
+  teledisko: {
+    name: "Teledisko OÜ",
+    address: "Sõle tn 14",
+    address2: "10611, Tallinn, Estonia",
+    registryCode: "16374990",
+    vatNumber: "EE102438910",
+  },
+  vanilla: {
+    name: "Vanilla OÜ",
+    address: "Sõle tn 14",
+    address2: "10611, Tallinn, Estonia",
+    registryCode: "...",
+    vatNumber: "...",
+  },
+}[process.env.NEXT_PUBLIC_PROJECT_KEY];
 
 // Create styles
 const styles = StyleSheet.create({
@@ -40,7 +68,7 @@ const styles = StyleSheet.create({
     fontSize: "10px",
     color: "#999",
   },
-  signature: {
+  walletInfo: {
     position: "absolute",
     bottom: 20,
     left: 20,
@@ -50,10 +78,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     flexDirection: "row",
     justifyContent: "space-between",
-    fontSize: "9px",
+    fontSize: "12px",
     marginBottom: "16px",
-    borderBottom: "1px solid #999",
-    borderTop: "1px solid #999",
     padding: "16px",
     paddingLeft: 0,
     paddingRight: 0,
@@ -66,29 +92,108 @@ export const Bold = ({ children, inverse = false }: { children: any; inverse?: b
 );
 export const Small = ({ children }: { children: any }) => <Text style={{ fontSize: "10px" }}>{children}</Text>;
 
-const Invoice = ({ userInfo, total, invoiceNumber }: { userInfo: string; total: string; invoiceNumber: number }) => {
-  const contentHtml = converter.makeHtml(userInfo);
+const Invoice = ({
+  companyInfo,
+  total,
+  vatNumber,
+  invoiceNumber,
+  walletAddress,
+  usdt,
+}: {
+  companyInfo: string;
+  total: string;
+  vatNumber: string;
+  usdt: string;
+  invoiceNumber: string;
+  walletAddress: string;
+}) => {
   return (
     <Document>
       <Page size="A4" style={{ ...styles.container }}>
         <View style={styles.headerInfo} wrap={false}>
+          <View style={{ width: "40%", textAlign: "left" }}>
+            <Text>
+              <Bold>Invoice number:</Bold> {invoiceNumber}
+            </Text>
+            <Text>
+              <Bold>Date:</Bold> {format(new Date(), "dd.MM.yyyy")}
+            </Text>
+            <Text>
+              <Bold>Due date:</Bold> {format(addDays(new Date(), 30), "dd.MM.yyyy")}
+            </Text>
+            <Text style={{ marginTop: "8px", marginBottom: "8px" }}>{companyInfo.replaceAll("/n", "<br />")}</Text>
+            <Text>VAT No. {vatNumber}</Text>
+          </View>
           <View style={{ width: "40%", textAlign: "right" }}>
+            <Text>Invoice To</Text>
             <Text>
-              <Bold>Business name:</Bold> {process.env.NEXT_PUBLIC_PROJECT_KEY} DAO OÜ
+              <Bold>{invoiceTo.name}</Bold>
             </Text>
-            <Text>
-              <Bold>Registry code:</Bold>{" "}
-              {process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom" ? "16638166" : "16374990"}
+            <Text>{invoiceTo.address}</Text>
+            <Text>{invoiceTo.address2}</Text>
+            <Text style={{ marginTop: "8px" }}>Reg. No. {invoiceTo.registryCode}</Text>
+            <Text>VAT No. {invoiceTo.vatNumber}</Text>
+          </View>
+        </View>
+        <View style={{ marginTop: "24px" }}>
+          <View style={{ display: "flex", fontSize: "14px", flexDirection: "row", backgroundColor: "#FAFAFA" }}>
+            <Text style={{ width: "40%", padding: "8px" }}>Description</Text>
+            <Text style={{ width: "20%", padding: "8px" }}>Quantity</Text>
+            <Text style={{ width: "20%", padding: "8px" }}>Price per Token</Text>
+            <Text style={{ width: "20%", padding: "8px" }}>Amount</Text>
+          </View>
+          <View style={{ display: "flex", fontSize: "12px", flexDirection: "row" }}>
+            <Text style={{ width: "40%", padding: "8px" }}>Redemption of {TOKEN_SYMBOL} tokens</Text>
+            <Text style={{ width: "20%", padding: "8px" }}>{total}</Text>
+            <Text style={{ width: "20%", padding: "8px" }}>1€</Text>
+            <Text style={{ width: "20%", padding: "8px" }}>{total}€</Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              fontSize: "12px",
+              flexDirection: "row",
+              marginTop: "48px",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Text style={{ width: "20%", padding: "8px" }}>
+              <Bold>Total</Bold>
             </Text>
-            <Text>
-              <Bold>Registered office:</Bold> Sõle 14, Tallinn, 10611 , Estonia
+            <Text style={{ width: "20%", padding: "8px" }}>
+              <Bold>{total}€</Bold>
+            </Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              fontSize: "12px",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Text style={{ width: "20%", padding: "8px" }}>VAT</Text>
+            <Text style={{ width: "20%", padding: "8px" }}>-</Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              fontSize: "12px",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Text style={{ width: "20%", padding: "8px" }}>
+              <Bold>Invoice Total</Bold>
+            </Text>
+            <Text style={{ width: "20%", padding: "8px" }}>
+              <Bold>{total}€</Bold>
             </Text>
           </View>
         </View>
-        <View fixed style={styles.signature}>
-          <Text style={styles.note}>/signed digitally/</Text>
-          <Text style={styles.note}>--------------------------------------</Text>
-          <Text style={styles.note}>Member of management board</Text>
+        <View fixed style={styles.walletInfo}>
+          <Text style={styles.note}>Amount paid sending {usdt} axlUSDC to</Text>
+          <Text style={styles.note}>Ethereum wallet: {walletAddress}</Text>
         </View>
       </Page>
     </Document>
