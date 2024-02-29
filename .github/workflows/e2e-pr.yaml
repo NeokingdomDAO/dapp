@@ -1,4 +1,4 @@
-run-name: e2e - ${{ github.event.deployment_status.deployment.environment }}
+run-name: e2e - ${{ github.event.deployment.environment }}
 
 on:
   deployment_status:
@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: echo ${{ github.event.deployment_status }}
       - uses: pnpm/action-setup@v3
         with:
           version: 8
@@ -21,7 +22,7 @@ jobs:
           E2E_ODOO_USERNAME: ${{ secrets.E2E_ODOO_USERNAME }}
           E2E_ODOO_PASSWORD: ${{ secrets.E2E_ODOO_PASSWORD }}
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: failure()
         with:
           name: playwright-report
           path: playwright-report/
