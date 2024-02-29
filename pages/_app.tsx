@@ -50,11 +50,11 @@ const overriddenEvmos: typeof evmos = {
   rpcUrls: {
     default: {
       // @ts-ignore
-      http: ["https://evmos-evm.publicnode.com/"],
+      http: ["https://evmos.lava.build"],
     },
     public: {
       // @ts-ignore
-      http: ["https://evmos-evm.publicnode.com/"],
+      http: ["https://evmos.lava.build"],
     },
   },
   blockExplorers: {
