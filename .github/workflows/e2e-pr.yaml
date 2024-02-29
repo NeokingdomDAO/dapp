@@ -4,6 +4,10 @@ on:
   deployment_status:
 jobs:
   run-e2es:
+    env:
+      E2E_WALLET_ENDPOINT: ${{ secrets.E2E_WALLET_ENDPOINT }}
+      E2E_ODOO_USERNAME: ${{ secrets.E2E_ODOO_USERNAME }}
+      E2E_ODOO_PASSWORD: ${{ secrets.E2E_ODOO_PASSWORD }}
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     steps:
