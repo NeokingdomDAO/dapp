@@ -1,4 +1,4 @@
-name: E2E Tests
+run-name: e2e - ${{ github.event.deployment_status.deployment.environment }}
 
 on:
   deployment_status:
