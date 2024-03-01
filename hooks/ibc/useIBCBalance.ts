@@ -28,7 +28,6 @@ const getNeokingdomTokenContract = (chainId: string, provider: Provider): Neokin
 function walletClientToProvider(walletClient: NonNullable<UseWalletClientReturnType["data"]>) {
   const { chain, transport } = walletClient;
 
-  walletClient?.chain;
   const network = {
     chainId: chain.id,
     name: chain.name,
