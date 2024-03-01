@@ -17,8 +17,10 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
 
   const { body: task } = req;
   const { username, password } = user;
-  const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
-  if (!session.uid) {
+  let session;
+  try {
+    session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
+  } catch (err) {
     await req.session.destroy();
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -35,16 +37,13 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
       const isSameMin = differenceInMinutes(new Date(activeTimeEntry.start * 1000), new Date()) === 0;
       if (isSameMin) {
         // Delete time entry
-        // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
         await session.remove("account.analytic.line", [Number(activeTimeEntry.id)]);
         const newTask = replaceTaskTimeEntry(activeTask, activeTimeEntry, { delete: true });
         res.status(200).json(newTask);
       } else {
         // Update time entry
         const end = formatInTimeZone(new Date(), "UTC", ODOO_DATE_FORMAT);
-        // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
         await session.update("account.analytic.line", Number(activeTimeEntry.id), { end });
-        // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
         const [updatedTimeEntry] = await session.read("account.analytic.line", [Number(activeTimeEntry.id)]);
         const newTask = replaceTaskTimeEntry(activeTask, updatedTimeEntry);
         res.status(200).json(newTask);

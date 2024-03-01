@@ -16,8 +16,10 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     body,
   } = req;
   const { username, password } = user;
-  const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
-  if (!session.uid) {
+  let session;
+  try {
+    session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
+  } catch (err) {
     await req.session.destroy();
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -26,10 +28,8 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     // Update Time Entry
     try {
       // TODO: Validate body params
-      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       const updated = await session.update("account.analytic.line", Number(id), JSON.parse(body));
       if (updated) {
-        // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
         const [newTimeEntry] = await session.read("account.analytic.line", [Number(id)]);
         res.status(200).json(newTimeEntry);
       } else {
@@ -42,7 +42,6 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "DELETE") {
     // Remove Time Entry
-    // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
     const removed = await session.remove("account.analytic.line", [Number(id)]);
     return res.status(removed ? 200 : 500).json({ removed });
   }

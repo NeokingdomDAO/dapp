@@ -13,8 +13,10 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
 
   const { body } = req;
   const { username, password } = user;
-  const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
-  if (!session.uid) {
+  let session;
+  try {
+    session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
+  } catch (err) {
     await req.session.destroy();
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -23,10 +25,8 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     // Create New Time Entry
     try {
       // TODO: Validate body params
-      // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
       const newTimeEntryId = await session.create("account.analytic.line", JSON.parse(body));
       if (newTimeEntryId) {
-        // @ts-expect-error Cannot invoke an object which is possibly 'undefined'
         const [newTimeEntry] = await session.read("account.analytic.line", [Number(newTimeEntryId)]);
         res.status(200).json(newTimeEntry);
       } else {
