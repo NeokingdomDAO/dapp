@@ -24,15 +24,6 @@ export default function LoginModal() {
     shallow,
   );
 
-  useAccount({
-    // @ts-expect-error Object literal may only specify known properties, and 'onConnect' does not exist in type 'UseAccountParameters<Config>'
-    onConnect({ address, isReconnected }) {
-      if (!isReconnected && address) {
-        setIsReadyToSign(true);
-      }
-    },
-  });
-
   const handleSignInClick = async () => {
     await handleWalletOdooLogin();
     handleModalClose();

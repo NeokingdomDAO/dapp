@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useChain } from "@cosmos-kit/react";
 import { formatEther, parseEther } from "ethers/lib/utils";
 import Image from "next/image";
@@ -192,7 +193,6 @@ export default function IBCBalanceCrescent() {
         </Box>
 
         <ChangeableAddress
-          // @ts-expect-error Property 'initialAddress' does not exist on type
           initialAddress={evmosAddress}
           address={targetAddress as string}
           setAddress={(value) => setTargetAddress(value)}

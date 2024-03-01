@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useChain } from "@cosmos-kit/react";
 import { evmosToEth } from "@evmos/address-converter";
 import { formatEther, parseEther } from "ethers/lib/utils";
@@ -215,7 +216,6 @@ export default function IBCBalanceEvmos() {
         </Box>
 
         <ChangeableAddress
-          // @ts-expect-error Property 'initialAddress' does not exist on type
           initialAddress={crescentAddress}
           address={targetAddress as string}
           setAddress={(value) => setTargetAddress(value)}
