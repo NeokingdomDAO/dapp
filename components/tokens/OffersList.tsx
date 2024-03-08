@@ -43,9 +43,7 @@ const formatOfferMatch = (allOdooUsers: OdooUser[]) => (match: OfferMatch, index
 const formatOffersToExport = (offers: Offer[], allOdooUsers: OdooUser[]) => {
   const formattedOffers = offers.map((o, i) => {
     const fromUser = allOdooUsers.find((u) => u.ethereum_address === o.from);
-
-    const matchesStringArray = o.matches.map(formatOfferMatch(allOdooUsers));
-    const matchesObject = i === 0 ? Object.fromEntries(matchesStringArray) : {};
+    const matchesObject = Object.fromEntries(o.matches.map(formatOfferMatch(allOdooUsers)));
 
     return {
       "From Address": o.from,
