@@ -1,12 +1,17 @@
 import { useContractsContext } from "contexts/ContractsContext";
-import { Offer } from "types";
+import { format } from "date-fns";
+import { download, generateCsv, mkConfig } from "export-to-csv";
+import { OdooUser, Offer, OfferMatch } from "types";
+import { useAccount } from "wagmi";
 
 import { useState } from "react";
 
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { LoadingButton } from "@mui/lab";
 import { Alert, Box, Grid, Slider, TextField, Typography } from "@mui/material";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
+import { getDateFromUnixTimestamp } from "@lib/resolutions/common";
 import { calculateSteps } from "@lib/utils";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
@@ -17,11 +22,52 @@ import UsersAutocomplete from "@components/UsersAutocomplete";
 import useApproveToMatchOffer from "@hooks/useApproveToMatchOffer";
 import useCheckAllowance from "@hooks/useCheckAllowance";
 import useMatchTokens from "@hooks/useMatchTokens";
+import useOdooUsers from "@hooks/useOdooUsers";
 import { bigIntToNum } from "@hooks/useUserBalanceAndOffers";
 
 import OfferCard from "./OfferCard";
 
-export default function OffersList({ offers, noOffersMessage }: { offers: Offer[]; noOffersMessage: string }) {
+const csvConfig = mkConfig({ useKeysAsHeaders: true });
+
+const formatOfferMatch = (allOdooUsers: OdooUser[]) => (match: OfferMatch, index: number) => {
+  const fromUser = allOdooUsers.find((u) => u.ethereum_address === match.matchedFrom);
+
+  let matchString = "";
+  matchString += `${match.matchedFrom} - `;
+  matchString += `${fromUser?.display_name || ""} - `;
+  matchString += `${bigIntToNum(match.amount)} - `;
+  matchString += `${format(getDateFromUnixTimestamp(match.createTimestamp), "dd LLL yyyy HH:mm")}`;
+  return [`Match ${index + 1} - From Address - From Name - Amount - Date`, matchString];
+};
+
+const formatOffersToExport = (offers: Offer[], allOdooUsers: OdooUser[]) => {
+  const formattedOffers = offers.map((o, i) => {
+    const fromUser = allOdooUsers.find((u) => u.ethereum_address === o.from);
+
+    const matchesStringArray = o.matches.map(formatOfferMatch(allOdooUsers));
+    const matchesObject = i === 0 ? Object.fromEntries(matchesStringArray) : {};
+
+    return {
+      "From Address": o.from,
+      "From Name": fromUser?.display_name || "",
+      Amount: bigIntToNum(o.amount),
+      Expiration: format(getDateFromUnixTimestamp(o.expirationTimestamp), "dd LLL yyyy HH:mm"),
+      Creation: format(getDateFromUnixTimestamp(o.createTimestamp), "dd LLL yyyy HH:mm"),
+      ...matchesObject,
+    };
+  });
+  return formattedOffers;
+};
+
+export default function OffersList({
+  offers,
+  noOffersMessage,
+  isExportEnabled,
+}: {
+  offers: Offer[];
+  noOffersMessage: string;
+  isExportEnabled?: boolean;
+}) {
   const [matchingOfferOpen, setMatchingOfferOpen] = useState<Offer | null>(null);
   const [matchingTokens, setMatchingTokens] = useState(0);
   const [selectedUserAddress, setSelectedUserAddress] = useState<string | null>(null);
@@ -31,6 +77,10 @@ export default function OffersList({ offers, noOffersMessage }: { offers: Offer[
   const { isLoading, isAwaitingConfirmation, type } = useBlockchainTransactionStore();
   const { onSubmit } = useMatchTokens();
   const { onSubmit: onSubmitApproveUsdc } = useApproveToMatchOffer();
+  const { allOdooUsers, isLoading: isLoadingUsers, error: errorUsers } = useOdooUsers();
+
+  const { address: userAddress } = useAccount();
+  const userAddressLowerCase = userAddress?.toLocaleLowerCase();
 
   const handleOnMatch = (offer: Offer) => {
     setMatchingOfferOpen(offer);
@@ -64,6 +114,13 @@ export default function OffersList({ offers, noOffersMessage }: { offers: Offer[
 
   const usersAddresses = [...new Set(offers.map((offer) => offer.from))];
 
+  const filteredOffers = offers.filter((offer) => !selectedUserAddress || offer.from === selectedUserAddress);
+
+  const isCurrentUserSelected = selectedUserAddress?.toLocaleLowerCase() === userAddressLowerCase;
+  const isOnlyUserInList =
+    usersAddresses.length === 1 && usersAddresses[0].toLocaleLowerCase() === userAddressLowerCase;
+  // TODO: make it available just for the current user: isExportEnabled && (isCurrentUserSelected || isOnlyUserInList)
+  const showExportButton = isExportEnabled || isCurrentUserSelected || isOnlyUserInList;
   return (
     <>
       <Modal open={!!matchingOfferOpen} onClose={handleModalClose} size="medium">
@@ -137,7 +194,8 @@ export default function OffersList({ offers, noOffersMessage }: { offers: Offer[
                   onClick={handleMatchOffer}
                   loading={(isLoading || isAwaitingConfirmation) && type === BLOCKCHAIN_TRANSACTION_KEYS.MATCH_TOKENS}
                 >
-                  Match offer
+                  {/* We need <span> to prevent a bug with Chrome and translations: https://mui.com/material-ui/react-button/#loading-button */}
+                  <span>Match offer</span>
                 </LoadingButton>
               </Box>
             </>
@@ -150,24 +208,39 @@ export default function OffersList({ offers, noOffersMessage }: { offers: Offer[
         </Typography>
       ) : (
         <>
-          {usersAddresses.length > 1 && (
-            <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end" }}>
-              <UsersAutocomplete
-                filterList={usersAddresses}
-                selectedAddress={selectedUserAddress}
-                onChange={(address) => setSelectedUserAddress(address)}
-                label="Filter by contributor"
-              />
+          {(usersAddresses.length > 1 || showExportButton) && (
+            <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}>
+              {showExportButton && (
+                <LoadingButton
+                  endIcon={<FileDownloadIcon />}
+                  loading={isLoadingUsers}
+                  loadingPosition="end"
+                  disabled={errorUsers}
+                  onClick={() => {
+                    const csv = generateCsv(csvConfig)(formatOffersToExport(filteredOffers, allOdooUsers));
+                    download(csvConfig)(csv);
+                  }}
+                >
+                  {/* We need <span> to prevent a bug with Chrome and translations: https://mui.com/material-ui/react-button/#loading-button */}
+                  <span>Export</span>
+                </LoadingButton>
+              )}
+              {usersAddresses.length > 1 && (
+                <UsersAutocomplete
+                  filterList={usersAddresses}
+                  selectedAddress={selectedUserAddress}
+                  onChange={(address) => setSelectedUserAddress(address)}
+                  label="Filter by contributor"
+                />
+              )}
             </Box>
           )}
           <Grid container spacing={2}>
-            {offers
-              .filter((offer) => !selectedUserAddress || offer.from === selectedUserAddress)
-              .map((offer) => (
-                <Grid key={offer.id} item xs={12} md={6} lg={4}>
-                  <OfferCard offer={offer} onMatchClicked={handleOnMatch} />
-                </Grid>
-              ))}
+            {filteredOffers.map((offer) => (
+              <Grid key={offer.id} item xs={12} md={6} lg={4}>
+                <OfferCard offer={offer} onMatchClicked={handleOnMatch} />
+              </Grid>
+            ))}
           </Grid>
         </>
       )}

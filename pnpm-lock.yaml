@@ -101,6 +101,9 @@ dependencies:
   ethers:
     specifier: ^5.7.2
     version: 5.7.2
+  export-to-csv:
+    specifier: ^1.2.3
+    version: 1.2.3
   graphql:
     specifier: ^16.6.0
     version: 16.6.0
@@ -11999,6 +12002,11 @@ packages:
       jest-message-util: 29.6.3
       jest-util: 29.6.3
     dev: true
+
+  /export-to-csv@1.2.3:
+    resolution: {integrity: sha512-N+hWdpEQNSn4BeltgusTuW65gC+2B5hmOWe4Eu0gw0NwKq92dzD+5ObSSBUeKTy7k+PGG7xDqaThPg8elZ7k+g==}
+    engines: {node: ^v12.20.0 || >=v14.13.0}
+    dev: false
 
   /extension-port-stream@2.1.1:
     resolution: {integrity: sha512-qknp5o5rj2J9CRKfVB8KJr+uXQlrojNZzdESUPhKYLXf97TPcGf6qWWKmpsNNtUyOdzFhab1ON0jzouNxHHvow==}

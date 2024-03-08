@@ -94,14 +94,14 @@ export default function Tokens() {
           {isLoading ? (
             <CircularProgress />
           ) : (
-            <OffersList offers={data?.activeOffers || []} noOffersMessage="No active offers" />
+            <OffersList offers={data?.activeOffers || []} noOffersMessage="No active offers" isExportEnabled={false} />
           )}
         </TabPanel>
         <TabPanel value={value} index={2}>
           {isLoading ? (
             <CircularProgress />
           ) : (
-            <OffersList offers={data?.expiredOffers || []} noOffersMessage="No expired offers" />
+            <OffersList offers={data?.expiredOffers || []} noOffersMessage="No expired offers" isExportEnabled={true} />
           )}
         </TabPanel>
         <TabPanel value={value} index={3}>
