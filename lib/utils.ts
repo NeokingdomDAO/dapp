@@ -158,6 +158,14 @@ export const getDateFromOdooTimestamp = (timestamp: number) => {
   return new Date(timestamp * 1000);
 };
 
+export const formatTimestampToDate = (timestamp: string) => {
+  return format(getDateFromUnixTimestamp(timestamp), "dd LLL yyyy");
+};
+
+export const formatTimestampToDateTime = (timestamp: string) => {
+  return format(getDateFromUnixTimestamp(timestamp), "dd LLL yyyy HH:mm");
+};
+
 export const TOKEN_SYMBOL = {
   teledisko: "BERLIN",
   neokingdom: "NEOK",

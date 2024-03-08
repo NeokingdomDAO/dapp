@@ -1,7 +1,5 @@
 import { useContractsContext } from "contexts/ContractsContext";
-import { format } from "date-fns";
-import { download, generateCsv, mkConfig } from "export-to-csv";
-import { OdooUser, Offer, OfferMatch } from "types";
+import { Offer } from "types";
 import { useAccount } from "wagmi";
 
 import { useState } from "react";
@@ -11,7 +9,7 @@ import { LoadingButton } from "@mui/lab";
 import { Alert, Box, Grid, Slider, TextField, Typography } from "@mui/material";
 
 import { BLOCKCHAIN_TRANSACTION_KEYS } from "@lib/constants";
-import { getDateFromUnixTimestamp } from "@lib/resolutions/common";
+import { downloadOffersCsv } from "@lib/exportOffers";
 import { calculateSteps } from "@lib/utils";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
@@ -26,36 +24,6 @@ import useOdooUsers from "@hooks/useOdooUsers";
 import { bigIntToNum } from "@hooks/useUserBalanceAndOffers";
 
 import OfferCard from "./OfferCard";
-
-const csvConfig = mkConfig({ useKeysAsHeaders: true });
-
-const formatOfferMatch = (allOdooUsers: OdooUser[]) => (match: OfferMatch, index: number) => {
-  const fromUser = allOdooUsers.find((u) => u.ethereum_address === match.matchedFrom);
-
-  let matchString = "";
-  matchString += `${match.matchedFrom} - `;
-  matchString += `${fromUser?.display_name || ""} - `;
-  matchString += `${bigIntToNum(match.amount)} - `;
-  matchString += `${format(getDateFromUnixTimestamp(match.createTimestamp), "dd LLL yyyy HH:mm")}`;
-  return [`Match ${index + 1} - From Address - From Name - Amount - Date`, matchString];
-};
-
-const formatOffersToExport = (offers: Offer[], allOdooUsers: OdooUser[]) => {
-  const formattedOffers = offers.map((o, i) => {
-    const fromUser = allOdooUsers.find((u) => u.ethereum_address === o.from);
-    const matchesObject = Object.fromEntries(o.matches.map(formatOfferMatch(allOdooUsers)));
-
-    return {
-      "From Address": o.from,
-      "From Name": fromUser?.display_name || "",
-      Amount: bigIntToNum(o.amount),
-      Expiration: format(getDateFromUnixTimestamp(o.expirationTimestamp), "dd LLL yyyy HH:mm"),
-      Creation: format(getDateFromUnixTimestamp(o.createTimestamp), "dd LLL yyyy HH:mm"),
-      ...matchesObject,
-    };
-  });
-  return formattedOffers;
-};
 
 export default function OffersList({
   offers,
@@ -75,7 +43,7 @@ export default function OffersList({
   const { isLoading, isAwaitingConfirmation, type } = useBlockchainTransactionStore();
   const { onSubmit } = useMatchTokens();
   const { onSubmit: onSubmitApproveUsdc } = useApproveToMatchOffer();
-  const { allOdooUsers, isLoading: isLoadingUsers, error: errorUsers } = useOdooUsers();
+  const { getOdooUser, isLoading: isLoadingUsers, error: errorUsers } = useOdooUsers();
 
   const { address: userAddress } = useAccount();
   const userAddressLowerCase = userAddress?.toLocaleLowerCase();
@@ -215,8 +183,7 @@ export default function OffersList({
                   loadingPosition="end"
                   disabled={errorUsers}
                   onClick={() => {
-                    const csv = generateCsv(csvConfig)(formatOffersToExport(filteredOffers, allOdooUsers));
-                    download(csvConfig)(csv);
+                    downloadOffersCsv(filteredOffers, getOdooUser);
                   }}
                 >
                   {/* We need <span> to prevent a bug with Chrome and translations: https://mui.com/material-ui/react-button/#loading-button */}
