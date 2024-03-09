@@ -85,8 +85,7 @@ export default function OffersList({
   const isCurrentUserSelected = selectedUserAddress?.toLocaleLowerCase() === userAddressLowerCase;
   const isOnlyUserInList =
     usersAddresses.length === 1 && usersAddresses[0].toLocaleLowerCase() === userAddressLowerCase;
-  // TODO: make it available just for the current user: isExportEnabled && (isCurrentUserSelected || isOnlyUserInList)
-  const showExportButton = isExportEnabled || isCurrentUserSelected || isOnlyUserInList;
+  const showExportButton = isExportEnabled && (isCurrentUserSelected || isOnlyUserInList);
   return (
     <>
       <Modal open={!!matchingOfferOpen} onClose={handleModalClose} size="medium">
@@ -175,11 +174,13 @@ export default function OffersList({
       ) : (
         <>
           {(usersAddresses.length > 1 || showExportButton) && (
-            <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
               {showExportButton && (
                 <LoadingButton
                   endIcon={<FileDownloadIcon />}
                   loading={isLoadingUsers}
+                  variant="outlined"
+                  color="primary"
                   loadingPosition="end"
                   disabled={errorUsers}
                   onClick={() => {
@@ -191,12 +192,14 @@ export default function OffersList({
                 </LoadingButton>
               )}
               {usersAddresses.length > 1 && (
-                <UsersAutocomplete
-                  filterList={usersAddresses}
-                  selectedAddress={selectedUserAddress}
-                  onChange={(address) => setSelectedUserAddress(address)}
-                  label="Filter by contributor"
-                />
+                <Box sx={{ ml: "auto" }}>
+                  <UsersAutocomplete
+                    filterList={usersAddresses}
+                    selectedAddress={selectedUserAddress}
+                    onChange={(address) => setSelectedUserAddress(address)}
+                    label="Filter by contributor"
+                  />
+                </Box>
               )}
             </Box>
           )}
