@@ -1,13 +1,10 @@
-import { Document, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import { addDays, format } from "date-fns";
-import Showdown from "showdown";
+import { InvoiceData, VatRegion } from "pages/api/pdf/redemption-invoice";
 
 import React from "react";
 
 import { TOKEN_SYMBOL } from "@lib/utils";
-
-const converter = new Showdown.Converter();
-converter.setFlavor("github");
 
 const invoiceTo = {
   neokingdom: {
@@ -47,23 +44,6 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
     color: "#676767",
   },
-  headerTitle: {
-    fontSize: "14px",
-    marginBottom: "12px",
-  },
-  title: {
-    fontSize: "16px",
-    fontWeight: "ultrabold",
-    marginBottom: "2px",
-  },
-  subTitle: {
-    fontSize: "12px",
-    marginBottom: "16px",
-  },
-  content: {
-    fontSize: "12px",
-    maxWidth: "90%",
-  },
   note: {
     fontSize: "10px",
     color: "#999",
@@ -92,21 +72,32 @@ export const Bold = ({ children, inverse = false }: { children: any; inverse?: b
 );
 export const Small = ({ children }: { children: any }) => <Text style={{ fontSize: "10px" }}>{children}</Text>;
 
+const VAT_ESTONIA = 22;
+
+const regionToText: Record<VatRegion, string | null> = {
+  eu: "Reverse charge according to Article 204 of Directive 2006/112/EC",
+  estonia: null,
+  "non-eu": "VAT is due in the customer's country.",
+};
+
+const getVATText = (vatRegion: VatRegion | undefined) => {
+  return vatRegion ? regionToText[vatRegion] : "Company is not VAT liable";
+};
+
 const Invoice = ({
   companyInfo,
   total,
   vatNumber,
   invoiceNumber,
+  registrationNumber,
   walletAddress,
   usdt,
-}: {
-  companyInfo: string;
-  total: string;
-  vatNumber: string;
-  usdt: string;
-  invoiceNumber: string;
-  walletAddress: string;
-}) => {
+  vatRegion,
+}: InvoiceData) => {
+  const vatText = getVATText(vatRegion);
+  const vatTotal = vatRegion === "estonia" && vatNumber ? (Number(total) * 22) / 100 : 0;
+  const invoiceTotal = (vatTotal + Number(total)).toFixed(2);
+
   return (
     <Document>
       <Page size="A4" style={{ ...styles.container }}>
@@ -119,10 +110,11 @@ const Invoice = ({
               <Bold>Date:</Bold> {format(new Date(), "dd.MM.yyyy")}
             </Text>
             <Text>
-              <Bold>Due date:</Bold> {format(addDays(new Date(), 30), "dd.MM.yyyy")}
+              <Bold>Due date:</Bold> {format(addDays(new Date(), 7), "dd.MM.yyyy")}
             </Text>
             <Text style={{ marginTop: "8px", marginBottom: "8px" }}>{companyInfo.replaceAll("/n", "<br />")}</Text>
-            <Text>VAT No. {vatNumber}</Text>
+            {vatNumber && <Text>VAT No. {vatNumber}</Text>}
+            {registrationNumber && <Text>Reg. No. {vatNumber}</Text>}
           </View>
           <View style={{ width: "40%", textAlign: "right" }}>
             <Text>Invoice To</Text>
@@ -164,17 +156,19 @@ const Invoice = ({
               <Bold>{total}€</Bold>
             </Text>
           </View>
-          <View
-            style={{
-              display: "flex",
-              fontSize: "12px",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Text style={{ width: "20%", padding: "8px" }}>VAT</Text>
-            <Text style={{ width: "20%", padding: "8px" }}>-</Text>
-          </View>
+          {vatNumber && (
+            <View
+              style={{
+                display: "flex",
+                fontSize: "12px",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Text style={{ width: "20%", padding: "8px" }}>VAT, {vatRegion === "estonia" ? VAT_ESTONIA : 0}%</Text>
+              <Text style={{ width: "20%", padding: "8px" }}>{vatTotal.toFixed(2)}€</Text>
+            </View>
+          )}
           <View
             style={{
               display: "flex",
@@ -187,9 +181,18 @@ const Invoice = ({
               <Bold>Invoice Total</Bold>
             </Text>
             <Text style={{ width: "20%", padding: "8px" }}>
-              <Bold>{total}€</Bold>
+              <Bold>{invoiceTotal}€</Bold>
             </Text>
           </View>
+          {vatText && (
+            <View
+              style={{
+                marginTop: "96px",
+              }}
+            >
+              <Text style={{ fontSize: "12px" }}>{vatText}</Text>
+            </View>
+          )}
         </View>
         <View fixed style={styles.walletInfo}>
           <Text style={styles.note}>Amount paid sending {usdt} axlUSDC to</Text>

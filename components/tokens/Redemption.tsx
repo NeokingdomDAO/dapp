@@ -67,7 +67,7 @@ export default function Redemption() {
     <>
       {redeemModalMax > 0 && (
         <Modal open onClose={() => setRedeemModalMax(0)} size="medium">
-          <RedeemTokens closeModal={() => setRedeemModalMax(0)} maxToRedeem={redeemModalMax} />
+          <RedeemTokens maxToRedeem={redeemModalMax} />
         </Modal>
       )}
       {hasRedeemedInLast30Days && lastRedemptionDate && (
@@ -145,7 +145,7 @@ export default function Redemption() {
                 color="primary"
                 size="small"
                 onClick={() => setRedeemModalMax(maxToRedeem)}
-                // disabled={!canBeRedeemed}
+                disabled={!canBeRedeemed}
               >
                 Redeem
               </Button>

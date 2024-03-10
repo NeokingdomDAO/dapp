@@ -30,7 +30,7 @@ const GET_EURUSDT_ENDPOINT = "https://api.binance.com/api/v3/avgPrice?symbol=EUR
 const getUsdtFromNeok = (neok: number, eurUsdt: number) =>
   Math.round((neok * Number(eurUsdt) + Number.EPSILON) * 100) / 100;
 
-export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: () => void; maxToRedeem: number }) {
+export default function RedeemTokens({ maxToRedeem }: { maxToRedeem: number }) {
   const [toRedeem, setToRedeem] = useState(0);
   const [redeemedTokensAmount, setRedeemedTokensAmount] = useState(0);
   const [address, setAddress] = useState("");
@@ -45,7 +45,7 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
   }
 
   const handleRedeemTokens = async () => {
-    const submitted = true; // await onSubmit({ amount: toRedeem });
+    const submitted = await onSubmit({ amount: toRedeem }); // TODO add address as soon as new contracts will be ready
     if (submitted) {
       setRedeemedTokensAmount(toRedeem);
       setToRedeem(0);
@@ -56,17 +56,20 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
     return (
       <>
         <Alert severity="success">{redeemedTokensAmount} tokens redeemed successfully!</Alert>
-        <Button
-          variant="contained"
-          color="primary"
-          href={`/generate-redemption-invoice?neok=${redeemedTokensAmount}&usdt=${getUsdtFromNeok(
-            redeemedTokensAmount,
-            eurUsdt.price,
-          )}&walletAddress=${address}`}
-          sx={{ mt: 2 }}
-        >
-          Generate Invoice
-        </Button>
+        <Box sx={{ textAlign: "center" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            href={`/generate-redemption-invoice?neok=${redeemedTokensAmount}&usdt=${getUsdtFromNeok(
+              redeemedTokensAmount,
+              eurUsdt.price,
+            )}&walletAddress=${address}`}
+            sx={{ mt: 2 }}
+            size="large"
+          >
+            Generate Invoice
+          </Button>
+        </Box>
       </>
     );
   }

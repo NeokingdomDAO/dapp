@@ -2,15 +2,32 @@ import { useRouter } from "next/router";
 
 import { useState } from "react";
 
-import { Box, Button, CircularProgress, Container, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
+
+GenerateRedemptionInvoice.requireLogin = true;
 
 export default function GenerateRedemptionInvoice() {
   const { query } = useRouter();
-  const [invoiceData, setInvoiceData] = useState({ invoiceNumber: "", companyInfo: "", vatNumber: "" });
+  const [vatLiable, setVatLiable] = useState(true);
 
   if (!query.neok || !query.usdt) {
     return <CircularProgress />;
   }
+
   return (
     <Container maxWidth="sm">
       <Typography variant="h4">To generate the redemption invoice please fill in the form!</Typography>
@@ -53,33 +70,41 @@ export default function GenerateRedemptionInvoice() {
             label="Invoice number"
             required
             name="invoice-number"
-            value={invoiceData.invoiceNumber}
-            onChange={(evt) => setInvoiceData((d) => ({ ...d, invoiceNumber: evt.target.value }))}
             fullWidth
             placeholder="Please use your own enumeration for the invoice number"
           />
         </Box>
-        <Box sx={{ mt: 3 }}>
-          <TextField
-            label="Your VAT number"
-            name="vat-number"
-            required
-            value={invoiceData.vatNumber}
-            onChange={(evt) => setInvoiceData((d) => ({ ...d, vatNumber: evt.target.value }))}
-            fullWidth
-          />
-        </Box>
+        <Paper sx={{ p: 2, mt: 3 }}>
+          <Box>
+            <FormControlLabel
+              control={<Switch checked={vatLiable} onChange={() => setVatLiable((old) => !old)} />}
+              label="Are you VAT liable?"
+              name="vat-liable"
+            />
+          </Box>
+          {vatLiable && (
+            <>
+              <Box sx={{ mt: 3 }}>
+                <TextField label="Registration number" required name="registration-number" fullWidth />
+              </Box>
+              <Box sx={{ mt: 3 }}>
+                <TextField label="Your VAT number" name="vat-number" required fullWidth />
+              </Box>
+              <Box sx={{ mt: 3 }}>
+                <FormControl required>
+                  <FormLabel id="region-group-label">VAT region</FormLabel>
+                  <RadioGroup aria-labelledby="region-group-label" defaultValue="eu" name="vat-region">
+                    <FormControlLabel value="estonia" control={<Radio />} label="Estonia" />
+                    <FormControlLabel value="eu" control={<Radio />} label="EU (non Estonia)" />
+                    <FormControlLabel value="non-eu" control={<Radio />} label="Outside of EU" />
+                  </RadioGroup>
+                </FormControl>
+              </Box>
+            </>
+          )}
+        </Paper>
         <Box sx={{ mt: 3, mb: 3 }}>
-          <TextField
-            label="Your company information and address"
-            name="company-info"
-            multiline
-            minRows={3}
-            value={invoiceData.companyInfo}
-            onChange={(evt) => setInvoiceData((d) => ({ ...d, companyInfo: evt.target.value }))}
-            fullWidth
-            required
-          />
+          <TextField label="Your company address" name="company-info" multiline minRows={3} fullWidth required />
         </Box>
         <Button type="submit" variant="contained" size="large" fullWidth>
           Generate
