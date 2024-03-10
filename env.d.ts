@@ -15,5 +15,7 @@ namespace NodeJS {
     E2E_WALLET_ENDPOINT: string;
     E2E_ODOO_USERNAME: string;
     E2E_ODOO_PASSWORD: string;
+    NEXT_PUBLIC_HYPERTUNE_TOKEN: string;
+    HYPERTUNE_OUTPUT_FILE_PATH: string;
   }
 }

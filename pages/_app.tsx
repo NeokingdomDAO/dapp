@@ -23,6 +23,8 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/s
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
+import useFeatureFlags from "@lib/feature-flags/useFeatureFlags";
+
 import CheckNeokBalance from "@components/CeckNeokBalance";
 import CheckConnected from "@components/CheckConnected";
 import Layout from "@components/Layout";
@@ -124,6 +126,9 @@ export default function App({ Component, pageProps }: DappProps) {
     redirectTo: `/login?redirectTo=${asPath}`,
     shouldSkip: !Component.requireLogin,
   });
+
+  //const featureFlags = useFeatureFlags({ email: user?.email, walletAddress: user?.ethereum_address, erpId: user?.id.toString() });
+  // const enableExportOffers = featureFlags.enableExportOffers().get(false);
 
   useEffect(() => {
     setMounted(true);
