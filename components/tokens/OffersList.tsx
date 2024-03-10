@@ -188,7 +188,7 @@ export default function OffersList({
                   }}
                 >
                   {/* We need <span> to prevent a bug with Chrome and translations: https://mui.com/material-ui/react-button/#loading-button */}
-                  <span>Export</span>
+                  <span>Export your offers</span>
                 </LoadingButton>
               )}
               {usersAddresses.length > 1 && (
