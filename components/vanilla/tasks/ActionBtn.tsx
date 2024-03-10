@@ -1,7 +1,6 @@
-import { useTheme } from "@emotion/react";
-
 import { ReactElement, ReactEventHandler } from "react";
 
+import { useTheme } from "@mui/material";
 import { Box } from "@mui/material";
 
 export default function ActionCardBtn({

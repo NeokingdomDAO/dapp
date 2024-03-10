@@ -1,4 +1,4 @@
-import { graphql } from "../generated";
+import { graphql } from "../../generated";
 
 export const resolutionTypeFragment = graphql(`
   fragment resolutionTypeFragment on ResolutionType {

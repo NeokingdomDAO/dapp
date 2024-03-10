@@ -61,18 +61,14 @@ function tuplify(query: Record<string, string> | string[] = {}) {
 }
 
 export async function getSession(url: string, db: string, username: string, password: string) {
-  try {
-    const user = await jsonRpc(ODOO_AUTH_ENDPOINT, "call", { db, login: username, password });
-    const model = (...args: any[]) => call(url, "object", "execute_kw", db, user.uid, password, ...args);
-    return {
-      create: async (name: string, object: any) => model(name, "create", [object]),
-      read: async (name: string, ids: number[]) => model(name, "read", [ids]),
-      search: async (name: string, query: any, fields?: any) => model(name, "search_read", [tuplify(query)], fields),
-      update: async (name: string, id: number, object: any) => model(name, "write", [[id], object]),
-      remove: async (name: string, ids: number[]) => model(name, "unlink", [ids]),
-      uid: user.uid,
-    };
-  } catch (err) {
-    return { error: true, uid: false };
-  }
+  const user = await jsonRpc(ODOO_AUTH_ENDPOINT, "call", { db, login: username, password });
+  const model = (...args: any[]) => call(url, "object", "execute_kw", db, user.uid, password, ...args);
+  return {
+    create: async (name: string, object: any) => model(name, "create", [object]),
+    read: async (name: string, ids: number[]) => model(name, "read", [ids]),
+    search: async (name: string, query: any, fields?: any) => model(name, "search_read", [tuplify(query)], fields),
+    update: async (name: string, id: number, object: any) => model(name, "write", [[id], object]),
+    remove: async (name: string, ids: number[]) => model(name, "unlink", [ids]),
+    uid: user.uid,
+  };
 }

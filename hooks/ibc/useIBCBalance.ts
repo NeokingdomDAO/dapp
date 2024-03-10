@@ -4,7 +4,7 @@ import { evmosToEth } from "@evmos/address-converter";
 import { BalanceByDenomResponse, generateEndpointBalanceByDenom } from "@evmos/provider";
 import { BigNumber, providers } from "ethers";
 import { formatEther } from "ethers/lib/utils.js";
-import { WalletClient, useWalletClient } from "wagmi";
+import { type UseWalletClientReturnType, useWalletClient } from "wagmi";
 
 import { useCallback, useEffect, useState } from "react";
 
@@ -25,8 +25,9 @@ const getNeokingdomTokenContract = (chainId: string, provider: Provider): Neokin
   return NeokingdomToken__factory.connect(address, provider);
 };
 
-function walletClientToProvider(walletClient: WalletClient) {
+function walletClientToProvider(walletClient: NonNullable<UseWalletClientReturnType["data"]>) {
   const { chain, transport } = walletClient;
+
   const network = {
     chainId: chain.id,
     name: chain.name,

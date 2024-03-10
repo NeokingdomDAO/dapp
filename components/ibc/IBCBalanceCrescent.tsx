@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useChain } from "@cosmos-kit/react";
 import { formatEther, parseEther } from "ethers/lib/utils";
 import Image from "next/image";

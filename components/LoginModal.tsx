@@ -24,14 +24,6 @@ export default function LoginModal() {
     shallow,
   );
 
-  useAccount({
-    onConnect({ address, isReconnected }) {
-      if (!isReconnected && address) {
-        setIsReadyToSign(true);
-      }
-    },
-  });
-
   const handleSignInClick = async () => {
     await handleWalletOdooLogin();
     handleModalClose();

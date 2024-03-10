@@ -20,9 +20,11 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
 
   const { body } = req;
   const { username, password } = user;
-  const session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
-  if (!session.uid) {
-    req.session.destroy();
+  let session;
+  try {
+    session = await getSession(ODOO_ENDPOINT, ODOO_DB_NAME, username, password);
+  } catch (err) {
+    await req.session.destroy();
     return res.status(401).json({ message: "Unauthorized" });
   }
 

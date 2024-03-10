@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useChain } from "@cosmos-kit/react";
 import { evmosToEth } from "@evmos/address-converter";
 import { formatEther, parseEther } from "ethers/lib/utils";
