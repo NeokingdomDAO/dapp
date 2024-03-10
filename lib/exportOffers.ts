@@ -1,19 +1,17 @@
 import { format } from "date-fns";
 import { download, generateCsv, mkConfig } from "export-to-csv";
 
-import { getDateFromUnixTimestamp } from "@lib/resolutions/common";
-
 import { bigIntToNum } from "@hooks/useUserBalanceAndOffers";
 
 import { OdooUser, Offer, OfferMatch } from "../types";
 import { formatTimestampToDate } from "./utils";
 
-type GetUser = (address: string) => OdooUser | undefined;
+type GetUserInfo = (address: string) => OdooUser | undefined;
 
 const getMatchHeader = (index: number) => `Match ${index + 1} - From Address - From Name - Amount - Date`;
 
-const formatOfferMatch = (getUser: GetUser) => (match: OfferMatch, index: number) => {
-  const fromUser = getUser(match.matchedFrom);
+const formatOfferMatch = (getUserInfo: GetUserInfo) => (match: OfferMatch, index: number) => {
+  const fromUser = getUserInfo(match.matchedFrom);
 
   let matchString = [
     match.matchedFrom,
@@ -24,11 +22,11 @@ const formatOfferMatch = (getUser: GetUser) => (match: OfferMatch, index: number
   return [getMatchHeader(index), matchString];
 };
 
-const formatOffersToExport = (offers: Offer[], getUser: GetUser) => {
+const formatOffersToExport = (offers: Offer[], getUserInfo: GetUserInfo) => {
   let maxNumberOfMatches = 0;
   const formattedOffers = offers.map((o) => {
-    const fromUser = getUser(o.from);
-    const matchesObject = Object.fromEntries(o.matches.map(formatOfferMatch(getUser)));
+    const fromUser = getUserInfo(o.from);
+    const matchesObject = Object.fromEntries(o.matches.map(formatOfferMatch(getUserInfo)));
     maxNumberOfMatches = Math.max(maxNumberOfMatches, o.matches.length);
 
     // On older offers the final amount is decreased on each match. This is an hack to fix older offers that were fully matched.
@@ -53,8 +51,17 @@ const formatOffersToExport = (offers: Offer[], getUser: GetUser) => {
   return { offers: formattedOffers, headers };
 };
 
-export const downloadOffersCsv = (filteredOffers: Offer[], getUser: GetUser) => {
-  const { offers: formattedOffers, headers } = formatOffersToExport(filteredOffers, getUser);
+export const downloadOffersCsv = ({
+  offers,
+  currentUserAddress,
+  getUserInfo,
+}: {
+  offers: Offer[];
+  currentUserAddress?: string;
+  getUserInfo: GetUserInfo;
+}) => {
+  const filteredOffers = offers.filter((offer) => !currentUserAddress || offer.from === currentUserAddress);
+  const { offers: formattedOffers, headers } = formatOffersToExport(filteredOffers, getUserInfo);
   const csvConfig = mkConfig({
     columnHeaders: headers,
     filename: `token-export-${format(new Date(), "yyyy-MM-dd-HHmmss")}`,

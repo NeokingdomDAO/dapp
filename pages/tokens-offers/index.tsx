@@ -94,7 +94,7 @@ export default function Tokens() {
           {isLoading ? (
             <CircularProgress />
           ) : (
-            <OffersList offers={data?.activeOffers || []} noOffersMessage="No active offers" isExportEnabled={false} />
+            <OffersList offers={data?.activeOffers || []} noOffersMessage="No active offers" />
           )}
         </TabPanel>
         <TabPanel value={value} index={2}>
