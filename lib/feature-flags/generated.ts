@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as sdk from "hypertune";
 
-const queryCode = `query FullQuery{root{enableExportOffers}}`;
+const queryCode = `query FullQuery{root{isDeveloper}}`;
 
 const query = {
   Query: {
@@ -10,7 +10,7 @@ const query = {
       root: {
         fieldArguments: { __isPartialObject__: true },
         fieldQuery: {
-          Root: { objectTypeName: "Root", selection: { enableExportOffers: { fieldArguments: {}, fieldQuery: null } } },
+          Root: { objectTypeName: "Root", selection: { isDeveloper: { fieldArguments: {}, fieldQuery: null } } },
         },
       },
     },
@@ -59,9 +59,9 @@ function mergeQueryAndArgs(
 }
 
 export const vercelFlagDefinitions = {
-  enableExportOffers: {
+  isDeveloper: {
     options: [{ value: true }, { value: false }],
-    origin: "https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EenableExportOffers",
+    origin: "https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDeveloper",
   },
 };
 
@@ -87,10 +87,10 @@ export type Rec2 = {
 };
 
 export type Root = {
-  enableExportOffers: boolean;
+  isDeveloper: boolean;
 };
 
-const rootFallback = { enableExportOffers: false };
+const rootFallback = { isDeveloper: false };
 
 export class RootNode extends sdk.Node {
   typeName = "Root" as const;
@@ -101,10 +101,10 @@ export class RootNode extends sdk.Node {
   }
 
   /**
-   * [Open in UI]({@link https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EenableExportOffers})
+   * [Open in UI]({@link https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDeveloper})
    */
-  enableExportOffers(args: Rec = {}): sdk.BooleanNode {
-    const props0 = this.getField("enableExportOffers", args);
+  isDeveloper(args: Rec = {}): sdk.BooleanNode {
+    const props0 = this.getField("isDeveloper", args);
     const expression0 = props0.expression;
 
     if (expression0 && expression0.type === "BooleanExpression") {
@@ -139,7 +139,7 @@ export type Query = {
   root: Root;
 };
 
-const queryFallback = { root: { enableExportOffers: false } };
+const queryFallback = { root: { isDeveloper: false } };
 
 export type Rec6 = {
   args: Rec2;
