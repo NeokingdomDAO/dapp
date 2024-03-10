@@ -1,5 +1,6 @@
 import { execSync } from "child_process";
 import withPWA from "next-pwa";
+import withVercelToolbar from "@vercel/toolbar/plugins/next";
 
 // starts a command line process to get the git hash
 const commitHash = execSync('git log --pretty=format:"%h" -n1').toString().trim();
@@ -23,7 +24,9 @@ const nextConfig = {
   },
 };
 
-export default process.env.NODE_ENV === "development" ? nextConfig : withPWA({
+const configWithToolbar = withVercelToolbar()(nextConfig)
+
+export default process.env.NODE_ENV === "development" ? configWithToolbar : withPWA({
   dest: "public",
-})(nextConfig);
+})(configWithToolbar);
 

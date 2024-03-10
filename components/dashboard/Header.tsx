@@ -6,7 +6,7 @@ import { InfoOutlined } from "@mui/icons-material";
 import { Alert, Chip, IconButton, Paper, Skeleton, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 
-import { hoursToTime } from "@lib/utils";
+import { useFeatureFlags } from "@lib/feature-flags/useFeatureFlags";
 
 import User from "@components/User";
 import ElapsedTime from "@components/time-entry/ElapsedTime";
@@ -35,6 +35,9 @@ export default function Header() {
 
   const { getShareholderStatus } = useShareholderStatus();
 
+  const featureFlags = useFeatureFlags();
+  const isDeveloper = featureFlags.isDeveloper().get(false);
+
   const hr = currentTimestamp.getHours();
   const message = messages.find((msg) => hr >= msg[0]);
   const welcomeMessage = message ? message[1] : "Welcome";
@@ -53,6 +56,7 @@ export default function Header() {
         </Typography>
         <User address={address || (user?.ethereum_address as string)} shouldMarkCurrentUser={false} />
         <Stack sx={{ pt: 2 }} spacing={1} direction="row">
+          {isDeveloper && <Chip size="small" label={"Developer"} color={"info"}></Chip>}
           {getShareholderStatus(address || (user?.ethereum_address as string)).map((status) => (
             <Chip key={status} size="small" label={status} />
           ))}

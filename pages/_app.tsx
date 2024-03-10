@@ -23,6 +23,8 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/s
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
+import { FeatureFlagContextProvider } from "@lib/feature-flags/useFeatureFlags";
+
 import CheckNeokBalance from "@components/CeckNeokBalance";
 import CheckConnected from "@components/CheckConnected";
 import Layout from "@components/Layout";
@@ -30,6 +32,7 @@ import Layout from "@components/Layout";
 import useUser from "@hooks/useUser";
 
 import ContractsProvider from "../components/ContractsProvider";
+import VercelTools from "../components/VercelTools";
 import { newTheme } from "../styles/theme";
 import { META } from "./_document";
 
@@ -134,61 +137,64 @@ export default function App({ Component, pageProps }: DappProps) {
   const supportedAssets = assets.filter((asset) => SUPPORTED_CHAINS.includes(asset.chain_name));
 
   const appElement = (
-    <CssVarsProvider theme={newTheme} defaultMode="system">
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            <ChainProvider
-              chains={supportedChains}
-              assetLists={supportedAssets}
-              wallets={[...keplrWallets, ...leapWallets]}
-              logLevel={"DEBUG"}
-              walletConnectOptions={{
-                // Required if "wallets" contains mobile wallets
-                signClient: {
-                  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
-                },
-              }}
-            >
-              <StyledSnackbarProvider
-                maxSnack={3}
-                autoHideDuration={3000}
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                preventDuplicate
+    <FeatureFlagContextProvider email={user?.email} walletAddress={user?.ethereum_address} erpId={user?.id.toString()}>
+      <CssVarsProvider theme={newTheme} defaultMode="system">
+        <VercelTools />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <WagmiProvider config={wagmiConfig}>
+            <QueryClientProvider client={queryClient}>
+              <ChainProvider
+                chains={supportedChains}
+                assetLists={supportedAssets}
+                wallets={[...keplrWallets, ...leapWallets]}
+                logLevel={"DEBUG"}
+                walletConnectOptions={{
+                  // Required if "wallets" contains mobile wallets
+                  signClient: {
+                    projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
+                  },
+                }}
               >
-                <CssBaseline />
-                {Component.noLayout ? (
-                  <>
-                    <ExtraneousWarning>
-                      <Component {...pageProps} />
-                    </ExtraneousWarning>
-                  </>
-                ) : (
-                  <Layout fullWidth={!!Component.fullWidth} checkMismatch={!!Component.checkMismatch}>
-                    <ExtraneousWarning>
-                      {(isLoading || !mounted) && (
-                        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                          <CircularProgress />
-                        </Box>
-                      )}
-                      {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
-                        <ContractsProvider>
-                          <>
-                            <CheckNeokBalance />
-                            <CheckConnected fullWidth={!!Component.fullWidth} />
-                            <Component {...pageProps} />
-                          </>
-                        </ContractsProvider>
-                      )}
-                    </ExtraneousWarning>
-                  </Layout>
-                )}
-              </StyledSnackbarProvider>
-            </ChainProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
-      </LocalizationProvider>
-    </CssVarsProvider>
+                <StyledSnackbarProvider
+                  maxSnack={3}
+                  autoHideDuration={3000}
+                  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                  preventDuplicate
+                >
+                  <CssBaseline />
+                  {Component.noLayout ? (
+                    <>
+                      <ExtraneousWarning>
+                        <Component {...pageProps} />
+                      </ExtraneousWarning>
+                    </>
+                  ) : (
+                    <Layout fullWidth={!!Component.fullWidth} checkMismatch={!!Component.checkMismatch}>
+                      <ExtraneousWarning>
+                        {(isLoading || !mounted) && (
+                          <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                            <CircularProgress />
+                          </Box>
+                        )}
+                        {((mounted && !isLoading && !Component.requireLogin) || user?.isLoggedIn) && (
+                          <ContractsProvider>
+                            <>
+                              <CheckNeokBalance />
+                              <CheckConnected fullWidth={!!Component.fullWidth} />
+                              <Component {...pageProps} />
+                            </>
+                          </ContractsProvider>
+                        )}
+                      </ExtraneousWarning>
+                    </Layout>
+                  )}
+                </StyledSnackbarProvider>
+              </ChainProvider>
+            </QueryClientProvider>
+          </WagmiProvider>
+        </LocalizationProvider>
+      </CssVarsProvider>
+    </FeatureFlagContextProvider>
   );
 
   return (
