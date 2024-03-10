@@ -95,7 +95,7 @@ const Invoice = ({
   vatRegion,
 }: InvoiceData) => {
   const vatText = getVATText(vatRegion);
-  const vatTotal = vatRegion === "estonia" && vatNumber ? (Number(total) * 22) / 100 : 0;
+  const vatTotal = vatRegion === "estonia" && vatNumber ? (Number(total) * VAT_ESTONIA) / 100 : 0;
   const invoiceTotal = (vatTotal + Number(total)).toFixed(2);
 
   return (
