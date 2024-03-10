@@ -31,6 +31,11 @@ If the schema on https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodar
 
 We use [Hypertune](https://www.hypertune.com/) to handle feature flags in our dapp. To update or add a new flag you need to be added to Hypertune by your teammates. 
 
+To be able to override feature flags locally using the Vercel Toolbar you need to:
+
+- run `pnpm i -g vercel@latest` if not already installed
+- run `vercel link` and connect it to our existing project
+
 ### How to add or update a feature flag
 
 - Open the Hypertune project on your browser and make your changes
