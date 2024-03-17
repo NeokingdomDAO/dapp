@@ -40,6 +40,7 @@ export default function UsersAutocomplete({
     <Autocomplete
       id="users-autocomplete"
       sx={{ width: fullWidth ? undefined : 300 }}
+      fullWidth={fullWidth}
       options={options}
       autoHighlight
       value={options.find((opt) => opt.value === selectedAddress)}
@@ -67,6 +68,7 @@ export default function UsersAutocomplete({
             ...params.inputProps,
             autoComplete: "new-kek", // disable autocomplete and autofill
           }}
+          variant="standard"
         />
       )}
     />
