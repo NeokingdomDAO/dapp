@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as sdk from "hypertune";
 
-const queryCode = `query FullQuery{root{isDeveloper}}`;
+const queryCode = `query FullQuery{root{isDeveloper isDefaultTierEnabled}}`;
 
 const query = {
   Query: {
@@ -10,7 +10,13 @@ const query = {
       root: {
         fieldArguments: { __isPartialObject__: true },
         fieldQuery: {
-          Root: { objectTypeName: "Root", selection: { isDeveloper: { fieldArguments: {}, fieldQuery: null } } },
+          Root: {
+            objectTypeName: "Root",
+            selection: {
+              isDeveloper: { fieldArguments: {}, fieldQuery: null },
+              isDefaultTierEnabled: { fieldArguments: {}, fieldQuery: null },
+            },
+          },
         },
       },
     },
@@ -63,6 +69,10 @@ export const vercelFlagDefinitions = {
     options: [{ value: true }, { value: false }],
     origin: "https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDeveloper",
   },
+  isDefaultTierEnabled: {
+    options: [{ value: true }, { value: false }],
+    origin: "https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDefaultTierEnabled",
+  },
 };
 
 export type Rec = {};
@@ -88,9 +98,10 @@ export type Rec2 = {
 
 export type Root = {
   isDeveloper: boolean;
+  isDefaultTierEnabled: boolean;
 };
 
-const rootFallback = { isDeveloper: false };
+const rootFallback = { isDeveloper: false, isDefaultTierEnabled: false };
 
 export class RootNode extends sdk.Node {
   typeName = "Root" as const;
@@ -105,6 +116,22 @@ export class RootNode extends sdk.Node {
    */
   isDeveloper(args: Rec = {}): sdk.BooleanNode {
     const props0 = this.getField("isDeveloper", args);
+    const expression0 = props0.expression;
+
+    if (expression0 && expression0.type === "BooleanExpression") {
+      return new sdk.BooleanNode(props0);
+    }
+
+    const node = new sdk.BooleanNode(props0);
+    node._logUnexpectedTypeError();
+    return node;
+  }
+
+  /**
+   * [Open in UI]({@link https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDefaultTierEnabled})
+   */
+  isDefaultTierEnabled(args: Rec = {}): sdk.BooleanNode {
+    const props0 = this.getField("isDefaultTierEnabled", args);
     const expression0 = props0.expression;
 
     if (expression0 && expression0.type === "BooleanExpression") {
@@ -139,7 +166,7 @@ export type Query = {
   root: Root;
 };
 
-const queryFallback = { root: { isDeveloper: false } };
+const queryFallback = { root: { isDeveloper: false, isDefaultTierEnabled: false } };
 
 export type Rec6 = {
   args: Rec2;

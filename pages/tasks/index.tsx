@@ -8,15 +8,23 @@ import { Add } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Button, CircularProgress, Stack, Typography } from "@mui/material";
 
+import { useFeatureFlags } from "@lib/feature-flags/useFeatureFlags";
 import { fetcher } from "@lib/net";
 
+// TODO FF isDefaultTierEnabled - remove this line and use the next import
 import useProjectTaskStore, { Project, ProjectTask } from "@store/projectTaskStore";
+import useProjectTaskStoreWithDefaultTier, {
+  ProjectTask as ProjectTaskWithDefaultTier,
+  Project as ProjectWithDefaultTier,
+} from "@store/projectTaskStoreWithDefaultTier";
 
 import Modal from "@components/Modal";
 import Section from "@components/Section";
 import ProjectCard from "@components/tasks/ProjectCard";
 import TaskDialog from "@components/tasks/TaskDialog";
+// TODO FF isDefaultTierEnabled - remove this line and use the next import
 import TaskForm from "@components/tasks/TaskForm";
+import TaskFormWithDefaultTier from "@components/tasks/TaskFormWithDefaultTier";
 import ElapsedTime from "@components/time-entry/ElapsedTime";
 
 import { useSnackbar } from "@hooks/useSnackbar";
@@ -28,18 +36,34 @@ Tasks.requireLogin = true;
 Tasks.fullWidth = true;
 
 export default function Tasks() {
+  const featureFlags = useFeatureFlags();
+  const isDefaultTierEnabled = featureFlags.isDefaultTierEnabled().get(false);
   const { mutateUser, user } = useUser();
   const { data: projects, error, mutate, isLoading } = useSWR<Project[]>("/api/tasks", fetcher);
+
+  // TODO FF isDefaultTierEnabled - remove next declaration and rename projectTaskStoreWithDefaultTierBindings to projectTaskStoreBindings
+  const projectTaskStoreBindings = useProjectTaskStore((state) => ({
+    createTask: state.actions.createTask,
+    updateTask: state.actions.updateTask,
+    setAddingTask: state.actions.setAddingTask,
+    addingTask: state.addingTask,
+    updatingTask: state.updatingTask,
+    setUpdatingTask: state.actions.setUpdatingTask,
+    projectKey: state.projectKey,
+  }));
+  const projectTaskStoreWithDefaultTierBindings = useProjectTaskStoreWithDefaultTier((state) => ({
+    createTask: state.actions.createTask,
+    updateTask: state.actions.updateTask,
+    setAddingTask: state.actions.setAddingTask,
+    addingTask: state.addingTask,
+    updatingTask: state.updatingTask,
+    setUpdatingTask: state.actions.setUpdatingTask,
+    projectKey: state.projectKey,
+  }));
+
   const { projectKey, createTask, setAddingTask, addingTask, updatingTask, updateTask, setUpdatingTask } =
-    useProjectTaskStore((state) => ({
-      createTask: state.actions.createTask,
-      updateTask: state.actions.updateTask,
-      setAddingTask: state.actions.setAddingTask,
-      addingTask: state.addingTask,
-      updatingTask: state.updatingTask,
-      setUpdatingTask: state.actions.setUpdatingTask,
-      projectKey: state.projectKey,
-    }));
+    isDefaultTierEnabled ? projectTaskStoreWithDefaultTierBindings : projectTaskStoreBindings;
+
   const { enqueueSnackbar } = useSnackbar();
   const projectsWithTasks = useMemo(() => projects?.filter((project) => project.tasks.length) || [], [projects]);
   const { openProjects, setOpenTasks, setOpenProjects } = useUserSettings();
@@ -55,7 +79,7 @@ export default function Tasks() {
     }
   }, [error, mutateUser]);
 
-  const confirmCreateTaks = async (data: ProjectTask) => {
+  const confirmCreateTask = async (data: ProjectTask & ProjectTaskWithDefaultTier) => {
     const { parentTask } = addingTask || { parentTask: null };
     const { alert, error } = parentTask
       ? // @ts-ignore parent is not null
@@ -69,7 +93,7 @@ export default function Tasks() {
     enqueueSnackbar(error.message, { variant: "error" });
   };
 
-  const confirmUpdateTask = async (data: Omit<ProjectTask, "id">) => {
+  const confirmUpdateTask = async (data: Omit<ProjectTask & ProjectTaskWithDefaultTier, "id">) => {
     const { alert, error } = await updateTask({ id: updatingTask?.id as number, ...data });
     if (alert) {
       setUpdatingTask(null);
@@ -113,11 +137,21 @@ export default function Tasks() {
           sx={{ bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#FAFAFA") }}
           onClose={() => setAddingTask(null)}
         >
-          <TaskForm
-            projectId={addingTask?.projectId}
-            onConfirm={confirmCreateTaks}
-            {...(addingTask.parentTask && { parentTask: addingTask.parentTask })}
-          />
+          {/* TODO FF isDefaultTierEnabled - remove condition */}
+          {isDefaultTierEnabled ? (
+            <TaskFormWithDefaultTier
+              projectId={addingTask?.projectId}
+              onConfirm={confirmCreateTask}
+              {...(addingTask.parentTask && { parentTask: addingTask.parentTask })}
+            />
+          ) : (
+            // @ts-expect-error
+            <TaskForm
+              projectId={addingTask?.projectId}
+              onConfirm={confirmCreateTask}
+              {...(addingTask.parentTask && { parentTask: addingTask.parentTask })}
+            />
+          )}
         </Modal>
       )}
       {!!updatingTask && (
@@ -126,7 +160,13 @@ export default function Tasks() {
           sx={{ bgcolor: (t) => (t.palette.mode === "dark" ? "#1A1A1A" : "#FAFAFA") }}
           onClose={() => setUpdatingTask(null)}
         >
-          <TaskForm task={updatingTask} onConfirm={confirmUpdateTask} />
+          {/* TODO FF isDefaultTierEnabled - remove condition */}
+          {isDefaultTierEnabled ? (
+            <TaskFormWithDefaultTier task={updatingTask} onConfirm={confirmUpdateTask} />
+          ) : (
+            // @ts-expect-error
+            <TaskForm task={updatingTask} onConfirm={confirmUpdateTask} />
+          )}
         </Modal>
       )}
       <Section inverse sx={{ mt: isConnected || !user?.isLoggedIn ? -3 : 0 }}>

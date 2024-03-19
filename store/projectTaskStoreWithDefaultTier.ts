@@ -1,4 +1,4 @@
-// TODO FF isDefaultTierEnabled - remove this file and rename projectTaskStoreWithDefaultTier.ts to projectTaskStore.ts
+// TODO FF isDefaultTierEnabled - remove projectTaskStore.ts and rename this file to projectTaskStore.ts
 import { formatInTimeZone } from "date-fns-tz";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
@@ -21,9 +21,8 @@ export type ProjectTask = {
   date_deadline: number;
   effective_hours: number;
   write_date: number;
-  user_id: { id: number; name: string };
+  user_ids: Array<{ id: number; name: string }>;
   approval_user_id: { id: number; name: string };
-  tier_id: Tier;
   project_id: { id: number };
   tag_ids: Array<{ id: number; name: string }>;
   parent_id: { id: number; name: string } | null;
@@ -76,6 +75,7 @@ const TIMEOUT_MS = 1000;
 const buildError = async (response: Response) => ({ ...(await response.json()), status: response.status });
 
 const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
+  // TODO: start from here - connect to correct odoo with new api
   projectKey: uuid(),
   loadingTask: null,
   loadingTimeEntry: null,
@@ -87,6 +87,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
     setProjectKey: () => set({ projectKey: uuid() }),
     markTaskAsDone: async (task: ProjectTask) => {
       set({ loadingTask: task.id });
+      // @ts-expect-error  FF isDefaultTierEnabled - fix with new type
       const totalHours = getTaskTotalHours(task);
       const response = await fetch(`/api/tasks/${task.id}`, {
         method: "PUT",
