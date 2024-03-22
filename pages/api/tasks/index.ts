@@ -1,7 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { getProjectsTasksQuery } from "@graphql/queries/get-projects-tasks.query";
+import { getUserProjectsQuery } from "@graphql/queries/get-user-projects.query";
 import { getUserTasksQuery } from "@graphql/queries/get-user-tasks.query";
 
 import odooGraphQLClient from "@lib/graphql/odoo";
@@ -50,14 +50,8 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     // List all Projects Tasks
     try {
-      const userId = user.id;
-      const tasks = await getUserTasks(userId);
-      const projectIds = getUserProjectIds(tasks);
-      const taskIds = getTaskIds(tasks);
-      const data = await odooGraphQLClient.query(cookie, getProjectsTasksQuery, {
-        projectIds,
-        taskIds,
-        userId,
+      const data = await odooGraphQLClient.query(cookie, getUserProjectsQuery, {
+        userId: user.id,
       });
       res.status(200).json(data?.ProjectProject || []);
     } catch (err: any) {

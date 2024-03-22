@@ -9,18 +9,6 @@ export const projectTaskFragment = gql`
     effective_hours
     date_deadline
     write_date
-    user_id {
-      id
-      name
-    }
-    approval_user_id {
-      id
-      name
-    }
-    tier_id {
-      id
-      name
-    }
     tag_ids {
       id
       name
@@ -41,8 +29,6 @@ export const projectTaskFragment = gql`
       name
       display_name
       unit_amount
-      start
-      end
     }
   }
 `;
