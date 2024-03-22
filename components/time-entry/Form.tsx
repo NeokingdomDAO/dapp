@@ -177,6 +177,7 @@ export default function TimeEntryForm() {
 
   return (
     <Box>
+      CIAO
       <Typography variant="h5" sx={{ mb: 3 }}>
         Save time entry
       </Typography>
@@ -247,7 +248,6 @@ export default function TimeEntryForm() {
           {formData.disabledEditStart ? "edit" : "discard"}
         </Button>
       </Box>
-
       <Box mt={2} sx={{ display: "flex", alignItems: "center" }}>
         <DateTimeField
           ampm={false}

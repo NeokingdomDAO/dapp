@@ -1,8 +1,4 @@
-import { format } from "date-fns";
-
 import { Box, Chip, Paper, Skeleton, Stack, Typography } from "@mui/material";
-
-import { getDateFromOdooTimestamp, hoursToTime } from "@lib/utils";
 
 import TimeEntries from "@components/tasks/TimeEntries";
 import ElapsedTime from "@components/time-entry/ElapsedTime";

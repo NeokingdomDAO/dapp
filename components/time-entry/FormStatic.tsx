@@ -1,7 +1,7 @@
-import { formatInTimeZone } from "date-fns-tz";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
 import {
@@ -12,7 +12,11 @@ import {
   Button,
   CircularProgress,
   Divider,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Switch,
   TextField,
@@ -20,9 +24,10 @@ import {
 } from "@mui/material";
 import { DateTimeField } from "@mui/x-date-pickers";
 
+import { fetcher } from "@lib/net";
 import { getTaskName, toPrettyRange } from "@lib/utils";
 
-import useProjectTaskStore from "@store/projectTaskStore";
+import useProjectTaskStore, { Project, Tier } from "@store/projectTaskStore";
 
 import useGetClashingTimeEntry from "@hooks/useGetClashingTimeEntry";
 import { useSnackbar } from "@hooks/useSnackbar";
@@ -36,6 +41,7 @@ type StateType = {
   description: string;
   taskId: number | null;
   timeEntryId?: number | null;
+  optional_tier_id?: number;
 };
 
 const ONE_MINUTE_IN_SECONDS = 60;
@@ -62,12 +68,14 @@ export default function TimeEntryFormStatic({
 
   const router = useRouter();
   const { userTasks, isLoading, userProjects } = useUserProjects();
+  const { data: tiers } = useSWR<Project[]>("/api/tiers", fetcher);
 
   const [formData, setFormData] = useState<StateType>(() => ({
     startTime: savedFormData?.startTime || new Date(),
     endTime: savedFormData?.endTime || new Date(Date.now() + DEFAULT_TASK_DURATION),
     description: savedFormData?.description || "",
     taskId,
+    optional_tier_id: savedFormData?.optional_tier_id,
   }));
 
   const [shouldConfirm, setShouldConfirm] = useState(false);
@@ -116,6 +124,7 @@ export default function TimeEntryFormStatic({
         start: formData.startTime.getTime(),
         end: formData.endTime.getTime(),
         name: formData.description,
+        optional_tier_id: formData.optional_tier_id,
       },
       taskId,
     );
@@ -134,6 +143,7 @@ export default function TimeEntryFormStatic({
       end: formData.endTime.getTime(),
       name: formData.description,
       id: savedFormData?.timeEntryId as number,
+      optional_tier_id: formData.optional_tier_id,
     });
 
     if (alert) {
@@ -213,6 +223,32 @@ export default function TimeEntryFormStatic({
         onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
       />
       <Box mt={2} sx={{ display: "flex", alignItems: "center" }}>
+        <FormControl fullWidth>
+          <InputLabel id="task-tier">Override Tier (optional)</InputLabel>
+          <Select
+            required
+            labelId="task-tier"
+            id="task-tier-select"
+            label="Override Tier (optional)"
+            value={formData.optional_tier_id}
+            onChange={(e) => {
+              const isEmptyString = e.target.value === "";
+              setFormData((prev) => ({
+                ...prev,
+                optional_tier_id: !isEmptyString ? Number(e.target.value) : undefined,
+              }));
+            }}
+          >
+            <MenuItem value={""} aria-label="None"></MenuItem>
+            {tiers?.map((tier: Tier) => (
+              <MenuItem key={tier.id} value={tier.id}>
+                {tier.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+      <Box mt={2} sx={{ display: "flex", alignItems: "center" }}>
         <DateTimeField
           ampm={false}
           label="Start time"
@@ -224,7 +260,6 @@ export default function TimeEntryFormStatic({
           format="dd/MM/yyyy H:mm"
         />
       </Box>
-
       <Box mt={2} sx={{ display: "flex", alignItems: "center" }}>
         <DateTimeField
           ampm={false}

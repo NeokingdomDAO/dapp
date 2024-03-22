@@ -2,13 +2,10 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { getUserProjectsQuery } from "@graphql/queries/get-user-projects.query";
-import { getUserTasksQuery } from "@graphql/queries/get-user-tasks.query";
 
 import odooGraphQLClient from "@lib/graphql/odoo";
 import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
 import { sessionOptions } from "@lib/session";
-
-import { ProjectTask } from "@store/projectTaskStore";
 
 async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   const cookie = req.session.cookie;
@@ -26,26 +23,6 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     await req.session.destroy();
     return res.status(401).json({ message: "Unauthorized" });
   }
-
-  const getUserTasks = async (userId: number) => {
-    const userTasks = await odooGraphQLClient.query(cookie, getUserTasksQuery, { user_id: userId });
-    return userTasks?.ProjectTask;
-  };
-
-  const getUserProjectIds = (tasks: ProjectTask[]) => {
-    return [...new Set(tasks.map((t: ProjectTask) => t.project_id.id))];
-  };
-
-  const getTaskIds = (tasks: ProjectTask[]) => {
-    return [
-      ...new Set(
-        tasks.map((task: ProjectTask) => {
-          if (task.parent_id) return task.parent_id.id;
-          return task.id;
-        }),
-      ),
-    ];
-  };
 
   if (req.method === "GET") {
     // List all Projects Tasks

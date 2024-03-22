@@ -4,26 +4,14 @@ import useSWR from "swr";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import {
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  Grid,
-  InputLabel,
-  ListSubheader,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, Button, FormControl, Grid, InputLabel, ListSubheader, MenuItem, Select, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { fetcher } from "@lib/net";
 import { getDateFromOdooTimestamp } from "@lib/utils";
 import { toDatetime } from "@lib/utils";
 
-import { Project, ProjectTask, Tier } from "@store/projectTaskStore";
+import { Project, ProjectTask } from "@store/projectTaskStore";
 
 import useUser from "@hooks/useUser";
 
@@ -33,9 +21,8 @@ import SearchSelect from "../SearchSelect";
 type FormData = {
   name: string;
   date_deadline: string;
-  user_id: number | undefined;
+  user_ids: number[];
   approval_user_id: number | undefined;
-  tier_id: number;
   project_id: number | undefined;
   tag_ids: number[];
 };
@@ -56,7 +43,6 @@ export default function TaskForm({
   const { user } = useUser();
   const { data: users } = useSWR<OdooUser[]>("/api/users", fetcher);
   const { data: projects } = useSWR<{ user: Project[]; other: Project[] }>("/api/projects/all", fetcher);
-  const { data: tiers } = useSWR<Project[]>("/api/tiers", fetcher);
   const { data: tags } = useSWR<{ name: string; id: number }[]>("/api/tags", fetcher);
 
   const [selectedProject, setSelectedProject] = useState<Project | undefined>();
@@ -66,19 +52,22 @@ export default function TaskForm({
   const defaultValues = useMemo(
     () => ({
       name: task ? task.name : "",
-      project_id: parentTask ? parentTask.project_id.id : task ? task.project_id.id : selectedProject?.id || -1,
+      project_id: parentTask ? parentTask.project_id.id : task ? task.project_id.id : selectedProject?.id || undefined,
       tag_ids: parentTask
         ? parentTask.tag_ids.map((tag) => tag.id)
         : task
         ? task.tag_ids.map((tag) => tag.id)
         : lastTask?.tag_ids?.map((tag) => tag.id) || [],
-      user_id: parentTask ? parentTask.user_id.id : task ? task.user_id.id : user?.id || -1,
-      approval_user_id: parentTask
+      user_ids: parentTask?.user_ids
+        ? parentTask.user_ids.map(({ id }) => id)
+        : task?.user_ids
+        ? task.user_ids.map(({ id }) => id)
+        : [user?.id] || [],
+      approval_user_id: parentTask?.approval_user_id
         ? parentTask.approval_user_id.id
-        : task
+        : task?.approval_user_id
         ? task.approval_user_id.id
         : lastTask?.approval_user_id?.id || -1,
-      tier_id: parentTask ? parentTask.tier_id.id : task ? task.tier_id.id : lastTask?.tier_id?.id || -1,
       date_deadline: format(task ? toDatetime(task.date_deadline) : endOfMonth(new Date()), dateFormat),
     }),
     [selectedProject, lastTask, user, task, parentTask],
@@ -116,9 +105,8 @@ export default function TaskForm({
       name: getValue("name"),
       project_id: getValue("project_id"),
       tag_ids: defaultValues.tag_ids,
-      user_id: getValue("user_id"),
+      user_ids: getValue("user_ids"),
       approval_user_id: getValue("approval_user_id"),
-      tier_id: getValue("tier_id"),
       date_deadline: getValue("date_deadline"),
     });
   }, [defaultValues, reset, getValues]);
@@ -197,36 +185,24 @@ export default function TaskForm({
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <FormControl fullWidth>
-            <InputLabel id="task-assignee">Assignee</InputLabel>
+            <InputLabel id="task-assignees">Assignees</InputLabel>
             <Controller
-              name="user_id"
+              name="user_ids"
               control={control}
               render={({ field }) => (
-                <Select required labelId="task-assignee" id="task-assignee-select" label="Assignee" {...field}>
+                <Select
+                  multiple
+                  required
+                  labelId="task-assignees"
+                  id="task-assignees-select"
+                  label="Assignees"
+                  {...field}
+                >
                   {users?.map((user: OdooUser) => (
                     <MenuItem key={user.id} value={user.id}>
                       {user.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <FormControl fullWidth>
-            <InputLabel id="task-tier">Tier</InputLabel>
-            <Controller
-              name="tier_id"
-              control={control}
-              render={({ field }) => (
-                <Select required labelId="task-tier" id="task-tier-select" label="Tier" {...field}>
-                  {tiers?.map((tier: Tier) => (
-                    <MenuItem key={tier.id} value={tier.id}>
-                      {tier.name}
                     </MenuItem>
                   ))}
                 </Select>
