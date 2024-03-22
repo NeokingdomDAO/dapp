@@ -21,12 +21,19 @@ import { calculateSteps } from "@lib/utils";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
 
+import ChangeableAddress from "@components/ChangeableAddress";
+
 import useRedeemTokens from "@hooks/useRedeemTokens";
 
 const GET_EURUSDT_ENDPOINT = "https://api.binance.com/api/v3/avgPrice?symbol=EURUSDT";
 
-export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: () => void; maxToRedeem: number }) {
+const getUsdtFromNeok = (neok: number, eurUsdt: number) =>
+  Math.round((neok * Number(eurUsdt) + Number.EPSILON) * 100) / 100;
+
+export default function RedeemTokens({ maxToRedeem }: { maxToRedeem: number }) {
   const [toRedeem, setToRedeem] = useState(0);
+  const [redeemedTokensAmount, setRedeemedTokensAmount] = useState(0);
+  const [address, setAddress] = useState("");
 
   const { onSubmit } = useRedeemTokens();
   const { data: eurUsdt, isLoading: isLoadingEurUsdt } = useSWR(GET_EURUSDT_ENDPOINT, fetcher);
@@ -38,12 +45,34 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
   }
 
   const handleRedeemTokens = async () => {
-    const submitted = await onSubmit({ amount: toRedeem });
+    const submitted = await onSubmit({ amount: toRedeem }); // TODO add address as soon as new contracts will be ready
     if (submitted) {
-      closeModal();
+      setRedeemedTokensAmount(toRedeem);
       setToRedeem(0);
     }
   };
+
+  if (redeemedTokensAmount > 0) {
+    return (
+      <>
+        <Alert severity="success">{redeemedTokensAmount} tokens redeemed successfully!</Alert>
+        <Box sx={{ textAlign: "center" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            href={`/generate-redemption-invoice?neok=${redeemedTokensAmount}&usdt=${getUsdtFromNeok(
+              redeemedTokensAmount,
+              eurUsdt.price,
+            )}&walletAddress=${address}`}
+            sx={{ mt: 2 }}
+            size="large"
+          >
+            Generate Invoice
+          </Button>
+        </Box>
+      </>
+    );
+  }
 
   return (
     <>
@@ -82,33 +111,40 @@ export default function RedeemTokens({ closeModal, maxToRedeem }: { closeModal: 
       </Box>
       {toRedeem > 0 && (
         <Alert severity="info" sx={{ mt: 3 }}>
-          You will receive <b>{Math.round((toRedeem * Number(eurUsdt.price) + Number.EPSILON) * 100) / 100} axlUSDT</b>
+          You will receive <b>{getUsdtFromNeok(toRedeem, eurUsdt.price)} axlUSDT</b>
           <br />
           <br />
-          <b>Heads up:</b> In order to redeem the tokens, you will need to send an invoice to Marko, who will give you
-          the details via discord. Automatic invoice generation is coming soon.
+          <b>Heads up:</b> After redeeming the tokens, you will be able to generate the invoice that you will need to
+          send to Merike.
           <FormControlLabel
             sx={{ display: "block", p: 2 }}
             control={<Switch defaultChecked />}
-            label="I have created the invoice"
+            label="Understood"
             checked={shouldConfirm}
             onChange={() => setShouldConfirm((prev) => !prev)}
           />
         </Alert>
       )}
-      <Box sx={{ textAlign: "center", pt: 2 }}>
-        <LoadingButton
-          fullWidth
-          loading={(isAwaitingConfirmation || isLoading) && type === BLOCKCHAIN_TRANSACTION_KEYS.REDEEM_TOKENS}
-          variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
-          disabled={!shouldConfirm}
-          onClick={handleRedeemTokens}
-        >
-          Redeem Tokens
-        </LoadingButton>
-      </Box>
+      {shouldConfirm && (
+        <Box sx={{ textAlign: "center", pt: 2 }}>
+          {toRedeem > 0 && (
+            <>
+              <ChangeableAddress address={address} setAddress={setAddress} label="Non whitelisted wallet address" />
+              <LoadingButton
+                fullWidth
+                loading={(isAwaitingConfirmation || isLoading) && type === BLOCKCHAIN_TRANSACTION_KEYS.REDEEM_TOKENS}
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+                onClick={handleRedeemTokens}
+                disabled={address === ""}
+              >
+                Redeem Tokens
+              </LoadingButton>
+            </>
+          )}
+        </Box>
+      )}
     </>
   );
 }

@@ -124,7 +124,7 @@ export default function App({ Component, pageProps }: DappProps) {
   const [mounted, setMounted] = useState(!!Component.renderOnServer);
 
   const { isLoading, user } = useUser({
-    redirectTo: `/login?redirectTo=${asPath}`,
+    redirectTo: `/login?redirectTo=${encodeURIComponent(asPath)}`,
     shouldSkip: !Component.requireLogin,
   });
 
