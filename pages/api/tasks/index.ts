@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { getProjectsTasksQuery } from "@graphql/queries/get-projects-tasks.query";
 import { getUserTasksQuery } from "@graphql/queries/get-user-tasks.query";
-import { getUserProjectsQuery } from "@graphql/queries/vanilla/get-user-projects.query";
 
 import odooGraphQLClient from "@lib/graphql/odoo";
 import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
@@ -48,20 +47,9 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
     ];
   };
 
-  const getVanillaTasks = async () => {
-    const data = await odooGraphQLClient.query(cookie, getUserProjectsQuery, {
-      userId: user.id,
-    });
-    res.status(200).json(data?.ProjectProject || []);
-  };
-
   if (req.method === "GET") {
     // List all Projects Tasks
     try {
-      const {
-        query: { vanilla },
-      } = req;
-      if (vanilla) return await getVanillaTasks();
       const userId = user.id;
       const tasks = await getUserTasks(userId);
       const projectIds = getUserProjectIds(tasks);

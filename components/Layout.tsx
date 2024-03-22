@@ -179,7 +179,7 @@ export default function Layout({
                 <Chip
                   label="Tasks"
                   component={Link}
-                  href={process.env.NEXT_PUBLIC_PROJECT_KEY === "vanilla" ? "vanilla" : "/tasks"}
+                  href={"/tasks"}
                   variant={isActive("/tasks") ? "filled" : "outlined"}
                   clickable
                 />
