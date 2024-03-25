@@ -41,7 +41,7 @@ type StateType = {
   description: string;
   taskId: number | null;
   timeEntryId?: number | null;
-  optional_tier_id?: number;
+  tier_id?: number;
 };
 
 const ONE_MINUTE_IN_SECONDS = 60;
@@ -75,7 +75,7 @@ export default function TimeEntryFormStatic({
     endTime: savedFormData?.endTime || new Date(Date.now() + DEFAULT_TASK_DURATION),
     description: savedFormData?.description || "",
     taskId,
-    optional_tier_id: savedFormData?.optional_tier_id,
+    tier_id: savedFormData?.tier_id,
   }));
 
   const [shouldConfirm, setShouldConfirm] = useState(false);
@@ -124,7 +124,7 @@ export default function TimeEntryFormStatic({
         start: formData.startTime.getTime(),
         end: formData.endTime.getTime(),
         name: formData.description,
-        optional_tier_id: formData.optional_tier_id,
+        tier_id: formData.tier_id,
       },
       taskId,
     );
@@ -143,7 +143,7 @@ export default function TimeEntryFormStatic({
       end: formData.endTime.getTime(),
       name: formData.description,
       id: savedFormData?.timeEntryId as number,
-      optional_tier_id: formData.optional_tier_id,
+      tier_id: formData.tier_id,
     });
 
     if (alert) {
@@ -230,12 +230,12 @@ export default function TimeEntryFormStatic({
             labelId="task-tier"
             id="task-tier-select"
             label="Override Tier (optional)"
-            value={formData.optional_tier_id}
+            value={formData.tier_id}
             onChange={(e) => {
               const isEmptyString = e.target.value === "";
               setFormData((prev) => ({
                 ...prev,
-                optional_tier_id: !isEmptyString ? Number(e.target.value) : undefined,
+                tier_id: !isEmptyString ? Number(e.target.value) : undefined,
               }));
             }}
           >
