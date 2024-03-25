@@ -42,7 +42,7 @@ export type Timesheet = {
   unit_amount: number;
   start: number;
   end?: number;
-  optional_tier_id?: number;
+  tier_id?: number;
 };
 
 export type ActionResponse = {
@@ -167,6 +167,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
           start: formatInTimeZone(new Date(timeEntry.start as number), "UTC", ODOO_DATE_FORMAT),
           end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
           name: timeEntry.name,
+          tier_id: timeEntry.tier_id,
         }),
       });
       if (response.ok) {
