@@ -20,9 +20,8 @@ export type ProjectTask = {
   date_deadline: number;
   effective_hours: number;
   write_date: number;
-  user_id: { id: number; name: string };
-  approval_user_id: { id: number; name: string };
-  tier_id: Tier;
+  user_ids: Array<{ id: number; name: string }> | undefined;
+  approval_user_id: { id: number; name: string } | undefined;
   project_id: { id: number };
   tag_ids: Array<{ id: number; name: string }>;
   parent_id: { id: number; name: string } | null;
@@ -43,6 +42,7 @@ export type Timesheet = {
   unit_amount: number;
   start: number;
   end?: number;
+  tier_id?: number;
 };
 
 export type ActionResponse = {
@@ -167,6 +167,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
           start: formatInTimeZone(new Date(timeEntry.start as number), "UTC", ODOO_DATE_FORMAT),
           end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
           name: timeEntry.name,
+          tier_id: timeEntry.tier_id,
         }),
       });
       if (response.ok) {

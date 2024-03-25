@@ -190,10 +190,38 @@ const PROJECT_TASK_TYPE_CROWDPUNK = [
   },
 ];
 
+const PROJECT_TASK_TYPE_VANILLA = [
+  {
+    id: 1,
+    name: "Backlog",
+  },
+  {
+    id: 2,
+    name: "To Do",
+  },
+  {
+    id: 3,
+    name: "In Progress",
+  },
+  {
+    id: 5,
+    name: "Review",
+  },
+  {
+    id: 4,
+    name: "Done",
+  },
+  {
+    id: 20,
+    name: "Approved",
+  },
+];
+
 const STAGE_IDS: Record<string, { id: number; name: string }[]> = {
   crowdpunk: PROJECT_TASK_TYPE_CROWDPUNK,
   teledisko: PROJECT_TASK_TYPE_TELEDISKO,
   neokingdom: PROJECT_TASK_TYPE_NEOKINGDOM,
+  vanilla: PROJECT_TASK_TYPE_VANILLA,
 };
 
 export const getStageId = (stageName: string) => {
