@@ -88,6 +88,10 @@ export default function Resolutions() {
     return Array.from(new Set(enhancedResolutions.map((r) => r.resolutionType.name)));
   }, [enhancedResolutions]);
 
+  const availableAuthors = useMemo(() => {
+    return [...new Set(enhancedResolutions.map((r) => r.createBy))];
+  }, [enhancedResolutions]);
+
   const filteredResolutions = useMemo(() => {
     let filteredResolutions = includeRejected
       ? enhancedResolutions
@@ -150,119 +154,142 @@ export default function Resolutions() {
           )}
         </Box>
       </Section>
-      <Section inverse sx={{ pb: 0 }}>
-        <>
-          <Button
-            endIcon={<Chevron expand={isFilterSectionExpanded} />}
-            onClick={() => setIsFilterSectionExpanded((e) => !e)}
-            aria-expanded={isFilterSectionExpanded}
-            aria-label="show filters"
-          >
-            Filters
-          </Button>
-          {!isFilterSectionExpanded && (
-            <List component={Stack} direction="row" dense>
-              {textFilter && (
-                <ListItem>
-                  <Chip label={`Text: ${textFilter}`} onDelete={() => setTextFilter("")} />
-                </ListItem>
-              )}
-              {selectedUser && (
-                <ListItem>
-                  <Chip label={`Author: ${selectedUser.display_name}`} onDelete={() => setAuthorFilter("")} />
-                </ListItem>
-              )}
-              {filteredResolutionType && (
-                <ListItem>
-                  <Chip
-                    label={`Type: ${RESOLUTION_TYPES_TEXTS[filteredResolutionType]?.title || filteredResolutionType}`}
-                    onDelete={() => setFilteredResolutionType("")}
-                  />
-                </ListItem>
-              )}
-              {excludeNonMonthlyReward && (
-                <ListItem>
-                  <Chip label={`Only monthly reward`} onDelete={() => setExcludeNonMonthlyReward(false)} />
-                </ListItem>
-              )}
-              {includeRejected && (
-                <ListItem>
-                  <Chip label={`Include rejected`} onDelete={() => setIncludeRejected(false)} />
-                </ListItem>
-              )}
-            </List>
-          )}
-          <Collapse
-            in={isFilterSectionExpanded}
-            timeout={0}
-            unmountOnExit
-            sx={{
-              p: 2,
-              mt: 1,
-              mx: 4,
-              bgcolor: theme.palette.mode === "dark" ? "rgba(33, 33, 33, 0.9)" : "rgba(250, 250, 250, 1)",
-            }}
-          >
-            <FormGrid container spacing={6}>
-              <FormGrid item xs={12} md={4}>
-                <TextField
-                  fullWidth
-                  label="Search resolution"
-                  variant="standard"
-                  value={textFilter}
-                  onChange={(e) => setTextFilter(e.target.value)}
-                />
-              </FormGrid>
-              <FormGrid item xs={12} md={4}>
-                <UsersAutocomplete fullWidth selectedAddress={authorFilter} onChange={setAuthorFilter} label="Author" />
-              </FormGrid>
-              <FormGrid item xs={12} md={4}>
-                <FormControl>
-                  <InputLabel variant="standard" htmlFor="resolution-type-input">
-                    Resolution type
-                  </InputLabel>
-                  <NativeSelect
-                    inputProps={{
-                      name: "resolution-type",
-                      id: "resolution-type-input",
-                    }}
-                    value={filteredResolutionType}
-                    onChange={(e) => setFilteredResolutionType(e.target.value)}
-                  >
-                    <option value={""}></option>
-                    {resolutionTypes.map((t) => (
-                      <option value={t} key={t}>
-                        {RESOLUTION_TYPES_TEXTS[t]?.title || t}
-                      </option>
-                    ))}
-                  </NativeSelect>
-                </FormControl>
-              </FormGrid>
-
-              {hasRejected && (
-                <FormGrid item xs={12} md={3}>
-                  <FormControlLabel
-                    control={<Switch checked={includeRejected} onChange={() => setIncludeRejected((old) => !old)} />}
-                    label="Include rejected"
+      {user?.isLoggedIn && (
+        <Section inverse sx={{ pb: 0 }}>
+          <>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Button
+                endIcon={<Chevron expand={isFilterSectionExpanded} />}
+                onClick={() => setIsFilterSectionExpanded((e) => !e)}
+                aria-expanded={isFilterSectionExpanded}
+                aria-label="show filters"
+              >
+                Filters
+              </Button>
+            </Box>
+            {!isFilterSectionExpanded && (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  overflow: "scroll",
+                }}
+              >
+                <List component={Stack} direction="row" dense>
+                  {textFilter && (
+                    <ListItem>
+                      <Chip label={`Text: ${textFilter}`} onDelete={() => setTextFilter("")} />
+                    </ListItem>
+                  )}
+                  {selectedUser && (
+                    <ListItem>
+                      <Chip label={`Author: ${selectedUser.display_name}`} onDelete={() => setAuthorFilter("")} />
+                    </ListItem>
+                  )}
+                  {filteredResolutionType && (
+                    <ListItem>
+                      <Chip
+                        label={`Type: ${
+                          RESOLUTION_TYPES_TEXTS[filteredResolutionType]?.title || filteredResolutionType
+                        }`}
+                        onDelete={() => setFilteredResolutionType("")}
+                      />
+                    </ListItem>
+                  )}
+                  {excludeNonMonthlyReward && (
+                    <ListItem>
+                      <Chip label={`Only monthly reward`} onDelete={() => setExcludeNonMonthlyReward(false)} />
+                    </ListItem>
+                  )}
+                  {includeRejected && (
+                    <ListItem>
+                      <Chip label={`Include rejected`} onDelete={() => setIncludeRejected(false)} />
+                    </ListItem>
+                  )}
+                </List>
+              </Box>
+            )}
+            <Collapse
+              in={isFilterSectionExpanded}
+              timeout={0}
+              unmountOnExit
+              sx={{
+                pt: 2,
+                pb: 4,
+                px: 4,
+                mt: 1,
+                bgcolor: theme.palette.mode === "dark" ? "rgba(33, 33, 33, 0.9)" : "rgba(250, 250, 250, 1)",
+              }}
+            >
+              <FormGrid container spacing={6}>
+                <FormGrid item xs={12} md={4}>
+                  <TextField
+                    fullWidth
+                    label="Search resolution"
+                    variant="standard"
+                    value={textFilter}
+                    onChange={(e) => setTextFilter(e.target.value)}
                   />
                 </FormGrid>
-              )}
+                <FormGrid item xs={12} md={4}>
+                  <UsersAutocomplete
+                    fullWidth
+                    filterList={availableAuthors}
+                    selectedAddress={authorFilter}
+                    onChange={setAuthorFilter}
+                    label="Author"
+                  />
+                </FormGrid>
+                <FormGrid item xs={12} md={4}>
+                  <FormControl fullWidth>
+                    <InputLabel variant="standard" htmlFor="resolution-type-input">
+                      Resolution type
+                    </InputLabel>
+                    <NativeSelect
+                      inputProps={{
+                        name: "resolution-type",
+                        id: "resolution-type-input",
+                      }}
+                      value={filteredResolutionType}
+                      onChange={(e) => setFilteredResolutionType(e.target.value)}
+                    >
+                      <option value={""}></option>
+                      {resolutionTypes.map((t) => (
+                        <option value={t} key={t}>
+                          {RESOLUTION_TYPES_TEXTS[t]?.title || t}
+                        </option>
+                      ))}
+                    </NativeSelect>
+                  </FormControl>
+                </FormGrid>
 
-              <FormGrid item xs={12} md={3}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={excludeNonMonthlyReward}
-                      onChange={() => setExcludeNonMonthlyReward((old) => !old)}
+                {hasRejected && (
+                  <FormGrid item xs={12} md={3}>
+                    <FormControlLabel
+                      control={<Switch checked={includeRejected} onChange={() => setIncludeRejected((old) => !old)} />}
+                      label="Include rejected"
                     />
-                  }
-                  label="Only monthly rewards"
-                />
+                  </FormGrid>
+                )}
+
+                <FormGrid item xs={12} md={3}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={excludeNonMonthlyReward}
+                        onChange={() => setExcludeNonMonthlyReward((old) => !old)}
+                      />
+                    }
+                    label="Only monthly rewards"
+                  />
+                </FormGrid>
               </FormGrid>
-            </FormGrid>
-          </Collapse>
-        </>
-      </Section>
+            </Collapse>
+          </>
+        </Section>
+      )}
       {activeResolutions?.length > 0 && (
         <Section inverse>
           <>
