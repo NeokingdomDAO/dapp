@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -62,20 +63,47 @@ const FormGrid = styled(Grid)(() => ({
 
 export default function Resolutions() {
   const theme = useTheme();
+  const router = useRouter();
   const { isConnected, address } = useAccount();
   const { acl, isLoading: isLoadingAcl } = useResolutionsAcl();
-  const [isFilterSectionExpanded, setIsFilterSectionExpanded] = useState(false);
-  const [includeRejected, setIncludeRejected] = useState(false);
-  const [excludeNonMonthlyReward, setExcludeNonMonthlyReward] = useState(false);
-  const [filteredResolutionType, setFilteredResolutionType] = useState("");
+  const { isFilterSectionExpanded, includeRejected, authorFilter, resolutionType, excludeNonMonthlyReward } =
+    router.query;
   const [textFilter, setTextFilter] = useState("");
-  const [authorFilter, setAuthorFilter] = useState("");
   const { currentTimestamp } = useTimestamp();
   const { user } = useUser();
   const { resolutions, isLoading, error } = useGetResolutions();
 
+  const updateFilterState = useCallback(
+    (updatedFilter: { [key: string]: string }) => {
+      router.replace(
+        {
+          query: { ...router.query, ...updatedFilter },
+        },
+        undefined,
+        { shallow: true },
+      );
+    },
+    [router],
+  );
+
+  // for performance reason we use a separate state kept for this field
+  // the internal state and the query parameter are kept in sync by these two use effect
+  useEffect(() => {
+    setTextFilter((router.query.resolutionTitle as string) || "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (router.query.resolutionTitle !== textFilter) {
+      timeoutId = setTimeout(() => {
+        updateFilterState({ resolutionTitle: textFilter });
+      }, 1000);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [router.query.resolutionTitle, textFilter, updateFilterState]);
+
   const { getOdooUser } = useOdooUsers();
-  const selectedUser = authorFilter ? getOdooUser(authorFilter) : undefined;
+  const selectedUser = authorFilter ? getOdooUser(authorFilter as string) : undefined;
 
   const enhancedResolutions = useMemo(() => {
     if ((isLoading || isLoadingAcl) && resolutions.length === 0) {
@@ -101,19 +129,20 @@ export default function Resolutions() {
       ? filteredResolutions.filter((r) => r.metadata.isMonthlyRewards === true)
       : filteredResolutions;
 
+    const lowerCaseTextFilter = textFilter.toLocaleLowerCase();
     filteredResolutions = textFilter
-      ? filteredResolutions.filter((r) => r.title.indexOf(textFilter) >= 0)
+      ? filteredResolutions.filter((r) => r.title.toLocaleLowerCase().indexOf(lowerCaseTextFilter) >= 0)
       : filteredResolutions;
 
-    filteredResolutions = filteredResolutionType
-      ? filteredResolutions.filter((r) => r.resolutionType.name === filteredResolutionType)
+    filteredResolutions = resolutionType
+      ? filteredResolutions.filter((r) => r.resolutionType.name === resolutionType)
       : filteredResolutions;
 
     filteredResolutions = authorFilter
       ? filteredResolutions.filter((r) => r.createBy === authorFilter)
       : filteredResolutions;
     return filteredResolutions;
-  }, [enhancedResolutions, excludeNonMonthlyReward, filteredResolutionType, includeRejected, textFilter, authorFilter]);
+  }, [enhancedResolutions, excludeNonMonthlyReward, resolutionType, includeRejected, textFilter, authorFilter]);
 
   const [activeResolutions, inactiveResolutions] = useMemo(() => {
     const active = filteredResolutions.filter((resolution) => {
@@ -159,9 +188,9 @@ export default function Resolutions() {
           <>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Button
-                endIcon={<Chevron expand={isFilterSectionExpanded} />}
-                onClick={() => setIsFilterSectionExpanded((e) => !e)}
-                aria-expanded={isFilterSectionExpanded}
+                endIcon={<Chevron expand={!!isFilterSectionExpanded} />}
+                onClick={() => updateFilterState({ isFilterSectionExpanded: isFilterSectionExpanded ? "" : "true" })}
+                aria-expanded={!!isFilterSectionExpanded}
                 aria-label="show filters"
               >
                 Filters
@@ -185,34 +214,38 @@ export default function Resolutions() {
                   )}
                   {selectedUser && (
                     <ListItem>
-                      <Chip label={`Author: ${selectedUser.display_name}`} onDelete={() => setAuthorFilter("")} />
+                      <Chip
+                        label={`Author: ${selectedUser.display_name}`}
+                        onDelete={() => updateFilterState({ authorFilter: "" })}
+                      />
                     </ListItem>
                   )}
-                  {filteredResolutionType && (
+                  {resolutionType && (
                     <ListItem>
                       <Chip
-                        label={`Type: ${
-                          RESOLUTION_TYPES_TEXTS[filteredResolutionType]?.title || filteredResolutionType
-                        }`}
-                        onDelete={() => setFilteredResolutionType("")}
+                        label={`Type: ${RESOLUTION_TYPES_TEXTS[resolutionType as string]?.title || resolutionType}`}
+                        onDelete={() => updateFilterState({ resolutionType: "" })}
                       />
                     </ListItem>
                   )}
                   {excludeNonMonthlyReward && (
                     <ListItem>
-                      <Chip label={`Only monthly reward`} onDelete={() => setExcludeNonMonthlyReward(false)} />
+                      <Chip
+                        label={`Only monthly reward`}
+                        onDelete={() => updateFilterState({ excludeNonMonthlyReward: "" })}
+                      />
                     </ListItem>
                   )}
                   {includeRejected && (
                     <ListItem>
-                      <Chip label={`Include rejected`} onDelete={() => setIncludeRejected(false)} />
+                      <Chip label={`Include rejected`} onDelete={() => updateFilterState({ includeRejected: "" })} />
                     </ListItem>
                   )}
                 </List>
               </Box>
             )}
             <Collapse
-              in={isFilterSectionExpanded}
+              in={!!isFilterSectionExpanded}
               timeout={0}
               unmountOnExit
               sx={{
@@ -237,8 +270,8 @@ export default function Resolutions() {
                   <UsersAutocomplete
                     fullWidth
                     filterList={availableAuthors}
-                    selectedAddress={authorFilter}
-                    onChange={setAuthorFilter}
+                    selectedAddress={authorFilter as string}
+                    onChange={(v) => updateFilterState({ authorFilter: v })}
                     label="Author"
                   />
                 </FormGrid>
@@ -252,8 +285,8 @@ export default function Resolutions() {
                         name: "resolution-type",
                         id: "resolution-type-input",
                       }}
-                      value={filteredResolutionType}
-                      onChange={(e) => setFilteredResolutionType(e.target.value)}
+                      value={resolutionType}
+                      onChange={(e) => updateFilterState({ resolutionType: e.target.value })}
                     >
                       <option value={""}></option>
                       {resolutionTypes.map((t) => (
@@ -268,7 +301,12 @@ export default function Resolutions() {
                 {hasRejected && (
                   <FormGrid item xs={12} md={3}>
                     <FormControlLabel
-                      control={<Switch checked={includeRejected} onChange={() => setIncludeRejected((old) => !old)} />}
+                      control={
+                        <Switch
+                          checked={!!includeRejected}
+                          onChange={() => updateFilterState({ includeRejected: includeRejected ? "" : "true" })}
+                        />
+                      }
                       label="Include rejected"
                     />
                   </FormGrid>
@@ -278,8 +316,10 @@ export default function Resolutions() {
                   <FormControlLabel
                     control={
                       <Switch
-                        checked={excludeNonMonthlyReward}
-                        onChange={() => setExcludeNonMonthlyReward((old) => !old)}
+                        checked={!!excludeNonMonthlyReward}
+                        onChange={() =>
+                          updateFilterState({ excludeNonMonthlyReward: excludeNonMonthlyReward ? "" : "true" })
+                        }
                       />
                     }
                     label="Only monthly rewards"
