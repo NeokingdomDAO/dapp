@@ -174,7 +174,7 @@ export const getEnhancedResolutionMapper =
         votersHaveVotedNo: resolutionVoters.filter((v) => v.hasVoted && !v.hasVotedYes),
       },
       metadata: {
-        isMonthlyRewards: resolution.metadata?.isMonthlyRewards || false,
+        isMonthlyRewards: !!resolution.metadata?.isMonthlyRewards,
       },
     };
   };
