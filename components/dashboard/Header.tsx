@@ -3,7 +3,7 @@ import { useAccount } from "wagmi";
 import { useState } from "react";
 
 import { InfoOutlined } from "@mui/icons-material";
-import { Alert, Chip, IconButton, Paper, Skeleton, Stack, Typography } from "@mui/material";
+import { Alert, AlertColor, Chip, IconButton, Paper, Skeleton, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 
 import { useFeatureFlags } from "@lib/feature-flags/useFeatureFlags";
@@ -26,7 +26,36 @@ const messages: [number, string][] = [
   [0, "Oh it's late 😴"],
 ];
 
-export default function Header() {
+const getVotingInfo = (percentage: number | null) => {
+  if (percentage === null) {
+    return {
+      severity: "info",
+      message: "You haven't voted on any resolution this year",
+    };
+  }
+
+  const preMessage = `You voted to ${Math.trunc(percentage)}% of the all votable resolutions this year`;
+  if (percentage >= 70) {
+    return {
+      severity: "success",
+      message: `${preMessage}. Keep it up!`,
+    };
+  }
+
+  if (percentage > 51) {
+    return {
+      severity: "warning",
+      message: `${preMessage}. Bear in mind you might be removed from the DAO if you vote to less than 51% of the resolutions during this year!`,
+    };
+  }
+
+  return {
+    severity: "error",
+    message: `${preMessage}. You will be removed from the DAO if you vote to less than 51% of the resolutions during this year!`,
+  };
+};
+
+export default function Header({ votingPercentageInTheYear }: { votingPercentageInTheYear: number | null }) {
   const { address } = useAccount();
   const { user } = useUser();
   const { isLoading, totalTime } = useCurrentTasks();
@@ -41,6 +70,7 @@ export default function Header() {
   const hr = currentTimestamp.getHours();
   const message = messages.find((msg) => hr >= msg[0]);
   const welcomeMessage = message ? message[1] : "Welcome";
+  const { severity: votingSeverity, message: votingInfoMessage } = getVotingInfo(votingPercentageInTheYear);
 
   return (
     <>
@@ -91,6 +121,11 @@ export default function Header() {
           </>
         )}
       </Paper>
+      {typeof votingPercentageInTheYear === "number" && (
+        <Alert severity={votingSeverity as AlertColor} sx={{ mt: 2, width: "100%" }}>
+          {votingInfoMessage}
+        </Alert>
+      )}
     </>
   );
 }
