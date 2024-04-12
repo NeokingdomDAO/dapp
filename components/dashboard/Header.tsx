@@ -30,7 +30,7 @@ const getVotingInfo = (percentage: number | null) => {
   if (percentage === null) {
     return {
       severity: "info",
-      message: "You are not connected with your wallet or you haven't voted on any resolution this year",
+      message: "You haven't voted on any resolution this year",
     };
   }
 
