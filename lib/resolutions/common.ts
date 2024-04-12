@@ -266,5 +266,5 @@ export const getVotingPercentage = (allResolutions: ResolutionEntityEnhanced[], 
 
   const votedResolutions = yourVotedResolutions.length;
 
-  return totalVotable === 0 ? 0 : (100 * votedResolutions) / totalVotable;
+  return totalVotable === 0 ? null : (100 * votedResolutions) / totalVotable;
 };

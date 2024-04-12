@@ -39,8 +39,13 @@ export default function ResolutionInfo({
   const { address, isConnected } = useAccount();
   const { user } = useUser();
 
-  const votingUser =
+  const canVote =
     address || user?.ethereum_address
+      ? resolution.voters.find((voter) => isSameAddress(voter.address, address || (user?.ethereum_address as string)))
+      : null;
+
+  const votingUser =
+    canVote && (address || user?.ethereum_address)
       ? resolution.votingStatus.votersHaveVoted.find((voter) =>
           isSameAddress(voter.address, address || (user?.ethereum_address as string)),
         )
@@ -100,9 +105,12 @@ export default function ResolutionInfo({
           "&::-webkit-scrollbar": { display: "none" },
         }}
       >
-        {!votingUser && RESOLUTION_STATES.ENDED === resolution.state && (isConnected || user?.isLoggedIn) && (
-          <Chip size={chipSize} sx={{ mr: hideState ? 0 : 2 }} label="Abstained, counts as No" variant="outlined" />
-        )}
+        {canVote &&
+          !votingUser &&
+          RESOLUTION_STATES.ENDED === resolution.state &&
+          (isConnected || user?.isLoggedIn) && (
+            <Chip size={chipSize} sx={{ mr: hideState ? 0 : 2 }} label="Abstained, counts as No" variant="outlined" />
+          )}
         {votingUser && (isConnected || user?.isLoggedIn) && (
           <>
             <Typography variant="body2">Your Vote: </Typography>

@@ -30,7 +30,7 @@ const getVotingInfo = (percentage: number | null) => {
   if (percentage === null) {
     return {
       severity: "info",
-      message: "You haven't voted on any resolution this year",
+      message: "You are not connected with your wallet or you haven't voted on any resolution this year",
     };
   }
 
@@ -121,11 +121,10 @@ export default function Header({ votingPercentageInTheYear }: { votingPercentage
           </>
         )}
       </Paper>
-      {typeof votingPercentageInTheYear === "number" && (
-        <Alert severity={votingSeverity as AlertColor} sx={{ mt: 2, width: "100%" }}>
-          {votingInfoMessage}
-        </Alert>
-      )}
+
+      <Alert severity={votingSeverity as AlertColor} sx={{ mt: 2, width: "100%" }}>
+        {votingInfoMessage}
+      </Alert>
     </>
   );
 }
