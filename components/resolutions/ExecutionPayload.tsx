@@ -46,7 +46,8 @@ export default function ExecutionPayload({
             <Box key={userData.address}>
               <Typography variant="body2">
                 <b>
-                  {userData.tokens} {TOKEN_SYMBOL}
+                  {!Number.isNaN(Number(userData.tokens)) ? Number(userData.tokens).toFixed(2) : userData.tokens}{" "}
+                  {TOKEN_SYMBOL}
                 </b>{" "}
                 to
               </Typography>
