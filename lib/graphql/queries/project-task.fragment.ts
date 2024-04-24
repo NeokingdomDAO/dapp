@@ -29,6 +29,8 @@ export const projectTaskFragment = gql`
       name
       display_name
       unit_amount
+      start
+      end
     }
   }
 `;

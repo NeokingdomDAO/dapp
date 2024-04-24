@@ -33,7 +33,7 @@ export default function ProjectCard({ project }: { project: Project }) {
     () =>
       project.tasks
         .filter((task) => task !== null)
-        .filter((task) => !task.parent_id && task.stage_id.id !== getStageId("approved")),
+        .filter((task) => !task.parent_id && task.stage_id && task.stage_id.id !== getStageId("approved")),
     [project],
   );
 
