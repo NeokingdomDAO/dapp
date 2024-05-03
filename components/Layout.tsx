@@ -63,29 +63,10 @@ export default function Layout({
 
   const delegationActive = data.signerDelegatedBy.length > 0 || data.signerDelegationStatus?.isDelegating;
 
-  const crowdpunkLogo = (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-      <Box
-        sx={{
-          width: "40px",
-          height: "40px",
-          borderRadius: "50%",
-          border: "1px solid rgb(237, 89, 203)",
-          overflow: "hidden",
-        }}
-      >
-        <Image width={40} height={40} src={CrowdpunkLogo} alt="Crowdpunk DAO" />
-      </Box>
-      <Box sx={{ ml: 1, fontSize: "1.8rem", color: "rgb(237, 89, 203)" }} className={stardosStencil.className}>
-        CROWDPUNK
-      </Box>
-    </Box>
-  );
-
   const LOGO = {
-    neokingdom: <NkdLogo height={70} />,
+    neokingdom: <NkdLogo height={70} style={{ transform: "scale(0.8)" }} />,
     teledisko: <Image height={35} src={TelediskoLogo} alt="Teledisko DAO" />,
-    crowdpunk: crowdpunkLogo,
+    crowdpunk: <Image width={80} height={80} src={CrowdpunkLogo} alt="Crowdpunk DAO" />,
     vanilla: <Image height={35} src={VanillaLogo} alt="Vanilla DAO" />,
   };
 

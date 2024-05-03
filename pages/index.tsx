@@ -4,7 +4,7 @@ import { useMemo } from "react";
 
 import { Typography } from "@mui/material";
 
-import { RESOLUTION_STATES, getEnhancedResolutions } from "@lib/resolutions/common";
+import { RESOLUTION_STATES, getEnhancedResolutions, getVotingPercentage } from "@lib/resolutions/common";
 
 import Section from "@components/Section";
 import Header from "@components/dashboard/Header";
@@ -15,6 +15,7 @@ import Tokens from "@components/dashboard/Tokens";
 import useGetResolutions from "@hooks/useGetResolutions";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
 import useTimestamp from "@hooks/useTimestamp";
+import useUser from "@hooks/useUser";
 
 import ResolutionsStats from "../components/dashboard/ResolutionsStats";
 import { ResolutionEntityEnhanced } from "../types";
@@ -38,18 +39,21 @@ export default function Home() {
 
   const { acl, isLoading: isLoadingAcl } = useResolutionsAcl();
   const { currentTimestamp } = useTimestamp();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
+  const { user: odooUser } = useUser();
 
-  const [enhancedResolutions, enhancedResolutionsToVote, stats]: [
+  const [enhancedResolutions, enhancedResolutionsToVote, stats, votingPercentageInTheYear]: [
     ResolutionEntityEnhanced[],
     ResolutionEntityEnhanced[],
     typeof emptyStats,
+    number | null,
   ] = useMemo(() => {
-    if (((isLoading || isLoadingAcl) && resolutions.length === 0) || error) {
-      return [[], [], emptyStats];
+    if (isLoading || isLoadingAcl || error) {
+      return [[], [], emptyStats, null];
     }
 
     const allResolutions = getEnhancedResolutions(resolutions, +currentTimestamp, acl);
+    const votingPercentageInTheYear = getVotingPercentage(allResolutions, address || odooUser?.ethereum_address);
 
     const inProgress = allResolutions.filter(
       (res) => ![RESOLUTION_STATES.ENDED, RESOLUTION_STATES.REJECTED].includes(res.state),
@@ -79,8 +83,9 @@ export default function Home() {
             typesTotals,
           };
 
-    return [allResolutions, resolutionsToVote, statsValues];
+    return [allResolutions, resolutionsToVote, statsValues, votingPercentageInTheYear];
   }, [resolutions, currentTimestamp, acl, isLoading, isLoadingAcl, error]);
+
   return (
     <>
       <Section
@@ -93,7 +98,7 @@ export default function Home() {
           flexWrap: "wrap",
         }}
       >
-        <Header />
+        <Header votingPercentageInTheYear={votingPercentageInTheYear} />
       </Section>
       <Section inverse={enhancedResolutionsToVote?.length === 0}>
         <Tasks />

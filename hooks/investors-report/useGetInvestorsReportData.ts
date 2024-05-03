@@ -11,8 +11,9 @@ const REFETCH_AFTER_MS = 10000;
 
 type DATA_POINT = {
   minted: number;
-  monthIndex: number;
+  sortIndex: number;
   month: string;
+  year: number;
 };
 
 const INITIAL_MONTHS_DATA =
@@ -21,22 +22,26 @@ const INITIAL_MONTHS_DATA =
         {
           minted: 730,
           month: "Jan",
-          monthIndex: 2023,
+          sortIndex: 202301,
+          year: 2023,
         },
         {
           minted: 55294.8313,
           month: "Feb",
-          monthIndex: 2024,
+          sortIndex: 202302,
+          year: 2023,
         },
         {
           minted: 44581.361,
           month: "Mar",
-          monthIndex: 2025,
+          sortIndex: 202303,
+          year: 2023,
         },
         {
           minted: 39986.6669,
           month: "Apr",
-          monthIndex: 2026,
+          sortIndex: 202304,
+          year: 2023,
         },
       ]
     : [];
@@ -57,28 +62,35 @@ export default function useGetInvestorsReportData(): {
 
   const monthsData = tokenMintings.reduce(
     (allData: any, { mintedTimestamp, amounts }: { mintedTimestamp: number; amounts: BigInt[] }) => {
-      const month = format(new Date(mintedTimestamp * 1000), "MMM");
-      const monthIndex = getMonth(new Date(mintedTimestamp * 1000));
-      const yearIndex = getYear(new Date(mintedTimestamp * 1000));
+      const mintedTimestampDate = new Date(mintedTimestamp * 1000);
+      const month = format(mintedTimestampDate, "MMM");
+      const monthIndex = getMonth(mintedTimestampDate);
+      const yearIndex = getYear(mintedTimestampDate);
       const totalMinted = amounts.reduce((sum, amount) => {
         return sum.add(bigIntToBigNum(amount));
       }, BigNumber.from(BigInt(0)));
-      allData[month] = {
-        minted: (allData[month]?.minted || BigNumber.from(BigInt(0))).add(totalMinted),
-        sortIndex: yearIndex + monthIndex,
-        month,
+      allData[yearIndex] = allData[yearIndex] || {};
+      allData[yearIndex][month] = {
+        minted: (allData[yearIndex][month]?.minted || BigNumber.from(BigInt(0))).add(totalMinted),
+        sortIndex: Number(`${yearIndex}${monthIndex < 10 ? `0${monthIndex}` : monthIndex}`),
+        year: yearIndex,
+        month: `${month} '${String(yearIndex).slice(2)}`,
       };
       return allData;
     },
     {},
   );
 
+  // @ts-ignore
   const finalData = Object.values(monthsData)
+    // @ts-ignore
+    .reduce((all, yearData) => [...all, ...Object.values(yearData)], [])
     .sort((a: any, b: any) => a.sortIndex - b.sortIndex)
     .map((item: any) => ({
       minted: Number(formatEther(item.minted)),
       month: item.month,
-      monthIndex: item.sortIndex,
+      sortIndex: item.sortIndex,
+      year: item.year,
     })) as DATA_POINT[];
 
   const results = INITIAL_MONTHS_DATA.concat(finalData.slice(1));

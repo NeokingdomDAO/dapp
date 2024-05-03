@@ -3,9 +3,12 @@ import { addSeconds, format, formatRelative, isBefore } from "date-fns";
 import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
+import { isSameAddress } from "@lib/utils";
+
 import type {
   MonthlyRewardsUserData,
   ResolutionEntity,
+  ResolutionEntityEnhanced,
   ResolutionState,
   ResolutionStates,
   ResolutionTypeInfo,
@@ -13,6 +16,9 @@ import type {
   ResolutionsAcl,
   RewardsResponse,
 } from "../../types";
+
+// 106 is a Test resolution (Ragnar's test) => https://dao.neokingdom.org/resolutions/106
+const RESOLUTIONS_IDS_TO_SKIP = process.env.NEXT_PUBLIC_PROJECT_KEY === "neokingdom" ? ["106"] : [];
 
 export const RESOLUTION_STATES: ResolutionStates = {
   PRE_DRAFT: "pre-draft", // default state
@@ -173,6 +179,9 @@ export const getEnhancedResolutionMapper =
         votersHaveVotedYes: resolutionVoters.filter((v) => v.hasVoted && v.hasVotedYes),
         votersHaveVotedNo: resolutionVoters.filter((v) => v.hasVoted && !v.hasVotedYes),
       },
+      metadata: {
+        isMonthlyRewards: !!resolution.metadata?.isMonthlyRewards,
+      },
     };
   };
 
@@ -219,4 +228,44 @@ export const getCurrentMonth = () => {
   const currentDate = new Date();
 
   return currentDate.toLocaleString("en-us", { month: "long" });
+};
+
+/**
+ * Logic:
+ * given all the resolutions, filter by the current year ones and filter out the monthly resolutions ones
+ * then, filter by the ones you're a voter of
+ * so this is the actual total number of resolutions
+ * then, check the ones you've voted OR checking the delegation chain (if you've been delegated and the delegated voted)
+ * this is then the number of resolutions you've voted
+ * finally, calculate the percentage
+ */
+export const getVotingPercentage = (allResolutions: ResolutionEntityEnhanced[], contributorAddress?: string) => {
+  const now = new Date();
+  const yourCurrentYearNonVetoResolutions = allResolutions.filter((res) => {
+    if (
+      new Date(res.approveTimestamp * 1000).getFullYear() !== now.getFullYear() ||
+      res.isNegative ||
+      RESOLUTIONS_IDS_TO_SKIP.includes(res.id) ||
+      res.state === "notice"
+    ) {
+      return false;
+    }
+
+    const canVote = res.voters
+      .map((v) => v.address.toLowerCase())
+      .includes(contributorAddress?.toLowerCase() as string);
+
+    return canVote;
+  });
+
+  const totalVotable = yourCurrentYearNonVetoResolutions.length;
+
+  const yourVotedResolutions = yourCurrentYearNonVetoResolutions.filter((res) => {
+    const voter = res.voters.find((v) => isSameAddress(v.address, contributorAddress as string));
+    return voter?.hasVoted || voter?.delegating?.hasVoted;
+  });
+
+  const votedResolutions = yourVotedResolutions.length;
+
+  return totalVotable === 0 ? null : (100 * votedResolutions) / totalVotable;
 };

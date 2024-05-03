@@ -31,6 +31,9 @@ export const resolutionFragment = graphql(`
       hasVotedYes
       delegated
     }
+    metadata {
+      isMonthlyRewards
+    }
   }
 `);
 

@@ -177,7 +177,7 @@ export default function InvestorsReport() {
           </FormControl>
         </Stack>
         <Box sx={{ height: 350 }}>
-          <Chart data={chartData} />
+          <Chart data={chartData.slice(-12)} />
         </Box>
       </Paper>
     </>
