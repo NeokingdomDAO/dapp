@@ -2,7 +2,7 @@ import { ResolutionManager } from "@contracts/typechain";
 
 import { useContext } from "react";
 
-import { addToIpfs } from "@lib/ipfs";
+import { addResolution } from "@lib/resolutions/net";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
 import { ResolutionFormBase } from "@store/resolutionFormStore";
@@ -24,11 +24,11 @@ export default function useResolutionUpdate() {
   return {
     onSubmit: async ({ vetoTypeId, resolutionId, currentResolution }: SubmitParams) => {
       setIsLoading(true);
-      const ipfsId = await addToIpfs(currentResolution);
+      const hash = await addResolution(currentResolution);
       const resolutionTypeId = Number(vetoTypeId || currentResolution.typeId);
       return executeTx<ResolutionManager["updateResolution"], Parameters<ResolutionManager["updateResolution"]>>({
         contractMethod: resolutionManagerContract?.updateResolution,
-        params: [resolutionId, ipfsId, resolutionTypeId, !!vetoTypeId, [], []],
+        params: [resolutionId, hash, resolutionTypeId, !!vetoTypeId, [], []],
         onSuccessMessage: "Preliminary draft resolution successfully updated",
         onErrorMessage: "Failed to update preliminary draft resolution",
       });

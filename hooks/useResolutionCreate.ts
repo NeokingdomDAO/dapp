@@ -33,7 +33,6 @@ export default function useResolutionCreate() {
     }: SubmitParams) => {
       setIsLoading(true);
       const hash = await addResolution({ ...currentResolution, isRewards });
-      return;
       const resolutionTypeId = Number(vetoTypeId || currentResolution.typeId);
       if ((currentResolution.exclusionAddress || "").trim() !== "") {
         return executeTx<
