@@ -7,5 +7,6 @@ export default defineConfig({
   driver: "pg",
   dbCredentials: {
     connectionString: process.env.POSTGRES_URL!,
+    ssl: true,
   },
 });

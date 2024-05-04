@@ -5,10 +5,13 @@ export const ResolutionsTable = pgTable(
   {
     id: serial("id").primaryKey(),
     hash: varchar("hash", { length: 64 }).notNull().unique(),
-    title: text("name").notNull(),
-    content: text("email").notNull(),
+    title: text("title").notNull(),
+    content: text("content").notNull(),
     isRewards: boolean("isRewards").default(false).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
+    project: varchar("project")
+      .notNull()
+      .default(process.env.NEXT_PUBLIC_PROJECT_KEY || "neokingdom"),
   },
   (resolutions) => {
     return {
