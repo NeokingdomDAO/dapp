@@ -63,6 +63,7 @@
     "immer": "^9.0.19",
     "iron-session": "^6.3.1",
     "jose": "^4.13.1",
+    "json-stringify-deterministic": "^1.0.12",
     "lodash.kebabcase": "^4.1.1",
     "lodash.throttle": "^4.1.1",
     "next": "latest",
