@@ -35,7 +35,7 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
   const { onSubmit: onSubmitApprove } = useResolutionApprove();
   const { onSubmit: onSubmitReject } = useResolutionReject();
   const featureFlags = useFeatureFlags();
-  const canCreateResolutions = featureFlags.canCreateResolutions().get(false);
+  const canCreateResolutions = featureFlags.canCreateResolutions().get(true);
   const router = useRouter();
   const isVeto = resolution.resolutionType.name === "routine" && resolution.isNegative;
   const store = useRef(

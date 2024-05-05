@@ -51,7 +51,7 @@ export default function NewResolution({
   const loadingSubmit = isAwaitingConfirmation || isLoading;
 
   const featureFlags = useFeatureFlags();
-  const canCreateResolutions = featureFlags.canCreateResolutions().get(false);
+  const canCreateResolutions = featureFlags.canCreateResolutions().get(true);
 
   if (!canCreateResolutions) {
     <Alert severity="warning">
