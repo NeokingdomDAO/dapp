@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Logout from "@mui/icons-material/Logout";
-import { Badge, useColorScheme } from "@mui/material";
+import { Badge } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -17,6 +17,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
+import { useColorScheme } from "@mui/material/styles";
 
 import { getLettersFromName } from "@lib/utils";
 
