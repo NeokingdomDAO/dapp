@@ -5,8 +5,6 @@ import { shallow } from "zustand/shallow";
 import * as React from "react";
 import { useEffect } from "react";
 
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Logout from "@mui/icons-material/Logout";
 import { Badge, useColorScheme } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
@@ -27,7 +25,7 @@ import useOdooUsers from "@hooks/useOdooUsers";
 import useUser from "@hooks/useUser";
 
 export default function AccountMenu() {
-  const { mode, setMode } = useColorScheme();
+  // const { mode, setMode } = useColorScheme();
   const { user } = useUser();
   const { logout } = useLogout();
 
@@ -156,12 +154,12 @@ export default function AccountMenu() {
           ),
         ]}
         <Divider />
-        <MenuItem onClick={() => setMode(mode === "light" ? "dark" : "light")}>
+        {/* <MenuItem onClick={() => setMode(mode === "light" ? "dark" : "light")}>
           Turn {mode === "light" ? "dark" : "light"}
           <IconButton sx={{ ml: 1 }} color="inherit">
             {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </React.Fragment>
   );

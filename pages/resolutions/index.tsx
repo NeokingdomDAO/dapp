@@ -72,6 +72,10 @@ export default function Resolutions() {
   const { currentTimestamp } = useTimestamp();
   const { user } = useUser();
   const { resolutions, isLoading, error } = useGetResolutions();
+  console.log(
+    "resolutions: ",
+    resolutions.filter((res) => !res.title),
+  );
 
   const updateFilterState = useCallback(
     (updatedFilter: { [key: string]: string }) => {
@@ -92,6 +96,7 @@ export default function Resolutions() {
     setTextFilter((router.query.resolutionTitle as string) || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     if (router.query.resolutionTitle !== textFilter) {
@@ -126,12 +131,12 @@ export default function Resolutions() {
       : enhancedResolutions.filter((resolution) => resolution.state !== RESOLUTION_STATES.REJECTED);
 
     filteredResolutions = excludeNonMonthlyReward
-      ? filteredResolutions.filter((r) => r.metadata.isMonthlyRewards === true)
+      ? filteredResolutions.filter((r) => r.isRewards === true)
       : filteredResolutions;
 
     const lowerCaseTextFilter = textFilter.toLocaleLowerCase();
     filteredResolutions = textFilter
-      ? filteredResolutions.filter((r) => r.title.toLocaleLowerCase().indexOf(lowerCaseTextFilter) >= 0)
+      ? filteredResolutions.filter((r) => r.title && r.title.toLocaleLowerCase().indexOf(lowerCaseTextFilter) >= 0)
       : filteredResolutions;
 
     filteredResolutions = resolutionType

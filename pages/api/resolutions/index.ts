@@ -12,7 +12,7 @@ async function getResolutionFromHash(req: NextApiRequest, res: NextApiResponse) 
   }
 
   try {
-    const resolutions = await getResolutions(["title", "hash"]);
+    const resolutions = await getResolutions(["title", "hash", "isRewards"]);
 
     return res.status(200).json(resolutions);
   } catch (error) {

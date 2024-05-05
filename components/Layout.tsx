@@ -52,12 +52,12 @@ export default function Layout({
   const { data } = useDelegationStatus();
   const { votingResolutions } = useGetActiveResolutions();
 
-  const { setThemeMode } = useWeb3ModalTheme();
-  const { mode } = useColorScheme();
+  // const { setThemeMode } = useWeb3ModalTheme();
+  // const { mode } = useColorScheme();
 
-  useEffect(() => {
-    setThemeMode(mode === "dark" ? "dark" : "light");
-  }, [mode]);
+  // useEffect(() => {
+  //   setThemeMode(mode === "dark" ? "dark" : "light");
+  // }, [mode]);
 
   const votingResolutionsNum = votingResolutions?.length || 0;
 

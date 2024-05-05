@@ -1724,7 +1724,6 @@ export type ResolutionFragmentFragment = {
     hasVotedYes: boolean;
     delegated: any;
   }> | null;
-  metadata?: { __typename?: "ResolutionMetadata"; isMonthlyRewards: boolean } | null;
 };
 
 export type LegacyResolutionFragmentFragment = {
@@ -1918,7 +1917,6 @@ export type GetResolutionQuery = {
       hasVotedYes: boolean;
       delegated: any;
     }> | null;
-    metadata?: { __typename?: "ResolutionMetadata"; isMonthlyRewards: boolean } | null;
   } | null;
 };
 
@@ -1978,7 +1976,6 @@ export type GetResolutionsQuery = {
       hasVotedYes: boolean;
       delegated: any;
     }> | null;
-    metadata?: { __typename?: "ResolutionMetadata"; isMonthlyRewards: boolean } | null;
   }>;
 };
 
@@ -2173,14 +2170,6 @@ export const ResolutionFragmentFragmentDoc = {
                 { kind: "Field", name: { kind: "Name", value: "hasVotedYes" } },
                 { kind: "Field", name: { kind: "Name", value: "delegated" } },
               ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metadata" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "isMonthlyRewards" } }],
             },
           },
         ],
@@ -2647,14 +2636,6 @@ export const GetResolutionDocument = {
               ],
             },
           },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metadata" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "isMonthlyRewards" } }],
-            },
-          },
         ],
       },
     },
@@ -2793,14 +2774,6 @@ export const GetResolutionsDocument = {
                 { kind: "Field", name: { kind: "Name", value: "hasVotedYes" } },
                 { kind: "Field", name: { kind: "Name", value: "delegated" } },
               ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metadata" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "isMonthlyRewards" } }],
             },
           },
         ],
