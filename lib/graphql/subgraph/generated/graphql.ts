@@ -1690,8 +1690,7 @@ export type ResolutionTypeFragmentFragment = {
 export type ResolutionFragmentFragment = {
   __typename?: "Resolution";
   id: string;
-  title: string;
-  content: string;
+  ipfsDataURI: string;
   isNegative: boolean;
   yesVotesTotal?: any | null;
   createTimestamp: any;
@@ -1731,8 +1730,7 @@ export type ResolutionFragmentFragment = {
 export type LegacyResolutionFragmentFragment = {
   __typename?: "Resolution";
   id: string;
-  title: string;
-  content: string;
+  ipfsDataURI: string;
   isNegative: boolean;
   yesVotesTotal?: any | null;
   createTimestamp: any;
@@ -1798,8 +1796,7 @@ export type GetLegacyResolutionQuery = {
   resolution?: {
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -1842,8 +1839,7 @@ export type GetLegacyResolutionsQuery = {
   resolutions: Array<{
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -1888,8 +1884,7 @@ export type GetResolutionQuery = {
   resolution?: {
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -1949,8 +1944,7 @@ export type GetResolutionsQuery = {
   resolutions: Array<{
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -2142,8 +2136,7 @@ export const ResolutionFragmentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2222,8 +2215,7 @@ export const LegacyResolutionFragmentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2414,8 +2406,7 @@ export const GetLegacyResolutionDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2515,8 +2506,7 @@ export const GetLegacyResolutionsDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2618,8 +2608,7 @@ export const GetResolutionDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2767,8 +2756,7 @@ export const GetResolutionsDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
