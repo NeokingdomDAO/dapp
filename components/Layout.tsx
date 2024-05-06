@@ -7,10 +7,11 @@ import { useRouter } from "next/router";
 
 import React, { useEffect, useMemo } from "react";
 
-import { Badge, Chip, Container, Divider, Slide, Stack, useColorScheme, useScrollTrigger } from "@mui/material";
+import { Badge, Chip, Container, Divider, Slide, Stack, useScrollTrigger } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
+import { useColorScheme } from "@mui/material/styles";
 
 import { useCheckSubgraphState } from "@hooks/useCheckSubgraphState";
 import useGetActiveResolutions from "@hooks/useGetActiveResolutions";
