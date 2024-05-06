@@ -28,9 +28,6 @@ import useResolutionsAcl from "@hooks/useResolutionsAcl";
 import { ResolutionEntity } from "../types";
 import Dialog from "./Dialog";
 
-// TODO if feature flag is on, disable editing/creating resolutions (show alert)
-// const featureFlags = useFeatureFlags();
-// const canCreateResolutions = featureFlags.canCreateResolutions().get(false);
 // resolution pdf get title and content from db
 
 export default function EditResolution({ resolution }: { resolution: ResolutionEntity }) {
