@@ -29,7 +29,7 @@ async function createNewResolution(req: NextApiRequest, res: NextApiResponse) {
   try {
     const hash = keccak256(toUtf8Bytes(stringifyDeterministic(result.data)));
 
-    const existingResolution = await getResolution(hash);
+    const [existingResolution] = await getResolution(hash);
 
     if (!existingResolution) {
       await addResolution({

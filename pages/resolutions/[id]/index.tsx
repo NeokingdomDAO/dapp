@@ -2,6 +2,7 @@ import { NeokingdomToken__factory } from "@contracts/typechain";
 import { Interface } from "@ethersproject/abi";
 import { formatEther } from "ethers/lib/utils";
 import showdown from "showdown";
+import { ResolutionEntity } from "types";
 
 import { useMemo } from "react";
 
@@ -41,7 +42,7 @@ export default function ResolutionView() {
 
   const resolution = useMemo(() => {
     if (resolutionEntity) {
-      return getEnhancedResolutionMapper(+currentTimestamp)(resolutionEntity);
+      return getEnhancedResolutionMapper(+currentTimestamp)(resolutionEntity as ResolutionEntity);
     }
     return null;
   }, [resolutionEntity, currentTimestamp]);

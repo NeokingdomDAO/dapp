@@ -26,11 +26,6 @@ import LoginModal from "./LoginModal";
 import MismatchNotifier from "./mismatch-notifier/MismatchNotifier";
 import NkdLogo from "./svg-logos/NkdLogo";
 
-const stardosStencil = Stardos_Stencil({
-  weight: "700",
-  subsets: ["latin"],
-});
-
 const initActiveStyle = (currentPath: string) => (href: string) =>
   currentPath === href || (href !== "/" && currentPath.startsWith(href));
 
@@ -53,12 +48,12 @@ export default function Layout({
   const { data } = useDelegationStatus();
   const { votingResolutions } = useGetActiveResolutions();
 
-  // const { setThemeMode } = useWeb3ModalTheme();
-  // const { mode } = useColorScheme();
+  const { setThemeMode } = useWeb3ModalTheme();
+  const { mode } = useColorScheme();
 
-  // useEffect(() => {
-  //   setThemeMode(mode === "dark" ? "dark" : "light");
-  // }, [mode]);
+  useEffect(() => {
+    setThemeMode(mode === "dark" ? "dark" : "light");
+  }, [mode]);
 
   const votingResolutionsNum = votingResolutions?.length || 0;
 

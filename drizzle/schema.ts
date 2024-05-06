@@ -1,10 +1,10 @@
-import { boolean, pgTable, serial, text, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, serial, text, timestamp, unique, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 
 export const ResolutionsTable = pgTable(
   "resolutions",
   {
     id: serial("id").primaryKey(),
-    hash: varchar("hash", { length: 64 }).notNull().unique(),
+    hash: varchar("hash", { length: 66 }).notNull(),
     title: text("title").notNull(),
     content: text("content").notNull(),
     isRewards: boolean("isRewards").default(false).notNull(),
@@ -15,7 +15,9 @@ export const ResolutionsTable = pgTable(
   },
   (resolutions) => {
     return {
-      uniqueIdx: uniqueIndex("unique_idx").on(resolutions.hash),
+      unq: unique().on(resolutions.hash, resolutions.project),
+      hashProjectIdx: uniqueIndex("hash_project_ids").on(resolutions.hash, resolutions.project),
+      projectIdx: index().on(resolutions.project),
     };
   },
 );

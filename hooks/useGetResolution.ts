@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { ResolutionEntity } from "types";
 
 import { getLegacyResolutionQuery } from "@graphql/subgraph/queries/get-legacy-resolution-query";
 import { getResolutionQuery } from "@graphql/subgraph/queries/get-resolution-query";
@@ -34,8 +35,6 @@ export default function useGetResolution() {
       : null,
     fetcher,
   );
-
-  console.log(legacyResolutionData?.resolution?.ipfsDataURI);
 
   const resolution =
     resolutionData?.resolution ||

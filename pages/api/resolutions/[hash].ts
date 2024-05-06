@@ -12,7 +12,7 @@ async function getResolutionFromHash(req: NextApiRequest, res: NextApiResponse) 
   }
 
   try {
-    const existingResolution = await getResolution(req.query.hash as string);
+    const [existingResolution] = await getResolution(req.query.hash as string);
 
     if (!existingResolution) {
       return res.status(404).end();

@@ -72,10 +72,6 @@ export default function Resolutions() {
   const { currentTimestamp } = useTimestamp();
   const { user } = useUser();
   const { resolutions, isLoading, error } = useGetResolutions();
-  console.log(
-    "resolutions: ",
-    resolutions.filter((res) => !res.title),
-  );
 
   const updateFilterState = useCallback(
     (updatedFilter: { [key: string]: string }) => {
