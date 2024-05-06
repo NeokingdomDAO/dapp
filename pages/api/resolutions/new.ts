@@ -7,7 +7,7 @@ import { z } from "zod";
 
 import { sessionOptions } from "@lib/session";
 
-const ResolutionData = z.object({
+export const ResolutionData = z.object({
   title: z.string().min(1),
   content: z.string().min(1),
   isRewards: z.boolean().default(false).optional(),
