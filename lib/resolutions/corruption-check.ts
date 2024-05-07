@@ -1,16 +1,22 @@
 import { keccak256, toUtf8Bytes } from "ethers/lib/utils";
 import stringifyDeterministic from "json-stringify-deterministic";
-import { ResolutionData } from "pages/api/resolutions/new";
 import { z } from "zod";
 
-export default function isCorrupted(dbHash: string, data: z.infer<typeof ResolutionData>) {
-  const result = ResolutionData.safeParse(data);
+import { ResolutionData } from "./validation";
 
-  if (!result.success) {
+export default function isCorrupted(dbHash: string, data: z.infer<typeof ResolutionData>) {
+  // as we have IPFS hashes
+  if (dbHash.startsWith("Qm") && dbHash.length === 46) {
     return false;
   }
 
-  const clientHash = keccak256(toUtf8Bytes(stringifyDeterministic(result.data)));
+  const result = ResolutionData.safeParse(data);
+
+  if (!result.success) {
+    return true;
+  }
+
+  const clientHash = keccak256(toUtf8Bytes(stringifyDeterministic(data)));
 
   return clientHash !== dbHash;
 }

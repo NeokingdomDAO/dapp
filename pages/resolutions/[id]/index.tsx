@@ -36,7 +36,7 @@ export default function ResolutionView() {
   const { currentTimestamp } = useTimestamp();
   const { user } = useUser();
 
-  const { resolution: resolutionEntity, isLoading } = useGetResolution();
+  const { resolution: resolutionEntity, isLoading, showCorruptionAlert } = useGetResolution();
 
   const notFound = !resolutionEntity;
 
@@ -76,6 +76,15 @@ export default function ResolutionView() {
       <Section>
         <Alert severity="warning">Resolution not found</Alert>
       </Section>
+    );
+  }
+
+  if (showCorruptionAlert) {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Resolution data corruption</AlertTitle>
+        The resolution data has been corrupted. Please contact the engineers via discord.
+      </Alert>
     );
   }
 

@@ -3,15 +3,9 @@ import { keccak256, toUtf8Bytes } from "ethers/lib/utils";
 import { withIronSessionApiRoute } from "iron-session/next";
 import stringifyDeterministic from "json-stringify-deterministic";
 import { NextApiRequest, NextApiResponse } from "next";
-import { z } from "zod";
 
+import { ResolutionData } from "@lib/resolutions/validation";
 import { sessionOptions } from "@lib/session";
-
-export const ResolutionData = z.object({
-  title: z.string().min(1),
-  content: z.string().min(1),
-  isRewards: z.boolean().default(false).optional(),
-});
 
 async function createNewResolution(req: NextApiRequest, res: NextApiResponse) {
   const cookie = req.session.cookie;

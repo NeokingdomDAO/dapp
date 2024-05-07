@@ -1,4 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
+import { getResolution } from "drizzle/db";
 import { withIronSessionApiRoute } from "iron-session/next";
 import kebabCase from "lodash.kebabcase";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -17,6 +18,7 @@ import {
 } from "@graphql/subgraph/subgraph-client";
 
 import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
+import isCorrupted from "@lib/resolutions/corruption-check";
 import { sessionOptions } from "@lib/session";
 
 import ResolutionPdf from "@components/resolutions/Pdf";
@@ -52,10 +54,24 @@ const getResolutionPdf = async (req: NextApiRequest, res: NextApiResponse) => {
       true,
     );
 
+    const [dbResolution] = await getResolution(resolutionData.ipfsDataURI as string);
+
+    if (!dbResolution) {
+      return res.status(404).end();
+    }
+
+    if (isCorrupted(dbResolution.hash, dbResolution)) {
+      return res.status(500).send("This resolution is corrupted. Please reach out to engineers ASAP");
+    }
+
     const pdf = await renderToBuffer(
       // @ts-ignore
       React.createElement(ResolutionPdf, {
-        resolution: resolutionData,
+        resolution: {
+          ...resolutionData,
+          title: dbResolution.title,
+          content: dbResolution.content,
+        },
         usersData: odooUsersData,
         resolutionUrl: `${
           {

@@ -1,6 +1,3 @@
-import { keccak256, toUtf8Bytes } from "ethers/lib/utils";
-import stringifyDeterministic from "json-stringify-deterministic";
-
 import isCorrupted from "./corruption-check";
 
 export async function addResolution(data: any) {
