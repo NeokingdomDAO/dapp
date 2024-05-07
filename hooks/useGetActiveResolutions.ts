@@ -1,3 +1,5 @@
+import { ResolutionEntity } from "types";
+
 import { useMemo } from "react";
 
 import { RESOLUTION_STATES, getEnhancedResolutions } from "@lib/resolutions/common";
@@ -13,7 +15,7 @@ export default function useGetActiveResolutions() {
 
   const [votingResolutions, noticeResolutions] = useMemo(() => {
     if (resolutions && acl) {
-      const allResolutions = getEnhancedResolutions(resolutions, +currentTimestamp, acl);
+      const allResolutions = getEnhancedResolutions(resolutions as ResolutionEntity[], +currentTimestamp, acl);
 
       const resolutionsToVote = allResolutions.filter((res) => res.state === RESOLUTION_STATES.VOTING);
       const resolutionsNotice = allResolutions.filter((res) => res.state === RESOLUTION_STATES.NOTICE);

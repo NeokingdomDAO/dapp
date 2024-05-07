@@ -25,12 +25,12 @@ import useResolutionTypes from "@hooks/useResolutionTypes";
 import useResolutionUpdate from "@hooks/useResolutionUpdate";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
 
-import { ResolutionEntity } from "../types";
+import { ResolutionEntityEnhanced } from "../types";
 import Dialog from "./Dialog";
 
 // resolution pdf get title and content from db
 
-export default function EditResolution({ resolution }: { resolution: ResolutionEntity }) {
+export default function EditResolution({ resolution }: { resolution: ResolutionEntityEnhanced }) {
   const { types } = useResolutionTypes();
   const { acl } = useResolutionsAcl();
   const { onSubmit } = useResolutionUpdate();

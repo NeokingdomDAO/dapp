@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { ResolutionEntity } from "types";
 import { useAccount } from "wagmi";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -110,7 +111,7 @@ export default function Resolutions() {
     if ((isLoading || isLoadingAcl) && resolutions.length === 0) {
       return [];
     }
-    return getEnhancedResolutions(resolutions, +currentTimestamp, acl);
+    return getEnhancedResolutions(resolutions as ResolutionEntity[], +currentTimestamp, acl);
   }, [resolutions, currentTimestamp, acl, isLoading, isLoadingAcl]);
 
   const resolutionTypes = useMemo(() => {

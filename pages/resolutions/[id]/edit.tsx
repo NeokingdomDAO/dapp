@@ -1,3 +1,4 @@
+import { getResolution } from "drizzle/db";
 import { useAccount } from "wagmi";
 
 import { Alert, CircularProgress } from "@mui/material";
@@ -29,7 +30,13 @@ export const getServerSideProps = async ({ params, res }: any) => {
     };
   }
 
-  const enhancedResolution: ResolutionEntityEnhanced = getEnhancedResolutionMapper(+new Date())(data.resolution);
+  const [dbResolution] = await getResolution(data.resolution?.ipfsDataURI as string);
+  const enhancedResolution: ResolutionEntityEnhanced = getEnhancedResolutionMapper(+new Date())({
+    ...data.resolution,
+    title: dbResolution?.title,
+    content: dbResolution?.content,
+    isRewards: dbResolution?.isRewards,
+  });
 
   if (enhancedResolution.state !== "pre-draft") {
     return {
@@ -42,12 +49,12 @@ export const getServerSideProps = async ({ params, res }: any) => {
 
   return {
     props: {
-      resolution: data.resolution,
+      resolution: enhancedResolution,
     },
   };
 };
 
-export default function EditResolutionPage({ resolution }: { resolution: ResolutionEntity | null }) {
+export default function EditResolutionPage({ resolution }: { resolution: ResolutionEntityEnhanced | null }) {
   const { acl, isLoading } = useResolutionsAcl();
   const { isConnected } = useAccount();
 

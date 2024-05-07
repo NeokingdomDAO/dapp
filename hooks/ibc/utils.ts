@@ -8,9 +8,8 @@ import {
 import { Fee, IBCMsgTransferParams, Sender, TxContext, TxPayload, createTxIBCMsgTransfer } from "@evmos/transactions";
 import { Long } from "cosmjs-types/helpers";
 import { BigNumber } from "ethers";
-import { formatEther } from "ethers/lib/utils.js";
 import { EnqueueSnackbar } from "notistack";
-import { SecretNetworkClient, stringToCoin } from "secretjs";
+import { SecretNetworkClient } from "secretjs";
 
 export function Uint8ArrayToString(array: Uint8Array) {
   const bin = [];
