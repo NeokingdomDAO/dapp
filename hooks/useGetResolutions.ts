@@ -36,7 +36,19 @@ export default function useGetResolutions() {
 
   return {
     resolutions: !dbResolutionsObject
-      ? []
+      ? [
+          ...(data?.resolutions?.map((res) => ({
+            ...res,
+            title: "🔐 Log in to see title",
+            isRewards: false,
+          })) || []),
+          ...(legacyResolutionsData?.resolutions || []).map((res) => ({
+            ...res,
+            isLegacy: true,
+            title: "🔐 Log in to see title",
+            isRewards: false,
+          })),
+        ]
       : [
           ...(data?.resolutions?.map((res) => ({
             ...res,

@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { sessionOptions } from "@lib/session";
 
-async function getResolutionFromHash(req: NextApiRequest, res: NextApiResponse) {
+async function getResolutionsIndex(req: NextApiRequest, res: NextApiResponse) {
   const cookie = req.session.cookie;
   const user = req.session.user;
   if (!(cookie && user)) {
@@ -21,4 +21,4 @@ async function getResolutionFromHash(req: NextApiRequest, res: NextApiResponse) 
   }
 }
 
-export default withIronSessionApiRoute(getResolutionFromHash, sessionOptions);
+export default withIronSessionApiRoute(getResolutionsIndex, sessionOptions);
