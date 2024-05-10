@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { ResolutionEntity } from "types";
 import { useAccount } from "wagmi";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -92,6 +93,7 @@ export default function Resolutions() {
     setTextFilter((router.query.resolutionTitle as string) || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     if (router.query.resolutionTitle !== textFilter) {
@@ -109,7 +111,7 @@ export default function Resolutions() {
     if ((isLoading || isLoadingAcl) && resolutions.length === 0) {
       return [];
     }
-    return getEnhancedResolutions(resolutions, +currentTimestamp, acl);
+    return getEnhancedResolutions(resolutions as ResolutionEntity[], +currentTimestamp, acl);
   }, [resolutions, currentTimestamp, acl, isLoading, isLoadingAcl]);
 
   const resolutionTypes = useMemo(() => {
@@ -126,12 +128,12 @@ export default function Resolutions() {
       : enhancedResolutions.filter((resolution) => resolution.state !== RESOLUTION_STATES.REJECTED);
 
     filteredResolutions = excludeNonMonthlyReward
-      ? filteredResolutions.filter((r) => r.metadata.isMonthlyRewards === true)
+      ? filteredResolutions.filter((r) => r.isRewards === true)
       : filteredResolutions;
 
     const lowerCaseTextFilter = textFilter.toLocaleLowerCase();
     filteredResolutions = textFilter
-      ? filteredResolutions.filter((r) => r.title.toLocaleLowerCase().indexOf(lowerCaseTextFilter) >= 0)
+      ? filteredResolutions.filter((r) => r.title && r.title.toLocaleLowerCase().indexOf(lowerCaseTextFilter) >= 0)
       : filteredResolutions;
 
     filteredResolutions = resolutionType

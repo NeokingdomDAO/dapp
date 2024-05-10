@@ -2,7 +2,7 @@ import { ResolutionManager } from "@contracts/typechain";
 
 import { useContext } from "react";
 
-import { addToIpfs } from "@lib/ipfs";
+import { addResolution } from "@lib/resolutions/net";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
 import { ResolutionFormBase } from "@store/resolutionFormStore";
@@ -15,7 +15,7 @@ type SubmitParams = {
   currentResolution: ResolutionFormBase;
   executionTo?: string[];
   executionData?: string[];
-  metadata?: {};
+  isRewards?: boolean;
 };
 
 export default function useResolutionCreate() {
@@ -29,10 +29,10 @@ export default function useResolutionCreate() {
       currentResolution,
       executionTo = [],
       executionData = [],
-      metadata = {},
+      isRewards = false,
     }: SubmitParams) => {
       setIsLoading(true);
-      const ipfsId = await addToIpfs({ ...currentResolution, metadata });
+      const hash = await addResolution({ ...currentResolution, isRewards });
       const resolutionTypeId = Number(vetoTypeId || currentResolution.typeId);
       if ((currentResolution.exclusionAddress || "").trim() !== "") {
         return executeTx<
@@ -40,14 +40,14 @@ export default function useResolutionCreate() {
           Parameters<ResolutionManager["createResolutionWithExclusion"]>
         >({
           contractMethod: resolutionManagerContract?.createResolutionWithExclusion,
-          params: [ipfsId, resolutionTypeId, executionTo, executionData, currentResolution.exclusionAddress],
+          params: [hash, resolutionTypeId, executionTo, executionData, currentResolution.exclusionAddress],
           onSuccessMessage: "Preliminary draft resolution successfully created",
           onErrorMessage: "Error while creating preliminary draft resolution",
         });
       }
       return executeTx<ResolutionManager["createResolution"], Parameters<ResolutionManager["createResolution"]>>({
         contractMethod: resolutionManagerContract?.createResolution,
-        params: [ipfsId, resolutionTypeId, !!vetoTypeId, executionTo, executionData],
+        params: [hash, resolutionTypeId, !!vetoTypeId, executionTo, executionData],
         onSuccessMessage: "Preliminary draft resolution successfully created",
         onErrorMessage: "Error while creating preliminary draft resolution",
       });

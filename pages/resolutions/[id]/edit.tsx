@@ -1,16 +1,22 @@
+import { getResolution } from "drizzle/db";
 import { useAccount } from "wagmi";
 
 import { Alert, CircularProgress } from "@mui/material";
 
+import { getLegacyResolutionQuery } from "@graphql/subgraph/queries/get-legacy-resolution-query";
 import { getResolutionQuery } from "@graphql/subgraph/queries/get-resolution-query";
-import { fetcherGraphqlPublic } from "@graphql/subgraph/subgraph-client";
+import {
+  fetcherGraphqlPublic,
+  isLegacyClientEnabled,
+  legacyFetcherGraphqlPublic,
+} from "@graphql/subgraph/subgraph-client";
 
 import { getEnhancedResolutionMapper } from "@lib/resolutions/common";
 
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
 
 import EditResolution from "../../../components/EditResolution";
-import { ResolutionEntity, ResolutionEntityEnhanced } from "../../../types";
+import { ResolutionEntityEnhanced } from "../../../types";
 
 EditResolutionPage.title = "Edit resolution";
 EditResolutionPage.requireLogin = false;
@@ -18,8 +24,12 @@ EditResolutionPage.checkMismatch = true;
 
 export const getServerSideProps = async ({ params, res }: any) => {
   const data = await fetcherGraphqlPublic([getResolutionQuery, { id: params.id as string }]);
+  const legacyGraphQlResolutionData: any =
+    data?.resolution === null && isLegacyClientEnabled
+      ? await legacyFetcherGraphqlPublic([getLegacyResolutionQuery, { id: params.id as string }])
+      : null;
 
-  if (!data.resolution) {
+  if (!data.resolution && !legacyGraphQlResolutionData?.resolution) {
     res.statusCode = 404;
 
     return {
@@ -29,7 +39,15 @@ export const getServerSideProps = async ({ params, res }: any) => {
     };
   }
 
-  const enhancedResolution: ResolutionEntityEnhanced = getEnhancedResolutionMapper(+new Date())(data.resolution);
+  const [dbResolution] = await getResolution(
+    (data.resolution?.ipfsDataURI || legacyGraphQlResolutionData.resolution?.ipfsDataURI) as string,
+  );
+  const enhancedResolution: ResolutionEntityEnhanced = getEnhancedResolutionMapper(+new Date())({
+    ...(data.resolution || legacyGraphQlResolutionData.resolution),
+    title: dbResolution?.title,
+    content: dbResolution?.content,
+    isRewards: dbResolution?.isRewards,
+  });
 
   if (enhancedResolution.state !== "pre-draft") {
     return {
@@ -42,12 +60,16 @@ export const getServerSideProps = async ({ params, res }: any) => {
 
   return {
     props: {
-      resolution: data.resolution,
+      resolution: {
+        ...(data.resolution || legacyGraphQlResolutionData.resolution),
+        title: dbResolution?.title,
+        content: dbResolution?.content,
+      },
     },
   };
 };
 
-export default function EditResolutionPage({ resolution }: { resolution: ResolutionEntity | null }) {
+export default function EditResolutionPage({ resolution }: { resolution: ResolutionEntityEnhanced | null }) {
   const { acl, isLoading } = useResolutionsAcl();
   const { isConnected } = useAccount();
 

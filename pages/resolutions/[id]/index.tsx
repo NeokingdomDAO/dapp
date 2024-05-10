@@ -2,6 +2,7 @@ import { NeokingdomToken__factory } from "@contracts/typechain";
 import { Interface } from "@ethersproject/abi";
 import { formatEther } from "ethers/lib/utils";
 import showdown from "showdown";
+import { ResolutionEntity } from "types";
 
 import { useMemo } from "react";
 
@@ -35,13 +36,13 @@ export default function ResolutionView() {
   const { currentTimestamp } = useTimestamp();
   const { user } = useUser();
 
-  const { resolution: resolutionEntity, isLoading } = useGetResolution();
+  const { resolution: resolutionEntity, isLoading, showCorruptionAlert } = useGetResolution();
 
   const notFound = !resolutionEntity;
 
   const resolution = useMemo(() => {
     if (resolutionEntity) {
-      return getEnhancedResolutionMapper(+currentTimestamp)(resolutionEntity);
+      return getEnhancedResolutionMapper(+currentTimestamp)(resolutionEntity as ResolutionEntity);
     }
     return null;
   }, [resolutionEntity, currentTimestamp]);
@@ -75,6 +76,15 @@ export default function ResolutionView() {
       <Section>
         <Alert severity="warning">Resolution not found</Alert>
       </Section>
+    );
+  }
+
+  if (showCorruptionAlert) {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Resolution data corruption</AlertTitle>
+        The resolution data has been corrupted. Please contact the engineers via discord.
+      </Alert>
     );
   }
 

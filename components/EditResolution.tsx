@@ -11,6 +11,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { Alert, Button, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 
+import { useFeatureFlags } from "@lib/feature-flags/useFeatureFlags";
 import { enhanceTitleWithPrefix } from "@lib/utils";
 
 import useBlockchainTransactionStore from "@store/blockchainTransactionStore";
@@ -24,15 +25,19 @@ import useResolutionTypes from "@hooks/useResolutionTypes";
 import useResolutionUpdate from "@hooks/useResolutionUpdate";
 import useResolutionsAcl from "@hooks/useResolutionsAcl";
 
-import { ResolutionEntity } from "../types";
+import { ResolutionEntityEnhanced } from "../types";
 import Dialog from "./Dialog";
 
-export default function EditResolution({ resolution }: { resolution: ResolutionEntity }) {
+// resolution pdf get title and content from db
+
+export default function EditResolution({ resolution }: { resolution: ResolutionEntityEnhanced }) {
   const { types } = useResolutionTypes();
   const { acl } = useResolutionsAcl();
   const { onSubmit } = useResolutionUpdate();
   const { onSubmit: onSubmitApprove } = useResolutionApprove();
   const { onSubmit: onSubmitReject } = useResolutionReject();
+  const featureFlags = useFeatureFlags();
+  const canCreateResolutions = featureFlags.canCreateResolutions().get(true);
   const router = useRouter();
   const isVeto = resolution.resolutionType.name === "routine" && resolution.isNegative;
   const store = useRef(
@@ -109,6 +114,14 @@ export default function EditResolution({ resolution }: { resolution: ResolutionE
     resolution.title !== formProps.title ||
     resolution.content !== formProps.content ||
     (isVeto ? formProps.typeId !== "routineVeto" : resolution.resolutionType.id !== formProps.typeId);
+
+  if (!canCreateResolutions) {
+    return (
+      <Alert severity="warning">
+        Creating or updating resolutions is disabled at the moment. The functionality will be back shortly.
+      </Alert>
+    );
+  }
 
   return (
     <>

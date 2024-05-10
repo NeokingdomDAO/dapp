@@ -1,16 +1,24 @@
 /* eslint-disable */
 import * as sdk from "hypertune";
 
-const queryCode = `query FullQuery{root{isDeveloper}}`;
+export const queryCode = `id/9a4c6506-4f0a-48ae-a1cc-501fb4456f5a`;
 
-const query = {
+export const query = {
   Query: {
     objectTypeName: "Query",
     selection: {
       root: {
         fieldArguments: { __isPartialObject__: true },
         fieldQuery: {
-          Root: { objectTypeName: "Root", selection: { isDeveloper: { fieldArguments: {}, fieldQuery: null } } },
+          Root: {
+            objectTypeName: "Root",
+            selection: {
+              canCreateResolutions: { fieldArguments: {}, fieldQuery: null },
+              isDeveloper: { fieldArguments: {}, fieldQuery: null },
+              isDefaultTierEnabled: { fieldArguments: {}, fieldQuery: null },
+              impersonateWalletAddress: { fieldArguments: {}, fieldQuery: null },
+            },
+          },
         },
       },
     },
@@ -59,9 +67,17 @@ function mergeQueryAndArgs(
 }
 
 export const vercelFlagDefinitions = {
+  canCreateResolutions: {
+    options: [{ value: true }, { value: false }],
+    origin: "https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EcanCreateResolutions",
+  },
   isDeveloper: {
     options: [{ value: true }, { value: false }],
     origin: "https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDeveloper",
+  },
+  isDefaultTierEnabled: {
+    options: [{ value: true }, { value: false }],
+    origin: "https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDefaultTierEnabled",
   },
 };
 
@@ -87,10 +103,18 @@ export type Rec2 = {
 };
 
 export type Root = {
+  canCreateResolutions: boolean;
   isDeveloper: boolean;
+  isDefaultTierEnabled: boolean;
+  impersonateWalletAddress: string;
 };
 
-const rootFallback = { isDeveloper: false };
+const rootFallback = {
+  canCreateResolutions: false,
+  isDeveloper: false,
+  isDefaultTierEnabled: false,
+  impersonateWalletAddress: "",
+};
 
 export class RootNode extends sdk.Node {
   typeName = "Root" as const;
@@ -101,6 +125,23 @@ export class RootNode extends sdk.Node {
   }
 
   /**
+   * [Open in UI]({@link https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EcanCreateResolutions})
+   */
+  canCreateResolutions(args: Rec = {}): sdk.BooleanNode {
+    const props0 = this.getField("canCreateResolutions", args);
+    const expression0 = props0.expression;
+
+    if (expression0 && expression0.type === "BooleanExpression") {
+      const node = new sdk.BooleanNode(props0);
+      return node;
+    }
+
+    const node = new sdk.BooleanNode(props0);
+    node._logUnexpectedTypeError();
+    return node;
+  }
+
+  /**
    * [Open in UI]({@link https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDeveloper})
    */
   isDeveloper(args: Rec = {}): sdk.BooleanNode {
@@ -108,10 +149,45 @@ export class RootNode extends sdk.Node {
     const expression0 = props0.expression;
 
     if (expression0 && expression0.type === "BooleanExpression") {
-      return new sdk.BooleanNode(props0);
+      const node = new sdk.BooleanNode(props0);
+      return node;
     }
 
     const node = new sdk.BooleanNode(props0);
+    node._logUnexpectedTypeError();
+    return node;
+  }
+
+  /**
+   * [Open in UI]({@link https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EisDefaultTierEnabled})
+   */
+  isDefaultTierEnabled(args: Rec = {}): sdk.BooleanNode {
+    const props0 = this.getField("isDefaultTierEnabled", args);
+    const expression0 = props0.expression;
+
+    if (expression0 && expression0.type === "BooleanExpression") {
+      const node = new sdk.BooleanNode(props0);
+      return node;
+    }
+
+    const node = new sdk.BooleanNode(props0);
+    node._logUnexpectedTypeError();
+    return node;
+  }
+
+  /**
+   * [Open in UI]({@link https://app.hypertune.com/projects/3217/draft?view=logic&selected_field_path=root%3EimpersonateWalletAddress})
+   */
+  impersonateWalletAddress(args: Rec = {}): sdk.StringNode {
+    const props0 = this.getField("impersonateWalletAddress", args);
+    const expression0 = props0.expression;
+
+    if (expression0 && expression0.type === "StringExpression") {
+      const node = new sdk.StringNode(props0);
+      return node;
+    }
+
+    const node = new sdk.StringNode(props0);
     node._logUnexpectedTypeError();
     return node;
   }
@@ -139,7 +215,9 @@ export type Query = {
   root: Root;
 };
 
-const queryFallback = { root: { isDeveloper: false } };
+const queryFallback = {
+  root: { canCreateResolutions: false, isDeveloper: false, isDefaultTierEnabled: false, impersonateWalletAddress: "" },
+};
 
 export type Rec6 = {
   args: Rec2;

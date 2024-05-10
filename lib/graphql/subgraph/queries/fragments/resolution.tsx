@@ -3,8 +3,7 @@ import { graphql } from "../../generated";
 export const resolutionFragment = graphql(`
   fragment resolutionFragment on Resolution {
     id
-    title
-    content
+    ipfsDataURI
     isNegative
     resolutionType {
       ...resolutionTypeFragment
@@ -31,17 +30,13 @@ export const resolutionFragment = graphql(`
       hasVotedYes
       delegated
     }
-    metadata {
-      isMonthlyRewards
-    }
   }
 `);
 
 export const legacyResolutionFragment = graphql(`
   fragment legacyResolutionFragment on Resolution {
     id
-    title
-    content
+    ipfsDataURI
     isNegative
     resolutionType {
       ...resolutionTypeFragment

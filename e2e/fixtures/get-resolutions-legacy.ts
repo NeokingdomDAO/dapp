@@ -4,9 +4,8 @@ export const legacyResolutionsMock: GetLegacyResolutionsQuery = {
   resolutions: [
     {
       id: "100",
-      title: "Title Legacy Resolution 1",
-      content: "Content Legacy Resolution 1",
       isNegative: false,
+      ipfsDataURI: "ipfs",
       resolutionType: {
         id: "8",
         name: "30sNotice3mVoting",
@@ -32,8 +31,7 @@ export const legacyResolutionsMock: GetLegacyResolutionsQuery = {
     },
     {
       id: "101",
-      title: "Title Legacy Resolution 2",
-      content: "Content Legacy Resolution 2",
+      ipfsDataURI: "ipfs",
       isNegative: false,
       resolutionType: {
         id: "6",
