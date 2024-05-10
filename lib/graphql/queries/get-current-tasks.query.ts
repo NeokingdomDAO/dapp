@@ -33,6 +33,7 @@ export const getCurrentTasks = gql`
         unit_amount
         start
         end
+        tier_id
       }
     }
   }

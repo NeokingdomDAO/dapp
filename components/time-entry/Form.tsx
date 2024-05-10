@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import useSWR from "swr";
 import { shallow } from "zustand/shallow";
 
 import { useEffect, useState } from "react";
@@ -12,7 +13,11 @@ import {
   Box,
   Button,
   CircularProgress,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   Switch,
   TextField,
@@ -20,9 +25,10 @@ import {
 } from "@mui/material";
 import { DateTimeField } from "@mui/x-date-pickers";
 
+import { fetcher } from "@lib/net";
 import { getTaskName, toPrettyRange } from "@lib/utils";
 
-import useProjectTaskStore from "@store/projectTaskStore";
+import useProjectTaskStore, { Project, Tier } from "@store/projectTaskStore";
 import useTimeEntryStore from "@store/timeEntry";
 
 import useGetClashingTimeEntry from "@hooks/useGetClashingTimeEntry";
@@ -36,6 +42,7 @@ type StateType = {
   endTime: Date;
   disabledEditStart: boolean;
   disabledEditEnd: boolean;
+  tier_id?: { id: number };
 };
 
 const ONE_MINUTE_IN_SECONDS = 60;
@@ -54,6 +61,7 @@ export default function TimeEntryForm() {
         setStartAt: state.setStartAt,
         description: state.description,
         setDescription: state.setDescription,
+        tier_id: { id: state.tier_id },
       }),
       shallow,
     );
@@ -69,6 +77,7 @@ export default function TimeEntryForm() {
 
   const router = useRouter();
   const { userTasks, isLoading, userProjects } = useUserProjects();
+  const { data: tiers } = useSWR<Project[]>("/api/tiers", fetcher);
 
   const [formData, setFormData] = useState<StateType>(() => ({
     startTime: new Date(startAt as number),
@@ -141,6 +150,7 @@ export default function TimeEntryForm() {
         start: formData.startTime.getTime(),
         end: formData.endTime.getTime(),
         name: description,
+        tier_id: formData.tier_id?.id,
       },
       taskId as number,
     );
@@ -177,7 +187,6 @@ export default function TimeEntryForm() {
 
   return (
     <Box>
-      CIAO
       <Typography variant="h5" sx={{ mb: 3 }}>
         Save time entry
       </Typography>
@@ -232,6 +241,32 @@ export default function TimeEntryForm() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
+      <Box mt={2} sx={{ display: "flex", alignItems: "center" }}>
+        <FormControl fullWidth>
+          <InputLabel id="task-tier">Override Tier (optional)</InputLabel>
+          <Select
+            required
+            labelId="task-tier"
+            id="task-tier-select"
+            label="Override Tier (optional)"
+            value={formData.tier_id?.id}
+            onChange={(e) => {
+              const isEmptyString = e.target.value === "";
+              setFormData((prev) => ({
+                ...prev,
+                tier_id: !isEmptyString ? { id: Number(e.target.value) } : undefined,
+              }));
+            }}
+          >
+            <MenuItem value={""} aria-label="None"></MenuItem>
+            {tiers?.map((tier: Tier) => (
+              <MenuItem key={tier.id} value={tier.id}>
+                {tier.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
       <Box mt={2} sx={{ display: "flex", alignItems: "center" }}>
         <DateTimeField
           ampm={false}

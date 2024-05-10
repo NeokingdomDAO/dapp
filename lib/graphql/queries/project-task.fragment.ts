@@ -31,6 +31,7 @@ export const projectTaskFragment = gql`
       unit_amount
       start
       end
+      tier_id
     }
   }
 `;

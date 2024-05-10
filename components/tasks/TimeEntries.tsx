@@ -144,6 +144,7 @@ export default function TimeEntries({
               endTime: new Date((editingTimeSheet.end as number) * 1000),
               description: editingTimeSheet.name,
               timeEntryId: editingTimeSheet.id,
+              tier_id: editingTimeSheet.tier_id,
             }}
             onDeleteTimeEntry={handleDeleteFromUpdate}
             taskId={taskId}

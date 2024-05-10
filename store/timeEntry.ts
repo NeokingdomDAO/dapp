@@ -6,6 +6,7 @@ interface TimeEntry {
   stopAt: number | null;
   taskId: number | null;
   description: string;
+  tier_id: { id: number } | null;
   start: () => void;
   stop: () => void;
   reset: () => void;
@@ -24,6 +25,7 @@ const useTimeEntryStore = create(
       stopAt: null,
       taskId: null,
       description: "",
+      tier_id: null,
       showStopModal: false,
       start: () => set({ startAt: +new Date() }),
       setStartAt: (startAt: number) => set({ startAt }),

@@ -36,6 +36,7 @@ export const getTasksForAuditing = gql`
         unit_amount
         start
         end
+        tier_id
       }
     }
   }
