@@ -1690,8 +1690,7 @@ export type ResolutionTypeFragmentFragment = {
 export type ResolutionFragmentFragment = {
   __typename?: "Resolution";
   id: string;
-  title: string;
-  content: string;
+  ipfsDataURI: string;
   isNegative: boolean;
   yesVotesTotal?: any | null;
   createTimestamp: any;
@@ -1725,14 +1724,12 @@ export type ResolutionFragmentFragment = {
     hasVotedYes: boolean;
     delegated: any;
   }> | null;
-  metadata?: { __typename?: "ResolutionMetadata"; isMonthlyRewards: boolean } | null;
 };
 
 export type LegacyResolutionFragmentFragment = {
   __typename?: "Resolution";
   id: string;
-  title: string;
-  content: string;
+  ipfsDataURI: string;
   isNegative: boolean;
   yesVotesTotal?: any | null;
   createTimestamp: any;
@@ -1798,8 +1795,7 @@ export type GetLegacyResolutionQuery = {
   resolution?: {
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -1842,8 +1838,7 @@ export type GetLegacyResolutionsQuery = {
   resolutions: Array<{
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -1888,8 +1883,7 @@ export type GetResolutionQuery = {
   resolution?: {
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -1923,7 +1917,6 @@ export type GetResolutionQuery = {
       hasVotedYes: boolean;
       delegated: any;
     }> | null;
-    metadata?: { __typename?: "ResolutionMetadata"; isMonthlyRewards: boolean } | null;
   } | null;
 };
 
@@ -1949,8 +1942,7 @@ export type GetResolutionsQuery = {
   resolutions: Array<{
     __typename?: "Resolution";
     id: string;
-    title: string;
-    content: string;
+    ipfsDataURI: string;
     isNegative: boolean;
     yesVotesTotal?: any | null;
     createTimestamp: any;
@@ -1984,7 +1976,6 @@ export type GetResolutionsQuery = {
       hasVotedYes: boolean;
       delegated: any;
     }> | null;
-    metadata?: { __typename?: "ResolutionMetadata"; isMonthlyRewards: boolean } | null;
   }>;
 };
 
@@ -2142,8 +2133,7 @@ export const ResolutionFragmentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2182,14 +2172,6 @@ export const ResolutionFragmentFragmentDoc = {
               ],
             },
           },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metadata" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "isMonthlyRewards" } }],
-            },
-          },
         ],
       },
     },
@@ -2222,8 +2204,7 @@ export const LegacyResolutionFragmentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2414,8 +2395,7 @@ export const GetLegacyResolutionDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2515,8 +2495,7 @@ export const GetLegacyResolutionsDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2618,8 +2597,7 @@ export const GetResolutionDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2656,14 +2634,6 @@ export const GetResolutionDocument = {
                 { kind: "Field", name: { kind: "Name", value: "hasVotedYes" } },
                 { kind: "Field", name: { kind: "Name", value: "delegated" } },
               ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metadata" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "isMonthlyRewards" } }],
             },
           },
         ],
@@ -2767,8 +2737,7 @@ export const GetResolutionsDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "id" } },
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "content" } },
+          { kind: "Field", name: { kind: "Name", value: "ipfsDataURI" } },
           { kind: "Field", name: { kind: "Name", value: "isNegative" } },
           {
             kind: "Field",
@@ -2805,14 +2774,6 @@ export const GetResolutionsDocument = {
                 { kind: "Field", name: { kind: "Name", value: "hasVotedYes" } },
                 { kind: "Field", name: { kind: "Name", value: "delegated" } },
               ],
-            },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metadata" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "isMonthlyRewards" } }],
             },
           },
         ],

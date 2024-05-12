@@ -87,17 +87,6 @@ export default function VotingWidget({ resolution }: { resolution: ResolutionEnt
     return <Alert severity="warning">You&apos;re excluded from voting for this resolution</Alert>;
   }
 
-  if (resolution.isLegacy) {
-    return (
-      <Alert severity="warning" sx={{ mt: 2 }}>
-        This resolution can be voted on{" "}
-        <Link target="_blank" href={`https://dao.legacy.neokingdom.org/#/resolutions/${resolution.id}`}>
-          the previous dapp version
-        </Link>
-      </Alert>
-    );
-  }
-
   if (!isConnected) {
     return (
       <Button onClick={handleOpenLoginModalFromLink} variant="outlined" href="/login">

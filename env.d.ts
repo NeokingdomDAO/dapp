@@ -6,9 +6,7 @@ namespace NodeJS {
     NEXT_PUBLIC_ODOO_ENDPOINT: string;
     NEXT_PUBLIC_PROJECT_KEY: "solidato";
     NEXT_PUBLIC_GRAPHQL_ENDPOINT: string;
-    NEXT_PUBLIC_LEGACY_GRAPHQL_ENDPOINT?: string;
     NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: string;
-    NEXT_PUBLIC_IPFS_ENDPOINT: string;
     NEXT_PUBLIC_ENV: "staging" | "production";
     COOKIE_NAME: string;
     COOKIE_PASSWORD: string;

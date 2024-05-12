@@ -1,6 +1,6 @@
 import { Window as KeplrWindow } from "@keplr-wallet/types";
 
-import { GetLegacyResolutionsQuery, GetResolutionsQuery, ResolutionVoter } from "@graphql/subgraph/generated/graphql";
+import { GetResolutionsQuery, ResolutionVoter } from "@graphql/subgraph/generated/graphql";
 
 export type ResolutionVoterEnhanced = NonNullable<ResolutionEntity["voters"]>["0"] & {
   votingPowerInt: number;
@@ -39,8 +39,11 @@ export type DaoManagerEntity = {
   totalVotingPower: BigInt;
 };
 
-export type ResolutionEntity = GetResolutionsQuery["resolutions"]["0"] &
-  GetLegacyResolutionsQuery["resolutions"]["0"] & { isLegacy?: boolean };
+export type ResolutionEntity = GetResolutionsQuery["resolutions"]["0"] & {
+  title: string;
+  content: string;
+  isRewards: boolean;
+};
 
 export type ResolutionAction = {
   label: string;

@@ -84,7 +84,7 @@ export default function ResolutionCard({
         </Typography>
         <User address={resolution.createBy} />
         <Box sx={{ mt: 2 }}>
-          {resolution.state === RESOLUTION_STATES.VOTING && !resolution.isLegacy && (
+          {resolution.state === RESOLUTION_STATES.VOTING && (
             <Alert
               severity="info"
               action={
@@ -98,14 +98,6 @@ export default function ResolutionCard({
                 prefixLabel="Voting ends"
                 inline
               />
-            </Alert>
-          )}
-          {resolution.state === RESOLUTION_STATES.VOTING && resolution.isLegacy && (
-            <Alert severity="warning" sx={{ mt: 2 }}>
-              This resolution can be voted on in{" "}
-              <Link target="_blank" href={`https://dao.legacy.neokingdom.org/#/resolutions/${resolution.id}`}>
-                the old dapp
-              </Link>
             </Alert>
           )}
           {resolution.state === RESOLUTION_STATES.ENDED && (

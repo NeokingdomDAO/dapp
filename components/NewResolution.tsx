@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Alert, Box, Divider, Typography } from "@mui/material";
 
+import { useFeatureFlags } from "@lib/feature-flags/useFeatureFlags";
 import { getPreviousMonth } from "@lib/resolutions/common";
 import { TOKEN_SYMBOL, enhanceTitleWithPrefix } from "@lib/utils";
 
@@ -49,6 +50,17 @@ export default function NewResolution({
   const disabledSubmit = !formProps.typeId || !acl?.canCreate || !formProps.title.trim() || !formProps.content.trim();
   const loadingSubmit = isAwaitingConfirmation || isLoading;
 
+  const featureFlags = useFeatureFlags();
+  const canCreateResolutions = featureFlags.canCreateResolutions().get(true);
+
+  if (!canCreateResolutions) {
+    return (
+      <Alert severity="warning">
+        Creating or updating resolutions is disabled at the moment. The functionality will be back shortly.
+      </Alert>
+    );
+  }
+
   const handleSave = async () => {
     setConfirmDialogOpen(false);
     const vetoTypeId =
@@ -64,10 +76,7 @@ export default function NewResolution({
       executionData: executionPayload?.map((user) => user.executionData as string) || [],
       executionTo: executionPayload?.map(() => governanceTokenContractAddress as string) || [],
       ...(monthlyRewardsResolutionData && {
-        metadata: {
-          isMonthlyRewards: true,
-          month: getPreviousMonth().toLowerCase(),
-        },
+        isRewards: true,
       }),
     });
 
