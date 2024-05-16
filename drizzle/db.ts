@@ -64,12 +64,12 @@ export const getResolution = async (hash: string) => {
   const cacheKey = `${hash}_${process.env.NEXT_PUBLIC_PROJECT_KEY || "neokingdom"}`;
   if (resolutionsCache.get(cacheKey)) {
     console.log("cache hit resolution", cacheKey);
-    return resolutionsCache.get(cacheKey);
+    return resolutionsCache.get(cacheKey) as typeof schema.ResolutionsTable.$inferSelect;
   }
 
   console.log("cache miss resolution", cacheKey);
 
-  const resolution = await db
+  const [resolution] = await db
     .select()
     .from(schema.ResolutionsTable)
     .where(

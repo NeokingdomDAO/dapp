@@ -54,7 +54,7 @@ const getResolutionPdf = async (req: NextApiRequest, res: NextApiResponse) => {
       true,
     );
 
-    const [dbResolution] = await getResolution(resolutionData.ipfsDataURI as string);
+    const dbResolution = await getResolution(resolutionData.ipfsDataURI as string);
 
     if (!dbResolution) {
       return res.status(404).end();
