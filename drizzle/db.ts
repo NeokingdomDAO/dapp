@@ -1,19 +1,51 @@
 import { sql } from "@vercel/postgres";
 import { and, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/vercel-postgres";
+import NodeCache from "node-cache";
 
 import "./envConfig";
 import * as schema from "./schema";
 
 export const db = drizzle(sql, { schema });
 
+const ALL_RESOLUTIONS_CACHE_KEY = "ALL_RESOLUTIONS_CACHE_KEY";
+export const DEFAULT_COLUMNS = ["title", "hash", "isRewards"] as Array<
+  keyof typeof schema.ResolutionsTable.$inferSelect
+>;
+
+const resolutionsCache = new NodeCache({ checkperiod: 120 });
+
+const getDynamicGetResolutionsCacheKey = (columns: Array<keyof typeof schema.ResolutionsTable.$inferSelect>) =>
+  `${ALL_RESOLUTIONS_CACHE_KEY}_${columns.join("_")}`;
+
 export const getResolutions = async (columns?: Array<keyof typeof schema.ResolutionsTable.$inferSelect>) => {
-  if (!columns)
-    return db.query.ResolutionsTable.findMany({
+  if (!columns || columns.length === 0) {
+    const cachedResolutions = resolutionsCache.get(ALL_RESOLUTIONS_CACHE_KEY);
+    if (cachedResolutions) {
+      console.log("cache hit all resolutions", ALL_RESOLUTIONS_CACHE_KEY);
+      return cachedResolutions;
+    }
+
+    console.log("cache miss all resolutions", ALL_RESOLUTIONS_CACHE_KEY);
+
+    const allResolutions = await db.query.ResolutionsTable.findMany({
       where: (resolutions) => eq(resolutions.project, process.env.NEXT_PUBLIC_PROJECT_KEY || "neokingdom"),
     });
+    resolutionsCache.set(ALL_RESOLUTIONS_CACHE_KEY, allResolutions);
 
-  return db.query.ResolutionsTable.findMany({
+    return allResolutions;
+  }
+
+  const dynamicCacheKey = getDynamicGetResolutionsCacheKey(columns);
+
+  if (resolutionsCache.get(dynamicCacheKey)) {
+    console.log("cache hit all resolutions", dynamicCacheKey);
+    return resolutionsCache.get(dynamicCacheKey);
+  }
+
+  console.log("cache miss all resolutions", ALL_RESOLUTIONS_CACHE_KEY);
+
+  const allResolutions = await db.query.ResolutionsTable.findMany({
     columns: {
       hash: !!columns?.includes("hash"),
       title: !!columns?.includes("title"),
@@ -22,10 +54,22 @@ export const getResolutions = async (columns?: Array<keyof typeof schema.Resolut
     },
     where: (resolutions) => eq(resolutions.project, process.env.NEXT_PUBLIC_PROJECT_KEY || "neokingdom"),
   });
+
+  resolutionsCache.set(dynamicCacheKey, allResolutions);
+
+  return allResolutions;
 };
 
 export const getResolution = async (hash: string) => {
-  return db
+  const cacheKey = `${hash}_${process.env.NEXT_PUBLIC_PROJECT_KEY || "neokingdom"}`;
+  if (resolutionsCache.get(cacheKey)) {
+    console.log("cache hit resolution", cacheKey);
+    return resolutionsCache.get(cacheKey);
+  }
+
+  console.log("cache miss resolution", cacheKey);
+
+  const resolution = await db
     .select()
     .from(schema.ResolutionsTable)
     .where(
@@ -34,6 +78,9 @@ export const getResolution = async (hash: string) => {
         eq(schema.ResolutionsTable.project, process.env.NEXT_PUBLIC_PROJECT_KEY || "neokingdom"),
       ),
     );
+  resolutionsCache.set(cacheKey, resolution);
+
+  return resolution;
 };
 
 type NewResolution = typeof schema.ResolutionsTable.$inferInsert;
@@ -43,4 +90,7 @@ export const addResolution = async (data: Omit<NewResolution, "id" | "createdAt"
     ...data,
     project: process.env.NEXT_PUBLIC_PROJECT_KEY || "neokingdom",
   });
+
+  resolutionsCache.del(ALL_RESOLUTIONS_CACHE_KEY);
+  resolutionsCache.del(getDynamicGetResolutionsCacheKey(DEFAULT_COLUMNS));
 };
