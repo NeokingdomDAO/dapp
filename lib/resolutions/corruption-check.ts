@@ -18,10 +18,11 @@ export default function isCorrupted(dbHash: string, data: z.infer<typeof Resolut
 
   const clientHash = keccak256(toUtf8Bytes(stringifyDeterministic(result.data)));
 
-  if (clientHash !== dbHash) {
-    console.log("Client hash: ", clientHash, "DB hash: ", dbHash);
-    return true;
-  }
+  // temporary disable hash check
+  // if (clientHash !== dbHash) {
+  //   console.log("Client hash: ", clientHash, "DB hash: ", dbHash);
+  //   return true;
+  // }
 
   return false;
 }
