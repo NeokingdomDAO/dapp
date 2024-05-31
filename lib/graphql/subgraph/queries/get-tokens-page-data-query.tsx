@@ -20,7 +20,7 @@ export const getTokensPageData = graphql(`
         expirationTimestamp
       }
     }
-    offers(orderBy: createTimestamp, orderDirection: desc) {
+    offers(orderBy: createTimestamp, orderDirection: desc, first: 1000) {
       id
       from
       amount

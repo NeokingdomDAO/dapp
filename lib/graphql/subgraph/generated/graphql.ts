@@ -2980,6 +2980,7 @@ export const GetTokensPageDataDocument = {
                 name: { kind: "Name", value: "orderDirection" },
                 value: { kind: "EnumValue", value: "desc" },
               },
+              { kind: "Argument", name: { kind: "Name", value: "first" }, value: { kind: "IntValue", value: "1000" } },
             ],
             selectionSet: {
               kind: "SelectionSet",

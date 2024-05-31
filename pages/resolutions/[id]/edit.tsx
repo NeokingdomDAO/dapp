@@ -39,7 +39,7 @@ export const getServerSideProps = async ({ params, res }: any) => {
     };
   }
 
-  const [dbResolution] = await getResolution(
+  const dbResolution = await getResolution(
     (data.resolution?.ipfsDataURI || legacyGraphQlResolutionData.resolution?.ipfsDataURI) as string,
   );
   const enhancedResolution: ResolutionEntityEnhanced = getEnhancedResolutionMapper(+new Date())({
