@@ -73,11 +73,13 @@ export default function TimeEntries({
       .sort()
       .reverse()
       .reduce((obj, key) => {
-        const date = new Date(Number(key));
-        obj[format(date, "E, dd LLL y")] = {
-          timeEntries: grouped[Number(key)],
-          dayTime: grouped[Number(key)].reduce((acc, curr) => acc + curr.unit_amount, 0),
-        };
+        if (!isNaN(Number(key))) {
+          const date = new Date(Number(key));
+          obj[format(date, "E, dd LLL y")] = {
+            timeEntries: grouped[Number(key)],
+            dayTime: grouped[Number(key)].reduce((acc, curr) => acc + curr.unit_amount, 0),
+          };
+        }
         return obj;
       }, {} as Record<string, { timeEntries: Timesheet[]; dayTime: number }>);
   }, [entries]);
@@ -142,6 +144,7 @@ export default function TimeEntries({
               endTime: new Date((editingTimeSheet.end as number) * 1000),
               description: editingTimeSheet.name,
               timeEntryId: editingTimeSheet.id,
+              tier_id: editingTimeSheet.tier_id,
             }}
             onDeleteTimeEntry={handleDeleteFromUpdate}
             taskId={taskId}

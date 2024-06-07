@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-import DeleteIcon from "@mui/icons-material/Delete";
 import ListIcon from "@mui/icons-material/List";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { Divider, IconButton, Menu, MenuItem, Paper, Stack, Typography } from "@mui/material";
 
 import { Timesheet } from "@store/projectTaskStore";

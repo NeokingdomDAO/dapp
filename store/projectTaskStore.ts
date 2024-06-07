@@ -20,9 +20,8 @@ export type ProjectTask = {
   date_deadline: number;
   effective_hours: number;
   write_date: number;
-  user_id: { id: number; name: string };
-  approval_user_id: { id: number; name: string };
-  tier_id: Tier;
+  user_ids: Array<{ id: number; name: string }> | undefined;
+  approval_user_id: { id: number; name: string } | undefined;
   project_id: { id: number };
   tag_ids: Array<{ id: number; name: string }>;
   parent_id: { id: number; name: string } | null;
@@ -43,7 +42,10 @@ export type Timesheet = {
   unit_amount: number;
   start: number;
   end?: number;
+  tier_id?: { id: number };
 };
+
+export type TimesheetMutation = Partial<Omit<Timesheet, "tier_id">> & { tier_id?: number };
 
 export type ActionResponse = {
   data?: any;
@@ -64,8 +66,8 @@ export interface ProjectTaskStore {
     createTask: (task: ProjectTask) => Promise<ActionResponse>;
     updateTask: (task: ProjectTask) => Promise<ActionResponse>;
     deleteTask: (task: ProjectTask) => Promise<ActionResponse>;
-    createTimeEntry: (timeEntry: Partial<Timesheet>, taskId: number) => Promise<ActionResponse>;
-    updateTimeEntry: (timeEntry: Partial<Timesheet>) => Promise<ActionResponse>;
+    createTimeEntry: (timeEntry: TimesheetMutation, taskId: number) => Promise<ActionResponse>;
+    updateTimeEntry: (timeEntry: TimesheetMutation) => Promise<ActionResponse>;
     deleteTimeEntry: (timeEntry: Timesheet, task: ProjectTask) => Promise<ActionResponse>;
   };
 }
@@ -158,7 +160,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         return { error: await buildError(response) };
       }
     },
-    createTimeEntry: async (timeEntry: Partial<Timesheet>, taskId: number) => {
+    createTimeEntry: async (timeEntry: TimesheetMutation, taskId: number) => {
       set({ loadingTimeEntry: timeEntry.id });
       const response = await fetch(`/api/time_entries`, {
         method: "POST",
@@ -167,6 +169,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
           start: formatInTimeZone(new Date(timeEntry.start as number), "UTC", ODOO_DATE_FORMAT),
           end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
           name: timeEntry.name,
+          tier_id: timeEntry.tier_id,
         }),
       });
       if (response.ok) {
@@ -177,7 +180,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
         return { error: await buildError(response) };
       }
     },
-    updateTimeEntry: async (timeEntry: Partial<Timesheet>) => {
+    updateTimeEntry: async (timeEntry: TimesheetMutation) => {
       set({ loadingTimeEntry: timeEntry.id });
       const response = await fetch(`/api/time_entries/${timeEntry.id}`, {
         method: "PUT",
@@ -185,6 +188,7 @@ const useProjectTaskStore = create<ProjectTaskStore>((set, get) => ({
           start: formatInTimeZone(new Date(timeEntry.start as number), "UTC", ODOO_DATE_FORMAT),
           end: timeEntry.end && formatInTimeZone(new Date(timeEntry.end), "UTC", ODOO_DATE_FORMAT),
           name: timeEntry.name,
+          tier_id: timeEntry.tier_id,
         }),
       });
       if (response.ok) {
