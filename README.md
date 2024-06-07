@@ -19,6 +19,14 @@ pnpm run dev
 
 Note: if you want to change from i.e. teledisko to neokingdom, just re-run `vercel link` and choose `dapp-neokingdom` as project name.
 
+## Run a local Postgres instance
+
+- Set `POSTGRES_LOCAL=true` in your `.env` file
+- Run `docker compose -f local-compose.yaml up`
+- Run `npx drizzle-kit push`
+
+You can now run the app connected to your local database.
+
 ## How to add a Subgraph query
 
 - Create a new file inside the `./lib/graphql/subgraph/queries/` folder
