@@ -1,12 +1,22 @@
 import { sql } from "@vercel/postgres";
 import { and, eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/vercel-postgres";
+import { drizzle as LocalDrizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { drizzle as VercelDrizzle, type VercelPgDatabase } from "drizzle-orm/vercel-postgres";
 import NodeCache from "node-cache";
+import postgres from "postgres";
 
 import "./envConfig";
 import * as schema from "./schema";
 
-export const db = drizzle(sql, { schema });
+export const localDbUrl = "postgresql://admin:root@localhost:5432/neok";
+
+let db: VercelPgDatabase<typeof schema> | PostgresJsDatabase<typeof schema>;
+if (process.env.POSTGRES_LOCAL === "true") {
+  const migrationClient = postgres(localDbUrl);
+  db = LocalDrizzle(migrationClient, { schema });
+} else {
+  db = VercelDrizzle(sql, { schema });
+}
 
 const ALL_RESOLUTIONS_CACHE_KEY = "ALL_RESOLUTIONS_CACHE_KEY";
 export const DEFAULT_COLUMNS = ["title", "hash", "isRewards"] as Array<
