@@ -48,3 +48,6 @@ next-env.d.ts
 /playwright/.cache//Users/atosatto/dev/test-playwright/tests
 
 /.cache-synpress/
+
+# Sentry Config File
+.env.sentry-build-plugin
