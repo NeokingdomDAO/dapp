@@ -10,7 +10,7 @@ type OdooTask = {
   user_id: [number, string];
   name: string;
   description: string;
-  child_ids: number[];
+  child_ids?: number[];
   stage_id: [keyof typeof STAGES, string];
   parent_id: number;
   durations: { id: number }[];
@@ -50,11 +50,11 @@ export function parseTask(task: OdooTask) {
     name: task.name,
     description: task.description,
     isTracking: false,
-    isParentTask: task.child_ids.length > 0 && !task.parent_id,
-    isSingleTask: task.child_ids.length === 0 && !task.parent_id,
+    isParentTask: task.child_ids && task.child_ids.length > 0 && !task.parent_id,
+    isSingleTask: task.child_ids?.length === 0 && !task.parent_id,
     isSubtask: !!task.parent_id,
     subtaskIds: task.child_ids,
-    hasSubtasks: task.child_ids.length > 0,
+    hasSubtasks: task.child_ids && task.child_ids?.length > 0,
     hasDurations: task.durations?.length > 0,
     parentId: task.task_id ? task.task_id[0] : null,
     durations: task.durations.map((duration) => duration.id),

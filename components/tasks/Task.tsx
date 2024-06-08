@@ -293,7 +293,7 @@ export default function Task({
             </MenuItem>,
           ]}
       </Menu>
-      {!isSubtask && task.child_ids.filter(Boolean).length > 0 && (
+      {!isSubtask && task.child_ids && task.child_ids.filter(Boolean).length > 0 && (
         <Collapse in={expanded} timeout="auto">
           <Box>
             {task.child_ids.filter(Boolean).map((subTask) => (

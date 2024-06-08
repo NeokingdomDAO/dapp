@@ -81,16 +81,6 @@ export default function Header({ votingPercentageInTheYear }: { votingPercentage
         </Alert>
       </Modal>
       <Box sx={{ mr: 2, width: { xs: "100%", sm: "auto" }, mt: { xs: 4, md: 0 } }}>
-        {isDeveloper && (
-          <button
-            type="button"
-            onClick={() => {
-              throw new Error("Sentry Frontend Error");
-            }}
-          >
-            Throw error
-          </button>
-        )}
         <Typography variant="h3" sx={{ pb: 2 }}>
           {welcomeMessage}
         </Typography>

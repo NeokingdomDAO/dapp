@@ -114,11 +114,11 @@ export const replaceTaskTimeEntry = (
   options: { delete?: boolean; add?: boolean } = {},
 ) => {
   return produce(task, (draft) => {
-    if (!draft.parent_id && draft.child_ids?.length) {
+    if (!draft.parent_id && draft.child_ids && draft.child_ids?.length >= 0) {
       // it's a task with subtasks
-      draft.child_ids?.some((child, childIdx) => {
+      draft.child_ids.some((child, childIdx) => {
         const timeIdx = child.timesheet_ids.findIndex((timesheet) => timesheet.id === timeEntry.id);
-        if (timeIdx > -1) {
+        if (timeIdx > -1 && draft.child_ids) {
           if (options.delete) {
             draft.child_ids[childIdx].timesheet_ids.splice(timeIdx, 1);
           } else {

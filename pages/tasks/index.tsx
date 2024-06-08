@@ -91,15 +91,18 @@ export default function Tasks() {
         return (
           total +
           project.tasks.reduce((sub, task) => {
-            if (task.child_ids.length > 0) {
-              return sub + task.child_ids.reduce((childSub, child) => childSub + (child?.effective_hours || 0), 0);
+            if (task.child_ids && task.child_ids?.length > 0) {
+              return sub + task.child_ids?.reduce((childSub, child) => childSub + (child?.effective_hours || 0), 0);
             }
             return sub + (task?.effective_hours || 0);
           }, 0)
         );
       }, 0) * 3600;
     const taskIds = projectsWithTasks.reduce((ids, project) => {
-      return [...ids, ...project.tasks.filter((task) => task.child_ids.length > 0).map((task) => task.id)];
+      return [
+        ...ids,
+        ...project.tasks.filter((task) => task.child_ids && task.child_ids?.length > 0).map((task) => task.id),
+      ];
     }, [] as number[]);
 
     return [totalTime, projectIds, taskIds];

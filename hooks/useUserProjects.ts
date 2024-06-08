@@ -23,18 +23,20 @@ export default function useUserProjects() {
         (acc: any[], project: any) => [
           ...acc,
           ...project.tasks.map((task: ProjectTask) => {
-            if (task.child_ids.length === 0) {
+            if (task.child_ids?.length === 0) {
               return {
                 ...task,
                 projectName: project.name,
                 projectId: project.id,
               };
             }
-            return task.child_ids.map((subTask: ProjectTask) => ({
-              ...subTask,
-              projectName: project.name,
-              projectId: project.id,
-            }));
+            return (
+              task.child_ids?.map((subTask: ProjectTask) => ({
+                ...subTask,
+                projectName: project.name,
+                projectId: project.id,
+              })) || []
+            );
           }),
         ],
         [],
