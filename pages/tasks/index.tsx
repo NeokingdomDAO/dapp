@@ -86,24 +86,30 @@ export default function Tasks() {
 
   const [totalTime, projectIds, taskIds] = useMemo(() => {
     const projectIds = projectsWithTasks.map((project) => project.id);
-    const totalTime =
-      projectsWithTasks.reduce((total, project) => {
-        return (
-          total +
-          project.tasks.reduce((sub, task) => {
-            if (task.child_ids && task.child_ids?.length > 0) {
-              return sub + task.child_ids?.reduce((childSub, child) => childSub + (child?.effective_hours || 0), 0);
-            }
-            return sub + (task?.effective_hours || 0);
-          }, 0)
-        );
-      }, 0) * 3600;
-    const taskIds = projectsWithTasks.reduce((ids, project) => {
-      return [
-        ...ids,
-        ...project.tasks.filter((task) => task.child_ids && task.child_ids?.length > 0).map((task) => task.id),
-      ];
-    }, [] as number[]);
+    let totalTime = 0;
+    let taskIds: number[] = [];
+    try {
+      totalTime =
+        projectsWithTasks.reduce((total, project) => {
+          return (
+            total +
+            project.tasks.reduce((sub, task) => {
+              if (task.child_ids && task.child_ids?.length > 0) {
+                return sub + task.child_ids?.reduce((childSub, child) => childSub + (child?.effective_hours || 0), 0);
+              }
+              return sub + (task?.effective_hours || 0);
+            }, 0)
+          );
+        }, 0) * 3600;
+      taskIds = projectsWithTasks.reduce((ids, project) => {
+        return [
+          ...ids,
+          ...project.tasks.filter((task) => task.child_ids && task.child_ids?.length > 0).map((task) => task.id),
+        ];
+      }, [] as number[]);
+    } catch (e) {
+      console.error(JSON.stringify(projectsWithTasks));
+    }
 
     return [totalTime, projectIds, taskIds];
   }, [projectsWithTasks]);
