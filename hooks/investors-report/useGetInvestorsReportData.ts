@@ -93,7 +93,7 @@ export default function useGetInvestorsReportData(): {
       year: item.year,
     })) as DATA_POINT[];
 
-  const results = INITIAL_MONTHS_DATA.concat(finalData.slice(1));
+  const results = INITIAL_MONTHS_DATA.concat(INITIAL_MONTHS_DATA.length > 0 ? finalData.slice(1) : finalData);
 
   return {
     data: results,

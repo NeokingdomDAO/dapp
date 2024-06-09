@@ -27,7 +27,7 @@ const Chart = memo(function Chart({ data }: { data: any[] }) {
           }}
         />
         <XAxis dataKey="month" />
-        <YAxis label={{ value: TOKEN_SYMBOL, position: "insideTopLeft" }} tick={false} mirror={true} />
+        <YAxis label={{ value: TOKEN_SYMBOL, position: "insideTopLeft" }} tick={false} mirror />
         <Line type="monotone" dataKey="minted" stroke="#8884d8" activeDot={{ r: 8 }} />
       </LineChart>
     </ResponsiveContainer>
