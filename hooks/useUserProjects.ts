@@ -18,13 +18,16 @@ export default function useUserProjects() {
     if (!Array.isArray(projectsWithTasks) || projectsWithTasks.length === 0) {
       return [];
     }
-    try {
-      return projectsWithTasks
-        .reduce(
-          (acc: any[], project: any) => [
-            ...acc,
-            ...project.tasks.map((task: ProjectTask) => {
-              if (task.child_ids?.length === 0) {
+
+    return projectsWithTasks
+      .reduce(
+        (acc: any[], project) => [
+          ...acc,
+          ...project.tasks
+            .filter((task) => task != null)
+            .map((task) => {
+              if (!task) return {};
+              if (task.child_ids.length === 0) {
                 return {
                   ...task,
                   projectName: project.name,
@@ -32,21 +35,17 @@ export default function useUserProjects() {
                 };
               }
               return (
-                task.child_ids?.map((subTask: ProjectTask) => ({
+                task.child_ids.map((subTask: ProjectTask) => ({
                   ...subTask,
                   projectName: project.name,
                   projectId: project.id,
                 })) || []
               );
             }),
-          ],
-          [],
-        )
-        .flat();
-    } catch (e) {
-      console.error(JSON.stringify(projectsWithTasks));
-      return [];
-    }
+        ],
+        [],
+      )
+      .flat();
   }, [projectsWithTasks]);
 
   return {

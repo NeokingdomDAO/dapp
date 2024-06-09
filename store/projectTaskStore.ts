@@ -10,7 +10,7 @@ export type Project = {
   name: string;
   display_name: string;
   tag_ids: Array<{ id: number; name: string }>;
-  tasks: ProjectTask[];
+  tasks: ProjectTask[] | null[];
 };
 
 export type ProjectTask = {
@@ -26,7 +26,7 @@ export type ProjectTask = {
   tag_ids: Array<{ id: number; name: string }>;
   parent_id: { id: number; name: string } | null;
   stage_id: { id: number; name: string };
-  child_ids?: ProjectTask[];
+  child_ids: ProjectTask[];
   timesheet_ids: Timesheet[];
 };
 
