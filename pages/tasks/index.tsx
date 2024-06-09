@@ -41,7 +41,7 @@ export default function Tasks() {
       projectKey: state.projectKey,
     }));
   const { enqueueSnackbar } = useSnackbar();
-  const projectsWithTasks = useMemo(() => projects?.filter((project) => project.tasks.length) || [], [projects]);
+  const projectsWithTasks = useMemo(() => projects?.filter((project) => project.task_ids.length) || [], [projects]);
   const { openProjects, setOpenTasks, setOpenProjects } = useUserSettings();
   const { isConnected } = useAccount();
 
@@ -91,8 +91,8 @@ export default function Tasks() {
       projectsWithTasks.reduce((total, project) => {
         return (
           total +
-          project.tasks.reduce((sub, task) => {
-            if (task?.child_ids && task?.child_ids.length > 0) {
+          project.task_ids.reduce((sub, task) => {
+            if (task.child_ids && task.child_ids.length > 0) {
               return sub + task.child_ids.reduce((childSub, child) => childSub + (child?.effective_hours || 0), 0);
             }
             return sub + (task?.effective_hours || 0);
@@ -102,7 +102,7 @@ export default function Tasks() {
     const taskIds = projectsWithTasks.reduce((ids, project) => {
       return [
         ...ids,
-        ...project.tasks.filter((task) => task?.child_ids && task.child_ids.length > 0).map((task) => task!.id),
+        ...project.task_ids.filter((task) => task.child_ids && task.child_ids.length > 0).map((task) => task!.id),
       ];
     }, [] as number[]);
 

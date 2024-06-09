@@ -31,9 +31,9 @@ export default function ProjectCard({ project }: { project: Project }) {
 
   const tasks = useMemo(
     () =>
-      project.tasks
-        .filter((task) => task !== null)
-        .filter((task) => !task.parent_id && task.stage_id && task.stage_id.id !== getStageId("approved")),
+      project.task_ids.filter(
+        (task) => !task.parent_id && task.stage_id && task.stage_id.id !== getStageId("approved"),
+      ),
     [project],
   );
 

@@ -7,6 +7,8 @@ import odooGraphQLClient from "@lib/graphql/odoo";
 import { ODOO_DB_NAME, ODOO_ENDPOINT, getSession } from "@lib/odooClient";
 import { sessionOptions } from "@lib/session";
 
+const removeNullInArray = <T>(arr: Array<T>): Array<T> => arr.filter((a) => a != null);
+
 async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
   const cookie = req.session.cookie;
   const user = req.session.user;
@@ -30,7 +32,15 @@ async function tasksRoute(req: NextApiRequest, res: NextApiResponse) {
       const data = await odooGraphQLClient.query(cookie, getUserProjectsQuery, {
         userId: user.id,
       });
-      res.status(200).json(data?.ProjectProject || []);
+      if (!data) res.status(200).json([]);
+      const dataProjects: any = data.ProjectProject;
+
+      const dataWithoutNullArrays = dataProjects.map((d: any) => ({
+        ...d,
+        tag_ids: removeNullInArray(d.tag_ids),
+        task_ids: removeNullInArray(d.task_ids),
+      }));
+      res.status(200).json(dataWithoutNullArrays);
     } catch (err: any) {
       console.log("🐞 > err:", err);
       res.status(500).json({ message: err.message });

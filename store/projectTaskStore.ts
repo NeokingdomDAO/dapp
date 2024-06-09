@@ -10,7 +10,7 @@ export type Project = {
   name: string;
   display_name: string;
   tag_ids: Array<{ id: number; name: string }>;
-  tasks: ProjectTask[] | null[];
+  task_ids: ProjectTask[];
 };
 
 export type ProjectTask = {

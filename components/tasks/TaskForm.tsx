@@ -86,7 +86,7 @@ export default function TaskForm({
         if (!selectedProject) {
           setSelectedProject(project);
         }
-        const [lastTask] = project.tasks
+        const [lastTask] = project.task_ids
           .sort((a, b) => compareAsc(getDateFromOdooTimestamp(a.write_date), getDateFromOdooTimestamp(b.write_date)))
           .slice(-1);
         setLastTask(lastTask);
