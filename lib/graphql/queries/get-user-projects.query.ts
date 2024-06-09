@@ -6,7 +6,7 @@ import { projectTaskFragment } from "./project-task.fragment";
 
 export const getUserProjectsQuery = gql`
   query getUserProjects($userId: Int!) {
-    ProjectProject(domain: [["tasks.user_ids.id", "in", [$userId]]]) {
+    ProjectProject(domain: [["tasks.user_ids", "in", [$userId]]]) {
       id
       name
       description
