@@ -17,7 +17,7 @@ export const getUserProjectsQuery = gql`
       }
       tasks(domain: [["user_ids.id", "in", [$userId]], ["stage_id.id", "!=", ${getStageId("approved")} ]]) {
         ...projectTaskFragment
-        child_ids {
+        child_ids(domain: [["user_ids.id", "in", [$userId]], ["stage_id.id", "!=", ${getStageId("approved")} ]]) {
           ...projectTaskFragment
         }
       }
