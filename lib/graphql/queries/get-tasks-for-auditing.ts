@@ -6,11 +6,9 @@ export const getTasksForAuditing = gql`
   query GetTasksForAuditing($limit: Number! = 50, $offset: Number! = 0) {
     ProjectTask(
       domain: [
-        ["stage_id.id", "!=", ${getStageId("approved")}]
-        ["child_ids", "=", false]
-        "|"
-        ["subtask_effective_hours", ">", 0]
+        ["user_ids", "in", [$userId]]
         ["effective_hours", ">", 0]
+        ["stage_id.id", "!=", ${getStageId("approved")}]
       ]
       order: "write_date DESC"
     ) {
